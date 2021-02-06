@@ -16,9 +16,9 @@ db.once('open', () => {
   console.log('Database Connection Established!')
 })
 
-var indexRouter = require('./routes/index');
 var player_listRouter = require('./routes/player_list')
 var AuthRouter = require('./routes/auth')
+var poolRouter = require('./routes/poolauth')
 
 var app = express();
 
@@ -28,9 +28,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
 app.use('/player_list', player_listRouter)
 app.use('/auth', AuthRouter)
+app.use('/pool', poolRouter)
 
 // app.set('view engine', 'jade');
 
