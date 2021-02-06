@@ -90,8 +90,45 @@ const login = (req, res, next) => {
 }
 
 
+const get_user = (req, res, next) => {
+
+    if(req.headers.token !== "undefined"){
+        var encrypt_token = req.headers.token
+
+        let token = jwt.decode(encrypt_token, 'verySecretValue')
+        // TODO: use token.iat and token.exp to use token expiration and force user to re-login
+        User.findOne({$or: [{name:token.name}]})
+        .then(user => {
+            if(user){
+                res.json({
+                    success: "True",
+                    username: token.name,
+                    message: 'legit User!'
+                })
+                return
+            }
+            else{
+                res.json({
+                    success: "False",
+                    message: 'User is not registered!'
+                })
+                return
+            }
+        })
+    }
+    else{
+        res.json({
+            success: "False",
+            message: 'no token, you need to login'
+        })
+        return
+    }
+    
+}
+
 
 module.exports = {
     register,
-    login
+    login,
+    get_user
 }

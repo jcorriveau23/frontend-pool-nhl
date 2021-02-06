@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Cookies from 'js-cookie';
 
 export default class CreatePool extends Component {
     constructor(props) {
@@ -6,7 +7,13 @@ export default class CreatePool extends Component {
         // variable from this page
         this.state = {
             username: "",
+            pool_name: "",
             number_poolers: 2,
+            number_forward: 12,
+            number_defenders: 6,
+            number_goalies: 2,
+            number_reservist: 4,
+
             forward_pts_goals: 1,
             forward_pts_assists: 1,
             forward_pts_hattricks: 1,
@@ -22,11 +29,57 @@ export default class CreatePool extends Component {
     };
 
     async componentDidMount() {
-      //TODO get username
+      const requestOptions = {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')}
+      };
+      fetch('http://localhost:3000/auth/get_user', requestOptions)
+      .then(response => response.json())
+      .then(data => {
+          if(data.success === "False"){
+              this.props.history.push('/');
+          }
+          else{
+            this.setState({username: data.username})
+          }
+      })
     }
 
     async create_pool(){
-        // TODO create pool object with state variable and store it in db as a pool object
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')},
+        body: JSON.stringify({ name: this.state.pool_name,
+                                owner: this.state.username,
+                                number_poolers: this.state.number_poolers,
+                                number_forward: this.state.number_forward,
+                                number_defenders: this.state.number_defenders,
+                                number_goalies: this.state.number_goalies,
+                                number_reservist: this.state.number_reservist,
+                                forward_pts_goals: this.state.forward_pts_goals,
+                                forward_pts_assists: this.state.forward_pts_assists,
+                                forward_pts_hattricks: this.state.forward_pts_hattricks,
+                                defender_pts_goals: this.state.defender_pts_goals,
+                                defender_pts_assits: this.state.defender_pts_assits,
+                                defender_pts_hattricks: this.state.defender_pts_hattricks,
+                                goalies_pts_wins: this.state.goalies_pts_wins,
+                                goalies_pts_shutouts: this.state.goalies_pts_shutouts,
+                                goalies_pts_goals: this.state.goalies_pts_goals,
+                                goalies_pts_assists: this.state.goalies_pts_assists
+                            })
+    };
+    fetch('http://localhost:3000/pool/pool_creation', requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            if(data.success === "True"){
+
+                //this.props.history.push('/pool_list'); TODO: Enter pool entrance with other user
+                console.log(data.message)
+            }
+            else{
+                console.log(data.message)
+            }
+        });
     }
     
     handleChange(event) {

@@ -48,24 +48,24 @@ export default class Draft extends Component {
   }
   
   async sort_by_number(stats, position){
-    
-    if(position == "D"){
-      var array = this.state.def_l;
+    var array;
+    if(position === "D"){
+      array = this.state.def_l;
       array = await this.sort_by_stats(stats, array)
       this.setState({def_l: array})
     }
-    else if(position == "F"){
-      var array = this.state.forw_l;
+    else if(position === "F"){
+      array = this.state.forw_l;
       array = await this.sort_by_stats(stats, array)
       this.setState({forw_l: array})
     }
-    else if(position == "G"){
-      var array = this.state.goal_l;
+    else if(position === "G"){
+      array = this.state.goal_l;
       array = await this.sort_by_stats(stats, array)
       this.setState({goal_l: array})
     }
     else{
-      var array = this.state.na_l;
+      array = this.state.na_l;
       array = await this.sort_by_stats(stats, array)
       this.setState({na_l: array})
     }
@@ -73,32 +73,32 @@ export default class Draft extends Component {
   }
 
   async sort_by_stats(stats, array){
-    if(stats == "goals"){
+    if(stats === "goals"){
       array.sort(function(a, b) {
         return b.stats.goals - a.stats.goals;
       });
     }
-    else if(stats == "assists"){
+    else if(stats === "assists"){
       array.sort(function(a, b) {
         return b.stats.assists - a.stats.assists;
       });
     }
-    else if(stats == "games"){
+    else if(stats === "games"){
       array.sort(function(a, b) {
         return b.stats.games - a.stats.games;
       });
     }
-    else if(stats == "wins"){
+    else if(stats === "wins"){
       array.sort(function(a, b) {
         return b.stats.wins - a.stats.wins;
       });
     }
-    else if(stats == "losses"){
+    else if(stats === "losses"){
       array.sort(function(a, b) {
         return b.stats.losses - a.stats.losses;
       });
     }
-    else if(stats == "savePercentage"){
+    else if(stats === "savePercentage"){
       array.sort(function(a, b) {
         return b.stats.savePercentage - a.stats.savePercentage;
       });
@@ -115,7 +115,7 @@ export default class Draft extends Component {
     // TODO: validate if its user turn
 
     // defense
-    if(player.role == "D"){
+    if(player.role === "D"){
       var chosen_defender = this.state.chosen_defender
       var number_defender_chosen = this.state.number_defender_chosen
 
@@ -131,7 +131,7 @@ export default class Draft extends Component {
 
     }
     // forward
-    else if(player.role == "F"){
+    else if(player.role === "F"){
       var chosen_forward = this.state.chosen_forward
       var number_forward_chosen = this.state.number_forward_chosen
 
@@ -146,7 +146,7 @@ export default class Draft extends Component {
       }
     }
     // goaltender
-    else if(player.role == "G"){
+    else if(player.role === "G"){
       var chosen_goalies = this.state.chosen_goalies
       var number_goalies_chosen = this.state.number_goalies_chosen
 

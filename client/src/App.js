@@ -6,13 +6,38 @@ import Register from "./components/register"
 import Login from "./components/login"
 import CreatePool from "./components/create_pool"
 import PoolList from "./components/pool_list"
+import Cookies from 'js-cookie';
 
 export default class App extends Component {
+
+  constructor(props) {
+    super(props);
+      // variable from this page
+      this.state = {
+          username: ""
+      }
+  };
+
+  async componentDidMount() {
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')}
+    };
+    fetch('http://localhost:3000/auth/get_user', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+        if(data.success === "True"){
+            this.setState({username: data.username})
+        }
+    })
+  }
+
   render() {
     return(
       <Router>
       <div>
-        <h2>Home</h2>
+        <h1>Home</h1>
+        <h2>Welcome {this.state.username}</h2>
         <ul>
           <li><Link to="/register">Register</Link></li>
           <li><Link to="/login">Login</Link></li>

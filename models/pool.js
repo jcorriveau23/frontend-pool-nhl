@@ -8,6 +8,7 @@ const poolSchema = new Schema({
   number_forward: {type: Number},
   number_defenders: {type: Number},
   number_goalies: {type: Number},
+  number_reservist: {type: Number},
 
   forward_pts_goals: {type: Number},
   forward_pts_assists: {type: Number},
@@ -29,12 +30,13 @@ const poolSchema = new Schema({
           choice_defender: [{name: {type: String}, api_call: {type: String}}],
           choice_goalies: [{name: {type: String}, api_call: {type: String}}]
       }]
-  }
+  },
+
+  status: {type: String}
 
 }, {timestamps: true})
 
 
-
-const User = mongoose.model('Pool', poolContextSchema)
-module.exports = User
+const Pool = mongoose.model('Pool', poolSchema)
+module.exports = Pool
 

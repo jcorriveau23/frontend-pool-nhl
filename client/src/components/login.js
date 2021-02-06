@@ -1,8 +1,9 @@
 // {"name": "Jean-Francois Corriveau", "password": "molly915"}
 import React, { Component } from 'react';
-import {Redirect} from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 export default class Login extends Component {
+    
     constructor(props) {
       super(props);
         // variable from this page
@@ -13,12 +14,19 @@ export default class Login extends Component {
         }
         this.handleChange = this.handleChange.bind(this);
     };
-        
 
-    
-  
     async componentDidMount() {
-      //TODO
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')}
+        };
+        fetch('http://localhost:3000/auth/get_user', requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            if(data.success === "True"){
+                this.props.history.push('/');
+            }
+        })
     }
 
     async login(){
@@ -32,9 +40,12 @@ export default class Login extends Component {
             .then(response => response.json())
             .then(data => {
                 if(data.success === "True"){
-                    this.setState({msg: data.message})
+                    this.setState({msg: data.message});
+                    Cookies.set('token', data.token);
+                    
                     this.props.history.push('/pool_list');
-                    //TODO use token for the user next login
+                    
+
                 }
                 else{
                     this.setState({msg: data.error})
