@@ -51,6 +51,7 @@ export default class App extends Component {
           <Route path="/create_pool" component={CreatePool}></Route>
           <Route path="/pool_list" component={PoolList}></Route>
           <Route path="/draft" component={Draft}></Route>
+          <Route path="/pool_list/:name" component = {PoolMatchMaking}></Route>
         </Switch>
       </div>
       </Router>
