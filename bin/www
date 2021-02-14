@@ -8,6 +8,7 @@ var app = require('../app');
 var debug = require('debug')('pool-jdope:server');
 var http = require('http');
 
+
 /**
  * Get port from environment and store in Express.
  */
@@ -15,20 +16,34 @@ var http = require('http');
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
+var server = http.createServer(app);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+
+//const io = socketIo(server);
+
+let interval;
+
+io.on("connection", (socket) => {
+  console.log("New client connected");
+
+});
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(port, () => console.log(`Listening on port ${port}`));
 server.on('error', onError);
 server.on('listening', onListening);
-
 /**
  * Normalize a port into a number, string, or false.
  */

@@ -50,10 +50,8 @@ export default class CreatePool extends Component {
         <div>
             <h1>Pool list (TODO)</h1>
             {this.state.pool_list.map(pool => 
-            <li>Pool name: {pool.name}  : Owner: {pool.owner}</li>
+            <li onClick={() => this.props.history.push({pathname: '/pool_list/' + pool.name, state: {pool_name: pool.name}})}>Pool name: {pool.name}  : Owner: {pool.owner}</li>
             )}
-
-            
         </div>
      );
     }

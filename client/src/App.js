@@ -6,6 +6,7 @@ import Register from "./components/register"
 import Login from "./components/login"
 import CreatePool from "./components/create_pool"
 import PoolList from "./components/pool_list"
+import PoolMatchMaking from "./components/PoolMatchMaking"
 import Cookies from 'js-cookie';
 
 export default class App extends Component {
@@ -49,7 +50,7 @@ export default class App extends Component {
           <Route path="/register" component={Register}></Route>
           <Route path="/login" component={Login}></Route>
           <Route path="/create_pool" component={CreatePool}></Route>
-          <Route path="/pool_list" component={PoolList}></Route>
+          <Route exact path="/pool_list" component={PoolList}></Route>
           <Route path="/draft" component={Draft}></Route>
           <Route path="/pool_list/:name" component = {PoolMatchMaking}></Route>
         </Switch>
