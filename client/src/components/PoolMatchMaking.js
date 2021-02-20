@@ -1,7 +1,28 @@
 import React, { Component } from 'react';
 import Cookies from 'js-cookie';
 import io from "socket.io-client";
+
 const socket = io("http://localhost:8080")
+
+
+function get_username2(){
+  // validate login
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')}
+  };
+  fetch('http://localhost:3000/auth/get_user', requestOptions)
+  .then(response => response.json())
+  .then(data => {
+      if(data.success === "False"){
+          this.props.history.push('/login');
+      }
+      else{
+        console.log(data.username)
+        return data.username
+      }
+  })
+}
 
 export default class PoolMatchMaking extends Component {
     constructor(props) {
@@ -9,30 +30,23 @@ export default class PoolMatchMaking extends Component {
         // variable from this page
         this.state = {
             username: "",
-            pool_info: {}
+            pool_info: {},
+            pool_name: ""
         }
         this.handleChange = this.handleChange.bind(this);
     };
         
-  
-    async componentDidMount() {
 
-      // validate login
-      const requestOptions = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')}
-      };
-      fetch('http://localhost:3000/auth/get_user', requestOptions)
-      .then(response => response.json())
-      .then(data => {
-          if(data.success === "False"){
-              this.props.history.push('/login');
-          }
-          else{
-            this.setState({username: data.username})
-          }
-      })
-      var pool_name = this.props.match.params.name
+
+    async componentDidMount() {
+      var pool_name = await this.props.match.params.name
+      
+      this.setState({pool_name: pool_name})
+
+      socket.emit('joinRoom', Cookies.get('token'), pool_name);
+      console.log('Joined Room');
+      
+      
 
       // get pool info
       const requestOptions2 = {
@@ -50,7 +64,6 @@ export default class PoolMatchMaking extends Component {
           }
           
       })
-
       // update new pool participant
       const requestOptions3 = {
         method: 'PUT',
@@ -73,6 +86,11 @@ export default class PoolMatchMaking extends Component {
       
     }
     
+    async componentWillUnmount(){
+      console.log("leaving pool: " + this.state.pool_name)
+      socket.emit('leaveRoom', Cookies.get('token'), this.state.pool_name);
+    }
+
     handleChange(event) {
         const target = event.target;
         const name = target.name;

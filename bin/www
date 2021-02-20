@@ -7,7 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('pool-jdope:server');
 var http = require('http');
-
+const jwt = require('jsonwebtoken')
 
 /**
  * Get port from environment and store in Express.
@@ -31,11 +31,91 @@ const io = require("socket.io")(server, {
 //const io = socketIo(server);
 
 let interval;
+var pools = {}
 
-io.on("connection", (socket) => {
-  console.log("New client connected");
+const userSocketIdMap = new Map()
 
+io.on('connection', function(socket){
+  console.log('Client connected with socket ID: '+ socket.client.id);
+
+  socket.on('joinRoom', function(data, room){
+    let token = jwt.decode(data, 'verySecretValue')
+    socket.join(room)
+    addClientToMap(token.name, socket.id)
+    if(pools[room] == undefined){
+      pools[room] = {}
+      pools[room]["numClients"] = 1;
+      pools[room]["listClient"] = [token.name]
+    }
+    else{
+      if(pools[room]["listClient"].includes(token.name)){
+        // do nothing
+      }
+      else if(pools[room]["numClients"] < 5){
+        // dont add it
+      }
+      else{
+        pools[room]["numClients"]++
+        pools[room]["listClient"].push(token.name)
+      }
+    }
+      
+    console.log(token.name + " join room: " + room);
+    console.log("in Room now: " + pools[room]["listClient"])
+  });
+
+  socket.on('leaveRoom', function(data, room){
+    let token = jwt.decode(data, 'verySecretValue')
+    socket.leave(room)
+    console.log(socket.id + " leave room: " + room);
+
+    if(removeClientFromMap(token.name, socket.id)){
+      
+      var index = pools[room]["listClient"].indexOf(token.name)
+      if(index > -1){
+        pools[room]["listClient"].splice(index, 1)
+        pools[room]["numClients"]--
+        console.log(token.name + " leave room: " + room);
+        if(pools[room]["numClients"] === 0){
+          pools[room] = undefined
+          console.log("room: " + room + "closed" )
+          return
+        }
+      }
+    }
+    console.log("in Room now: " + pools[room]["listClient"])
+  });
+
+  socket.on('disconnect', () => {
+    console.log("device disconnected")
+    // socket.rooms.size === 0
+  });
 });
+
+
+function addClientToMap(userName, socketId){
+  if (!userSocketIdMap.has(userName)) {
+  //when user is joining first time
+  userSocketIdMap.set(userName, new Set([socketId]));
+  } else{
+  //user had already joined from one client and now joining using another client
+  userSocketIdMap.get(userName).add(socketId);
+  }
+}
+
+function removeClientFromMap(userName, socketId){
+  if (userSocketIdMap.has(userName)) {
+    let userSocketIdSet = userSocketIdMap.get(userName);
+    userSocketIdSet.delete(socketId);
+    //if there are no clients for a user, remove that user from online
+    if (userSocketIdSet.size == 0 ) {
+      userSocketIdMap.delete(userName);
+    return true
+    }
+    return false
+  }
+}
+
 
 /**
  * Listen on provided port, on all network interfaces.
