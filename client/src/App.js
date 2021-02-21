@@ -6,7 +6,7 @@ import Register from "./components/register"
 import Login from "./components/login"
 import CreatePool from "./components/create_pool"
 import PoolList from "./components/pool_list"
-import PoolMatchMaking from "./components/PoolMatchMaking"
+import PoolMatchMaking from "./components/poolMatchMaking"
 import Cookies from 'js-cookie';
 
 export default class App extends Component {

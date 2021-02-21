@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Cookies from 'js-cookie';
 import io from "socket.io-client";
 
+import './poolMatchMaking.css';
+
 const socket = io("http://localhost:8080")
 
 
@@ -31,22 +33,24 @@ export default class PoolMatchMaking extends Component {
         this.state = {
             username: "",
             pool_info: {},
-            pool_name: ""
+            pool_name: "",
+            user_list: []
         }
         this.handleChange = this.handleChange.bind(this);
     };
         
-
+    componentWillMount(){
+      // socket listening event
+      socket.on('roomData', (data) => {
+        console.log("user list changed: " + data)
+        this.setState({user_list: data})
+      });
+    }
 
     async componentDidMount() {
-      var pool_name = await this.props.match.params.name
-      
-      this.setState({pool_name: pool_name})
 
-      socket.emit('joinRoom', Cookies.get('token'), pool_name);
-      console.log('Joined Room');
-      
-      
+      var pool_name = await this.props.match.params.name
+      this.setState({pool_name: pool_name})      
 
       // get pool info
       const requestOptions2 = {
@@ -60,6 +64,7 @@ export default class PoolMatchMaking extends Component {
               this.props.history.push('/pool_list');
           }
           else{
+            console.log(data.message)
             this.setState({pool_info: data.message})
           }
           
@@ -84,11 +89,14 @@ export default class PoolMatchMaking extends Component {
           }  
       })
       
+      socket.emit('joinRoom', Cookies.get('token'), pool_name);
+      console.log('Joined Room');
     }
     
     async componentWillUnmount(){
       console.log("leaving pool: " + this.state.pool_name)
       socket.emit('leaveRoom', Cookies.get('token'), this.state.pool_name);
+      socket.off('roomData');
     }
 
     handleChange(event) {
@@ -100,9 +108,33 @@ export default class PoolMatchMaking extends Component {
   
     render() {
       return(
-        <div>
+        <div class="container">
           <h1>Match Making for Pool {this.state.pool_info.name}</h1>
-          <h2>Rule: </h2>
+          <div class="floatLeft">
+            <h2>Rule: </h2>
+            <h4>Number poolers: {this.state.pool_info.number_poolers}</h4>
+            <h4>Number forwards: {this.state.pool_info.number_forward}</h4>
+            <h4>Number defenders: {this.state.pool_info.number_defenders}</h4>
+            <h4>Number goalies: {this.state.pool_info.number_goalies}</h4>
+            <h4>Number reservist: {this.state.pool_info.number_reservist}</h4>
+            <h2>Points</h2>
+            <h4>Goals by forward: {this.state.pool_info.forward_pts_goals} pts</h4>
+            <h4>Assists by forward: {this.state.pool_info.forward_pts_assists} pts</h4>
+            <h4>Hat tricks by forward: {this.state.pool_info.forward_pts_hattricks} pts</h4>
+            <h4>Goals by defender: {this.state.pool_info.defender_pts_goals} pts</h4>
+            <h4>Assists by defender: {this.state.pool_info.defender_pts_assists} pts</h4>
+            <h4>Hat tricks by defender: {this.state.pool_info.defender_pts_hattricks} pts</h4>
+            <h4>Win by goalies: {this.state.pool_info.goalies_pts_wins} pts</h4>
+            <h4>shutouts by goalies: {this.state.pool_info.goalies_pts_shutouts} pts</h4>
+            <h4>Goals by goalies: {this.state.pool_info.goalies_pts_goals} pts</h4>
+            <h4>Assists by goalies: {this.state.pool_info.goalies_pts_assists} pts</h4>
+          </div>
+          <div class="floatRight">
+            <h2>Participants: </h2>
+            {this.state.user_list.map(user =>
+            <li>{user}</li>
+            )}
+          </div>
         </div>
 
       )

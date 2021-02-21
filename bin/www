@@ -46,17 +46,19 @@ io.on('connection', function(socket){
       pools[room] = {}
       pools[room]["numClients"] = 1;
       pools[room]["listClient"] = [token.name]
+      io.in(room).emit("roomData", pools[room]["listClient"])
     }
     else{
       if(pools[room]["listClient"].includes(token.name)){
         // do nothing
       }
-      else if(pools[room]["numClients"] < 5){
+      else if(pools[room]["numClients"] > 5){
         // dont add it
       }
       else{
         pools[room]["numClients"]++
         pools[room]["listClient"].push(token.name)
+        io.in(room).emit("roomData", pools[room]["listClient"])
       }
     }
       
@@ -75,6 +77,9 @@ io.on('connection', function(socket){
       if(index > -1){
         pools[room]["listClient"].splice(index, 1)
         pools[room]["numClients"]--
+        
+        io.in(room).emit("roomData", pools[room]["listClient"])
+
         console.log(token.name + " leave room: " + room);
         if(pools[room]["numClients"] === 0){
           pools[room] = undefined
@@ -88,7 +93,7 @@ io.on('connection', function(socket){
 
   socket.on('disconnect', () => {
     console.log("device disconnected")
-    // socket.rooms.size === 0
+    // TODO, make client leave room
   });
 });
 
