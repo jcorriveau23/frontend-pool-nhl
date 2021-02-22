@@ -275,7 +275,7 @@ export default class Draft extends Component {
           </div>
           </Tabs>
           </div>
-          <div class="floatRight">
+        <div class="floatRight">
             <div class="floatLeft">
               <h3>{this.state.selected_player.name}</h3>
               <button onClick={() => this.chose_player(this.state.selected_player)}>choose</button>

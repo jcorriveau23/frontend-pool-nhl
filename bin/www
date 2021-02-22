@@ -50,7 +50,7 @@ io.on('connection', function(socket){
     }
     else{
       if(pools[room]["listClient"].includes(token.name)){
-        // do nothing
+        io.in(room).emit("roomData", pools[room]["listClient"])
       }
       else if(pools[room]["numClients"] > 5){
         // dont add it

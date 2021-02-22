@@ -37,16 +37,28 @@ export default class PoolMatchMaking extends Component {
             user_list: []
         }
         this.handleChange = this.handleChange.bind(this);
+        this.componentCleanup = this.componentCleanup.bind(this);
     };
         
-    componentWillMount(){
+    async componentWillMount(){
+      window.addEventListener('beforeunload', this.componentCleanup);
+
+      var pool_name = await this.props.match.params.name
+      socket.emit('joinRoom', Cookies.get('token'), pool_name);
+      console.log('Joined Room');
+
       // socket listening event
       socket.on('roomData', (data) => {
         console.log("user list changed: " + data)
         this.setState({user_list: data})
       });
-    }
 
+    }
+    async componentCleanup(){
+      console.log("leaving pool: " + this.state.pool_name)
+      socket.emit('leaveRoom', Cookies.get('token'), this.state.pool_name);
+      socket.off('roomData');
+    }
     async componentDidMount() {
 
       var pool_name = await this.props.match.params.name
@@ -89,14 +101,12 @@ export default class PoolMatchMaking extends Component {
           }  
       })
       
-      socket.emit('joinRoom', Cookies.get('token'), pool_name);
-      console.log('Joined Room');
+
     }
     
     async componentWillUnmount(){
-      console.log("leaving pool: " + this.state.pool_name)
-      socket.emit('leaveRoom', Cookies.get('token'), this.state.pool_name);
-      socket.off('roomData');
+      this.componentCleanup();
+      window.removeEventListener('beforeunload', this.componentCleanup); // remove the event handler for normal unmounting
     }
 
     handleChange(event) {
