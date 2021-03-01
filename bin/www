@@ -7,8 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('pool-jdope:server');
 var http = require('http');
-const jwt = require('jsonwebtoken')
-
+const jwt = require('jsonwebtoken');
+const fetch = require("node-fetch");
 /**
  * Get port from environment and store in Express.
  */
@@ -40,16 +40,24 @@ io.on('connection', function(socket){
 
   socket.on('joinRoom', function(data, room){
     let token = jwt.decode(data, 'verySecretValue')
-    socket.join(room)
-    addClientToMap(token.name, socket.id)
+    
+    //TODO: valide token.name is a registered client in db
+
     if(pools[room] == undefined){
       pools[room] = {}
       pools[room]["numClients"] = 1;
-      pools[room]["listClient"] = [token.name]
+      pools[room]["listClient"] = [{name: token.name, ready: false}]
+
+      socket.join(room) 
+      addClientToMap(token.name, socket.id)
+
       io.in(room).emit("roomData", pools[room]["listClient"])
     }
     else{
-      if(pools[room]["listClient"].includes(token.name)){
+      if(pools[room]["listClient"].findIndex(e => (e.name === token.name)) !== -1){ // already in the room
+        socket.join(room) // still add the duplicate socket
+        addClientToMap(token.name, socket.id)
+
         io.in(room).emit("roomData", pools[room]["listClient"])
       }
       else if(pools[room]["numClients"] > 5){
@@ -57,7 +65,10 @@ io.on('connection', function(socket){
       }
       else{
         pools[room]["numClients"]++
-        pools[room]["listClient"].push(token.name)
+        pools[room]["listClient"].push({name: token.name, ready: false})
+        socket.join(room) // still add the duplicate socket
+        addClientToMap(token.name, socket.id)
+
         io.in(room).emit("roomData", pools[room]["listClient"])
       }
     }
@@ -73,7 +84,7 @@ io.on('connection', function(socket){
 
     if(removeClientFromMap(token.name, socket.id)){
       
-      var index = pools[room]["listClient"].indexOf(token.name)
+      var index = pools[room]["listClient"].findIndex(e => (e.name === token.name))
       if(index > -1){
         pools[room]["listClient"].splice(index, 1)
         pools[room]["numClients"]--
@@ -91,9 +102,81 @@ io.on('connection', function(socket){
     console.log("in Room now: " + pools[room]["listClient"])
   });
 
+  socket.on('playerReady', function(data, room){
+    let token = jwt.decode(data, 'verySecretValue')
+
+    var index = pools[room]["listClient"].findIndex(e => (e.name === token.name))
+
+    if(index > -1){
+
+      pools[room]["listClient"][index].ready = true
+
+      io.in(room).emit("roomData", pools[room]["listClient"])
+    }
+  });
+
+  socket.on('playerNotReady', function(data, room){
+    let token = jwt.decode(data, 'verySecretValue')
+
+    var index = pools[room]["listClient"].findIndex(e => (e.name === token.name))
+
+    if(index > -1){
+
+      pools[room]["listClient"][index].ready = false
+
+      io.in(room).emit("roomData", pools[room]["listClient"])
+    }
+  });
+
+  socket.on('startDraft', function(data, room){
+    for(i = 0; i < pools[room]["listClient"].length; i++){
+      if(pools[room]["listClient"][i].ready === false){
+        console.log("not every body ready")
+        return
+      }
+    }
+
+    const requestOptions = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'token': data},
+      body: JSON.stringify({pool_name: room, participants: pools[room]["listClient"]})
+    };
+    fetch('http://localhost:3000/pool/start_draft', requestOptions)
+      .then(response => response.json())
+      .then(data => {
+
+        if(data.success === "True"){
+          io.in(room).emit("poolInfo", data.message)
+        }
+        else{
+            console.log('error with put request (start_draft)')
+        }
+      }
+    );
+  });
+
+  socket.on('pickPlayer', function(data, room, player){
+    const requestOptions = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'token': data},
+      body: JSON.stringify({pool_name: room, player: player})
+    };
+    fetch('http://localhost:3000/pool/chose_player', requestOptions)
+      .then(response => response.json())
+      .then(data => {
+
+        if(data.success === "True"){
+          io.in(room).emit("poolInfo", data.message)
+        }
+        else{
+            console.log('error with put request (chose_player)' + data.message)
+        }
+      }
+    );
+  });
+
   socket.on('disconnect', () => {
     console.log("device disconnected")
-    // TODO, make client leave room
   });
 });
 

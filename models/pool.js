@@ -22,15 +22,10 @@ const poolSchema = new Schema({
   goalies_pts_assists: {type: Number},
 
   participants: [String],
+  next_drafter: {type: String},
 
-  context: {
-      participants: [{
-          user: {type: String},
-          choice_forward: [{name: {type: String}, api_call: {type: String}}],
-          choice_defender: [{name: {type: String}, api_call: {type: String}}],
-          choice_goalies: [{name: {type: String}, api_call: {type: String}}]
-      }]
-  },
+  context: {type: Object},
+  nb_player_drafted: {type: Number},
 
   status: {type: String}
 

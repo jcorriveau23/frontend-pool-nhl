@@ -9,4 +9,7 @@ router.get('/pool_list', PoolController.pool_list)
 router.get('/get_pool_info', PoolController.get_pool_info)
 
 router.put('/new_participant', PoolController.new_participant)
+router.put('/start_draft', PoolController.start_draft)
+router.put('/chose_player', PoolController.chose_player)
+
 module.exports = router
