@@ -5,13 +5,7 @@ import Tabs from "./Tabs"
 
 import './poolMatchMaking.css';
 
-const socket = io("http://localhost:8080")
-
-// TODO, parameters received from game creation settings
-const MAX_FORWARD = 12;
-const MAX_DEFENSE = 6;
-const MAX_GOALTENDER = 2;
-const MAX_RESERVIST = 4;
+const socket = io.connect()
 
 export default class PoolMatchMaking extends Component {
     constructor(props) {
@@ -49,7 +43,6 @@ export default class PoolMatchMaking extends Component {
       socket.emit('joinRoom', Cookies.get('token'), pool_name);
       console.log('Joined Room');
 
-      // socket listening event
       socket.on('roomData', (data) => {
         console.log("user list changed: " + data)
         this.setState({user_list: data})
@@ -60,10 +53,9 @@ export default class PoolMatchMaking extends Component {
       });
 
       socket.on("poolInfo", (data) => {
-        console.log("Error: " + data)
+        console.log(data)
         this.setState({pool_info: data})
       });
-
     }
 
     async componentCleanup(){
@@ -84,7 +76,7 @@ export default class PoolMatchMaking extends Component {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', 'token': cookie}
       };
-      fetch('http://localhost:3000/auth/get_user', requestOptions)
+      fetch('../auth/get_user', requestOptions)
       .then(response => response.json())
       .then(data => {
           if(data.success === "False"){
@@ -101,7 +93,7 @@ export default class PoolMatchMaking extends Component {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', 'token': cookie, 'pool_name': pool_name}
       };
-      fetch('http://localhost:3000/pool/get_pool_info', requestOptions2)
+      fetch('../pool/get_pool_info', requestOptions2)
       .then(response => response.json())
       .then(data => {
           if(data.success === "False"){

@@ -20,7 +20,7 @@ export default class Login extends Component {
             method: 'GET',
             headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')}
         };
-        fetch('http://localhost:3000/auth/get_user', requestOptions)
+        fetch('auth/get_user', requestOptions)
         .then(response => response.json())
         .then(data => {
             if(data.success === "True"){
@@ -36,7 +36,7 @@ export default class Login extends Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: this.state.username, password: this.state.psw})
         };
-        fetch('http://localhost:3000/auth/login', requestOptions)
+        fetch('auth/login', requestOptions)
             .then(response => response.json())
             .then(data => {
                 if(data.success === "True"){

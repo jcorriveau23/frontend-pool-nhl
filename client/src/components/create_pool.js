@@ -33,7 +33,7 @@ export default class CreatePool extends Component {
           method: 'GET',
           headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')}
       };
-      fetch('http://localhost:3000/auth/get_user', requestOptions)
+      fetch('auth/get_user', requestOptions)
       .then(response => response.json())
       .then(data => {
           if(data.success === "False"){
@@ -68,7 +68,7 @@ export default class CreatePool extends Component {
                                 goalies_pts_assists: this.state.goalies_pts_assists
                             })
     };
-    fetch('http://localhost:3000/pool/pool_creation', requestOptions)
+    fetch('pool/pool_creation', requestOptions)
         .then(response => response.json())
         .then(data => {
             if(data.success === "True"){

@@ -527,5 +527,4 @@ module.exports = {
     new_participant,
     start_draft,
     chose_player
-
 }

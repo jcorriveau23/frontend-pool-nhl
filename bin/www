@@ -144,7 +144,6 @@ io.on('connection', function(socket){
     fetch('http://localhost:3000/pool/start_draft', requestOptions)
       .then(response => response.json())
       .then(data => {
-
         if(data.success === "True"){
           io.in(room).emit("poolInfo", data.message)
         }

@@ -18,7 +18,7 @@ export default class CreatePool extends Component {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')}
       };
-      fetch('http://localhost:3000/pool/pool_list', requestOptions)
+      fetch('pool/pool_list', requestOptions)
       .then(response => response.json())
       .then(data => {
         console.log(data.message)

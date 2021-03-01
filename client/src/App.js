@@ -24,7 +24,7 @@ export default class App extends Component {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')}
     };
-    fetch('http://localhost:3000/auth/get_user', requestOptions)
+    fetch('auth/get_user', requestOptions)
     .then(response => response.json())
     .then(data => {
         if(data.success === "True"){

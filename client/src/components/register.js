@@ -26,7 +26,7 @@ export default class Register extends Component {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: this.state.username, email: this.state.email, phone: "TODO", password: this.state.psw})
             };
-            fetch('http://localhost:3000/auth/register', requestOptions)
+            fetch('auth/register', requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     if(data.success === "True"){
