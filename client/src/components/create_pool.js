@@ -90,11 +90,14 @@ export default class CreatePool extends Component {
         this.setState({[name]: value});
         console.log(name + " : " + value);
     }
-  
+  /*
+            number_defenders: 6,
+            number_goalies: 2,
+            number_reservist: 4,*/
     render() {
       return(
         <div>
-            <h1>create pool (TODO)</h1>
+            <h1>create pool</h1>
             <p>Pool name:</p>
             <input type="text" placeholder="pool name" name="pool_name" onChange={this.handleChange} required/>
             <p>Number of poolers:</p>
@@ -114,6 +117,53 @@ export default class CreatePool extends Component {
               <option>11</option>
               <option>12</option>
             </select>
+            <p>Number of forwards:</p>
+            <select 
+              name="number_forward" 
+              onChange={this.handleChange} 
+            >
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+            </select>
+            <p>Number of defenders:</p>
+            <select 
+              name="number_defenders" 
+              onChange={this.handleChange} 
+            >
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+            </select>
+            <p>Number of goalies:</p>
+            <select 
+              name="number_goalies" 
+              onChange={this.handleChange} 
+            >
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </select>
+            <p>Number of reservists:</p>
+            <select 
+              name="number_reservist" 
+              onChange={this.handleChange} 
+            >
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </select>
+
             <p>pts per goal by forward:</p>
             <select 
               name="forward_pts_goals" 
