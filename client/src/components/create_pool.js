@@ -37,7 +37,7 @@ export default class CreatePool extends Component {
       .then(response => response.json())
       .then(data => {
           if(data.success === "False"){
-              this.props.history.push('/');
+              this.props.history.push('/Login');
           }
           else{
             this.setState({username: data.username})

@@ -154,7 +154,7 @@ io.on('connection', function(socket){
     );
   });
 
-  socket.on('pickPlayer', function(data, room, player){
+  socket.on('pickPlayer', function(data, room, player, callback){
     const requestOptions = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'token': data},
@@ -166,9 +166,11 @@ io.on('connection', function(socket){
 
         if(data.success === "True"){
           io.in(room).emit("poolInfo", data.message)
+          callback({success: "True", message: data.message})
         }
         else{
             console.log('error with put request (chose_player)' + data.message)
+            callback({success: "False", message: data.message})
         }
       }
     );

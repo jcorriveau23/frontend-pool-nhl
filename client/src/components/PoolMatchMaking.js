@@ -13,10 +13,12 @@ export default class PoolMatchMaking extends Component {
         // variable from this page
         this.state = {
             username: "",
-            pool_info: {},
+            pool_info: {participants: []},
 
             pool_name: "",
             user_list: [],
+
+            message: "",
 
             // Draft
             def_l: [],
@@ -101,6 +103,7 @@ export default class PoolMatchMaking extends Component {
           }
           else{
             console.log(data.message.context)
+            console.log(data.message.participants)
             this.setState({pool_info: data.message})
           }
           
@@ -195,7 +198,14 @@ export default class PoolMatchMaking extends Component {
     async chose_player(player){
       console.log(player.name)
 
-      socket.emit('pickPlayer', Cookies.get('token'), this.state.pool_info.name, player)
+      socket.emit('pickPlayer', Cookies.get('token'), this.state.pool_info.name, player, (ack)=>{
+        if(ack.success === "False"){
+          this.setState({message: ack.message})
+        }
+        else{
+          this.setState({message: ""})
+        }
+      })
       
     }
 
@@ -226,9 +236,9 @@ export default class PoolMatchMaking extends Component {
         }
       }
 
-      const render_defender = () => {
-        if(this.state.pool_info['context'][this.state.username]){
-          return this.state.pool_info['context'][this.state.username]['chosen_defender'].map((player, index) =>
+      const render_defender = (pooler) => {
+        if(this.state.pool_info['context'][pooler]){
+          return this.state.pool_info['context'][pooler]['chosen_defender'].map((player, index) =>
           <tr>
             <td>{index + 1}</td>
             <td>{player.name}</td>
@@ -241,9 +251,9 @@ export default class PoolMatchMaking extends Component {
         }
       }
 
-      const render_forward = () => {
-        if(this.state.pool_info['context'][this.state.username]){
-          return this.state.pool_info['context'][this.state.username]['chosen_forward'].map((player, index) =>
+      const render_forward = (pooler) => {
+        if(this.state.pool_info['context'][pooler]){
+          return this.state.pool_info['context'][pooler]['chosen_forward'].map((player, index) =>
           <tr>
             <td>{index + 1}</td>
             <td>{player.name}</td>
@@ -256,9 +266,9 @@ export default class PoolMatchMaking extends Component {
         }
       }
 
-      const render_reservist = () => {
-        if(this.state.pool_info['context'][this.state.username]){
-          return this.state.pool_info['context'][this.state.username]['chosen_reservist'].map((player, index) =>
+      const render_reservist = (pooler) => {
+        if(this.state.pool_info['context'][pooler]){
+          return this.state.pool_info['context'][pooler]['chosen_reservist'].map((player, index) =>
           <tr>
             <td>{index + 1}</td>
             <td>{player.name}</td>
@@ -271,9 +281,9 @@ export default class PoolMatchMaking extends Component {
         }
       }
 
-      const render_goalies = () => {
-        if(this.state.pool_info['context'][this.state.username]){
-          return this.state.pool_info['context'][this.state.username]['chosen_goalies'].map((player, index) =>
+      const render_goalies = (pooler) => {
+        if(this.state.pool_info['context'][pooler]){
+          return this.state.pool_info['context'][pooler]['chosen_goalies'].map((player, index) =>
           <tr>
             <td>{index + 1}</td>
             <td>{player.name}</td>
@@ -284,6 +294,70 @@ export default class PoolMatchMaking extends Component {
         else{
           return
         }
+      }
+
+      const isUser = (participant) => {
+        return participant === this.state.username
+      }
+
+      const render_tabs_choice = () => {
+        if(this.state.pool_info['participants']){
+          var array = this.state.pool_info['participants']
+          var index = array.findIndex(isUser)
+          array.splice(index, 1)
+          array.splice(0, 0, this.state.username)
+
+          return <Tabs>
+                  {array.map(pooler =>
+                      <div label={pooler}>
+                        <table border="1">
+                    <h3>Forward</h3>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                    {render_forward(pooler)}
+                    <h3>Def</h3>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                    {render_defender(pooler)}
+                    <h3>Goalies</h3>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                    {render_goalies(pooler)}
+                    <h3>Reservist</h3>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                    {render_reservist(pooler)}
+                  </table>
+                      </div>
+                  )}
+          </Tabs>
+          
+        }
+        else{
+          return
+        }
+      }
+
+      const render_color_user_turn = () => {
+        if(this.state.pool_info.next_drafter === this.state.username){
+          return <h2 class="green-text">{this.state.pool_info.next_drafter}'s turn</h2>
+        }
+        else{
+          return <h2 class="red-text">{this.state.pool_info.next_drafter}'s turn</h2>
+        }
+        
       }
 
       if(this.state.pool_info.status === "created"){
@@ -333,7 +407,7 @@ export default class PoolMatchMaking extends Component {
             <h1>Stats derniere saison</h1>
             <div class="floatLeft">
             <Tabs>
-            <div label="def">
+            <div label="defense">
             <h2>Defenseur</h2>
             <table border="1">
               <tbody>
@@ -358,7 +432,7 @@ export default class PoolMatchMaking extends Component {
                 </tbody>
             </table>
             </div>
-            <div label="fow">
+            <div label="forward">
             <h2>Attaquant</h2>
               <table border="1">
                 <tbody>
@@ -383,7 +457,7 @@ export default class PoolMatchMaking extends Component {
                   </tbody>
               </table>
             </div> 
-            <div label="gol">
+            <div label="goalies">
             <h2>Goalers</h2>
               <table border="1">
                 <tbody>
@@ -437,42 +511,14 @@ export default class PoolMatchMaking extends Component {
               </div>
             <div class="floatRight">
                 <div class="floatLeft">
-                  <h2>{this.state.pool_info.next_drafter}'s turn</h2>
-                  <h3>{this.state.selected_player.name}</h3>
+                  {render_color_user_turn()}
+                  <h1>{this.state.selected_player.name}</h1>
+                  <h3 class="red-text">{this.state.message}</h3>
                   <button onClick={() => this.chose_player(this.state.selected_player)}>choose</button>
                 </div>
                 <div class="floatRight">
-                <h1>My Team</h1>
-                  <table border="1">
-                    <h3>Forward</h3>
-                    <tr>
-                      <th>#</th>
-                      <th>name</th>
-                      <th>team</th>
-                    </tr>
-                    {render_forward()}
-                    <h3>Def</h3>
-                    <tr>
-                      <th>#</th>
-                      <th>name</th>
-                      <th>team</th>
-                    </tr>
-                    {render_defender()}
-                    <h3>Goalies</h3>
-                    <tr>
-                      <th>#</th>
-                      <th>name</th>
-                      <th>team</th>
-                    </tr>
-                    {render_goalies()}
-                    <h3>Reservist</h3>
-                    <tr>
-                      <th>#</th>
-                      <th>name</th>
-                      <th>team</th>
-                    </tr>
-                    {render_reservist()}
-                  </table>
+                  {render_tabs_choice()}
+
                 </div>
               </div>
             </div>  

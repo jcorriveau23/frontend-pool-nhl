@@ -24,7 +24,7 @@ export default class CreatePool extends Component {
         console.log(data.message)
         console.log(data.success)
         if(data.success === "False"){
-          this.props.history.push('/');
+          this.props.history.push('/Login');
         }
         else{
           this.setState({pool_list: data.message})

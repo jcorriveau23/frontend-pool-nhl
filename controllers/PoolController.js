@@ -175,7 +175,8 @@ const get_pool_info = (req, res, next) =>{
                 goalies_pts_assists: pool.goalies_pts_assists,
                 next_drafter: pool.next_drafter,
                 context: pool.context,
-                status: pool.status
+                status: pool.status,
+                participants: pool.participants
             }
         }
 
@@ -476,7 +477,7 @@ const chose_player = (req, res, next) => {
                 else if(pool.context[username]['nb_reservist'] < pool.number_reservist){
                     index = pool.context[username]['nb_reservist']
 
-                    pool.context[username]['nb_reservist'][index] = player
+                    pool.context[username]['chosen_reservist'][index] = player
                     pool.context[username]['nb_reservist'] += 1
                 }
                 // cant pick this player
