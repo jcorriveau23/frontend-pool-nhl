@@ -31,8 +31,7 @@ export default class PoolMatchMaking extends Component {
             number_forward_chosen: 0,
             number_defender_chosen: 0,
             number_goalies_chosen: 0,
-            number_reservist_chosen: 0,
-
+            number_reservist_chosen: 0
         }
         this.handleChange = this.handleChange.bind(this);
         this.componentCleanup = this.componentCleanup.bind(this);
@@ -57,6 +56,7 @@ export default class PoolMatchMaking extends Component {
       socket.on("poolInfo", (data) => {
         console.log(data)
         this.setState({pool_info: data})
+        this.filter_players(this.state.pool_info.number_poolers)
       });
     }
 
@@ -68,6 +68,7 @@ export default class PoolMatchMaking extends Component {
 
     async componentDidMount() {
       this.fetchPlayerDraft()
+
       var pool_name = await this.props.match.params.name
       this.setState({pool_name: pool_name})   
       
@@ -102,15 +103,12 @@ export default class PoolMatchMaking extends Component {
               this.props.history.push('/pool_list');
           }
           else{
-            console.log(data.message.context)
-            console.log(data.message.participants)
             this.setState({pool_info: data.message})
           }
-          
+          this.filter_players(this.state.pool_info.number_poolers)
       })
-
-
     }
+
     
     async componentWillUnmount(){
       this.componentCleanup();
@@ -223,6 +221,53 @@ export default class PoolMatchMaking extends Component {
         socket.emit('startDraft', Cookies.get('token'), this.state.pool_info.name);
       }
       
+    }
+
+    async filter_players(number_poolers){
+
+      if(this.state.pool_info.status == "draft"){
+        var def_picked_l = []
+        var forward_picked_l = []
+        var goalies_picked_l = []
+  
+        var participant
+  
+        var filtered_def_l = []
+        var filtered_forward_l = []
+        var filtered_goalies_l = []
+  
+  
+        for(var i = 0; i < number_poolers; i++){
+          participant = this.state.pool_info.participants[i]
+          
+          def_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_defender)
+          forward_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_forward)
+          goalies_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_goalies)
+
+          def_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_reservist)
+          forward_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_reservist)
+          goalies_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_reservist)
+        }
+        
+        filtered_def_l = await this.filterArray(this.state.def_l, def_picked_l)
+        filtered_forward_l = await this.filterArray(this.state.forw_l, forward_picked_l)
+        filtered_goalies_l = await this.filterArray(this.state.goal_l, goalies_picked_l)
+  
+        this.setState({def_l: filtered_def_l})
+        this.setState({forw_l: filtered_forward_l})
+        this.setState({goal_l: filtered_goalies_l})
+      }
+
+    }
+
+    async filterArray(arr1, arr2){
+      const filtered = arr1.filter(e1 => {
+         return (arr2.findIndex(e2 => 
+           e2.name === e1.name && e2.team === e1.team
+         ) === -1);
+      });
+      
+      return filtered;
     }
   
     render() {
@@ -404,7 +449,7 @@ export default class PoolMatchMaking extends Component {
           <div>
             <h1>Draft for pool {this.state.pool_info.name}</h1>
             <div class="container">
-            <h1>Stats derniere saison</h1>
+            <h1>Stats last season</h1>
             <div class="floatLeft">
             <Tabs>
             <div label="defense">
