@@ -171,6 +171,11 @@ export default class PoolMatchMaking extends Component {
           return b.stats.games - a.stats.games;
         });
       }
+      else if(stats === "pts"){
+        array.sort(function(a, b) {
+          return b.stats.pts - a.stats.pts;
+        });
+      }
       else if(stats === "wins"){
         array.sort(function(a, b) {
           return b.stats.wins - a.stats.wins;
@@ -462,7 +467,7 @@ export default class PoolMatchMaking extends Component {
                 <th onClick={() => this.sort_by_number("games", "D")}>Games played</th>
                 <th onClick={() => this.sort_by_number("goals", "D")}>Goals</th>
                 <th onClick={() => this.sort_by_number("assists", "D")}>Assists</th>
-                <th>pts</th>
+                <th onClick={() => this.sort_by_number("pts", "D")}>pts</th>
               </tr>
               {this.state.def_l.map(player => 
                 <tr onClick={() => this.player_selection(player.name, player.team, "D")}>
@@ -471,7 +476,7 @@ export default class PoolMatchMaking extends Component {
                   <td>{player.stats.games}</td>
                   <td>{player.stats.goals}</td>
                   <td>{player.stats.assists}</td>
-                  <td>{player.stats.goals + player.stats.assists}</td>
+                  <td>{player.stats.pts}</td>
                 </tr>
                 )}
                 </tbody>
@@ -487,7 +492,7 @@ export default class PoolMatchMaking extends Component {
                   <th onClick={() => this.sort_by_number("games", "F")}>Games played</th>
                   <th onClick={() => this.sort_by_number("goals", "F")}>Goals</th>
                   <th onClick={() => this.sort_by_number("assists", "F")}>Assists</th>
-                  <th>pts</th>
+                  <th onClick={() => this.sort_by_number("pts", "F")}>pts</th>
                 </tr>
                 {this.state.forw_l.map(player => 
                   <tr onClick={() => this.player_selection(player.name, player.team, "F")}>
@@ -496,7 +501,7 @@ export default class PoolMatchMaking extends Component {
                     <td>{player.stats.games}</td>
                     <td>{player.stats.goals}</td>
                     <td>{player.stats.assists}</td>
-                    <td>{player.stats.goals + player.stats.assists}</td>
+                    <td>{player.stats.pts}</td>
                   </tr>
                   )}
                   </tbody>
@@ -537,7 +542,7 @@ export default class PoolMatchMaking extends Component {
                       <th onClick={() => this.sort_by_number("games", "N/A")}>Games played</th>
                       <th onClick={() => this.sort_by_number("goals", "N/A")}>Goals</th>
                       <th onClick={() => this.sort_by_number("assists", "N/A")}>Assists</th>
-                      <th >pts</th>
+                      <th onClick={() => this.sort_by_number("pts", "N/A")}>pts</th>
                     </tr>
                     {this.state.na_l.map(player => 
                       <tr onClick={() => this.player_selection(player.name, player.team, "G")}>
@@ -546,7 +551,7 @@ export default class PoolMatchMaking extends Component {
                         <td>{player.stats.games}</td>
                         <td>{player.stats.goals}</td>
                         <td>{player.stats.assists}</td>
-                        <td>{player.stats.goals + player.stats.assists}</td>
+                        <td>{player.stats.pts}</td>
                       </tr>
                       )}
                       </tbody>
