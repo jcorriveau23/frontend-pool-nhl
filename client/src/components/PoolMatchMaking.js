@@ -26,6 +26,10 @@ export default class PoolMatchMaking extends Component {
             goal_l: [],
             na_l: [],
 
+            forw_protected: [],
+            def_protected: [],
+            goal_protected: [], 
+
             selected_player: {name: "select a player", team: " - ", role: " - "},
 
             number_forward_chosen: 0,
@@ -213,7 +217,7 @@ export default class PoolMatchMaking extends Component {
     }
 
     async handleChange(event) {
-      if(event.target.type == "checkbox"){
+      if(event.target.type === "checkbox"){
         if(event.target.checked){
           socket.emit('playerReady', Cookies.get('token'), this.state.pool_info.name);
         }
@@ -222,7 +226,7 @@ export default class PoolMatchMaking extends Component {
         }
       }
 
-      else if(event.target.type == "submit"){
+      else if(event.target.type === "submit"){
         socket.emit('startDraft', Cookies.get('token'), this.state.pool_info.name);
       }
       
@@ -230,7 +234,7 @@ export default class PoolMatchMaking extends Component {
 
     async filter_players(number_poolers){
 
-      if(this.state.pool_info.status == "draft"){
+      if(this.state.pool_info.status === "draft"){
         var def_picked_l = []
         var forward_picked_l = []
         var goalies_picked_l = []
@@ -262,6 +266,39 @@ export default class PoolMatchMaking extends Component {
         this.setState({forw_l: filtered_forward_l})
         this.setState({goal_l: filtered_goalies_l})
       }
+
+    }
+
+    async protect_player(player){
+      var changedArray = []
+      var number_protected = this.state.def_protected.length + this.state.forw_protected.length + this.state.goal_protected.length
+      if(number_protected < this.state.pool_info.next_season_number_players_protected){
+        if(player.role === "D"){
+          changedArray = this.state.def_protected
+          changedArray.push(player)
+  
+          this.setState({def_protected: changedArray})
+        }
+        else if(player.role === "F"){
+          changedArray = this.state.forw_protected
+          changedArray.push(player)
+  
+          this.setState({forw_protected: changedArray})
+        }
+        else if(player.role === "G"){
+          changedArray = this.state.goal_protected
+          changedArray.push(player)
+  
+          this.setState({goal_protected: changedArray})
+        }
+      }
+      else{
+        console.log("Maximum player protected reach")
+      }
+
+    }
+
+    async unprotect_player(player){
 
     }
 
@@ -350,9 +387,91 @@ export default class PoolMatchMaking extends Component {
         return participant === this.state.username
       }
 
+      const render_forward_dynastie = () => {
+        if(this.state.pool_info['context'][this.state.username]){
+          var forw_filtered = []
+
+          forw_filtered = this.filterArray(this.state.pool_info['context'][this.state.username]['chosen_forward'], this.state.forw_protected)
+          return forw_filtered.map((player, index) =>
+          <tbody>
+            <tr onClick={() => this.protect_player(player)}>
+              <td>{index + 1}</td>
+              <td>{player.name}</td>
+              <td>{player.team}</td>
+            </tr>
+          </tbody>
+        )
+        }
+        else{
+          return
+        }
+      }
+
+      const render_defender_dynastie = () => {
+        if(this.state.pool_info['context'][this.state.username]){
+          var defender_filtered = []
+
+          defender_filtered = this.filterArray(this.state.pool_info['context'][this.state.username]['chosen_defender'], this.state.def_protected)
+          return defender_filtered.map((player, index) =>
+          <tr onClick={() => this.protect_player(player)}>
+            <td>{index + 1}</td>
+            <td>{player.name}</td>
+            <td>{player.team}</td>
+          </tr>
+        )
+        }
+        else{
+          return
+        }
+      }
+
+      const render_goalies_dynastie = () => {
+        if(this.state.pool_info['context'][this.state.username]){
+          var goal_filtered = []
+
+          goal_filtered = this.filterArray(this.state.pool_info['context'][this.state.username]['chosen_goalies'], this.state.goal_protected)
+          return goal_filtered.map((player, index) =>
+          <tr onClick={() => this.protect_player(player)}>
+            <td>{index + 1}</td>
+            <td>{player.name}</td>
+            <td>{player.team}</td>
+          </tr>
+        )
+        }
+        else{
+          return
+        }
+      }
+
+      const render_reservist_dynastie = () => {
+        if(this.state.pool_info['context'][this.state.username]){
+          var goal_filtered = []
+
+          var players = []
+
+          players = players.concat(this.state.def_protected)
+          players = players.concat(this.state.forw_protected)
+          players = players.concat(this.state.goal_protected)
+
+          goal_filtered = this.filterArray(this.state.pool_info['context'][this.state.username]['chosen_reservist'], players)
+          return goal_filtered.map((player, index) =>
+          <tr onClick={() => this.protect_player(player)}>
+            <td>{index + 1}</td>
+            <td>{player.name}</td>
+            <td>{player.team}</td>
+          </tr>
+        )
+        }
+        else{
+          return
+        }
+      }
+
       const render_tabs_choice = () => {
         if(this.state.pool_info['participants']){
           var array = this.state.pool_info['participants']
+
+          // replace pooler user name to be first
           var index = array.findIndex(isUser)
           array.splice(index, 1)
           array.splice(0, 0, this.state.username)
@@ -574,6 +693,105 @@ export default class PoolMatchMaking extends Component {
             </div>  
           </div>
         )
+      }
+      else if (this.state.pool_info.status === "dynastie"){
+        // TODO match making for dynastie 
+        // Protect your (10? parameter players)
+        return(
+          <div>
+            <h1>Draft for pool {this.state.pool_info.name}</h1>
+            <div class="container">
+              <h1>Protect {this.state.pool_info.next_season_number_players_protected} players of your team</h1>
+              <div class="floatLeft">
+                <table border="1">
+                  <h1>Forwards</h1>
+                  <thead>
+                    <tr>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                    {render_forward_dynastie()}
+                  </thead>
+                  <h1>Defenders</h1>
+                  <thead>
+                    <tr>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                    {render_defender_dynastie()}
+                  </thead>
+                  <h1>Goalies</h1>
+                  <thead>
+                    <tr>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                    {render_goalies_dynastie()}
+                  </thead>
+                  <h1>Reservists</h1>
+                  <thead>
+                    <tr>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                    {render_reservist_dynastie()}
+                  </thead>
+                </table>
+              </div>
+              <div class="floatRight">
+                <h1>Forwards</h1>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                  </thead>
+                  {this.state.forw_protected.map((player, index) => //TODO
+                    <tr>
+                      <td>{index + 1}</td>
+                      <td>{player.name}</td>
+                      <td>{player.team}</td>
+                    </tr>
+                  )}
+                <h1>Defenders</h1>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                  </thead>
+                  {this.state.def_protected.map((player, index) => //TODO
+                    <tr>
+                      <td>{index + 1}</td>
+                      <td>{player.name}</td>
+                      <td>{player.team}</td>
+                    </tr>
+                  )}
+                <h1>Goalies</h1>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                  </thead>
+                  {this.state.goal_protected.map((player, index) => //TODO
+                    <tr>
+                      <td>{index + 1}</td>
+                      <td>{player.name}</td>
+                      <td>{player.team}</td>
+                    </tr>
+                  )}
+              </div>
+            </div>
+          </div>
+        )
+      }
+      else if (this.state.pool_info.status === "dynastiedraft"){
+        // TODO protect your player (10? parameter)
+        // TODO match making 
       }
       else{
         return(

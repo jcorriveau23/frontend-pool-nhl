@@ -45,6 +45,8 @@ const pool_creation = (req, res, next) =>{
                 goalies_pts_shutouts: req.body.goalies_pts_shutouts,
                 goalies_pts_goals: req.body.goalies_pts_goals,
                 goalies_pts_assists: req.body.goalies_pts_assists,
+                next_season_number_players_protected: req.body.next_season_number_players_protected,
+                tradable_picks: req.body.tradable_picks,
                 status: "created"
               
             })
@@ -65,7 +67,6 @@ const pool_creation = (req, res, next) =>{
         }
     })
 }
-
 
 const pool_list = (req, res, next) =>{
     
@@ -176,7 +177,9 @@ const get_pool_info = (req, res, next) =>{
                 next_drafter: pool.next_drafter,
                 context: pool.context,
                 status: pool.status,
-                participants: pool.participants
+                participants: pool.participants,
+                next_season_number_players_protected: pool.next_season_number_players_protected,
+                tradable_picks: pool.tradable_picks,
             }
         }
 
@@ -489,9 +492,16 @@ const chose_player = (req, res, next) => {
                     return
                 }
 
-                // next pooler
-                pool.nb_player_drafted +=1
-                pool.next_drafter = pool.participants[pool.nb_player_drafted % pool.number_poolers]
+                if(pool.nb_player_drafted == pool.number_poolers*(pool.number_defenders + pool.number_forward + pool.number_goalies + pool.number_reservist)){
+                    // draft is complete
+                    pool.status = "dynastie"
+                }
+                else{
+                    // next pooler
+                    pool.nb_player_drafted +=1
+                    pool.next_drafter = pool.participants[pool.nb_player_drafted % pool.number_poolers]
+                }
+
 
 
                 Pool.updateOne({_id: pool._id}, {$set: pool}, function(err, result){
@@ -519,6 +529,10 @@ const chose_player = (req, res, next) => {
             }
         }
     })
+}
+
+const protected_player = (req, res, next) => {
+    //TODO store the list of protected players into a new data structure for the next season dynastie
 }
 
 module.exports = {
