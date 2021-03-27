@@ -20,7 +20,9 @@ const poolSchema = new Schema({
   goalies_pts_shutouts: {type: Number},
   goalies_pts_goals: {type: Number},
   goalies_pts_assists: {type: Number},
-
+  next_season_number_players_protected: {type: Number},
+  tradable_picks: {type: Number},
+   
   participants: [String],
   next_drafter: {type: String},
 

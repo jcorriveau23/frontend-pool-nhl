@@ -327,25 +327,43 @@ const start_draft = (req, res, next) =>{
             if(pool.number_poolers === participants.length){
                 if(pool.owner === username){
                     // modify pool object
-                    pool.context = {}
-                    for(i = 0; i < participants.length; i++){
-                        pool.participants.push(participants[i].name)
-                        pool.context[participants[i].name] = {}
-                        pool.context[participants[i].name]['chosen_defender'] = Array(pool.number_defenders).fill({name: " - ", team: " - ", role: '', api: ''}),
-                        pool.context[participants[i].name]['chosen_forward'] = Array(pool.number_forward).fill({name: " - ", team: " - ", role: '', api: ''}),
-                        pool.context[participants[i].name]['chosen_goalies'] = Array(pool.number_goalies).fill({name: " - ", team: " - ", role: '', api: ''}),
-                        pool.context[participants[i].name]['chosen_reservist'] = Array(pool.number_reservist).fill({name: " - ", team: " - ", role: '', api: ''})
-                        pool.context[participants[i].name]['nb_defender'] = 0
-                        pool.context[participants[i].name]['nb_forward'] = 0
-                        pool.context[participants[i].name]['nb_goalies'] = 0
-                        pool.context[participants[i].name]['nb_reservist'] = 0
+                    if(pool.status === "created"){
+                        // TODO set player order aleatoire
+
+                        pool.context = {}
+                        for(i = 0; i < participants.length; i++){
+                            pool.participants.push(participants[i].name)
+                            pool.context[participants[i].name] = {}
+                            pool.context[participants[i].name]['chosen_defender'] = Array(pool.number_defenders).fill({name: " - ", team: " - ", role: '', api: ''}),
+                            pool.context[participants[i].name]['chosen_forward'] = Array(pool.number_forward).fill({name: " - ", team: " - ", role: '', api: ''}),
+                            pool.context[participants[i].name]['chosen_goalies'] = Array(pool.number_goalies).fill({name: " - ", team: " - ", role: '', api: ''}),
+                            pool.context[participants[i].name]['chosen_reservist'] = Array(pool.number_reservist).fill({name: " - ", team: " - ", role: '', api: ''})
+
+                            pool.context[participants[i].name]['tradable_picks'] = [] // array of tradable picks
+                            for(j = 0; j < pool.tradable_picks; j++){
+                                pool.context[participants[i].name]['tradable_picks'].push({"rank": j+1, "player": participants[i].name})
+                            }
+
+                            pool.context[participants[i].name]['nb_defender'] = 0
+                            pool.context[participants[i].name]['nb_forward'] = 0
+                            pool.context[participants[i].name]['nb_goalies'] = 0
+                            pool.context[participants[i].name]['nb_reservist'] = 0
+                        }
                     }
+                    else if(pool.status === "dynastie"){
+                        // TODO set player order depending on last season placement
+                        for(i = 0; i < participants.length; i++){
+                            pool.context[participants[i].name]['tradable_picks'] = [] // reset array of tradable picks
+                            for(j = 0; j < pool.tradable_picks; j++){
+                                pool.context[participants[i].name]['tradable_picks'].push({"rank": j+1, "player": participants[i].name})
+                            }
+                        }
+                    }
+
+                    
                     pool.status = "draft"
                     pool.nb_player_drafted = 0
-                    pool.next_drafter = pool.participants[0] //TODO change to be aleatoire
-                    // modify pool object
-
-                    console.log("pool object modified")
+                    pool.next_drafter = pool.participants[0] //TODO, look previous TODO
 
                     Pool.updateOne({_id: pool._id}, {$set: pool}, function(err, result){
                         if(err){
@@ -492,7 +510,7 @@ const chose_player = (req, res, next) => {
                     return
                 }
 
-                if(pool.nb_player_drafted == pool.number_poolers*(pool.number_defenders + pool.number_forward + pool.number_goalies + pool.number_reservist)){
+                if(pool.nb_player_drafted == pool.number_poolers*(pool.number_defenders + pool.number_forward + pool.number_goalies + pool.number_reservist)){ // TODO use also tradable picks
                     // draft is complete
                     pool.status = "dynastie"
                 }
