@@ -328,7 +328,6 @@ const start_draft = (req, res, next) =>{
                 if(pool.owner === username){
                     // modify pool object
                     if(pool.status === "created"){
-                        // TODO set player order aleatoire
 
                         pool.context = {}
                         for(i = 0; i < participants.length; i++){
@@ -349,6 +348,14 @@ const start_draft = (req, res, next) =>{
                             pool.context[participants[i].name]['nb_goalies'] = 0
                             pool.context[participants[i].name]['nb_reservist'] = 0
                         }
+                        var shuffle_participants = shuffleArray(pool.participants);
+
+                        pool.context['draft_order'] = []
+                        for(i = 0; i < pool.number_poolers*(pool.nb_defender + pool.nb_forward + pool.nb_goalies + pool.nb_reservist); i++)
+                        {
+                            pool.context['draft_order'].push(shuffle_participants[i])
+                        }
+                        pool.next_drafter = pool.context['draft_order'].shift() // pop next drafter
                     }
                     else if(pool.status === "dynastie"){
                         // TODO set player order depending on last season placement
@@ -363,7 +370,6 @@ const start_draft = (req, res, next) =>{
                     
                     pool.status = "draft"
                     pool.nb_player_drafted = 0
-                    pool.next_drafter = pool.participants[0] //TODO, look previous TODO
 
                     Pool.updateOne({_id: pool._id}, {$set: pool}, function(err, result){
                         if(err){
@@ -517,7 +523,7 @@ const chose_player = (req, res, next) => {
                 else{
                     // next pooler
                     pool.nb_player_drafted +=1
-                    pool.next_drafter = pool.participants[pool.nb_player_drafted % pool.number_poolers]
+                    pool.next_drafter = pool.context['draft_order'].shift()
                 }
 
 
@@ -551,6 +557,10 @@ const chose_player = (req, res, next) => {
 
 const protected_player = (req, res, next) => {
     //TODO store the list of protected players into a new data structure for the next season dynastie
+}
+
+function shuffleArray(arr) {
+    arr.sort(() => Math.random() - 0.5);
 }
 
 module.exports = {
