@@ -1,6 +1,6 @@
 # pool-nhl-ethereum
 
-nhl hockey pool that automatically distribute fund to the winner
+nhl hockey pool that automatically distribute fund to the winner without 3rd party with the use of smart contract.
 
 ## Run the app in development configuration
 ### Start server command
