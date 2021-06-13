@@ -250,12 +250,12 @@ export default class PoolMatchMaking extends Component {
           participant = this.state.pool_info.participants[i]
           
           def_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_defender)
-          forward_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_forward)
-          goalies_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_goalies)
+          forward_picked_l = forward_picked_l.concat(this.state.pool_info.context[participant].chosen_forward)
+          goalies_picked_l = goalies_picked_l.concat(this.state.pool_info.context[participant].chosen_goalies)
 
           def_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_reservist)
-          forward_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_reservist)
-          goalies_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_reservist)
+          forward_picked_l = forward_picked_l.concat(this.state.pool_info.context[participant].chosen_reservist)
+          goalies_picked_l = goalies_picked_l.concat(this.state.pool_info.context[participant].chosen_reservist)
         }
         
         filtered_def_l = await this.filterArray(this.state.def_l, def_picked_l)
@@ -445,7 +445,7 @@ export default class PoolMatchMaking extends Component {
 
       const render_reservist_dynastie = () => {
         if(this.state.pool_info['context'][this.state.username]){
-          var goal_filtered = []
+          var reserv_filtered = []
 
           var players = []
 
@@ -453,8 +453,8 @@ export default class PoolMatchMaking extends Component {
           players = players.concat(this.state.forw_protected)
           players = players.concat(this.state.goal_protected)
 
-          goal_filtered = this.filterArray(this.state.pool_info['context'][this.state.username]['chosen_reservist'], players)
-          return goal_filtered.map((player, index) =>
+          reserv_filtered = this.filterArray(this.state.pool_info['context'][this.state.username]['chosen_reservist'], players)
+          return reserv_filtered.map((player, index) =>
           <tr onClick={() => this.protect_player(player)}>
             <td>{index + 1}</td>
             <td>{player.name}</td>
@@ -789,9 +789,16 @@ export default class PoolMatchMaking extends Component {
           </div>
         )
       }
-      else if (this.state.pool_info.status === "dynastiedraft"){
-        // TODO protect your player (10? parameter)
-        // TODO match making 
+      else if (this.state.pool_info.status === "in Progress"){
+        return(
+          <div>
+            <h1>Pool in progress...</h1>
+            <div>
+                  {render_tabs_choice()}
+
+            </div>
+          </div>
+        )
       }
       else{
         return(

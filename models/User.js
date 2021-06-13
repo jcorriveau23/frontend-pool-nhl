@@ -13,7 +13,10 @@ const userSchema = new Schema({
   },
   password: {
     type: String
-  }
+  },
+  
+  pool_list: [String]
+
 }, {timestamps: true})
 
 const User = mongoose.model('User', userSchema)

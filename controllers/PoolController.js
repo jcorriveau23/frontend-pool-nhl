@@ -1,7 +1,6 @@
 const Pool = require('../models/Pool')
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
-const { db } = require('../models/User')
 
 const pool_creation = (req, res, next) =>{
     var encrypt_token = req.headers.token
@@ -47,6 +46,8 @@ const pool_creation = (req, res, next) =>{
                 goalies_pts_assists: req.body.goalies_pts_assists,
                 next_season_number_players_protected: req.body.next_season_number_players_protected,
                 tradable_picks: req.body.tradable_picks,
+                context: {},
+                next_drafter: "",
                 status: "created"
               
             })
@@ -69,6 +70,7 @@ const pool_creation = (req, res, next) =>{
 }
 
 const pool_list = (req, res, next) =>{
+    var user_pools = []
     
     if(req.headers.token !== "undefined"){
         var encrypt_token = req.headers.token
@@ -83,6 +85,7 @@ const pool_list = (req, res, next) =>{
                 })
                 return
             }
+            user_pools = user.pool_list
         })
     }
     else{
@@ -103,11 +106,24 @@ const pool_list = (req, res, next) =>{
         for(i=0; i < pools.length; i++){
             pools_created.push({"name": pools[i].name, "owner": pools[i].owner})
         }
-        res.json({
-            success: "True",
-            message: pools_created
+
+        Pool.find({name: user_pools}, {name:1, status:1, owner:1})
+        .then(pools => {
+            console.log(pools)
+            res.json({
+                success: "True",
+                pool_created: pools_created,
+                user_pools_info: pools
+                })
         })
-        return
+        .catch(error => {
+            res.json({
+                success: "False",
+                message: error
+            })
+            return
+        })
+        
     })
     .catch(error => {
         res.json({
@@ -348,14 +364,14 @@ const start_draft = (req, res, next) =>{
                             pool.context[participants[i].name]['nb_goalies'] = 0
                             pool.context[participants[i].name]['nb_reservist'] = 0
                         }
-                        var shuffle_participants = shuffleArray(pool.participants);
-
+                        shuffleArray(pool.participants);    // randomize a bit
                         pool.context['draft_order'] = []
-                        for(i = 0; i < pool.number_poolers*(pool.nb_defender + pool.nb_forward + pool.nb_goalies + pool.nb_reservist); i++)
+                        var number_picks = pool.number_poolers*(pool.number_defenders + pool.number_forward + pool.number_goalies + pool.number_reservist)
+                        for(i = 0; i < number_picks; i++)
                         {
-                            pool.context['draft_order'].push(shuffle_participants[i])
+                            pool.context['draft_order'].push(pool.participants[i % pool.number_poolers])
                         }
-                        pool.next_drafter = pool.context['draft_order'].shift() // pop next drafter
+                        pool.next_drafter = pool.context['draft_order'].shift() // pop first next drafter of the draft
                     }
                     else if(pool.status === "dynastie"){
                         // TODO set player order depending on last season placement
@@ -380,6 +396,33 @@ const start_draft = (req, res, next) =>{
                             return
                         }
                         else{
+                            for(i = 0; i < participants.length; i++){
+                                User.findOne({name: participants[i].name})      
+                                .then(user => {
+                                    
+                                    user.pool_list.push(pool.name)
+
+                                    User.updateOne({_id: user._id}, {$set: user}, function(err, result){
+                                        if(err){
+                                            res.json({
+                                                success: "False",
+                                                message: 'Problem with updating one of user information'
+                                            })
+                                            return
+                                        }
+                                        else{
+                                            console.log(user.name + " assigned to pool: " + pool.name)
+                                        }
+                                    })
+                                })
+                                .catch(error => {
+                                    res.json({
+                                        success: "False",
+                                        message: error
+                                    })
+                                    return
+                                })                    
+                            }
                             res.json({
                                 success: "True",
                                 message: pool
@@ -516,14 +559,12 @@ const chose_player = (req, res, next) => {
                     return
                 }
 
-                if(pool.nb_player_drafted == pool.number_poolers*(pool.number_defenders + pool.number_forward + pool.number_goalies + pool.number_reservist)){ // TODO use also tradable picks
-                    // draft is complete
-                    pool.status = "dynastie"
-                }
-                else{
-                    // next pooler
-                    pool.nb_player_drafted +=1
-                    pool.next_drafter = pool.context['draft_order'].shift()
+
+                // next pooler to draft
+                pool.nb_player_drafted +=1
+                pool.next_drafter = pool.context['draft_order'].shift()
+                if(pool.context['draft_order'].length == 0){
+                    pool.status = "in Progress"  // draft completed
                 }
 
 
