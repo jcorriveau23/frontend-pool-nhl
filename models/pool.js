@@ -29,7 +29,8 @@ const poolSchema = new Schema({
   context: {type: Object},
   nb_player_drafted: {type: Number},
 
-  status: {type: String}
+  status: {type: String},
+  final_rank: [String]
 
 }, {timestamps: true})
 

@@ -11,5 +11,6 @@ router.get('/get_pool_info', PoolController.get_pool_info)
 router.put('/new_participant', PoolController.new_participant)
 router.put('/start_draft', PoolController.start_draft)
 router.put('/chose_player', PoolController.chose_player)
+router.put('/protect_players', PoolController.protected_players)
 
 module.exports = router
