@@ -122,7 +122,56 @@ export default class PoolMatchMaking extends Component {
       
     }
 
-    
+    async download_csv(pool){
+      var csv = 'Player Name,Team\n';
+
+      for(var i = 0; i < pool.number_poolers; i++){
+        var pooler = pool.participants[i]
+        
+        // forward
+        csv += pooler + "'s forwards\n"
+        for(var j= 0; j < pool.context[pooler].chosen_forward.length; j++){
+          csv += pool.context[pooler].chosen_forward[j].name + ', ' + pool.context[pooler].chosen_forward[j].team
+          csv += "\n";
+        }
+        csv += "\n";
+
+        // defenders
+        csv += pooler + "'s defenders\n"
+        for(var j= 0; j < pool.context[pooler].chosen_defender.length; j++){
+          csv += pool.context[pooler].chosen_defender[j].name + ', ' + pool.context[pooler].chosen_defender[j].team
+          csv += "\n";
+        }
+        csv += "\n";
+
+        // goalies
+        csv += pooler + "'s goalies\n"
+        for(var j= 0; j < pool.context[pooler].chosen_goalies.length; j++){
+          csv += pool.context[pooler].chosen_goalies[j].name + ', ' + pool.context[pooler].chosen_goalies[j].team
+          csv += "\n";
+        }
+        csv += "\n";
+
+        // reservist
+        csv += pooler + "'s reservists\n"
+        for(var j= 0; j < pool.context[pooler].chosen_reservist.length; j++){
+          csv += pool.context[pooler].chosen_reservist[j].name + ', ' + pool.context[pooler].chosen_reservist[j].team
+          csv += "\n";
+        }
+        csv += "\n";
+        csv += "\n-------, -------, -------, -------\n";
+        csv += "\n";
+      }
+
+      console.log(csv);
+      var hiddenElement = document.createElement('a');
+      hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+      hiddenElement.target = '_blank';
+      hiddenElement.download = 'people.csv';
+      hiddenElement.click();
+
+    }
+
     async componentWillUnmount(){
       this.componentCleanup();
       window.removeEventListener('beforeunload', this.componentCleanup); // remove the event handler for normal unmounting
@@ -975,6 +1024,7 @@ export default class PoolMatchMaking extends Component {
         return(
           <div>
             <h1>Pool in progress...</h1>
+            <button onClick={() => this.download_csv(this.state.pool_info)}>Download CSV</button>
             <div>
                   {render_tabs_choice()}
 
