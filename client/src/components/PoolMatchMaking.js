@@ -43,6 +43,7 @@ export default class PoolMatchMaking extends Component {
             number_goalies_chosen: 0,
             number_reservist_chosen: 0
         }
+        
         this.handleChange = this.handleChange.bind(this);
         this.componentCleanup = this.componentCleanup.bind(this);
     };
