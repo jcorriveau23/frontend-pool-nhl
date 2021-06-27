@@ -157,37 +157,59 @@ export default class PoolMatchMaking extends Component {
     async calculate_pool_stats(){
       var stats = {}
       var pooler
+      var player
+
       for(var i = 0; i < this.state.pool_info.participants.length; i++){
         pooler = this.state.pool_info.participants[i]
 
         stats[pooler] = {}
         stats[pooler]["chosen_forward"] = []
 
+        var forwards_total_pts = 0// TODO, calculate each of them to include in stats[pooler][x_total_points] and show them 
+        var defenders_total_pts = 0
+        var goalies_total_pts = 0
+        var reservist_total_pts = 0
+        var total_pts = 0
+
         for(var j = 0; j < this.state.pool_info.context[pooler].chosen_forward.length; j++){
-          console.log(this.state.pool_info.context[pooler].chosen_forward[j].name)
-          stats[pooler]["chosen_forward"].push(this.state.players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_forward[j].name))
+          player = this.state.players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_forward[j].name)
+          player["pool_points"] = this.state.pool_info.forward_pts_goals*player.stats.goals + this.state.pool_info.forward_pts_assists*player.stats.assists //+ hat trick 
+          stats[pooler]["chosen_forward"].push(player)
         }
 
         stats[pooler]["chosen_defender"] = []
 
         for(var j = 0; j < this.state.pool_info.context[pooler].chosen_defender.length; j++){
-          console.log(this.state.pool_info.context[pooler].chosen_defender[j].name)
-          stats[pooler]["chosen_defender"].push(this.state.players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_defender[j].name))
+          player = this.state.players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_defender[j].name)
+          player["pool_points"] = this.state.pool_info.defender_pts_goals*player.stats.goals + this.state.pool_info.defender_pts_assits*player.stats.assists //+ hat trick 
+          stats[pooler]["chosen_defender"].push(player)
         }
 
         stats[pooler]["chosen_goalies"] = []
 
         for(var j = 0; j < this.state.pool_info.context[pooler].chosen_goalies.length; j++){
-          console.log(this.state.pool_info.context[pooler].chosen_goalies[j].name)
-          stats[pooler]["chosen_goalies"].push(this.state.players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_goalies[j].name))
+          player = this.state.players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_goalies[j].name)
+          player["pool_points"] = this.state.pool_info.goalies_pts_wins*player.stats.wins + this.state.pool_info.goalies_pts_shutouts*player.stats.shutouts
+          stats[pooler]["chosen_goalies"].push(player)
         }
 
         stats[pooler]["chosen_reservist"] = []
 
         for(var j = 0; j < this.state.pool_info.context[pooler].chosen_reservist.length; j++){
-          console.log(this.state.pool_info.context[pooler].chosen_reservist[j].name)
-          stats[pooler]["chosen_reservist"].push(this.state.players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_reservist[j].name))
+          player = this.state.players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_reservist[j].name)
+
+          if(player.position === "G"){
+            player["pool_points"] = this.state.pool_info.goalies_pts_wins*player.stats.wins + this.state.pool_info.goalies_pts_shutouts*player.stats.shutouts
+          }
+          else if(player.position === "F"){
+            player["pool_points"] = this.state.pool_info.forward_pts_goals*player.stats.goals + this.state.pool_info.forward_pts_assists*player.stats.assists //+ hat trick 
+          }
+          else{
+            player["pool_points"] = this.state.pool_info.defender_pts_goals*player.stats.goals + this.state.pool_info.defender_pts_assits*player.stats.assists //+ hat trick 
+          }
+          stats[pooler]["chosen_reservist"].push(player)
         }
+        // TODO, calculate points for each poolers using pool parameters entered when creating the pool
 
         this.setState({stats: stats})
       }
@@ -629,6 +651,7 @@ export default class PoolMatchMaking extends Component {
             <td>{player.stats.goals}</td>
             <td>{player.stats.assists}</td>
             <td>{player.stats.pts}</td>
+            <td>{player.pool_points}</td>
           </tr>
         )
         }
@@ -663,6 +686,7 @@ export default class PoolMatchMaking extends Component {
             <td>{player.stats.goals}</td>
             <td>{player.stats.assists}</td>
             <td>{player.stats.pts}</td>
+            <td>{player.pool_points}</td>
           </tr>
         )
         }
@@ -670,7 +694,6 @@ export default class PoolMatchMaking extends Component {
           return
         }
       }
-      
 
       const render_reservist = (pooler) => {
         if(this.state.pool_info['context'][pooler]){
@@ -729,6 +752,10 @@ export default class PoolMatchMaking extends Component {
             <td>{index + 1}</td>
             <td>{player.name}</td>
             <td>{player.team}</td>
+            <td>{player.stats.wins}</td>
+            <td>{player.stats.losses}</td>
+            <td>{player.stats.savePercentage}</td>
+            <td>{player.pool_points}</td>
 
           </tr>
         )
