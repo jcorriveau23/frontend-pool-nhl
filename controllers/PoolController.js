@@ -1,5 +1,6 @@
 const Pool = require('../models/Pool')
 const User = require('../models/User')
+const Player = require('../models/Player')
 const jwt = require('jsonwebtoken')
 
 const pool_creation = (req, res, next) =>{
@@ -109,7 +110,6 @@ const pool_list = (req, res, next) =>{
 
         Pool.find({name: user_pools}, {name:1, status:1, owner:1})
         .then(pools => {
-            console.log(pools)
             res.json({
                 success: "True",
                 pool_created: pools_created,
@@ -158,8 +158,7 @@ const get_pool_info = (req, res, next) =>{
         })
         return
     }
-    
-    
+
     var pool_name = req.headers.pool_name
 
     Pool.findOne({name:pool_name})
@@ -756,6 +755,86 @@ const protected_players = (req, res, next) => {
     )
 }
 
+const get_pool_stats = (req, res, next) => {
+    var username;
+
+    if(req.headers.token !== "undefined"){
+        var encrypt_token = req.headers.token
+        let token = jwt.decode(encrypt_token, 'verySecretValue')
+        username = token.name
+        // TODO: use token.iat and token.exp to use token expiration and force user to re-login
+        User.findOne({$or: [{name:username}]})
+        .then(user => {
+            if(!user){
+                res.json({
+                    success: "False",
+                    message: 'User is not registered!'
+                })
+                return
+            }
+        })
+    }
+    else{
+        res.json({
+            success: "False",
+            message: 'no token, you need to login'
+        })
+        return
+    }
+
+    var pool_name = req.headers.pool_name
+    var players_name = []
+    var players_team = []
+
+    Pool.findOne({name:pool_name})
+    .then(pool => {
+        if(!pool){
+            res.json({
+                success: "False",
+                message: 'Pool does not exist'
+            })
+            return
+        }
+        else{
+            for(var i = 0; i < pool.number_poolers; i++){
+                for(var j = 0; j < pool.context[pool.participants[i]].chosen_defender.length; j++){
+                    players_name.push(pool.context[pool.participants[i]].chosen_defender[j].name)
+                    players_team.push(pool.context[pool.participants[i]].chosen_defender[j].team)
+                }
+                for(var j = 0; j < pool.context[pool.participants[i]].chosen_forward.length; j++){
+                    players_name.push(pool.context[pool.participants[i]].chosen_forward[j].name)
+                    players_team.push(pool.context[pool.participants[i]].chosen_forward[j].team)
+                }
+                for(var j = 0; j < pool.context[pool.participants[i]].chosen_goalies.length; j++){
+                    players_name.push(pool.context[pool.participants[i]].chosen_goalies[j].name)
+                    players_team.push(pool.context[pool.participants[i]].chosen_goalies[j].team)
+                }
+                for(var j = 0; j < pool.context[pool.participants[i]].chosen_reservist.length; j++){
+                    players_name.push(pool.context[pool.participants[i]].chosen_reservist[j].name)
+                    players_team.push(pool.context[pool.participants[i]].chosen_reservist[j].team)
+                }
+            }
+
+            Player.find({name: players_name, team: players_team}, {name:1, team:1, stats:1, position:1, url:1})
+            .then(players => {
+                console.log(players)
+                res.json({
+                    success: "True",
+                    players: players,
+                    })
+            })
+            .catch(error => {
+                res.json({
+                    success: "False",
+                    message: error
+                })
+                return
+            })
+        }
+    }
+    )
+}
+
 function shuffleArray(arr) {
     arr.sort(() => Math.random() - 0.5);
 }
@@ -767,5 +846,6 @@ module.exports = {
     new_participant,
     start_draft,
     chose_player,
-    protected_players
+    protected_players,
+    get_pool_stats
 }
