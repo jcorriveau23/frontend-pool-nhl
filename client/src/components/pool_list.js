@@ -33,8 +33,6 @@ export default class CreatePool extends Component {
           var pool_draft = []
           var pool_in_progress = []
           var pool_dynastie = []
-          console.log(data.pool_created)
-          console.log(data.user_pools_info)
 
           for(var i=0; i < data.user_pools_info.length; i++){
             if (data.user_pools_info[i]['status'] === 'draft'){
@@ -56,10 +54,6 @@ export default class CreatePool extends Component {
         }
       })
 
-    }
-
-    async go_to_pool(){
-        // TODO go to pool information
     }
     
     handleChange(event) {

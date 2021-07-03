@@ -57,7 +57,7 @@ const pool_creation = (req, res, next) =>{
             .then(user => {
                 res.json({
                     success: "True",
-                    message: 'Pool added successfully!'
+                    message: req.body.name
                 })
             })
             .catch(error => {

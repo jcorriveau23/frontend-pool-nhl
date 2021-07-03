@@ -80,8 +80,7 @@ export default class CreatePool extends Component {
         .then(data => {
             if(data.success === "True"){
 
-                //this.props.history.push('/pool_list'); TODO: Enter pool entrance with other user
-                console.log(data.message)
+                this.props.history.push('/pool_list/' + data.message);
             }
             else{
                 console.log(data.message)
