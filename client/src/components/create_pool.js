@@ -79,7 +79,6 @@ export default class CreatePool extends Component {
         .then(response => response.json())
         .then(data => {
             if(data.success === "True"){
-
                 this.props.history.push('/pool_list/' + data.message);
             }
             else{
