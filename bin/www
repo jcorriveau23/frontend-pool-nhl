@@ -40,66 +40,70 @@ io.on('connection', function(socket){
 
   socket.on('joinRoom', function(data, room){
     let token = jwt.decode(data, 'verySecretValue')
-    
+
+    if(token !== null){
     //TODO: valide token.name is a registered client in db
+ 
+      if(pools[room] == undefined){
+        pools[room] = {}
+        pools[room]["numClients"] = 1;
+        pools[room]["listClient"] = [{name: token.name, ready: false}]
 
-    if(pools[room] == undefined){
-      pools[room] = {}
-      pools[room]["numClients"] = 1;
-      pools[room]["listClient"] = [{name: token.name, ready: false}]
-
-      socket.join(room) 
-      addClientToMap(token.name, socket.id)
-
-      io.in(room).emit("roomData", pools[room]["listClient"])
-    }
-    else{
-      if(pools[room]["listClient"].findIndex(e => (e.name === token.name)) !== -1){ // already in the room
-        socket.join(room) // still add the duplicate socket
+        socket.join(room) 
         addClientToMap(token.name, socket.id)
 
         io.in(room).emit("roomData", pools[room]["listClient"])
-      }
-      else if(pools[room]["numClients"] > 5){
-        // dont add it
       }
       else{
-        pools[room]["numClients"]++
-        pools[room]["listClient"].push({name: token.name, ready: false})
-        socket.join(room) // still add the duplicate socket
-        addClientToMap(token.name, socket.id)
+        if(pools[room]["listClient"].findIndex(e => (e.name === token.name)) !== -1){ // already in the room
+          socket.join(room) // still add the duplicate socket
+          addClientToMap(token.name, socket.id)
 
-        io.in(room).emit("roomData", pools[room]["listClient"])
+          io.in(room).emit("roomData", pools[room]["listClient"])
+        }
+        else if(pools[room]["numClients"] > 5){
+          // dont add it
+        }
+        else{
+          pools[room]["numClients"]++
+          pools[room]["listClient"].push({name: token.name, ready: false})
+          socket.join(room) // still add the duplicate socket
+          addClientToMap(token.name, socket.id)
+
+          io.in(room).emit("roomData", pools[room]["listClient"])
+        }
       }
+      console.log(token.name + " join room: " + room);
+      console.log("in Room now: " + pools[room]["listClient"])
     }
-      
-    console.log(token.name + " join room: " + room);
-    console.log("in Room now: " + pools[room]["listClient"])
   });
 
   socket.on('leaveRoom', function(data, room){
     let token = jwt.decode(data, 'verySecretValue')
-    socket.leave(room)
-    console.log(socket.id + " leave room: " + room);
 
-    if(removeClientFromMap(token.name, socket.id)){
+    if(token !== null){
+      socket.leave(room)
+      console.log(socket.id + " leave room: " + room);
       
-      var index = pools[room]["listClient"].findIndex(e => (e.name === token.name))
-      if(index > -1){
-        pools[room]["listClient"].splice(index, 1)
-        pools[room]["numClients"]--
+      if(removeClientFromMap(token.name, socket.id)){
         
-        io.in(room).emit("roomData", pools[room]["listClient"])
+        var index = pools[room]["listClient"].findIndex(e => (e.name === token.name))
+        if(index > -1){
+          pools[room]["listClient"].splice(index, 1)
+          pools[room]["numClients"]--
+          
+          io.in(room).emit("roomData", pools[room]["listClient"])
 
-        console.log(token.name + " leave room: " + room);
-        if(pools[room]["numClients"] === 0){
-          pools[room] = undefined
-          console.log("room: " + room + "closed" )
-          return
+          console.log(token.name + " leave room: " + room);
+          if(pools[room]["numClients"] === 0){
+            pools[room] = undefined
+            console.log("room: " + room + "closed" )
+            return
+          }
         }
       }
+      console.log("in Room now: " + pools[room]["listClient"])
     }
-    console.log("in Room now: " + pools[room]["listClient"])
   });
 
   socket.on('playerReady', function(data, room){
