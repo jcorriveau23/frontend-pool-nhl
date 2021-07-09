@@ -42,8 +42,6 @@ export default class App extends Component {
     return(
       <Router>
       <div>
-        <h1>Home</h1>
-        <h2>Welcome {this.state.username}</h2>
         <ul>
           <li><Link to="/register">Register</Link></li>
           <li><Link to="/login">Login</Link></li>
@@ -51,6 +49,8 @@ export default class App extends Component {
           <li><Link to="/pool_list">Pool List</Link></li>
           <li><Link onClick={() => this.onDisconnect()}>Disconnect</Link></li>
         </ul>
+        <h1>Home</h1>
+        <h2>Welcome {this.state.username}</h2>
         <Switch>
           <Route path="/register" component={Register}></Route>
           <Route path="/login" component={Login}></Route>

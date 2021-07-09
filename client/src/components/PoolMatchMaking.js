@@ -5,6 +5,8 @@ import Tabs from "./Tabs"
 
 import './poolMatchMaking.css';
 
+import Logo from "./img/Montréal Canadiens.png"
+
 const socket = io.connect()
 
 export default class PoolMatchMaking extends Component {
@@ -683,6 +685,9 @@ export default class PoolMatchMaking extends Component {
             <td>{index + 1}</td>
             <td>{player.name}</td>
             <td>{player.team}</td>
+            <td>
+              <img src={Logo} width="30" height="30"/>
+            </td>
             <td>{player.stats.goals}</td>
             <td>{player.stats.assists}</td>
             <td>{player.stats.pts}</td>
@@ -1265,7 +1270,6 @@ export default class PoolMatchMaking extends Component {
             <button onClick={() => this.download_csv(this.state.pool_info)}>Download CSV</button>
             <div>
                   {render_tabs_choice_stats()}
-
             </div>
           </div>
         )

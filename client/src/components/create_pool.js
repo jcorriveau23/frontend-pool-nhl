@@ -165,6 +165,7 @@ export default class CreatePool extends Component {
               <option selected>2</option>
               <option>3</option>
               <option>4</option>
+              <option>5</option>
             </select>
 
             <p>pts per goal by forward:</p>
