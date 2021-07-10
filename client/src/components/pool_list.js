@@ -25,11 +25,11 @@ export default class CreatePool extends Component {
       .then(response => response.json())
       .then(data => {
         if(data.success === "False"){
+          
           this.props.history.push('/Login');
         }
         else{
           
-
           var pool_draft = []
           var pool_in_progress = []
           var pool_dynastie = []

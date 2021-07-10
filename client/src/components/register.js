@@ -6,7 +6,6 @@ export default class Register extends Component {
         // variable from this page
         this.state = {
             username: "",
-            email: "",
             psw: "",
             repeat_psw: "",
             msg: ""
@@ -62,9 +61,6 @@ export default class Register extends Component {
             <label><b>Username</b></label>
             <input type="text" placeholder="Enter Username" name="username" onChange={this.handleChange} required/>
 
-            <label><b>Email</b></label>
-            <input type="text" placeholder="Enter Email" name="email" onChange={this.handleChange} required/>
-
             <label><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="psw" onChange={this.handleChange} required/>
 
@@ -74,11 +70,6 @@ export default class Register extends Component {
             <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
         </form>
         <button onClick={() => this.register()} >Register</button>
-            
-            <h2>username: {this.state.username}</h2>
-            <h2>email: {this.state.email}</h2>
-            <h2>psw: {this.state.psw}</h2>
-            <h2>psw_repeat: {this.state.repeat_psw}</h2>
         </div>
      );
     }

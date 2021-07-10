@@ -75,9 +75,6 @@ export default class Login extends Component {
                 
             </form>
             <button onClick={() => this.login()} >Login</button>
-            
-            <h2>username: {this.state.username}</h2>
-            <h2>psw: {this.state.psw}</h2>
         </div>
      );
     }

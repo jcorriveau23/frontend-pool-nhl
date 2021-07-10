@@ -3,9 +3,8 @@ import Cookies from 'js-cookie';
 import io from "socket.io-client";
 import Tabs from "./Tabs"
 
-import './poolMatchMaking.css';
-
-import Logo from "./img/Montréal Canadiens.png"
+import logos from "./img/images"
+import './components.css';
 
 const socket = io.connect()
 
@@ -38,8 +37,8 @@ export default class PoolMatchMaking extends Component {
             not_protected_goalies: [],
             not_protected_reservists: [],
 
-            players_stats: [],
-            stats: {},
+            player_stats: {},
+            ranking: [],
 
             selected_player: {name: "select a player", team: " - ", role: " - "},
 
@@ -136,9 +135,7 @@ export default class PoolMatchMaking extends Component {
                 else{
 
                   //TODO: Store the pool stats into state
-                  //TODO use pool_stats to show them in the render
-                  this.setState({players_stats: data.players})
-                  this.calculate_pool_stats()
+                  this.calculate_pool_stats(data.players)
                 }
               })
           }
@@ -156,10 +153,12 @@ export default class PoolMatchMaking extends Component {
       
     }
 
-    async calculate_pool_stats(){
+    async calculate_pool_stats(players_stats){
       var stats = {}
       var pooler
       var player
+
+      var ranking = []
 
       for(var i = 0; i < this.state.pool_info.participants.length; i++){
         pooler = this.state.pool_info.participants[i]
@@ -167,54 +166,76 @@ export default class PoolMatchMaking extends Component {
         stats[pooler] = {}
         stats[pooler]["chosen_forward"] = []
 
-        var forwards_total_pts = 0// TODO, calculate each of them to include in stats[pooler][x_total_points] and show them 
-        var defenders_total_pts = 0
-        var goalies_total_pts = 0
-        var reservist_total_pts = 0
-        var total_pts = 0
+        stats[pooler]["forwards_total_pts"] = 0 // TODO, calculate each of them to include in stats[pooler][x_total_points] and show them 
+        stats[pooler]["defenders_total_pts"] = 0
+        stats[pooler]["goalies_total_pts"] = 0
+        stats[pooler]["reservists_total_pts"] = 0
 
         for(var j = 0; j < this.state.pool_info.context[pooler].chosen_forward.length; j++){
-          player = this.state.players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_forward[j].name)
-          player["pool_points"] = this.state.pool_info.forward_pts_goals*player.stats.goals + this.state.pool_info.forward_pts_assists*player.stats.assists //+ hat trick 
+          player = players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_forward[j].name)
+          player["pool_points"] = this.state.pool_info.forward_pts_goals*player.stats.goals + this.state.pool_info.forward_pts_assists*player.stats.assists //+ hat trick
+          stats[pooler]["forwards_total_pts"] += this.state.pool_info.forward_pts_goals*player.stats.goals + this.state.pool_info.forward_pts_assists*player.stats.assists
+
           stats[pooler]["chosen_forward"].push(player)
         }
 
         stats[pooler]["chosen_defender"] = []
 
         for(var j = 0; j < this.state.pool_info.context[pooler].chosen_defender.length; j++){
-          player = this.state.players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_defender[j].name)
+          player = players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_defender[j].name)
           player["pool_points"] = this.state.pool_info.defender_pts_goals*player.stats.goals + this.state.pool_info.defender_pts_assits*player.stats.assists //+ hat trick 
+          stats[pooler]["defenders_total_pts"] += this.state.pool_info.defender_pts_goals*player.stats.goals + this.state.pool_info.defender_pts_assits*player.stats.assists //+ hat trick  
+          
           stats[pooler]["chosen_defender"].push(player)
         }
 
         stats[pooler]["chosen_goalies"] = []
 
         for(var j = 0; j < this.state.pool_info.context[pooler].chosen_goalies.length; j++){
-          player = this.state.players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_goalies[j].name)
+          player = players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_goalies[j].name)
           player["pool_points"] = this.state.pool_info.goalies_pts_wins*player.stats.wins + this.state.pool_info.goalies_pts_shutouts*player.stats.shutouts
+          stats[pooler]["goalies_total_pts"] += this.state.pool_info.goalies_pts_wins*player.stats.wins + this.state.pool_info.goalies_pts_shutouts*player.stats.shutouts
+
           stats[pooler]["chosen_goalies"].push(player)
         }
 
         stats[pooler]["chosen_reservist"] = []
 
         for(var j = 0; j < this.state.pool_info.context[pooler].chosen_reservist.length; j++){
-          player = this.state.players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_reservist[j].name)
+          player = players_stats.find(p => p.name === this.state.pool_info.context[pooler].chosen_reservist[j].name)
 
           if(player.position === "G"){
             player["pool_points"] = this.state.pool_info.goalies_pts_wins*player.stats.wins + this.state.pool_info.goalies_pts_shutouts*player.stats.shutouts
+            stats[pooler]["reservists_total_pts"] += this.state.pool_info.goalies_pts_wins*player.stats.wins + this.state.pool_info.goalies_pts_shutouts*player.stats.shutouts
           }
           else if(player.position === "F"){
             player["pool_points"] = this.state.pool_info.forward_pts_goals*player.stats.goals + this.state.pool_info.forward_pts_assists*player.stats.assists //+ hat trick 
+            stats[pooler]["reservists_total_pts"] += this.state.pool_info.forward_pts_goals*player.stats.goals + this.state.pool_info.forward_pts_assists*player.stats.assists //+ hat trick 
           }
           else{
-            player["pool_points"] = this.state.pool_info.defender_pts_goals*player.stats.goals + this.state.pool_info.defender_pts_assits*player.stats.assists //+ hat trick 
+            player["pool_points"] = this.state.pool_info.defender_pts_goals*player.stats.goals + this.state.pool_info.defender_pts_assits*player.stats.assists //+ hat trick
+            stats[pooler]["reservists_total_pts"] +=  this.state.pool_info.defender_pts_goals*player.stats.goals + this.state.pool_info.defender_pts_assits*player.stats.assists //+ hat trick
           }
           stats[pooler]["chosen_reservist"].push(player)
         }
+
+        stats[pooler]["total_pts"] = stats[pooler]["forwards_total_pts"] + stats[pooler]["defenders_total_pts"] + stats[pooler]["goalies_total_pts"] + stats[pooler]["reservists_total_pts"]
         // TODO, calculate points for each poolers using pool parameters entered when creating the pool
 
-        this.setState({stats: stats})
+        var pooler_global_stats = {
+          name: pooler, 
+          defenders_total_pts: stats[pooler]["defenders_total_pts"],
+          forwards_total_pts: stats[pooler]["forwards_total_pts"],
+          goalies_total_pts: stats[pooler]["goalies_total_pts"],
+          reservists_total_pts: stats[pooler]["reservists_total_pts"],
+          total_pts: stats[pooler]["total_pts"]
+        }
+
+        ranking.push(pooler_global_stats)
       }
+      await this.sort_by_stats("total_pts", ranking)
+      this.setState({ranking: ranking})
+      this.setState({player_stats: stats})
     }
 
     async download_csv(pool){
@@ -346,6 +367,11 @@ export default class PoolMatchMaking extends Component {
       else if(stats === "savePercentage"){
         array.sort(function(a, b) {
           return b.stats.savePercentage - a.stats.savePercentage;
+        });
+      }
+      else if(stats === "total_pts"){
+        array.sort(function(a, b) {
+          return b.total_pts - a.total_pts;
         });
       }
       return array
@@ -633,7 +659,9 @@ export default class PoolMatchMaking extends Component {
           <tr>
             <td>{index + 1}</td>
             <td>{player.name}</td>
-            <td>{player.team}</td>
+            <td>
+              <img src={logos[player.team]} width="30" height="30"></img>
+            </td>
           </tr>
         )
         }
@@ -643,19 +671,36 @@ export default class PoolMatchMaking extends Component {
       }
 
       const render_defender_stats = (pooler) => {
-        if(this.state.stats[pooler]){
-          
-          return this.state.stats[pooler]['chosen_defender'].map((player, index) =>
+        if(this.state.player_stats[pooler]){
+         
+          return (
+          <>
+          {this.state.player_stats[pooler]['chosen_defender'].map((player, index) =>
           <tr>
             <td>{index + 1}</td>
             <td>{player.name}</td>
-            <td>{player.team}</td>
+            <td>
+              <img src={logos[player.team]} width="30" height="30"></img>
+            </td>
             <td>{player.stats.goals}</td>
             <td>{player.stats.assists}</td>
             <td>{player.stats.pts}</td>
             <td>{player.pool_points}</td>
+          </tr> 
+          )}
+          <tr>
+            <th>total</th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th>{this.state.player_stats[pooler]['defenders_total_pts']}</th>
           </tr>
-        )
+          </>
+          )
+        
+
         }
         else{
           return
@@ -668,7 +713,9 @@ export default class PoolMatchMaking extends Component {
           <tr>
             <td>{index + 1}</td>
             <td>{player.name}</td>
-            <td>{player.team}</td>
+            <td>
+              <img src={logos[player.team]} width="30" height="30"></img>
+            </td>
           </tr>
         )
         }
@@ -678,21 +725,34 @@ export default class PoolMatchMaking extends Component {
       }
 
       const render_forward_stats = (pooler) => {
-        if(this.state.stats[pooler]){
+        if(this.state.player_stats[pooler]){
           
-          return this.state.stats[pooler]['chosen_forward'].map((player, index) =>
-          <tr>
+          return( 
+          <>
+          {this.state.player_stats[pooler]['chosen_forward'].map((player, index) =>
+          <tr class="content-table">
             <td>{index + 1}</td>
             <td>{player.name}</td>
-            <td>{player.team}</td>
             <td>
-              <img src={Logo} width="30" height="30"/>
+              <img src={logos[player.team]} width="30" height="30"></img>
             </td>
             <td>{player.stats.goals}</td>
             <td>{player.stats.assists}</td>
             <td>{player.stats.pts}</td>
             <td>{player.pool_points}</td>
           </tr>
+        )
+        }
+          <tr>
+            <th>total</th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th>{this.state.player_stats[pooler]['forwards_total_pts']}</th>
+          </tr>
+        </>
         )
         }
         else{
@@ -706,7 +766,9 @@ export default class PoolMatchMaking extends Component {
           <tr>
             <td>{index + 1}</td>
             <td>{player.name}</td>
-            <td>{player.team}</td>
+            <td>
+              <img src={logos[player.team]} width="30" height="30"></img>
+            </td>
           </tr>
         )
         }
@@ -716,18 +778,36 @@ export default class PoolMatchMaking extends Component {
       }
 
       const render_reservist_stats = (pooler) => {
-        if(this.state.stats[pooler]){
+        if(this.state.player_stats[pooler]){
           
-          return this.state.stats[pooler]['chosen_reservist'].map((player, index) =>
+          return (
+            <>
+            
+            {this.state.player_stats[pooler]['chosen_reservist'].map((player, index) =>
           <tr>
             <td>{index + 1}</td>
             <td>{player.name}</td>
-            <td>{player.team}</td>
+            <td>
+              <img src={logos[player.team]} width="30" height="30"></img>
+            </td>
             <td>{player.stats.goals}</td>
             <td>{player.stats.assists}</td>
             <td>{player.stats.pts}</td>
+            <td>{player.pool_points}</td>
           </tr>
-        )
+        )}
+        <tr>
+            <th>total</th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th>{this.state.player_stats[pooler]['reservists_total_pts']}</th>
+          </tr>
+        </>
+
+          )
         }
         else{
           return
@@ -740,7 +820,9 @@ export default class PoolMatchMaking extends Component {
           <tr>
             <td>{index + 1}</td>
             <td>{player.name}</td>
-            <td>{player.team}</td>
+            <td>
+              <img src={logos[player.team]} width="30" height="30"></img>
+            </td>
           </tr>
         )
         }
@@ -750,13 +832,17 @@ export default class PoolMatchMaking extends Component {
       }
 
       const render_goalies_stats = (pooler) => {
-        if(this.state.stats[pooler]){
+        if(this.state.player_stats[pooler]){
           
-          return this.state.stats[pooler]['chosen_goalies'].map((player, index) =>
+          return (
+            <>
+            {this.state.player_stats[pooler]['chosen_goalies'].map((player, index) =>
           <tr>
             <td>{index + 1}</td>
             <td>{player.name}</td>
-            <td>{player.team}</td>
+            <td>
+              <img src={logos[player.team]} width="30" height="30"></img>
+            </td>
             <td>{player.stats.wins}</td>
             <td>{player.stats.losses}</td>
             <td>{player.stats.savePercentage}</td>
@@ -764,7 +850,21 @@ export default class PoolMatchMaking extends Component {
 
           </tr>
         )
+          }
+          <tr>
+            <th>total</th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th>{this.state.player_stats[pooler]['goalies_total_pts']}</th>
+          </tr>
+          </>
+          )
+
         }
+
         else{
           return
         }
@@ -783,7 +883,6 @@ export default class PoolMatchMaking extends Component {
             <tr onClick={() => this.protect_player(player)}>
               <td>{index + 1}</td>
               <td>{player.name}</td>
-              <td>{player.team}</td>
             </tr>
           </tbody>
         )
@@ -800,7 +899,6 @@ export default class PoolMatchMaking extends Component {
           <tr onClick={() => this.protect_player(player)}>
             <td>{index + 1}</td>
             <td>{player.name}</td>
-            <td>{player.team}</td>
           </tr>
         )
         }
@@ -816,7 +914,9 @@ export default class PoolMatchMaking extends Component {
           <tr onClick={() => this.protect_player(player)}>
             <td>{index + 1}</td>
             <td>{player.name}</td>
-            <td>{player.team}</td>
+            <td>
+              <img src={logos[player.team]} width="30" height="30"></img>
+            </td>
           </tr>
         )
         }
@@ -832,7 +932,9 @@ export default class PoolMatchMaking extends Component {
           <tr onClick={() => this.protect_player(player)}>
             <td>{index + 1}</td>
             <td>{player.name}</td>
-            <td>{player.team}</td>
+            <td>
+              <img src={logos[player.team]} width="30" height="30"></img>
+            </td>
           </tr>
         )
         }
@@ -905,8 +1007,8 @@ export default class PoolMatchMaking extends Component {
           return <Tabs>
                   {array.map(pooler =>
                       <div label={pooler}>
-                        <table border="1">
-                    <h3>Forward</h3>
+                      <table class="content-table">
+                    <h2>Forward</h2>
                     <tr>
                       <th>#</th>
                       <th>name</th>
@@ -952,6 +1054,28 @@ export default class PoolMatchMaking extends Component {
                   )}
           </Tabs>
           
+        }
+        else{
+          return
+        }
+      }
+
+      const render_tabs_pool_rank = () => {
+        if(this.state.ranking){
+          return(
+          this.state.ranking.map((pooler_stats, index) =>
+          <tr>
+            <td>{index + 1}</td>
+            <td>{pooler_stats.name}</td>
+            <td>{pooler_stats.forwards_total_pts}</td>
+            <td>{pooler_stats.defenders_total_pts}</td>
+            <td>{pooler_stats.goalies_total_pts}</td>
+            <td>{pooler_stats.reservists_total_pts}</td>
+            <td>{pooler_stats.total_pts}</td>
+          </tr>
+          )
+          
+          )
         }
         else{
           return
@@ -1015,9 +1139,8 @@ export default class PoolMatchMaking extends Component {
             <h1>Stats last season</h1>
             <div class="floatLeft">
             <Tabs>
-            <div label="defense">
-            <h2>Defenseur</h2>
-            <table border="1">
+            <div label="defenders">
+            <table class="content-table">
               <tbody>
               <tr>
                 <th>name</th>
@@ -1030,7 +1153,9 @@ export default class PoolMatchMaking extends Component {
               {this.state.def_l.map(player => 
                 <tr onClick={() => this.player_selection(player.name, player.team, "D")}>
                   <td>{player.name}</td>
-                  <td>{player.team}</td>
+                  <td>
+                    <img src={logos[player.team]} width="30" height="30"></img>
+                  </td>
                   <td>{player.stats.games}</td>
                   <td>{player.stats.goals}</td>
                   <td>{player.stats.assists}</td>
@@ -1040,9 +1165,8 @@ export default class PoolMatchMaking extends Component {
                 </tbody>
             </table>
             </div>
-            <div label="forward">
-            <h2>Attaquant</h2>
-              <table border="1">
+            <div label="forwards">
+              <table class="content-table">
                 <tbody>
                 <tr>
                   <th>name</th>
@@ -1055,7 +1179,9 @@ export default class PoolMatchMaking extends Component {
                 {this.state.forw_l.map(player => 
                   <tr onClick={() => this.player_selection(player.name, player.team, "F")}>
                     <td>{player.name}</td>
-                    <td>{player.team}</td>
+                    <td>
+                      <img src={logos[player.team]} width="30" height="30"></img>
+                    </td>
                     <td>{player.stats.games}</td>
                     <td>{player.stats.goals}</td>
                     <td>{player.stats.assists}</td>
@@ -1066,8 +1192,7 @@ export default class PoolMatchMaking extends Component {
               </table>
             </div> 
             <div label="goalies">
-            <h2>Goalers</h2>
-              <table border="1">
+              <table class="content-table">
                 <tbody>
                 <tr>
                   <th>name</th>
@@ -1080,7 +1205,9 @@ export default class PoolMatchMaking extends Component {
                 {this.state.goal_l.map(player => 
                   <tr onClick={() => this.player_selection(player.name, player.team, "G")}>
                     <td>{player.name}</td>
-                    <td>{player.team}</td>
+                    <td>
+                      <img src={logos[player.team]} width="30" height="30"></img>
+                    </td>
                     <td>{player.stats.games}</td>
                     <td>{player.stats.wins}</td>
                     <td>{player.stats.losses}</td>
@@ -1091,12 +1218,11 @@ export default class PoolMatchMaking extends Component {
               </table>
               </div>
               <div label="N/A">
-                <h2>N/A</h2>
-                  <table border="1">
+                  <table class="content-table">
                     <tbody>
                     <tr>
                       <th>name</th>
-                      <th>team</th>
+                      <th>logo</th>
                       <th onClick={() => this.sort_by_number("games", "N/A")}>Games played</th>
                       <th onClick={() => this.sort_by_number("goals", "N/A")}>Goals</th>
                       <th onClick={() => this.sort_by_number("assists", "N/A")}>Assists</th>
@@ -1105,7 +1231,9 @@ export default class PoolMatchMaking extends Component {
                     {this.state.na_l.map(player => 
                       <tr onClick={() => this.player_selection(player.name, player.team, "G")}>
                         <td>{player.name}</td>
-                        <td>{player.team}</td>
+                        <td>
+                          <img src={logos[player.team]} width="30" height="30"></img>
+                        </td>
                         <td>{player.stats.games}</td>
                         <td>{player.stats.goals}</td>
                         <td>{player.stats.assists}</td>
@@ -1198,7 +1326,9 @@ export default class PoolMatchMaking extends Component {
                     <tr onClick={() => this.unprotect_player(player, false)}>
                       <td>{index + 1}</td>
                       <td>{player.name}</td>
-                      <td>{player.team}</td>
+                      <td>
+                        <img src={logos[player.team]} width="30" height="30"></img>
+                      </td>
                     </tr>
                   )}
                   <thead>
@@ -1213,7 +1343,9 @@ export default class PoolMatchMaking extends Component {
                     <tr onClick={() => this.unprotect_player(player, false)}>
                       <td>{index + 1}</td>
                       <td>{player.name}</td>
-                      <td>{player.team}</td>
+                      <td>
+                        <img src={logos[player.team]} width="30" height="30"></img>
+                      </td>
                     </tr>
                   )}
                   <thead>
@@ -1228,7 +1360,9 @@ export default class PoolMatchMaking extends Component {
                     <tr onClick={() => this.unprotect_player(player, false)}>
                       <td>{index + 1}</td>
                       <td>{player.name}</td>
-                      <td>{player.team}</td>
+                      <td>
+                        <img src={logos[player.team]} width="30" height="30"></img>
+                      </td>
                     </tr>
                   )}
                   <thead>
@@ -1243,7 +1377,9 @@ export default class PoolMatchMaking extends Component {
                     <tr onClick={() => this.unprotect_player(player, true)}>
                       <td>{index + 1}</td>
                       <td>{player.name}</td>
-                      <td>{player.team}</td>
+                      <td>
+                        <img src={logos[player.team]} width="30" height="30"></img>
+                      </td>
                     </tr>
                   )}
                   </table>
@@ -1265,11 +1401,27 @@ export default class PoolMatchMaking extends Component {
       }
       else if (this.state.pool_info.status === "in Progress"){
         return(
-          <div>
+          <div class="back-site">
             <h1>Pool in progress...</h1>
             <button onClick={() => this.download_csv(this.state.pool_info)}>Download CSV</button>
-            <div>
-                  {render_tabs_choice_stats()}
+            <div class="floatLeft">
+              <div>
+                    {render_tabs_choice_stats()}
+              </div>
+            </div>
+            <div class="floatRight">
+              <table class="content-table">
+                <tr>
+                  <th>rank</th>
+                  <th>pooler name</th>
+                  <th>forwards (pts)</th>
+                  <th>defenders (pts)</th>
+                  <th>goalies (pts)</th>
+                  <th>reservists (pts)</th>
+                  <th>total (pts)</th>
+                </tr>
+              {render_tabs_pool_rank()}
+              </table>
             </div>
           </div>
         )
