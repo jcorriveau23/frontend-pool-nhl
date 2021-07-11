@@ -71,7 +71,7 @@ export default class PoolMatchMaking extends Component {
       socket.on("poolInfo", (data) => {
         console.log(data)
         this.setState({pool_info: data})
-        this.filter_players(this.state.pool_info.number_poolers)
+        this.filter_players()
       });
     }
 
@@ -118,7 +118,7 @@ export default class PoolMatchMaking extends Component {
           else{
             this.setState({pool_info: data.message})
           }
-          this.filter_players(this.state.pool_info.number_poolers)
+          this.filter_players()
           
           if(this.state.pool_info.status === "in Progress")
           {
@@ -133,9 +133,9 @@ export default class PoolMatchMaking extends Component {
                     this.props.history.push('/pool_list');
                 }
                 else{
-
                   //TODO: Store the pool stats into state
                   this.calculate_pool_stats(data.players)
+
                 }
               })
           }
@@ -143,7 +143,9 @@ export default class PoolMatchMaking extends Component {
             this.filter_protected_players()
           }
           else{
+          
             this.fetchPlayerDraft() // all draftable players data base
+            
           }
           
       })
@@ -306,6 +308,8 @@ export default class PoolMatchMaking extends Component {
       })
     
       await this.sort_by_number("goals", "D")
+
+      this.filter_players()
     }
 
     async sort_by_number(stats, position){
@@ -374,6 +378,20 @@ export default class PoolMatchMaking extends Component {
           return b.total_pts - a.total_pts;
         });
       }
+      else if(stats === "name"){
+        array.sort(function(a, b) {
+          if(a.name < b.name) {return -1;}
+          if(a.name > b.name) {return 1;}
+          return 0;
+        });
+      }
+      else if(stats === "team"){
+        array.sort(function(a, b) {
+          if(a.team < b.team) {return -1;}
+          if(a.team > b.team) {return 1;}
+          return 0;
+        });
+      }
       return array
     }
     
@@ -411,7 +429,7 @@ export default class PoolMatchMaking extends Component {
       
     }
 
-    async filter_players(number_poolers){
+    async filter_players(){
 
       if(this.state.pool_info.status === "draft"){
         var def_picked_l = []
@@ -425,7 +443,7 @@ export default class PoolMatchMaking extends Component {
         var filtered_goalies_l = []
   
   
-        for(var i = 0; i < number_poolers; i++){
+        for(var i = 0; i < this.state.pool_info.participants.length; i++){
           participant = this.state.pool_info.participants[i]
           
           def_picked_l = def_picked_l.concat(this.state.pool_info.context[participant].chosen_defender)
@@ -845,6 +863,7 @@ export default class PoolMatchMaking extends Component {
             </td>
             <td>{player.stats.wins}</td>
             <td>{player.stats.losses}</td>
+            <td>{player.stats.shutouts}</td>
             <td>{player.stats.savePercentage}</td>
             <td>{player.pool_points}</td>
 
@@ -853,6 +872,7 @@ export default class PoolMatchMaking extends Component {
           }
           <tr>
             <th>total</th>
+            <th> - </th>
             <th> - </th>
             <th> - </th>
             <th> - </th>
@@ -955,7 +975,7 @@ export default class PoolMatchMaking extends Component {
           return <Tabs>
                   {array.map(pooler =>
                       <div label={pooler}>
-                        <table border="1">
+                        <table class="content-table">
                     <h3>Forward</h3>
                     <tr>
                       <th>#</th>
@@ -1006,9 +1026,10 @@ export default class PoolMatchMaking extends Component {
 
           return <Tabs>
                   {array.map(pooler =>
-                      <div label={pooler}>
+                      <div label={pooler} >
+                        <Tabs>
+                        <div label="Forward">
                       <table class="content-table">
-                    <h2>Forward</h2>
                     <tr>
                       <th>#</th>
                       <th>name</th>
@@ -1019,7 +1040,10 @@ export default class PoolMatchMaking extends Component {
                       <th>Pts (pool)</th>
                     </tr>
                     {render_forward_stats(pooler)}
-                    <h3>Def</h3>
+                    </table>
+                    </div>
+                    <div label="Defenders">
+                    <table class="content-table">
                     <tr>
                       <th>#</th>
                       <th>name</th>
@@ -1030,18 +1054,25 @@ export default class PoolMatchMaking extends Component {
                       <th>Pts (pool)</th>
                     </tr>
                     {render_defender_stats(pooler)}
-                    <h3>Goalies</h3>
+                    </table>
+                    </div>
+                    <div label="Goalies">
+                    <table class="content-table">
                     <tr>
                       <th>#</th>
                       <th>name</th>
                       <th>team</th>
                       <th>Win</th>
                       <th>Loss</th>
+                      <th>Shutout</th>
                       <th>Save %</th>
                       <th>Pts (pool)</th>
                     </tr>
                     {render_goalies_stats(pooler)}
-                    <h3>Reservist</h3>
+                    </table>
+                    </div>
+                    <div label="Reservists">
+                    <table class="content-table">
                     <tr>
                       <th>#</th>
                       <th>name</th>
@@ -1049,7 +1080,10 @@ export default class PoolMatchMaking extends Component {
 
                     </tr>
                     {render_reservist_stats(pooler)}
-                  </table>
+                    </table>
+                    </div>
+                  
+                  </Tabs>
                       </div>
                   )}
           </Tabs>
@@ -1143,8 +1177,8 @@ export default class PoolMatchMaking extends Component {
             <table class="content-table">
               <tbody>
               <tr>
-                <th>name</th>
-                <th>team</th>
+                <th onClick={() => this.sort_by_number("name", "D")}>name</th>
+                <th onClick={() => this.sort_by_number("team", "D")}>team</th>
                 <th onClick={() => this.sort_by_number("games", "D")}>Games played</th>
                 <th onClick={() => this.sort_by_number("goals", "D")}>Goals</th>
                 <th onClick={() => this.sort_by_number("assists", "D")}>Assists</th>
@@ -1169,8 +1203,8 @@ export default class PoolMatchMaking extends Component {
               <table class="content-table">
                 <tbody>
                 <tr>
-                  <th>name</th>
-                  <th>team</th>
+                  <th onClick={() => this.sort_by_number("name", "F")}>name</th>
+                  <th onClick={() => this.sort_by_number("team", "F")}>team</th>
                   <th onClick={() => this.sort_by_number("games", "F")}>Games played</th>
                   <th onClick={() => this.sort_by_number("goals", "F")}>Goals</th>
                   <th onClick={() => this.sort_by_number("assists", "F")}>Assists</th>
@@ -1195,8 +1229,8 @@ export default class PoolMatchMaking extends Component {
               <table class="content-table">
                 <tbody>
                 <tr>
-                  <th>name</th>
-                  <th>team</th>
+                  <th onClick={() => this.sort_by_number("name", "G")}>name</th>
+                  <th onClick={() => this.sort_by_number("team", "G")}>team</th>
                   <th onClick={() => this.sort_by_number("games", "G")}>Games played</th>
                   <th onClick={() => this.sort_by_number("wins", "G")}>Win</th>
                   <th onClick={() => this.sort_by_number("losses", "G")}>losses</th>
@@ -1221,8 +1255,8 @@ export default class PoolMatchMaking extends Component {
                   <table class="content-table">
                     <tbody>
                     <tr>
-                      <th>name</th>
-                      <th>logo</th>
+                      <th onClick={() => this.sort_by_number("name", "N/A")}>name</th>
+                      <th onClick={() => this.sort_by_number("team", "N/A")}>logo</th>
                       <th onClick={() => this.sort_by_number("games", "N/A")}>Games played</th>
                       <th onClick={() => this.sort_by_number("goals", "N/A")}>Goals</th>
                       <th onClick={() => this.sort_by_number("assists", "N/A")}>Assists</th>
@@ -1403,13 +1437,14 @@ export default class PoolMatchMaking extends Component {
         return(
           <div class="back-site">
             <h1>Pool in progress...</h1>
-            <button onClick={() => this.download_csv(this.state.pool_info)}>Download CSV</button>
+            
             <div class="floatLeft">
               <div>
                     {render_tabs_choice_stats()}
               </div>
             </div>
             <div class="floatRight">
+              <h1>Today's ranking</h1>
               <table class="content-table">
                 <tr>
                   <th>rank</th>
@@ -1423,6 +1458,7 @@ export default class PoolMatchMaking extends Component {
               {render_tabs_pool_rank()}
               </table>
             </div>
+            <button onClick={() => this.download_csv(this.state.pool_info)}>Download CSV</button>
           </div>
         )
       }
