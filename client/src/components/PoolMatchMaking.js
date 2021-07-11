@@ -27,6 +27,8 @@ export default class PoolMatchMaking extends Component {
             goal_l: [],
             na_l: [],
 
+            search_text: "",
+
             forw_protected: [],
             def_protected: [],
             goal_protected: [],
@@ -425,8 +427,11 @@ export default class PoolMatchMaking extends Component {
 
       else if(event.target.type === "submit"){
         socket.emit('startDraft', Cookies.get('token'), this.state.pool_info.name);
-      }
-      
+      }      
+    }
+
+    async search_players(val){
+      this.setState({search_text: val})
     }
 
     async filter_players(){
@@ -463,7 +468,6 @@ export default class PoolMatchMaking extends Component {
         this.setState({forw_l: filtered_forward_l})
         this.setState({goal_l: filtered_goalies_l})
       }
-
     }
 
     async filter_protected_players(){
@@ -1172,6 +1176,7 @@ export default class PoolMatchMaking extends Component {
             <div class="container">
             <h1>Stats last season</h1>
             <div class="floatLeft">
+            <input type="text" placeholder="Search..." onChange={event => this.search_players(event.target.value)}/>
             <Tabs>
             <div label="defenders">
             <table class="content-table">
@@ -1184,7 +1189,13 @@ export default class PoolMatchMaking extends Component {
                 <th onClick={() => this.sort_by_number("assists", "D")}>Assists</th>
                 <th onClick={() => this.sort_by_number("pts", "D")}>pts</th>
               </tr>
-              {this.state.def_l.map(player => 
+              {this.state.def_l.filter((player) => {
+                if(this.state.search_text === ""){
+                  return player
+                }else if(player.name.toLowerCase().includes(this.state.search_text.toLowerCase())){
+                  return player
+                }
+              }).map(player => 
                 <tr onClick={() => this.player_selection(player.name, player.team, "D")}>
                   <td>{player.name}</td>
                   <td>
@@ -1210,7 +1221,13 @@ export default class PoolMatchMaking extends Component {
                   <th onClick={() => this.sort_by_number("assists", "F")}>Assists</th>
                   <th onClick={() => this.sort_by_number("pts", "F")}>pts</th>
                 </tr>
-                {this.state.forw_l.map(player => 
+                {this.state.forw_l.filter((player) => {
+                if(this.state.search_text === ""){
+                  return player
+                }else if(player.name.toLowerCase().includes(this.state.search_text.toLowerCase())){
+                  return player
+                }
+              }).map(player => 
                   <tr onClick={() => this.player_selection(player.name, player.team, "F")}>
                     <td>{player.name}</td>
                     <td>
@@ -1236,7 +1253,13 @@ export default class PoolMatchMaking extends Component {
                   <th onClick={() => this.sort_by_number("losses", "G")}>losses</th>
                   <th onClick={() => this.sort_by_number("savePercentage", "G")}>save percentage</th>
                 </tr>
-                {this.state.goal_l.map(player => 
+                {this.state.goal_l.filter((player) => {
+                  if(this.state.search_text === ""){
+                    return player
+                  }else if(player.name.toLowerCase().includes(this.state.search_text.toLowerCase())){
+                    return player
+                  }
+                  }).map(player => 
                   <tr onClick={() => this.player_selection(player.name, player.team, "G")}>
                     <td>{player.name}</td>
                     <td>
@@ -1262,7 +1285,13 @@ export default class PoolMatchMaking extends Component {
                       <th onClick={() => this.sort_by_number("assists", "N/A")}>Assists</th>
                       <th onClick={() => this.sort_by_number("pts", "N/A")}>pts</th>
                     </tr>
-                    {this.state.na_l.map(player => 
+                    {this.state.na_l.filter((player) => {
+                      if(this.state.search_text === ""){
+                        return player
+                      }else if(player.name.toLowerCase().includes(this.state.search_text.toLowerCase())){
+                        return player
+                      }
+                      }).map(player => 
                       <tr onClick={() => this.player_selection(player.name, player.team, "G")}>
                         <td>{player.name}</td>
                         <td>
