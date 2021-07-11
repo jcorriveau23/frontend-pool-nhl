@@ -33,7 +33,7 @@ var pools = {}
 const userSocketIdMap = new Map()
 
 io.on('connection', function(socket){
-  console.log('Client connected with socket ID: '+ socket.client.id);
+  //console.log('Client connected with socket ID: '+ socket.client.id);
 
   socket.on('joinRoom', function(data, room){
     let token = jwt.decode(data, 'verySecretValue')
@@ -70,8 +70,8 @@ io.on('connection', function(socket){
           io.in(room).emit("roomData", pools[room]["listClient"])
         }
       }
-      console.log(token.name + " join room: " + room);
-      console.log("in Room now: " + pools[room]["listClient"])
+      //console.log(token.name + " join room: " + room);
+      //console.log("in Room now: " + pools[room]["listClient"])
     }
   });
 
@@ -80,7 +80,7 @@ io.on('connection', function(socket){
 
     if(token !== null){
       socket.leave(room)
-      console.log(socket.id + " leave room: " + room);
+      //console.log(socket.id + " leave room: " + room);
       
       if(removeClientFromMap(token.name, socket.id)){
         
@@ -91,15 +91,15 @@ io.on('connection', function(socket){
           
           io.in(room).emit("roomData", pools[room]["listClient"])
 
-          console.log(token.name + " leave room: " + room);
+          //console.log(token.name + " leave room: " + room);
           if(pools[room]["numClients"] === 0){
             pools[room] = undefined
-            console.log("room: " + room + "closed" )
+            //console.log("room: " + room + "closed" )
             return
           }
         }
       }
-      console.log("in Room now: " + pools[room]["listClient"])
+      //console.log("in Room now: " + pools[room]["listClient"])
     }
   });
 
@@ -132,7 +132,7 @@ io.on('connection', function(socket){
   socket.on('startDraft', function(data, room){
     for(i = 0; i < pools[room]["listClient"].length; i++){
       if(pools[room]["listClient"][i].ready === false){
-        console.log("not every body ready")
+        //console.log("not every body ready")
         return
       }
     }
@@ -149,7 +149,7 @@ io.on('connection', function(socket){
           io.in(room).emit("poolInfo", data.message)
         }
         else{
-            console.log('error with put request (start_draft)')
+            //console.log('error with put request (start_draft)')
         }
       }
     );
@@ -170,7 +170,7 @@ io.on('connection', function(socket){
           callback({success: "True", message: data.message})
         }
         else{
-            console.log('error with put request (chose_player)' + data.message)
+            //console.log('error with put request (chose_player)' + data.message)
             callback({success: "False", message: data.message})
         }
       }
@@ -178,7 +178,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('disconnect', () => {
-    console.log("device disconnected")
+    //console.log("device disconnected")
   });
 });
 

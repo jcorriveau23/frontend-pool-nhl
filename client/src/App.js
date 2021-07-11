@@ -34,7 +34,6 @@ export default class App extends Component {
 
   async onDisconnect() {
     Cookies.remove('token')
-    console.log("Disconnecting")
     window.location.reload(true);
   }
 

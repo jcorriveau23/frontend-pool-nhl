@@ -59,26 +59,21 @@ export default class PoolMatchMaking extends Component {
 
       var pool_name = await this.props.match.params.name
       socket.emit('joinRoom', Cookies.get('token'), pool_name);
-      console.log('Joined Room');
 
       socket.on('roomData', (data) => {
-        console.log("user list changed: " + data)
         this.setState({user_list: data})
       });
 
       socket.on("error", (data) => {
-        console.log("Error: " + data)
       });
 
       socket.on("poolInfo", (data) => {
-        console.log(data)
         this.setState({pool_info: data})
         this.filter_players()
       });
     }
 
     async componentCleanup(){
-      console.log("leaving pool: " + this.state.pool_name)
       socket.emit('leaveRoom', Cookies.get('token'), this.state.pool_name);
       socket.off('roomData');
     }
@@ -101,7 +96,6 @@ export default class PoolMatchMaking extends Component {
               this.props.history.push('/login');
           }
           else{
-            console.log(data.username)
             this.setState({username: data.username})
           }
       })
@@ -283,11 +277,10 @@ export default class PoolMatchMaking extends Component {
         csv += "\n";
       }
 
-      console.log(csv);
       var hiddenElement = document.createElement('a');
       hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
       hiddenElement.target = '_blank';
-      hiddenElement.download = 'people.csv';
+      hiddenElement.download = this.state.pool_info.name + '.csv';
       hiddenElement.click();
 
     }
@@ -402,7 +395,6 @@ export default class PoolMatchMaking extends Component {
     }
   
     async chose_player(player){
-      console.log(player.name)
 
       socket.emit('pickPlayer', Cookies.get('token'), this.state.pool_info.name, player, (ack)=>{
         if(ack.success === "False"){
@@ -545,7 +537,6 @@ export default class PoolMatchMaking extends Component {
         }
       }
       else{
-        console.log("Maximum player protected reach")
       }
 
       if(add_to_reservist){
@@ -556,7 +547,6 @@ export default class PoolMatchMaking extends Component {
           this.setState({reserv_protected: changedArray})
         }
         else{
-          console.log("No more place in reservist")
         }
       }
       this.filter_protected_players()
@@ -599,7 +589,6 @@ export default class PoolMatchMaking extends Component {
           }
         }
         else{
-          console.log("invalid player selection")
         }
 
         // remove from reservist protected player
@@ -613,7 +602,6 @@ export default class PoolMatchMaking extends Component {
         }
       }
       else{
-        console.log("You dont have any protected players")
       }
       this.filter_protected_players()
     }
@@ -623,9 +611,6 @@ export default class PoolMatchMaking extends Component {
       var number_protected_player = this.state.def_protected.length + this.state.forw_protected.length + this.state.goal_protected.length + this.state.reserv_protected.length
 
       if(number_protected_player === this.state.pool_info.next_season_number_players_protected){
-        //TODO: send the list of protected players to server and store it in data base
-        console.log("send it to server to store the information")
-
         var cookie = Cookies.get('token')
 
         // validate login
@@ -641,17 +626,12 @@ export default class PoolMatchMaking extends Component {
                 this.props.history.push('/login');
             }
             else{
-              console.log('successfuly saved your protected players')
               this.componentDidMount()
             }
         })
 
 
       }
-      else{
-        console.log('You need to protect ' + this.state.pool_info.next_season_number_players_protected + ' players')
-      }
-
     }
 
     async filterArray(arr1, arr2){

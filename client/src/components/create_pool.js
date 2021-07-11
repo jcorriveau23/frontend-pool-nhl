@@ -93,7 +93,6 @@ export default class CreatePool extends Component {
         const value = target.value;
 
         this.setState({[name]: value});
-        console.log(name + " : " + value);
     }
 
     render() {

@@ -686,13 +686,10 @@ const protected_players = (req, res, next) => {
             if(ready){
                 pool.context.draft_order = []
 
-                console.log(pool.tradable_picks)
                 for(rank = 1; rank <= pool.tradable_picks; rank++){
                     for(j = pool.number_poolers-1; j > -1; j--){
                         //i picks of player j
                         var player_search = pool.participants[j] // participants should be reordered depending on the rank of last season
-
-                        console.log("try to find: " + {'rank': rank, 'player': player_search})
                         
                         if(pool.context[player_search].tradable_picks.findIndex(t => (t.rank === rank && t.player === player_search)) > - 1 ){
                             // player still has his picks
@@ -705,8 +702,6 @@ const protected_players = (req, res, next) => {
                                 pooler = pool.final_rank[i]
                                 if(pool.context[pooler].tradable_picks.findIndex(t => (t.rank === rank && t.player === player_search)) > - 1 )
                                 {
-                                    console.log("find player traded to")
-                                    console.log("rank:" + rank + "from " + player_search + "got the pick: " + pooler)
                                     pool.context.draft_order.push(pooler)
                                     break  
                                 }
@@ -718,7 +713,6 @@ const protected_players = (req, res, next) => {
                 var number_picks = pool.number_poolers*(pool.number_defenders + pool.number_forward + pool.number_goalies + pool.number_reservist - pool.next_season_number_players_protected)
                 for(i = number_picks-(pool.tradable_picks*pool.number_poolers + 1); i > -1; i--)
                 {
-                    console.log("Classic " + i)
                     pool.context['draft_order'].push(pool.participants[i % pool.number_poolers])
                 }
                 pool.status = "draft"
@@ -817,7 +811,6 @@ const get_pool_stats = (req, res, next) => {
 
             Player.find({name: players_name, team: players_team}, {name:1, team:1, stats:1, position:1, url:1})
             .then(players => {
-                console.log(players)
                 res.json({
                     success: "True",
                     players: players,
