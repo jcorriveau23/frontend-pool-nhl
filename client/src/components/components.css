@@ -93,3 +93,7 @@ body {
 button:hover {
   background-color: #007500;
 }
+
+li {
+  display: inline;
+}

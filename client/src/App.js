@@ -1,62 +1,61 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import {BrowserRouter as Router, Link, Switch, Route} from "react-router-dom"
 
-import Register from "./components/register"
-import Login from "./components/login"
+// modals
+import {RegisterModal} from "./modals/register"
+import {LoginModal} from "./modals/login"
+
+//pages
 import CreatePool from "./components/create_pool"
 import PoolList from "./components/pool_list"
 import PoolMatchMaking from "./components/PoolMatchMaking"
 import Cookies from 'js-cookie';
 
-export default class App extends Component {
+function App() {
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
+  const [username, setUsername] = useState("")
 
-  constructor(props) {
-    super(props);
-      // variable from this page
-      this.state = {
-          username: ""
-      }
-  };
-
-  async componentDidMount() {
-    const requestOptions = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')}
-    };
-    fetch('auth/get_user', requestOptions)
-    .then(response => response.json())
-    .then(data => {
-        if(data.success === "True"){
-            this.setState({username: data.username})
-        }
-    })
+  const openRegisterModal = () => {
+    setShowRegisterModal(prev => !prev)
   }
 
-  async onDisconnect() {
+  const openLoginModal = () => {
+    setShowLoginModal(prev => !prev)
+  }
+
+  const onDisconnect = () => {
     Cookies.remove('token')
     window.location.reload(true);
   }
 
-  render() {
-    return(
+  return(
       <Router>
       <div class="back-site">
-        <ul>
-          <li><Link to="/register">Register</Link></li>
-          <li><Link to="/login">Login</Link></li>
-          <li><Link to="/create_pool">Create Pool</Link></li>
-          <li><Link to="/pool_list">Pool List</Link></li>
-          <li><Link onClick={() => this.onDisconnect()}>Disconnect</Link></li>
-        </ul>
+        <nav>
+          <div>
+            <div>
+              <a><Link to="/">Pool JDope</Link></a>
+            </div>
+            <ul>
+              <li onClick={openRegisterModal}>Register</li>
+              <li onClick={openLoginModal}>Login</li>
+              <li><Link to="/create_pool">Create Pool</Link></li>
+              <li><Link to="/pool_list">Pool List</Link></li>
+              <li><Link onClick={() => onDisconnect()}>Disconnect</Link></li>
+            </ul>
+          </div>
+        </nav>
+        <RegisterModal showRegisterModal={showRegisterModal} setShowRegisterModal={setShowRegisterModal}></RegisterModal>
+        <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal}></LoginModal>
         <Switch>
-          <Route path="/register" component={Register}></Route>
-          <Route path="/login" component={Login}></Route>
           <Route path="/create_pool" component={CreatePool}></Route>
           <Route exact path="/pool_list" component={PoolList}></Route>
           <Route path="/pool_list/:name" component = {PoolMatchMaking}></Route>
         </Switch>
       </div>
       </Router>
-    )
-  }
+  )
 }
+
+export default App;
