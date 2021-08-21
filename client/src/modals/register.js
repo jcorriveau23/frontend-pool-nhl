@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import Modal from 'react-modal'
 
+import { styleModal } from './styleModal'
 export const RegisterModal = ({showRegisterModal, setShowRegisterModal}) => {
  
     const [username, setUsername] = useState("")
@@ -19,10 +20,10 @@ export const RegisterModal = ({showRegisterModal, setShowRegisterModal}) => {
                 .then(response => response.json())
                 .then(data => {
                     if(data.success === "True"){
-                        //this.setState({msg: data.message})
+                        setMsg(data.message)
                     }
                     else{
-                        //this.setState({msg: data.error})
+                        setMsg(data.message)
                     }
                 });
         }
@@ -32,7 +33,7 @@ export const RegisterModal = ({showRegisterModal, setShowRegisterModal}) => {
     }
 
     return (
-        <Modal isOpen={showRegisterModal} onRequestClose={() => setShowRegisterModal(false)}>
+        <Modal style={styleModal} isOpen={showRegisterModal} onRequestClose={() => setShowRegisterModal(false)}>
             <h2>Register an account.</h2>
             <div>
                 <form>
@@ -52,7 +53,7 @@ export const RegisterModal = ({showRegisterModal, setShowRegisterModal}) => {
                 <button onClick={() => register()} >Register</button>
             </div>
             <div>
-                <button onClick={() => setShowRegisterModal(false)}></button>
+                <button onClick={() => setShowRegisterModal(false)}>Cancel</button>
             </div>
         </Modal>
     )

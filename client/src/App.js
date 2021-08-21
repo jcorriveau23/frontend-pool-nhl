@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {BrowserRouter as Router, Link, Switch, Route} from "react-router-dom"
+
+import Logo from "./components/img/logo/logo.png"
 
 // modals
 import {RegisterModal} from "./modals/register"
@@ -16,6 +18,15 @@ function App() {
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [username, setUsername] = useState("")
 
+  useEffect(() => {
+    const username = localStorage.getItem("username");
+    console.log("username: " + username)
+    if (username) {
+      console.log(username)
+      setUsername(username);
+    }
+  }, []);
+
   const openRegisterModal = () => {
     setShowRegisterModal(prev => !prev)
   }
@@ -24,8 +35,9 @@ function App() {
     setShowLoginModal(prev => !prev)
   }
 
-  const onDisconnect = () => {
+  const Disconnect = () => {
     Cookies.remove('token')
+    localStorage.clear("username")
     window.location.reload(true);
   }
 
@@ -34,20 +46,20 @@ function App() {
       <div class="back-site">
         <nav>
           <div>
-            <div>
-              <a><Link to="/">Pool JDope</Link></a>
-            </div>
             <ul>
-              <li onClick={openRegisterModal}>Register</li>
-              <li onClick={openLoginModal}>Login</li>
+              <li><img src={Logo} width="50" height="50"></img></li>
+              <li><Link to="/">Home</Link></li>
               <li><Link to="/create_pool">Create Pool</Link></li>
               <li><Link to="/pool_list">Pool List</Link></li>
-              <li><Link onClick={() => onDisconnect()}>Disconnect</Link></li>
+              <li onClick={openRegisterModal}><a href="#">Register</a></li>
+              {username? <li><Link onClick={() => Disconnect()}>Disconnect</Link></li> : <li onClick={openLoginModal}><a href="#">Login</a></li>}
+              {username?<li><a href="#">connected: {username}</a></li> : null}
             </ul>
           </div>
         </nav>
+        <div></div>
         <RegisterModal showRegisterModal={showRegisterModal} setShowRegisterModal={setShowRegisterModal}></RegisterModal>
-        <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal}></LoginModal>
+        <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} username={username} setUsername={setUsername}></LoginModal>
         <Switch>
           <Route path="/create_pool" component={CreatePool}></Route>
           <Route exact path="/pool_list" component={PoolList}></Route>
