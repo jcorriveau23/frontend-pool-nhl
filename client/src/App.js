@@ -43,7 +43,7 @@ function App() {
 
   return(
       <Router>
-      <div class="back-site">
+      <div class="header">
         <nav>
           <div>
             <ul>
@@ -57,7 +57,8 @@ function App() {
             </ul>
           </div>
         </nav>
-        <div></div>
+        </div>
+        <div>
         <RegisterModal showRegisterModal={showRegisterModal} setShowRegisterModal={setShowRegisterModal}></RegisterModal>
         <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} username={username} setUsername={setUsername}></LoginModal>
         <Switch>
@@ -65,7 +66,7 @@ function App() {
           <Route exact path="/pool_list" component={PoolList}></Route>
           <Route path="/pool_list/:name" component = {PoolMatchMaking}></Route>
         </Switch>
-      </div>
+        </div>
       </Router>
   )
 }

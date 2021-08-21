@@ -85,6 +85,7 @@ button {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+  border-radius: 10px;
 }
 body {
   background-color:#DFE5A3;
@@ -111,8 +112,11 @@ li {
   display: inline;
 }
 
-header{
-  background: #55d6aa;
+.header {
+  border-color: #444;
+  border-style: groove;
+  width: 100%;
+  display: flex;
 }
 
 nav{

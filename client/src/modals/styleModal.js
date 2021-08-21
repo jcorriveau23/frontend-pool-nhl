@@ -13,7 +13,7 @@ export const styleModal={
       left: '20%',
       right: '20%',
       bottom: '20%',
-      border: '5px solid #ccc',
+      border: '5px solid #444',
       background: '#DFE5A3',
       overflow: 'auto',
       WebkitOverflowScrolling: 'touch',
