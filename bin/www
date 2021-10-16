@@ -129,6 +129,16 @@ io.on('connection', function(socket){
     }
   });
 
+  socket.on('changeRule', function(data, pool_info){
+    let token = jwt.decode(data, 'verySecretValue')
+
+    var index = pools[pool_info.name]["listClient"].findIndex(e => (e.name === token.name))
+
+    if(index > -1 && pool_info.owner === token.name){
+      io.in(pool_info.name).emit("poolInfo", pool_info)
+    }
+  });
+
   socket.on('startDraft', function(data, room){
     for(i = 0; i < pools[room]["listClient"].length; i++){
       if(pools[room]["listClient"][i].ready === false){

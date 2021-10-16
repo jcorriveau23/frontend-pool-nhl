@@ -26,6 +26,7 @@ export const LoginModal = ({showLoginModal, setShowLoginModal, username, setUser
                     Cookies.set('token', data.token);
                     localStorage.setItem('username', usernameInput)
                     setUsername(usernameInput)
+                    setShowLoginModal(false)
                 }
                 else{
                     setMsg(data.message);
@@ -36,8 +37,8 @@ export const LoginModal = ({showLoginModal, setShowLoginModal, username, setUser
     const isLoggedRender = () => {
         if(username){
             return(
-                <div>
-                    <h1>You are already logged in!</h1>
+                <div class="modal_content">
+                    <p>You are already logged in, you need to disconnect first.</p>
                     <button onClick={() => setShowLoginModal(false)}>Ok</button>
                 </div>
             )
@@ -45,18 +46,14 @@ export const LoginModal = ({showLoginModal, setShowLoginModal, username, setUser
         else{
             return(    
                 <div class="modal_content">
-                    <h2>Please Login.</h2>
+                    <h1>Login</h1>
                     <form>
-                        <p style={{color:'red'}}>{msg}</p>
-                        <label><b>Username</b></label>
+                        <p>Please fill in this form to login.</p>
                         <input type="text" placeholder="Enter Username" onChange={event => setUsernameInput(event.target.value)} required/>
-
-                        <label><b>Password</b></label>
-                        <input type="password" placeholder="Enter Password" onChange={event => setPasswordInput(event.target.value)} required/>
-                        
+                        <input type="password" placeholder="Enter Password" onChange={event => setPasswordInput(event.target.value)} required/> 
                     </form>
                     <button onClick={() => login()} >Login</button>
-                    <button onClick={() => setShowLoginModal(false)}>Cancel</button>
+                    <p style={{color:'red'}}>{msg}</p>
                 </div>
             )
         }
@@ -64,13 +61,8 @@ export const LoginModal = ({showLoginModal, setShowLoginModal, username, setUser
     
     return (
         <Modal style={styleModal} isOpen={showLoginModal} onRequestClose={() => setShowLoginModal(false)}>
-            
-            <div>
-                {isLoggedRender()}
-                
-            </div>
-        </Modal>
-        
+            {isLoggedRender()}
+        </Modal>  
     )
 }
     

@@ -115,6 +115,7 @@ li {
 .header {
   border-color: #444;
   border-style: groove;
+  border-radius: 10px;
   width: 100%;
   display: flex;
 }
@@ -180,7 +181,51 @@ nav a:hover::before{
 
 
 .modal_content {
-  position: relative;
-  top: 40%;
-  left: 20%;
+  text-align:center;
+}
+
+.modal_content form {
+  text-align:center;
+  padding: 10px 20px;
+  }
+
+.modal_content input {
+  width: 51%;
+  padding: 8px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  text-align:center;
+  border: 2px solid #444;
+  border-radius: 10px;
+}
+
+
+
+
+
+
+.pool_item {
+  display: inline-block;
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 16px;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  margin: 10px 5px;
+  padding: 0 16px 16px 16px;
+  max-width: 468px;
+}
+
+.pool_item a {
+  color: inherit;
+  font-weight: normal;
+  text-decoration: none;
+  outline: 0 none;
+}
+
+.pool_item a:hover,
+.pool_item a:focus {
+  text-decoration: underline;
 }

@@ -30,23 +30,23 @@ const pool_creation = (req, res, next) =>{
             let pool = new Pool({
                 name: req.body.name,
                 owner: token.name,
-                number_poolers: req.body.number_poolers,
-                number_forward: req.body.number_forward,
-                number_defenders: req.body.number_defenders,
-                number_goalies: req.body.number_goalies,
-                number_reservist: req.body.number_reservist,
-                forward_pts_goals: req.body.forward_pts_goals,
-                forward_pts_assists: req.body.forward_pts_assists,
-                forward_pts_hattricks: req.body.forward_pts_hattricks,
-                defender_pts_goals: req.body.defender_pts_goals,
-                defender_pts_assits: req.body.defender_pts_assits,
-                defender_pts_hattricks: req.body.defender_pts_hattricks,
-                goalies_pts_wins: req.body.goalies_pts_wins,
-                goalies_pts_shutouts: req.body.goalies_pts_shutouts,
-                goalies_pts_goals: req.body.goalies_pts_goals,
-                goalies_pts_assists: req.body.goalies_pts_assists,
-                next_season_number_players_protected: req.body.next_season_number_players_protected,
-                tradable_picks: req.body.tradable_picks,
+                number_poolers: req.body.number_pooler,
+                number_forward: 9,
+                number_defenders: 4,
+                number_goalies: 2,
+                number_reservist: 2,
+                forward_pts_goals: 2,
+                forward_pts_assists: 1,
+                forward_pts_hattricks: 3,
+                defender_pts_goals: 3,
+                defender_pts_assits: 2,
+                defender_pts_hattricks: 2,
+                goalies_pts_wins: 2,
+                goalies_pts_shutouts: 3,
+                goalies_pts_goals: 3,
+                goalies_pts_assists: 2,
+                next_season_number_players_protected: 8,
+                tradable_picks: 3,
                 context: {},
                 next_drafter: "",
                 status: "created"
@@ -68,6 +68,46 @@ const pool_creation = (req, res, next) =>{
             })
         }
     })
+}
+
+const delete_pool = (req, res, next) =>{
+    var encrypt_token = req.headers.token
+
+    let token = jwt.decode(encrypt_token, 'verySecretValue')
+    // TODO: use token.iat and token.exp to use token expiration and force user to re-login
+    User.findOne({$or: [{name:token.name}]})
+    .then(user => {
+        if(!user){
+            res.json({
+                success: "False",
+                message: 'User is not registered!'
+            })
+        }
+    })
+
+    Pool.findOne({$or: [{name:req.body.name}]})
+    .then(pool => {
+        if(pool.owner === token.name)
+        {
+            Pool.deleteOne({name: pool.name})
+            .then(pool => {
+                console.log("pool deleted: " + req.body.name)
+                res.json({
+                success: "True",
+                message: "pool as been deleted!"
+                })
+
+            })
+        }
+        else{
+            res.json({
+                success: "False",
+                message: "you are not the owner of that pool!"
+            }) 
+        }
+            
+        }
+    )
 }
 
 const pool_list = (req, res, next) =>{
@@ -840,5 +880,6 @@ module.exports = {
     start_draft,
     chose_player,
     protected_players,
-    get_pool_stats
+    get_pool_stats,
+    delete_pool
 }

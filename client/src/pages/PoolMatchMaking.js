@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Cookies from 'js-cookie';
 import io from "socket.io-client";
-import Tabs from "./Tabs"
+import Tabs from "../components/Tabs"
 
-import logos from "./img/images"
-import './components.css';
+import logos from "../components/img/images"
+import '../components/components.css';
 
 const socket = io.connect()
 
@@ -64,9 +64,6 @@ export default class PoolMatchMaking extends Component {
         this.setState({user_list: data})
       });
 
-      socket.on("error", (data) => {
-      });
-
       socket.on("poolInfo", (data) => {
         this.setState({pool_info: data})
         this.filter_players()
@@ -93,7 +90,7 @@ export default class PoolMatchMaking extends Component {
       .then(response => response.json())
       .then(data => {
           if(data.success === "False"){
-              this.props.history.push('/login');
+              this.props.history.push('/Home');
           }
           else{
             this.setState({username: data.username})
@@ -145,10 +142,6 @@ export default class PoolMatchMaking extends Component {
           }
           
       })
-
-
-
-      
     }
 
     async calculate_pool_stats(players_stats){
@@ -419,7 +412,13 @@ export default class PoolMatchMaking extends Component {
 
       else if(event.target.type === "submit"){
         socket.emit('startDraft', Cookies.get('token'), this.state.pool_info.name);
-      }      
+      }    
+      else if( event.target.type === "select-one" ){
+        var pool_info = this.state.pool_info
+
+        pool_info[event.target.name] = event.target.value
+        socket.emit("changeRule", Cookies.get('token'), pool_info )
+      }  
     }
 
     async search_players(val){
@@ -1116,22 +1115,221 @@ export default class PoolMatchMaking extends Component {
             <h1>Match Making for Pool {this.state.pool_info.name}</h1>
             <div class="floatLeft">
               <h2>Rule: </h2>
-              <h4>Number poolers: {this.state.pool_info.number_poolers}</h4>
-              <h4>Number forwards: {this.state.pool_info.number_forward}</h4>
-              <h4>Number defenders: {this.state.pool_info.number_defenders}</h4>
-              <h4>Number goalies: {this.state.pool_info.number_goalies}</h4>
-              <h4>Number reservist: {this.state.pool_info.number_reservist}</h4>
+              <p>Number of poolers:</p>
+              <select 
+                name="number_poolers" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.number_poolers}
+              >
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+                <option>11</option>
+                <option >12</option>
+              </select>
+              <p>Number of forwards:</p>
+              <select 
+                name="number_forward" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.number_forward}
+              >
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+                <option>11</option>
+                <option>12</option>
+              </select>
+              <p>Number of defenders:</p>
+              <select 
+                name="number_defenders" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.number_defenders}
+              >
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+              </select>
+              <p>Number of goalies:</p>
+              <select 
+                name="number_goalies" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.number_goalies}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <p>Number of reservists:</p>
+              <select 
+                name="number_reservist" 
+                onChange={this.handleChange}
+                disabled={this.state.pool_info.owner === this.state.username? false : true} 
+                value={this.state.pool_info.number_reservist}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
               <h2>Points</h2>
-              <h4>Goals by forward: {this.state.pool_info.forward_pts_goals} pts</h4>
-              <h4>Assists by forward: {this.state.pool_info.forward_pts_assists} pts</h4>
-              <h4>Hat tricks by forward: {this.state.pool_info.forward_pts_hattricks} pts</h4>
-              <h4>Goals by defender: {this.state.pool_info.defender_pts_goals} pts</h4>
-              <h4>Assists by defender: {this.state.pool_info.defender_pts_assists} pts</h4>
-              <h4>Hat tricks by defender: {this.state.pool_info.defender_pts_hattricks} pts</h4>
-              <h4>Win by goalies: {this.state.pool_info.goalies_pts_wins} pts</h4>
-              <h4>shutouts by goalies: {this.state.pool_info.goalies_pts_shutouts} pts</h4>
-              <h4>Goals by goalies: {this.state.pool_info.goalies_pts_goals} pts</h4>
-              <h4>Assists by goalies: {this.state.pool_info.goalies_pts_assists} pts</h4>
+              <p>pts per goal by forward:</p>
+              <select 
+                name="forward_pts_goals" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.forward_pts_goals}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <p>pts per assist by forward:</p>
+              <select 
+                name="forward_pts_assists" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.forward_pts_assists}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <p>pts per hat trick by forward:</p>
+              <select 
+                name="forward_pts_hattricks" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.forward_pts_hattricks}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <p>pts per goal by defender:</p>
+              <select 
+                name="defender_pts_goals" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.defender_pts_goals}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <p>pts per assist by defender:</p>
+              <select 
+                name="defender_pts_assits" 
+                onChange={this.handleChange}
+                disabled={this.state.pool_info.owner === this.state.username? false : true} 
+                value={this.state.pool_info.defender_pts_assits}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <p>pts per hat trick by defender:</p>
+              <select 
+                name="defender_pts_hattricks" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.defender_pts_hattricks}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <p>pts per win by goalies</p>
+              <select 
+                name="goalies_pts_wins" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.goalies_pts_wins}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <p>pts per shutout by goalies</p>
+              <select 
+                name="goalies_pts_shutouts" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.goalies_pts_shutouts}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <p>pts per goal by goalies:</p>
+              <select 
+                name="goalies_pts_goals" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.goalies_pts_goals}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <p>pts per assist by goalies:</p>
+              <select 
+                name="goalies_pts_assists" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.goalies_pts_assists}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <p>next season number player protected:</p>
+              <select 
+                name="next_season_number_players_protected" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+                value={this.state.pool_info.next_season_number_players_protected}
+              >
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+                <option>11</option>
+                <option>12</option>
+              </select>
+              <p>number tradable draft picks:</p>
+              <select 
+                name="tradable_picks" 
+                onChange={this.handleChange} 
+                disabled={this.state.pool_info.owner === this.state.username? false : true}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+
+
             </div>
             <div class="floatRight">
               <label>

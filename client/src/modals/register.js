@@ -34,26 +34,19 @@ export const RegisterModal = ({showRegisterModal, setShowRegisterModal}) => {
 
     return (
         <Modal style={styleModal} isOpen={showRegisterModal} onRequestClose={() => setShowRegisterModal(false)}>
-            <h2>Register an account.</h2>
-            <div>
+            <div class="modal_content">
+                <h2>Register an account</h2>
                 <form>
                     <p>Please fill in this form to create an account.</p>
-                    <p style={{color:'red'}}>{msg}</p>
-                    <label><b>Username</b></label>
                     <input type="text" placeholder="Enter Username" onChange={event => setUsername(event.target.value)} required/>
-
-                    <label><b>Password</b></label>
                     <input type="password" placeholder="Enter Password" onChange={event => setPassword(event.target.value)} required/>
-
-                    <label><b>Repeat Password</b></label>
                     <input type="password" placeholder="Repeat Password" onChange={event => setRepeatPassword(event.target.value)} required/>
-                    
-                    <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
                 </form>
                 <button onClick={() => register()} >Register</button>
+                <p style={{color:'red'}}>{msg}</p>
             </div>
             <div>
-                <button onClick={() => setShowRegisterModal(false)}>Cancel</button>
+                
             </div>
         </Modal>
     )

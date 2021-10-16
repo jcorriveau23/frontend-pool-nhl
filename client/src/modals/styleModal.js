@@ -16,7 +16,7 @@ export const styleModal={
       border: '5px solid #444',
       background: '#DFE5A3',
       overflow: 'auto',
-      WebkitOverflowScrolling: 'touch',
+      WebkitOverflowScrolling: 'auto',
       borderRadius: '30px',
       outline: 'none',
       padding: '4%',
