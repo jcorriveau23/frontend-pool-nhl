@@ -29,6 +29,7 @@ import BUF from "./buffalo-sabres-logo.png"
 import ANA from "./anaheim-ducks-logo.png"
 import CLB from "./columbus-blue-jackets-logo.png"
 import VGK from "./vegas-golden-knights-logo.png"
+import KRK from "./kraken.png"
 
 
 const logos = { 
@@ -62,7 +63,8 @@ const logos = {
     "Buffalo Sabres": BUF,
     "Anaheim Ducks": ANA,
     "Columbus Blue Jackets": CLB,
-    "Vegas Golden Knights": VGK
+    "Vegas Golden Knights": VGK,
+    "Seattle Kraken": KRK
  }
 
 export default logos;

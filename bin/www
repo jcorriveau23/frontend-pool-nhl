@@ -109,7 +109,7 @@ io.on('connection', function(socket){
     var index = pools[room]["listClient"].findIndex(e => (e.name === token.name))
 
     if(index > -1){
-
+      console.log("im ready: " + token.name)
       pools[room]["listClient"][index].ready = true
 
       io.in(room).emit("roomData", pools[room]["listClient"])

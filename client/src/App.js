@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {BrowserRouter as Router, Link, Switch, Route} from "react-router-dom"
-
+import './components/components.css';
 import Logo from "./components/img/logo/logo.png"
 
 // modals
@@ -9,7 +9,7 @@ import {LoginModal} from "./modals/login"
 
 //pages
 import PoolList from "./pages/pool_list"
-import PoolMatchMaking from "./pages/PoolMatchMaking"
+import PoolPage from "./pages/pool_page"
 import Cookies from 'js-cookie';
 
 function App() {
@@ -61,7 +61,7 @@ function App() {
         <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} username={username} setUsername={setUsername}></LoginModal>
         <Switch>
           <Route exact path="/pool_list" component={() => PoolList(username)}></Route>
-          <Route path="/pool_list/:name" component = {PoolMatchMaking}></Route>
+          <Route path="/pool_list/:name" component = {() => PoolPage(username)}></Route>
         </Switch>
         </div>
       </Router>

@@ -5,7 +5,7 @@ import { PoolItem } from "../components/poolItem";
 
 import { CreatePoolModal } from '../modals/createPool';
 
-function PoolList(username, props) {
+function PoolList(username) {
     
     const [showCreatePoolModal, setShowCreatePoolModal] = useState(false)
     const [poolDeleted, setPoolDeleted] = useState(false)

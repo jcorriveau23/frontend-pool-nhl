@@ -1,6 +1,7 @@
 const Pool = require('../models/Pool')
 const User = require('../models/User')
-const Player = require('../models/Player')
+const Players = require('../models/Player')
+
 const jwt = require('jsonwebtoken')
 
 const pool_creation = (req, res, next) =>{
@@ -91,7 +92,6 @@ const delete_pool = (req, res, next) =>{
         {
             Pool.deleteOne({name: pool.name})
             .then(pool => {
-                console.log("pool deleted: " + req.body.name)
                 res.json({
                 success: "True",
                 message: "pool as been deleted!"
@@ -140,14 +140,8 @@ const pool_list = (req, res, next) =>{
     
 
     Pool.find({"status": "created"})
-    .then(pools => {
+    .then(pools_created => {
         
-        var pools_created = []
-
-        for(i=0; i < pools.length; i++){
-            pools_created.push({"name": pools[i].name, "owner": pools[i].owner})
-        }
-
         Pool.find({name: user_pools}, {name:1, status:1, owner:1})
         .then(pools => {
             res.json({
@@ -849,7 +843,7 @@ const get_pool_stats = (req, res, next) => {
                 }
             }
 
-            Player.find({name: players_name, team: players_team}, {name:1, team:1, stats:1, position:1, url:1})
+            Players.Players.find({ name: players_name }, {name:1, team:1, stats:1, position:1, url:1})
             .then(players => {
                 res.json({
                     success: "True",
@@ -868,8 +862,84 @@ const get_pool_stats = (req, res, next) => {
     )
 }
 
+const get_all_players = (req, res, next) => {
+
+    ValidateUser(req.headers.token)
+
+    response = {"F": [], "D": [], "G": []}
+
+    Players.DraftForwards.find()
+    .then(forwards => {
+        response["F"] = forwards
+
+        Players.DraftDefenders.find()
+        .then(defenders => {
+            response["D"] = defenders
+
+            Players.DraftGoalies.find()
+            .then(goalies => {
+                response["G"] = goalies
+
+                res.json({
+                    success: "True",
+                    message: response
+                })
+                return
+            })
+            .catch(error => {
+                res.json({
+                    success: "False",
+                    message: error
+                })
+                return
+            })
+        })
+        .catch(error => {
+            res.json({
+                message: error
+            })
+            return
+        })
+
+    })
+    .catch(error => {
+        res.json({
+            success: "False",
+            message: error
+        })
+        return
+    })
+}
+
 function shuffleArray(arr) {
     arr.sort(() => Math.random() - 0.5);
+}
+
+function ValidateUser(encrypt_token){
+    if(encrypt_token !== "undefined"){
+        let token = jwt.decode(encrypt_token, 'verySecretValue')
+
+        username = token.name
+
+        // TODO: use token.iat and token.exp to use token expiration and force user to re-login
+        User.findOne({$or: [{name:username}]})
+        .then(user => {
+            if(!user){
+                res.json({
+                    success: "False",
+                    message: 'User is not registered!'
+                })
+                return
+            }
+        })
+    }
+    else{
+        res.json({
+            success: "False",
+            message: 'no token, you need to login'
+        })
+        return
+    }
 }
 
 module.exports = {
@@ -881,5 +951,6 @@ module.exports = {
     chose_player,
     protected_players,
     get_pool_stats,
-    delete_pool
+    delete_pool,
+    get_all_players
 }
