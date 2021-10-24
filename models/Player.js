@@ -10,7 +10,14 @@ const playerSchema = new Schema({
 
 }, {timestamps: true})
 
+const Players = mongoose.model('players', playerSchema)
+const DraftDefenders = mongoose.model('draft_defenders', playerSchema)
+const DraftForwards = mongoose.model('draft_forwards', playerSchema)
+const DraftGoalies = mongoose.model('draft_goalies', playerSchema)
 
-const Player = mongoose.model('Player', playerSchema)
-module.exports = Player
-
+module.exports = {
+  Players,
+  DraftDefenders,
+  DraftForwards,
+  DraftGoalies
+}

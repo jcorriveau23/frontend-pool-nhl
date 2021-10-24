@@ -1,6 +1,7 @@
 const Pool = require('../models/Pool')
 const User = require('../models/User')
-const Player = require('../models/Player')
+const Players = require('../models/Player')
+
 const jwt = require('jsonwebtoken')
 
 const pool_creation = (req, res, next) =>{
@@ -30,23 +31,23 @@ const pool_creation = (req, res, next) =>{
             let pool = new Pool({
                 name: req.body.name,
                 owner: token.name,
-                number_poolers: req.body.number_poolers,
-                number_forward: req.body.number_forward,
-                number_defenders: req.body.number_defenders,
-                number_goalies: req.body.number_goalies,
-                number_reservist: req.body.number_reservist,
-                forward_pts_goals: req.body.forward_pts_goals,
-                forward_pts_assists: req.body.forward_pts_assists,
-                forward_pts_hattricks: req.body.forward_pts_hattricks,
-                defender_pts_goals: req.body.defender_pts_goals,
-                defender_pts_assits: req.body.defender_pts_assits,
-                defender_pts_hattricks: req.body.defender_pts_hattricks,
-                goalies_pts_wins: req.body.goalies_pts_wins,
-                goalies_pts_shutouts: req.body.goalies_pts_shutouts,
-                goalies_pts_goals: req.body.goalies_pts_goals,
-                goalies_pts_assists: req.body.goalies_pts_assists,
-                next_season_number_players_protected: req.body.next_season_number_players_protected,
-                tradable_picks: req.body.tradable_picks,
+                number_poolers: req.body.number_pooler,
+                number_forward: 9,
+                number_defenders: 4,
+                number_goalies: 2,
+                number_reservist: 2,
+                forward_pts_goals: 2,
+                forward_pts_assists: 1,
+                forward_pts_hattricks: 3,
+                defender_pts_goals: 3,
+                defender_pts_assits: 2,
+                defender_pts_hattricks: 2,
+                goalies_pts_wins: 2,
+                goalies_pts_shutouts: 3,
+                goalies_pts_goals: 3,
+                goalies_pts_assists: 2,
+                next_season_number_players_protected: 8,
+                tradable_picks: 3,
                 context: {},
                 next_drafter: "",
                 status: "created"
@@ -68,6 +69,45 @@ const pool_creation = (req, res, next) =>{
             })
         }
     })
+}
+
+const delete_pool = (req, res, next) =>{
+    var encrypt_token = req.headers.token
+
+    let token = jwt.decode(encrypt_token, 'verySecretValue')
+    // TODO: use token.iat and token.exp to use token expiration and force user to re-login
+    User.findOne({$or: [{name:token.name}]})
+    .then(user => {
+        if(!user){
+            res.json({
+                success: "False",
+                message: 'User is not registered!'
+            })
+        }
+    })
+
+    Pool.findOne({$or: [{name:req.body.name}]})
+    .then(pool => {
+        if(pool.owner === token.name)
+        {
+            Pool.deleteOne({name: pool.name})
+            .then(pool => {
+                res.json({
+                success: "True",
+                message: "pool as been deleted!"
+                })
+
+            })
+        }
+        else{
+            res.json({
+                success: "False",
+                message: "you are not the owner of that pool!"
+            }) 
+        }
+            
+        }
+    )
 }
 
 const pool_list = (req, res, next) =>{
@@ -100,14 +140,8 @@ const pool_list = (req, res, next) =>{
     
 
     Pool.find({"status": "created"})
-    .then(pools => {
+    .then(pools_created => {
         
-        var pools_created = []
-
-        for(i=0; i < pools.length; i++){
-            pools_created.push({"name": pools[i].name, "owner": pools[i].owner})
-        }
-
         Pool.find({name: user_pools}, {name:1, status:1, owner:1})
         .then(pools => {
             res.json({
@@ -686,13 +720,10 @@ const protected_players = (req, res, next) => {
             if(ready){
                 pool.context.draft_order = []
 
-                console.log(pool.tradable_picks)
                 for(rank = 1; rank <= pool.tradable_picks; rank++){
                     for(j = pool.number_poolers-1; j > -1; j--){
                         //i picks of player j
                         var player_search = pool.participants[j] // participants should be reordered depending on the rank of last season
-
-                        console.log("try to find: " + {'rank': rank, 'player': player_search})
                         
                         if(pool.context[player_search].tradable_picks.findIndex(t => (t.rank === rank && t.player === player_search)) > - 1 ){
                             // player still has his picks
@@ -705,8 +736,6 @@ const protected_players = (req, res, next) => {
                                 pooler = pool.final_rank[i]
                                 if(pool.context[pooler].tradable_picks.findIndex(t => (t.rank === rank && t.player === player_search)) > - 1 )
                                 {
-                                    console.log("find player traded to")
-                                    console.log("rank:" + rank + "from " + player_search + "got the pick: " + pooler)
                                     pool.context.draft_order.push(pooler)
                                     break  
                                 }
@@ -718,7 +747,6 @@ const protected_players = (req, res, next) => {
                 var number_picks = pool.number_poolers*(pool.number_defenders + pool.number_forward + pool.number_goalies + pool.number_reservist - pool.next_season_number_players_protected)
                 for(i = number_picks-(pool.tradable_picks*pool.number_poolers + 1); i > -1; i--)
                 {
-                    console.log("Classic " + i)
                     pool.context['draft_order'].push(pool.participants[i % pool.number_poolers])
                 }
                 pool.status = "draft"
@@ -815,9 +843,8 @@ const get_pool_stats = (req, res, next) => {
                 }
             }
 
-            Player.find({name: players_name, team: players_team}, {name:1, team:1, stats:1, position:1, url:1})
+            Players.Players.find({ name: players_name }, {name:1, team:1, stats:1, position:1, url:1})
             .then(players => {
-                console.log(players)
                 res.json({
                     success: "True",
                     players: players,
@@ -835,8 +862,84 @@ const get_pool_stats = (req, res, next) => {
     )
 }
 
+const get_all_players = (req, res, next) => {
+
+    ValidateUser(req.headers.token)
+
+    response = {"F": [], "D": [], "G": []}
+
+    Players.DraftForwards.find()
+    .then(forwards => {
+        response["F"] = forwards
+
+        Players.DraftDefenders.find()
+        .then(defenders => {
+            response["D"] = defenders
+
+            Players.DraftGoalies.find()
+            .then(goalies => {
+                response["G"] = goalies
+
+                res.json({
+                    success: "True",
+                    message: response
+                })
+                return
+            })
+            .catch(error => {
+                res.json({
+                    success: "False",
+                    message: error
+                })
+                return
+            })
+        })
+        .catch(error => {
+            res.json({
+                message: error
+            })
+            return
+        })
+
+    })
+    .catch(error => {
+        res.json({
+            success: "False",
+            message: error
+        })
+        return
+    })
+}
+
 function shuffleArray(arr) {
     arr.sort(() => Math.random() - 0.5);
+}
+
+function ValidateUser(encrypt_token){
+    if(encrypt_token !== "undefined"){
+        let token = jwt.decode(encrypt_token, 'verySecretValue')
+
+        username = token.name
+
+        // TODO: use token.iat and token.exp to use token expiration and force user to re-login
+        User.findOne({$or: [{name:username}]})
+        .then(user => {
+            if(!user){
+                res.json({
+                    success: "False",
+                    message: 'User is not registered!'
+                })
+                return
+            }
+        })
+    }
+    else{
+        res.json({
+            success: "False",
+            message: 'no token, you need to login'
+        })
+        return
+    }
 }
 
 module.exports = {
@@ -847,5 +950,7 @@ module.exports = {
     start_draft,
     chose_player,
     protected_players,
-    get_pool_stats
+    get_pool_stats,
+    delete_pool,
+    get_all_players
 }
