@@ -334,7 +334,7 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                         <th>team</th>
                                     </tr>
                                 </thead>
-                                {forwProtected.map((player, index) => //TODO: when clicked on remove from protected player list
+                                {forwProtected.map((player, index) =>
                                     <tr onClick={() => unprotect_player(player, false)}>
                                         <td>{index + 1}</td>
                                         <td>{player.name}</td>
