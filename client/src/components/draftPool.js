@@ -15,7 +15,6 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     const [message, setMessage] = useState("");
 
     useEffect(() => {
-        console.log("useEffect 1")
         if (socket && poolName && username) {
             socket.emit('joinRoom', Cookies.get('token'), poolName);
             fetchPlayerDraft();
@@ -32,7 +31,6 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     }, [username]); // only run on this component mount and unmount
 
     useEffect(() => {
-        console.log("useEffect 2")
         if(socket){
             socket.on("poolInfo", (data) => { 
                 setPoolInfo(data)
@@ -236,7 +234,8 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
         </tr>
     )
     }
-    else{
+    else
+    {
         return
     }
     }
