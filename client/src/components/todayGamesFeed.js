@@ -30,7 +30,7 @@ function TodayGamesFeed() {
         .then(response => response.json())
         .then(todayGamesData => {
             todayGamesData["dates"][0]["games"].map( game => {
-                fetch('https://statsapi.web.nhl.com' + game["link"])
+                fetch('https://statsapi.web.nhl.com' + game.link)
                 .then(response => response.json())
                 .then(gameFeedData => {
                     setGamesStats(gamesStats => [...gamesStats, gameFeedData])

@@ -19,6 +19,7 @@ import {LoginModal} from "./modals/login"
 import PoolList from "./pages/pool_list"
 import PoolPage from "./pages/pool_page"
 import StatsPage from "./pages/stats_page"
+import GameFeedPage from "./pages/game_feed_page"
 
 function App() {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
@@ -58,9 +59,9 @@ function App() {
               <li><Link to="/">Home</Link></li>
               {username? <li><Link to="/poolList">Pool List</Link></li> : null}
               <li><Link to="/statsPage">League Stats</Link></li>
-              <li onClick={openRegisterModal}><a href="#">Register</a></li>
-              {username? <li><Link onClick={() => Disconnect()}>Disconnect</Link></li> : <li onClick={openLoginModal}><a href="#">Login</a></li>}
-              {username?<li><a href="#">connected: {username}</a></li> : null}
+              <li onClick={openRegisterModal}><Link>Register</Link></li>
+              {username? <li><Link onClick={() => Disconnect()}>Disconnect</Link></li> : <li onClick={openLoginModal}><Link>Login</Link></li>}
+              {username?<li><Link>connected: {username}</Link></li> : null}
             </ul>
           </div>
         </nav>
@@ -75,6 +76,7 @@ function App() {
           <Route exact path="/poolList" component = {() => PoolList(username)}></Route>
           <Route path="/poolList/:name" component = {() => PoolPage(username)}></Route>
           <Route exact path="/statsPage" component = {StatsPage}></Route>
+          <Route path="/gameFeed/:id" component = {() => GameFeedPage()}></Route>
         </Switch>
         </div>
       </Router>

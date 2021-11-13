@@ -1,6 +1,8 @@
 import React from 'react'
 import Cookies from 'js-cookie';
 
+import { Link } from "react-router-dom"
+
 export const PoolItem = ({name, owner, username, poolDeleted, setPoolDeleted}) => {
     
     const delete_pool = () => {
@@ -15,7 +17,7 @@ export const PoolItem = ({name, owner, username, poolDeleted, setPoolDeleted}) =
 
     return (
         <div>
-            <a href={'poolList/' + name}>Pool: {name}</a>
+            <Link to={'poolList/' + name}>Pool: {name}</Link>
             <p>Owner: {owner}</p>
             {username === owner? <a onClick={delete_pool}>Delete</a> : null}
         </div>

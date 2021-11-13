@@ -1,12 +1,10 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 // teams logo
 import logos from "./img/images" 
 
 export const GameItem = ({gameData}) => {
-
-    console.log(gameData)
-
     return (
         
         <table>
@@ -20,6 +18,9 @@ export const GameItem = ({gameData}) => {
             <tr>
                 <td><img src={logos[gameData.liveData.boxscore.teams.away.team.name] } width="30" height="30"></img></td>
                 <td>{gameData.liveData.boxscore.teams.away.teamStats.teamSkaterStats.goals}</td>
+            </tr>
+            <tr>
+                <Link to={'/gameFeed/' + gameData.gamePk}>More...</Link>
             </tr>
         </table>
     )

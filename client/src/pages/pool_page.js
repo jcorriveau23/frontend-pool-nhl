@@ -14,7 +14,7 @@ var socket = io.connect()
 
 function PoolPage(username) {
 
-    const [poolInfo, setPoolInfo] = useState({ participants: [] })
+    const [poolInfo, setPoolInfo] = useState({})
     const [poolName] = useState(useParams().name)   // get the name of the pool using the param url
 
     useEffect(() => {
@@ -39,10 +39,6 @@ function PoolPage(username) {
             })
         }
     },[username]);
-
-    const GetParam = () => {
-      //return useParams();
-    }
     
     if(poolInfo.status === "created")
     {
@@ -68,7 +64,6 @@ function PoolPage(username) {
             <DynastiePool username={username} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket}></DynastiePool>
         )
     }
-
     else
     {
         return(

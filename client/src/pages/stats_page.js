@@ -17,10 +17,8 @@ function StatsPage() {
 
     if(teamsStats != null)
     {
-        console.log(teamsStats)
         return(
             <div>
-                <h1>hey you, you are on the stats page.</h1>
                 <TeamsStanding data={teamsStats}></TeamsStanding>
             </div>
         );
