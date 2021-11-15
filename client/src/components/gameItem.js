@@ -9,15 +9,15 @@ export const GameItem = ({gameData}) => {
         
         <table>
             <tr>
-                <td>{new Date(Date.parse(gameData.gameData.datetime.dateTime)).toLocaleString(navigator.language, {hour: '2-digit', minute:'2-digit'})}</td>
+                <td>{new Date(Date.parse(gameData.gameDate)).toLocaleString(navigator.language, {hour: '2-digit', minute:'2-digit'})}</td>
             </tr>
             <tr>
-                <td><img src={logos[gameData.liveData.boxscore.teams.home.team.name] } width="30" height="30"></img></td>
-                <td>{gameData.liveData.boxscore.teams.home.teamStats.teamSkaterStats.goals}</td>
+                <td><img src={logos[gameData.teams.away.team.name] } width="30" height="30"></img></td>
+                <td>{gameData.teams.away.score}</td>
             </tr>
             <tr>
-                <td><img src={logos[gameData.liveData.boxscore.teams.away.team.name] } width="30" height="30"></img></td>
-                <td>{gameData.liveData.boxscore.teams.away.teamStats.teamSkaterStats.goals}</td>
+                <td><img src={logos[gameData.teams.home.team.name] } width="30" height="30"></img></td>
+                <td>{gameData.teams.home.score}</td>
             </tr>
             <tr>
                 <Link to={'/gameFeed/' + gameData.gamePk}>More...</Link>

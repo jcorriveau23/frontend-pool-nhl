@@ -1,11 +1,5 @@
-// https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
-
-//json["boxscore"]["home"]["teamStats"]   
-//json["boxscore"]["away"]["teamStats"]["players"] // for players specific game stats.
-
 import React, { useState, useEffect } from 'react';
-
-import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // teams logo
 import logos from "../components/img/images" 
@@ -13,25 +7,23 @@ import logos from "../components/img/images"
 function GameFeedPage() {
 
     const [gameInfo, setGameInfo] = useState(null)
-    const url = window.location.pathname.split('/').pop();
-    console.log(url)
+
+    const gameID = window.location.pathname.split('/').pop();
+    console.log(gameID)
     
     useEffect(() => {
-        fetch('https://statsapi.web.nhl.com/api/v1/game/' + url + "/feed/live")
+        fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/feed/live")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
         .then(response => response.json())
         .then(gameInfo => {
             setGameInfo({...gameInfo})
         })
 
-    }, [url]); 
-
-    if(gameInfo != null)
-    { 
-        console.log(gameInfo)
-
+    }, [gameID]);
+    
+    const render_team_stats = (team) => {
         return(
             <div>
-                <img src={logos[gameInfo.liveData.boxscore.teams.home.team.name]} width="50" height="50"></img>
+                <img src={logos[team.team.name]} width="50" height="50"></img>
                 <table  class="content-table">
                     <tr>
                         <th>#</th>
@@ -52,28 +44,28 @@ function GameFeedPage() {
                         <th>PP TOI</th>
                         <th>SH TOI</th>
                     </tr>
-                    {Object.keys(gameInfo.liveData.boxscore.teams.home.players).map( (key, index) => {
-                        if(gameInfo.liveData.boxscore.teams.home.players[key].stats.hasOwnProperty("skaterStats"))
+                    {Object.keys(team.players).map( (key, index) => {
+                        if(team.players[key].stats.hasOwnProperty("skaterStats"))
                         {
                             return(
                                 <tr>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].jerseyNumber}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].person.fullName}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].position.abbreviation}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.goals}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.assists}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.goals + gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.assists}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.plusMinus}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.penaltyMinutes}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.shots}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.hits}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.blocked}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.giveaways}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.takeaways}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.faceOffWins / gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.faceOffTaken}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.timeOnIce}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.powerPlayTimeOnIce}</td>
-                                    <td>{gameInfo.liveData.boxscore.teams.home.players[key].stats.skaterStats.shortHandedTimeOnIce}</td>
+                                    <td>{team.players[key].jerseyNumber}</td>
+                                    <td><Link to={"/"} style={{ textDecoration: 'none', color: "white" }}>{team.players[key].person.fullName}</Link></td>
+                                    <td>{team.players[key].position.abbreviation}</td>
+                                    <td>{team.players[key].stats.skaterStats.goals}</td>
+                                    <td>{team.players[key].stats.skaterStats.assists}</td>
+                                    <td>{team.players[key].stats.skaterStats.goals + team.players[key].stats.skaterStats.assists}</td>
+                                    <td>{team.players[key].stats.skaterStats.plusMinus}</td>
+                                    <td>{team.players[key].stats.skaterStats.penaltyMinutes}</td>
+                                    <td>{team.players[key].stats.skaterStats.shots}</td>
+                                    <td>{team.players[key].stats.skaterStats.hits}</td>
+                                    <td>{team.players[key].stats.skaterStats.blocked}</td>
+                                    <td>{team.players[key].stats.skaterStats.giveaways}</td>
+                                    <td>{team.players[key].stats.skaterStats.takeaways}</td>
+                                    <td>{team.players[key].stats.skaterStats.faceOffWins === 0 || team.players[key].stats.skaterStats.faceOffTaken === 0? 0 : team.players[key].stats.skaterStats.faceOffWins / team.players[key].stats.skaterStats.faceOffTaken}</td>
+                                    <td>{team.players[key].stats.skaterStats.timeOnIce}</td>
+                                    <td>{team.players[key].stats.skaterStats.powerPlayTimeOnIce}</td>
+                                    <td>{team.players[key].stats.skaterStats.shortHandedTimeOnIce}</td>
 
                                 </tr>
                             )
@@ -82,9 +74,20 @@ function GameFeedPage() {
                         
                     })}
                 </table>
-                <img src={logos[gameInfo.liveData.boxscore.teams.away.team.name]} width="50" height="50"></img>
             </div>
-        );
+        )
+    }
+
+    if(gameInfo)
+    { 
+        console.log(gameInfo)
+        return(
+            <div>
+                {render_team_stats(gameInfo.liveData.boxscore.teams.home)}
+                {render_team_stats(gameInfo.liveData.boxscore.teams.away)}
+            </div>
+        )
+       
     }
     else
     {

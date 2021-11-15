@@ -20,6 +20,7 @@ import PoolList from "./pages/pool_list"
 import PoolPage from "./pages/pool_page"
 import StatsPage from "./pages/stats_page"
 import GameFeedPage from "./pages/game_feed_page"
+import PlayerPage from "./pages/player_page"
 
 function App() {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
@@ -77,6 +78,7 @@ function App() {
           <Route path="/poolList/:name" component = {() => PoolPage(username)}></Route>
           <Route exact path="/statsPage" component = {StatsPage}></Route>
           <Route path="/gameFeed/:id" component = {() => GameFeedPage()}></Route>
+          <Route path="/playerInfo/:id" component = {() => PlayerPage()}></Route>
         </Switch>
         </div>
       </Router>
