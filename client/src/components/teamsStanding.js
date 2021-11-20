@@ -7,21 +7,21 @@ import Tabs from "./Tabs"
 
 function TeamsStanding({data}) {
 
-    const renderDivisionTeams = (div) => div["teamRecords"].map((team, index) => {
+    const renderDivisionTeams = (div) => div.teamRecords.map((team, index) => {
         return (
             <tr>
                 <td>{index + 1}</td>
                 <td>
-                    <img src={logos[ team["team"]["name"] ]} width="30" height="30"></img>
+                    <img src={logos[ team.team.name ]} width="30" height="30"></img>
                 </td>
-                <td>{team["leagueRecord"]["wins"] + team["leagueRecord"]["losses"] + team["leagueRecord"]["ot"]}</td> 
-                <td>{team["leagueRecord"]["wins"]}</td>
-                <td>{team["leagueRecord"]["losses"]}</td>
-                <td>{team["leagueRecord"]["ot"]}</td>
-                <td>{team["regulationWins"]}</td>
-                <td>{team["goalsAgainst"]}</td>
-                <td>{team["goalsScored"]}</td>
-                <td>{team["points"]}</td>
+                <td>{team.leagueRecord.wins + team.leagueRecord.losses + team.leagueRecord.ot}</td> 
+                <td>{team.leagueRecord.wins}</td>
+                <td>{team.leagueRecord.losses}</td>
+                <td>{team.leagueRecord.ot}</td>
+                <td>{team.regulationWins}</td>
+                <td>{team.goalsAgainst}</td>
+                <td>{team.goalsScored}</td>
+                <td>{team.points}</td>
             </tr>
         )
     })    
@@ -44,7 +44,7 @@ function TeamsStanding({data}) {
     }
 
     const renderDivisionStanding = () => data["records"].map(div => {
-            return <div label={div["division"]["name"]}>
+            return <div label={div.division.name}>
                 <div>
                     <table class="content-table">
                         {renderHeader()}

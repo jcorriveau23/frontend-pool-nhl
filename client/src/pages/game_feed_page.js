@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
+import Tabs from "../components/Tabs"
+
 // teams logo
 import logos from "../components/img/images" 
 
@@ -22,8 +24,7 @@ function GameFeedPage() {
     
     const render_team_stats = (team) => {
         return(
-            <div>
-                <img src={logos[team.team.name]} width="50" height="50"></img>
+            <div label={team.team.name}>
                 <table  class="content-table">
                     <tr>
                         <th>#</th>
@@ -66,13 +67,74 @@ function GameFeedPage() {
                                     <td>{team.players[key].stats.skaterStats.timeOnIce}</td>
                                     <td>{team.players[key].stats.skaterStats.powerPlayTimeOnIce}</td>
                                     <td>{team.players[key].stats.skaterStats.shortHandedTimeOnIce}</td>
-
                                 </tr>
                             )
-                            
                         }
-                        
                     })}
+                </table>
+            </div>
+        )
+    }
+
+    const render_game_stats = (teams) => {
+        return(
+            <div label="Game stats">
+                <table  class="content-table">
+                    <tr>
+                        <th><img src={logos[ teams.away.team.name ]} width="30" height="30"></img></th>
+                        <th>Summary</th>
+                        <th><img src={logos[ teams.home.team.name ]} width="30" height="30"></img></th>
+                    </tr>
+                    <tr>
+                        <td>{teams.away.teamStats.teamSkaterStats.goals}</td>
+                        <th>Goals</th>
+                        <td>{teams.home.teamStats.teamSkaterStats.goals}</td>
+                    </tr>
+                    <tr>
+                        <td>{teams.away.teamStats.teamSkaterStats.shots}</td>
+                        <th>Shots on Goal</th>
+                        <td>{teams.home.teamStats.teamSkaterStats.shots}</td>
+                    </tr>
+                    <tr>
+                        <td>{teams.away.teamStats.teamSkaterStats.faceOffWinPercentage}</td>
+                        <th>Faceoff %</th>
+                        <td>{teams.home.teamStats.teamSkaterStats.faceOffWinPercentage}</td>
+                    </tr>
+                    <tr>
+                        <td>{teams.away.teamStats.teamSkaterStats.powerPlayGoals + " / " + teams.away.teamStats.teamSkaterStats.powerPlayOpportunities}</td>
+                        <th>Power Play</th>
+                        <td>{teams.home.teamStats.teamSkaterStats.powerPlayGoals + " / " + teams.home.teamStats.teamSkaterStats.powerPlayOpportunities}</td>
+                    </tr>
+                    <tr>
+                        <td>{teams.away.teamStats.teamSkaterStats.pim}</td>
+                        <th>PIM</th>
+                        <td>{teams.home.teamStats.teamSkaterStats.pim}</td>
+                    </tr>
+                    <tr>
+                        <td>{teams.away.teamStats.teamSkaterStats.hits}</td>
+                        <th>Hits</th>
+                        <td>{teams.home.teamStats.teamSkaterStats.hits}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{teams.away.teamStats.teamSkaterStats.blocked}</td>
+                        <th>Blocks</th>
+                        <td>{teams.home.teamStats.teamSkaterStats.blocked}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{teams.away.teamStats.teamSkaterStats.giveaways}</td>
+                        <th>Giveaways</th>
+                        <td>{teams.home.teamStats.teamSkaterStats.giveaways}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{teams.away.teamStats.teamSkaterStats.takeaways}</td>
+                        <th>Takeaways</th>
+                        <td>{teams.home.teamStats.teamSkaterStats.takeaways}</td>
+                    </tr>
+
+
                 </table>
             </div>
         )
@@ -80,11 +142,13 @@ function GameFeedPage() {
 
     if(gameInfo)
     { 
-        console.log(gameInfo)
         return(
             <div>
-                {render_team_stats(gameInfo.liveData.boxscore.teams.home)}
-                {render_team_stats(gameInfo.liveData.boxscore.teams.away)}
+                <Tabs>
+                    {render_team_stats(gameInfo.liveData.boxscore.teams.home)}
+                    {render_game_stats(gameInfo.liveData.boxscore.teams)}
+                    {render_team_stats(gameInfo.liveData.boxscore.teams.away)}
+                </Tabs>
             </div>
         )
        

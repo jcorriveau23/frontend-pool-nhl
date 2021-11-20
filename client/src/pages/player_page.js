@@ -32,30 +32,27 @@ function PlayerPage() {
                 <table  class="content-table">
                 <h1>{info.fullName}</h1>
                     <tr>
-                        <th colspan="2">{info.fullName}</th>                        
-                    </tr>
-                    <tr>
-                        <td>Position</td>
+                        <th>Position</th>
                         <td>{info.primaryPosition.abbreviation}</td>                        
                     </tr>
                     <tr>
-                        <td>Number</td>
+                        <th>Number</th>
                         <td>{info.primaryNumber}</td>                        
                     </tr>
                     <tr>
-                        <td>bitrhDate</td>
+                        <th>bitrhDate</th>
                         <td>{info.birthDate}</td>                        
                     </tr>
                     <tr>
-                        <td>Age</td>
+                        <th>Age</th>
                         <td>{info.currentAge}</td>                        
                     </tr>
                     <tr>
-                        <td>Height</td>
+                        <th>Height</th>
                         <td>{info.height}</td>                        
                     </tr>
                     <tr>
-                        <td>Weight</td>
+                        <th>Weight</th>
                         <td>{info.weight}</td>                        
                     </tr>
                 </table>
@@ -86,7 +83,7 @@ function PlayerPage() {
                     {stats.map( (season, index) => {
                         return(
                             <tr>
-                                <td>{season.season}</td>                                
+                                <td>{season.season.slice(0,4) + "-" + season.season.slice(4)}</td>                                
                                 <td>{season.team.name}</td>
                                 <td>{season.league.name}</td>
                                 <td>{season.stat.games}</td>

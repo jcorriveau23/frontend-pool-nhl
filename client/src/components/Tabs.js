@@ -10,6 +10,7 @@ class Tabs extends Component {
     constructor(props) {
       super(props);
 
+      console.log(this.props.children[0].props.label)
       this.state = {
         activeTab: this.props.children[0].props.label,
       };
