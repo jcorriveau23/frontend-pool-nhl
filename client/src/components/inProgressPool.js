@@ -470,7 +470,7 @@ function InProgressPool({ username, poolName, poolInfo }) {
                         {render_tabs_pool_rank()}
                     </table>
                 </div>
-                <button onClick={() => download_csv(poolInfo)}>Download CSV</button>
+                <button onClick={() => download_csv(poolInfo)} disabled={false}>Download CSV</button>
             </div>
         )
     }

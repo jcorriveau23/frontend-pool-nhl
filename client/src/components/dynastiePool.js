@@ -395,7 +395,7 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                     </tr>
                                 )}
                             </table>
-                            <button onClick={() => send_protected_player()}>
+                            <button onClick={() => send_protected_player()} disabled={false}>
                                 complete protecting player
                             </button>
                         </div>

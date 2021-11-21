@@ -18,9 +18,10 @@ export const LoginModal = ({showLoginModal, setShowLoginModal, username, setUser
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: usernameInput, password: passwordInput})
         };
-        fetch('auth/login', requestOptions)
+        fetch('/auth/login', requestOptions)
             .then(response => response.json())
             .then(data => {
+                console.log(data.message)
                 if(data.success === "True"){
                     setMsg(data.message);
                     Cookies.set('token', data.token);
@@ -39,7 +40,7 @@ export const LoginModal = ({showLoginModal, setShowLoginModal, username, setUser
             return(
                 <div class="modal_content">
                     <p>You are already logged in, you need to disconnect first.</p>
-                    <button onClick={() => setShowLoginModal(false)}>Ok</button>
+                    <button onClick={() => setShowLoginModal(false)} disabled={false}>Ok</button>
                 </div>
             )
         }
@@ -52,7 +53,7 @@ export const LoginModal = ({showLoginModal, setShowLoginModal, username, setUser
                         <input type="text" placeholder="Enter Username" onChange={event => setUsernameInput(event.target.value)} required/>
                         <input type="password" placeholder="Enter Password" onChange={event => setPasswordInput(event.target.value)} required/> 
                     </form>
-                    <button onClick={() => login()} >Login</button>
+                    <button onClick={() => login()} disabled={false}>Login</button>
                     <p style={{color:'red'}}>{msg}</p>
                 </div>
             )

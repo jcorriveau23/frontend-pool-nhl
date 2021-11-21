@@ -159,7 +159,7 @@ io.on('connection', function(socket){
           io.in(room).emit("poolInfo", data.message)
         }
         else{
-            //console.log('error with put request (start_draft)')
+            console.log(data.message)
         }
       }
     );

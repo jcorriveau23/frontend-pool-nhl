@@ -62,7 +62,7 @@ export const CreatePoolModal = ({showCreatePoolModal, setShowCreatePoolModal, us
                                 </select>
                             </div>
                         </form>
-                    <button onClick={() => createPool()}>Create</button>
+                    <button onClick={() => createPool()} disabled={false}>Create</button>
                     <p style={{color:'red'}}>{msg}</p>
                 </div>
             )

@@ -256,36 +256,36 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
         return <Tabs>
                 {array.map(pooler =>
                     <div label={pooler}>
-                    <table class="content-table">
-                <h3>Forward</h3>
-                <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                </tr>
-                {render_forward(pooler)}
-                <h3>Def</h3>
-                <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                </tr>
-                {render_defender(pooler)}
-                <h3>Goalies</h3>
-                <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                </tr>
-                {render_goalies(pooler)}
-                <h3>Reservist</h3>
-                <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                </tr>
-                {render_reservist(pooler)}
-                </table>
+                        <table class="content-table">
+                            <h3>Forward</h3>
+                            <tr>
+                                <th>#</th>
+                                <th>name</th>
+                                <th>team</th>
+                            </tr>
+                            {render_forward(pooler)}
+                            <h3>Def</h3>
+                            <tr>
+                                <th>#</th>
+                                <th>name</th>
+                                <th>team</th>
+                            </tr>
+                            {render_defender(pooler)}
+                            <h3>Goalies</h3>
+                            <tr>
+                                <th>#</th>
+                                <th>name</th>
+                                <th>team</th>
+                            </tr>
+                            {render_goalies(pooler)}
+                            <h3>Reservist</h3>
+                            <tr>
+                                <th>#</th>
+                                <th>name</th>
+                                <th>team</th>
+                            </tr>
+                            {render_reservist(pooler)}
+                        </table>
                     </div>
                 )}
         </Tabs>
@@ -414,7 +414,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                             {render_color_user_turn()}
                             <h1>{selectedPlayer.name}</h1>
                             <h3 class="red-text">{message}</h3>
-                            <button onClick={() => chose_player(selectedPlayer)}>choose</button>
+                            <button onClick={() => chose_player(selectedPlayer)} disabled={false}>choose</button>
                         </div>
                         <div class="floatRight">
                             {render_tabs_choice()}

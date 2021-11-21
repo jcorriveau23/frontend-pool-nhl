@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import './components/components.css';
 
 // Logo of web site
-import Logo from "./components/img/logo/logo.png"
+import Logo from "./components/img/logo/logo.svg"
 
 // component
 import TodayGamesFeed from "./components/todayGamesFeed"
@@ -56,7 +56,7 @@ function App() {
         <nav>
           <div>
             <ul>
-              <li><img src={Logo} width="50" height="50"></img></li>
+              <img src={Logo} width="100" height="75"></img>
               <li><Link to="/">Home</Link></li>
               {username? <li><Link to="/poolList">Pool List</Link></li> : null}
               <li><Link to="/statsPage">League Stats</Link></li>

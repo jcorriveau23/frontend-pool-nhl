@@ -51,9 +51,9 @@ function TodayGamesFeed() {
                 })}
             </div>
             <div>
-                <button onClick={prevDate}>prev</button>
+                <button onClick={prevDate} disabled={false}>prev</button>
                 <b>{date.toISOString().slice(0, 10)}</b>
-                <button onClick={nextDate}>next</button>
+                <button onClick={nextDate} disabled={false}>next</button>
             </div>
         </div>
     )    

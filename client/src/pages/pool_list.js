@@ -60,7 +60,7 @@ function PoolList(username) {
     return(
       <div>
           <h1>Pool list</h1>
-          <button onClick={openCreatePoolModal}>Create a new Pool.</button>
+          <button onClick={openCreatePoolModal} disabled={false}>Create a new Pool.</button>
           <h2>Created</h2>
           {poolCreated.map(pool => 
           <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner} username={username} poolDeleted = {poolDeleted} setPoolDeleted={setPoolDeleted}></PoolItem></li>  

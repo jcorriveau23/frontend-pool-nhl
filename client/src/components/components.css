@@ -1,5 +1,5 @@
-.floatLeft { width: 50%; float: left; background-color: #DFE5A3; }
-.floatRight {width: 50%; float: right; background-color: #DFE5A3; }
+.floatLeft { width: 50%; float: left; background-color: #888888; }
+.floatRight {width: 50%; float: right; background-color: #888888; }
 .container { overflow: hidden; }
 
 .red-text {color: red;}
@@ -36,11 +36,11 @@
 }
 
 .tab-background {
-  background-color: #DFE5A3;
+  background-color: #888888;
 }
 
 .back-site {
-  background-color: #DFE5A3;
+  background-color: #888888;
 }
 
 .content-table {
@@ -80,19 +80,24 @@ button {
   background-color: #4CAF50;
   border: none;
   color: white;
-  padding: 15px 32px;
+  padding: 5px 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   border-radius: 10px;
 }
+
 body {
-  background-color:#DFE5A3;
+  background-color:#888888;
 }
 
-button:hover {
+button:hover:enabled {
   background-color: #007500;
+}
+
+button:disabled{
+  opacity: 0.25;
 }
 
 
@@ -146,7 +151,7 @@ nav a {
 }
 
 nav a:hover{
-  color: #0077ff;
+  color: #ffffff;
 }
 
 nav a::before {
@@ -212,9 +217,9 @@ nav a:hover::before{
   line-height: 16px;
   border-radius: 5px;
   border-style: solid;
-  border-width: 1px;
+  border-width: 2px;
   margin: 10px 5px;
-  padding: 0 16px 16px 16px;
+  padding: 0 16px 0px 16px;
   max-width: 468px;
 }
 

@@ -42,7 +42,7 @@ export const RegisterModal = ({showRegisterModal, setShowRegisterModal}) => {
                     <input type="password" placeholder="Enter Password" onChange={event => setPassword(event.target.value)} required/>
                     <input type="password" placeholder="Repeat Password" onChange={event => setRepeatPassword(event.target.value)} required/>
                 </form>
-                <button onClick={() => register()} >Register</button>
+                <button onClick={() => register()} disabled={false}>Register</button>
                 <p style={{color:'red'}}>{msg}</p>
             </div>
             <div>
