@@ -5,7 +5,7 @@ import { PoolItem } from "../components/poolItem";
 
 import { CreatePoolModal } from '../modals/createPool';
 
-function PoolList(username) {
+function MyPools(username) {
     
     const [showCreatePoolModal, setShowCreatePoolModal] = useState(false)
     const [poolDeleted, setPoolDeleted] = useState(false)
@@ -60,22 +60,22 @@ function PoolList(username) {
     return(
       <div>
           <h1>Pool list</h1>
-          <button onClick={openCreatePoolModal} disabled={false}>Create a new Pool.</button>
+            <button onClick={openCreatePoolModal} disabled={false}>Create a new Pool.</button>
           <h2>Created</h2>
           {poolCreated.map(pool => 
-          <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner} username={username} poolDeleted = {poolDeleted} setPoolDeleted={setPoolDeleted}></PoolItem></li>  
+            <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner} username={username} poolDeleted = {poolDeleted} setPoolDeleted={setPoolDeleted}></PoolItem></li>  
           )}
           <h2>Drafting</h2>
           {poolDraft.map(pool => 
-          <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
+            <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
           )}
           <h2>Dynastie</h2>
           {poolDynastie.map(pool => 
-          <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
+            <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
           )}
           <h2>in Progress</h2>
           {poolInProgress.map(pool => 
-          <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
+            <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
           )}
           <CreatePoolModal showCreatePoolModal={showCreatePoolModal} setShowCreatePoolModal={setShowCreatePoolModal} username={username}></CreatePoolModal>
       </div>
@@ -83,4 +83,4 @@ function PoolList(username) {
     
   
   }
-  export default PoolList;
+  export default MyPools;

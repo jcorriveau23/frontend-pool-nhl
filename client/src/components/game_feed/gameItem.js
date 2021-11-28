@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 // teams logo
-import logos from "./img/images" 
+import logos from "../img/images" 
 
 export const GameItem = ({gameData}) => {
     return (

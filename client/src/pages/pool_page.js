@@ -3,10 +3,10 @@ import Cookies from 'js-cookie';
 import { useParams } from "react-router-dom";
 
 // pool status components
-import CreatedPool from '../components/createdPool';
-import DraftPool from '../components/draftPool'
-import InProgressPool from '../components/inProgressPool';
-import DynastiePool from '../components/dynastiePool';
+import CreatedPool from '../components/pool_state/createdPool';
+import DraftPool from '../components/pool_state/draftPool'
+import InProgressPool from '../components/pool_state/inProgressPool';
+import DynastiePool from '../components/pool_state/dynastiePool';
 
 import io from "socket.io-client";
 

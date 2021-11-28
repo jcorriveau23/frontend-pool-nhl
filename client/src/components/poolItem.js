@@ -17,7 +17,7 @@ export const PoolItem = ({name, owner, username, poolDeleted, setPoolDeleted}) =
 
     return (
         <div>
-            <Link to={'poolList/' + name}>Pool: {name}</Link>
+            <Link to={'MyPools/' + name}>Pool: {name}</Link>
             <p>Owner: {owner}</p>
             {username === owner? <a onClick={delete_pool}>Delete</a> : null}
         </div>

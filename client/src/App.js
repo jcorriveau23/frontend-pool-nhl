@@ -9,14 +9,14 @@ import './components/components.css';
 import Logo from "./components/img/logo/logo.svg"
 
 // component
-import TodayGamesFeed from "./components/todayGamesFeed"
+import TodayGamesFeed from "./components/game_feed/todayGamesFeed"
 
 // modals
 import {RegisterModal} from "./modals/register"
 import {LoginModal} from "./modals/login"
 
 //pages
-import PoolList from "./pages/pool_list"
+import MyPools from "./pages/myPools_page"
 import PoolPage from "./pages/pool_page"
 import StatsPage from "./pages/stats_page"
 import GameFeedPage from "./pages/game_feed_page"
@@ -58,7 +58,7 @@ function App() {
             <ul>
               <img src={Logo} width="100" height="75"></img>
               <li><Link to="/">Home</Link></li>
-              {username? <li><Link to="/poolList">Pool List</Link></li> : null}
+              {username? <li><Link to="/MyPools">My Pools</Link></li> : null}
               <li><Link to="/statsPage">League Stats</Link></li>
               <li onClick={openRegisterModal}><Link>Register</Link></li>
               {username? <li><Link onClick={() => Disconnect()}>Disconnect</Link></li> : <li onClick={openLoginModal}><Link>Login</Link></li>}
@@ -74,8 +74,8 @@ function App() {
         <RegisterModal showRegisterModal={showRegisterModal} setShowRegisterModal={setShowRegisterModal}></RegisterModal>
         <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} username={username} setUsername={setUsername}></LoginModal>
         <Switch>
-          <Route exact path="/poolList" component = {() => PoolList(username)}></Route>
-          <Route path="/poolList/:name" component = {() => PoolPage(username)}></Route>
+          <Route exact path="/MyPools" component = {() => MyPools(username)}></Route>
+          <Route path="/MyPools/:name" component = {() => PoolPage(username)}></Route>
           <Route exact path="/statsPage" component = {StatsPage}></Route>
           <Route path="/gameFeed/:id" component = {() => GameFeedPage()}></Route>
           <Route path="/playerInfo/:id" component = {() => PlayerPage()}></Route>

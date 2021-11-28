@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
-import logos from "./img/images"
-import Tabs from "./Tabs"
+import logos from "../img/images"
+import Tabs from "../Tabs"
 
 function InProgressPool({ username, poolName, poolInfo }) {
 

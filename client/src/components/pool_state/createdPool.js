@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { ParticipantItem } from './participantItem';
 
+import { ParticipantItem } from './participantItem';
 
 function CreatedPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     

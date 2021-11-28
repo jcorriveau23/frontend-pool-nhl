@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 // component
-import { GameItem } from "../components/gameItem";
+import { GameItem } from "./gameItem";
 
 function TodayGamesFeed() {
 
