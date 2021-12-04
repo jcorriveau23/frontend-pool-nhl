@@ -1,9 +1,10 @@
 // https://statsapi.web.nhl.com/api/v1/standings: this call gives all the information we need to make a ranking team board by division conference or league.
 
 import React from 'react'
-import logos from "./img/images"
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
-import Tabs from "./Tabs"
+import logos from "./img/images"
 
 function TeamsStanding({data}) {
 
@@ -43,23 +44,30 @@ function TeamsStanding({data}) {
         )
     }
 
-    const renderDivisionStanding = () => data["records"].map(div => {
-            return <div label={div.division.name}>
-                <div>
-                    <table class="content-table">
-                        {renderHeader()}
-                        {renderDivisionTeams(div)}
-                    </table>
-                </div>
-            </div>         
-    })
+    const renderDivisionStanding = () => {
+        return (
+            <Tabs>
+                <TabList>
+                    {data["records"].map(div => <Tab>{div.division.name}</Tab>)}
+                </TabList>
+                {data["records"].map(div => {
+                    return <TabPanel>
+                        <div>
+                            <table class="content-table">
+                                {renderHeader()}
+                                {renderDivisionTeams(div)}
+                            </table>
+                        </div>  
+                    </TabPanel>
+                })}
+            </Tabs>
+        )     
+    }
 
     return (
         <div>
             <h1>Teams Standing</h1>
-            <Tabs>
             {renderDivisionStanding()}
-            </Tabs>
         </div>
     )
 

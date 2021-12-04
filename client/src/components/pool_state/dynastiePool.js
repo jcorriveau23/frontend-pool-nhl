@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 import logos from "../img/images"
-import Tabs from "../Tabs"
 
 function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
     

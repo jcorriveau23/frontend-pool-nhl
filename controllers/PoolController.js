@@ -2,12 +2,15 @@ const Pool = require('../models/Pool')
 const User = require('../models/User')
 const Players = require('../models/Player')
 
+//import { PRIVATE_KEY_DB } from 'constants'
+PRIVATE_KEY_DB = 'verySecretValue'
+
 const jwt = require('jsonwebtoken')
 
 const pool_creation = (req, res, next) =>{
     var encrypt_token = req.headers.token
 
-    let token = jwt.decode(encrypt_token, 'verySecretValue')
+    let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB)
     // TODO: use token.iat and token.exp to use token expiration and force user to re-login
     User.findOne({$or: [{name:token.name}]})
     .then(user => {
@@ -74,7 +77,7 @@ const pool_creation = (req, res, next) =>{
 const delete_pool = (req, res, next) =>{
     var encrypt_token = req.headers.token
 
-    let token = jwt.decode(encrypt_token, 'verySecretValue')
+    let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB)
     // TODO: use token.iat and token.exp to use token expiration and force user to re-login
     User.findOne({$or: [{name:token.name}]})
     .then(user => {
@@ -112,67 +115,75 @@ const delete_pool = (req, res, next) =>{
 
 const pool_list = (req, res, next) =>{
     var user_pools = []
+    var user_name = ""
     
-    if(req.headers.token !== "undefined"){
+    if(req.headers.token !== "undefined")
+    {
         var encrypt_token = req.headers.token
-        let token = jwt.decode(encrypt_token, 'verySecretValue')
+        let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB)
         // TODO: use token.iat and token.exp to use token expiration and force user to re-login
         User.findOne({$or: [{name:token.name}]})
-        .then(user => {
-            if(!user){
-                res.json({
+        .then(user => 
+        {
+            if(!user)
+            {
+                res.json(
+                {
                     success: "False",
                     message: 'User is not registered!'
                 })
-                return
             }
+
             user_pools = user.pool_list
+            user_name = user.name
+
+            Pool.find({status: "created", owner: user.name})
+            .then(pools_created => 
+            {
+                Pool.find({name: user.pool_list}, {name:1, status:1, owner:1})
+                .then(pools => 
+                {
+                    res.json(
+                    {
+                        success: "True",
+                        pool_created: pools_created,
+                        user_pools_info: pools
+                    })
+                })
+                .catch(error => 
+                {
+                    res.json(
+                    {
+                        success: "False",
+                        message: error
+                    })
+                })
+                
+            })
+            .catch(error => {
+                res.json(
+                {
+                    success: "False",
+                    message: error
+                })
+            })
         })
     }
-    else{
-        res.json({
+    else
+    {
+        res.json(
+        {
             success: "False",
             message: 'no token, you need to login'
         })
-        return
     }
-    
-    
-
-    Pool.find({"status": "created"})
-    .then(pools_created => {
-        
-        Pool.find({name: user_pools}, {name:1, status:1, owner:1})
-        .then(pools => {
-            res.json({
-                success: "True",
-                pool_created: pools_created,
-                user_pools_info: pools
-                })
-        })
-        .catch(error => {
-            res.json({
-                success: "False",
-                message: error
-            })
-            return
-        })
-        
-    })
-    .catch(error => {
-        res.json({
-            success: "False",
-            message: error
-        })
-        return
-    })
 }
 
 const get_pool_info = (req, res, next) =>{
     
     if(req.headers.token !== "undefined"){
         var encrypt_token = req.headers.token
-        let token = jwt.decode(encrypt_token, 'verySecretValue')
+        let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB)
         // TODO: use token.iat and token.exp to use token expiration and force user to re-login
         User.findOne({$or: [{name:token.name}]})
         .then(user => {
@@ -247,98 +258,11 @@ const get_pool_info = (req, res, next) =>{
     })
 }
 
-const new_participant = (req, res, next) =>{
-    var username = ""
-
-    if(req.headers.token !== "undefined"){
-        var encrypt_token = req.headers.token
-        let token = jwt.decode(encrypt_token, 'verySecretValue')
-        username = token.name
-        // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-        User.findOne({$or: [{name:username}]})
-        .then(user => {
-            if(!user){
-                res.json({
-                    success: "False",
-                    message: 'User is not registered!'
-                })
-                return
-            }
-        })
-    }
-    else{
-        res.json({
-            success: "False",
-            message: 'no token, you need to login'
-        })
-        return
-    }
-    
-    var pool_name = req.headers.pool_name
-
-    Pool.findOne({name:pool_name})
-    .then(pool => {
-        if(!pool){
-            res.json({
-                success: "False",
-                message: 'Pool does not exist'
-            })
-            return
-        }
-        else{
-            if(pool.participants.includes(username)){
-                res.json({
-                    success: "False",
-                    message: 'Already participating in pool'
-                })
-                return
-            }
-            else{
-                if(pool.number_poolers > pool.participants.length){
-                    pool.participants.push(username)
-                    Pool.updateOne({_id: pool._id}, {$set: pool}, function(err, result){
-                        if(err){
-                            res.json({
-                                success: "False",
-                                message: 'Problem with updating the pool information'
-                            })
-                            return
-                        }
-                        else{
-                            res.json({
-                                success: "True",
-                                message: 'New participant added to the pool'
-                            })
-                            return
-                        }
-                    })
-                    
-                }
-                else{
-                    res.json({
-                        success: "False",
-                        message: 'Already maximum poolers'
-                    })
-                    return
-                }
-                
-            }
-        }
-    })
-    .catch(error => {
-        res.json({
-            success: "False",
-            message: error
-        })
-        return
-    })
-}
-
 const start_draft = (req, res, next) =>{
 
     if(req.headers.token !== "undefined"){
         var encrypt_token = req.headers.token
-        let token = jwt.decode(encrypt_token, 'verySecretValue')
+        let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB)
         username = token.name
         // TODO: use token.iat and token.exp to use token expiration and force user to re-login
         User.findOne({$or: [{name:username}]})
@@ -484,7 +408,7 @@ const chose_player = (req, res, next) => {
 
     if(req.headers.token !== "undefined"){
         var encrypt_token = req.headers.token
-        let token = jwt.decode(encrypt_token, 'verySecretValue')
+        let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB)
         username = token.name
         // TODO: use token.iat and token.exp to use token expiration and force user to re-login
         User.findOne({$or: [{name:username}]})
@@ -623,7 +547,7 @@ const protected_players = (req, res, next) => {
 
     if(req.headers.token !== "undefined"){
         var encrypt_token = req.headers.token
-        let token = jwt.decode(encrypt_token, 'verySecretValue')
+        let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB)
         username = token.name
         // TODO: use token.iat and token.exp to use token expiration and force user to re-login
         User.findOne({$or: [{name:username}]})
@@ -788,7 +712,7 @@ const get_pool_stats = (req, res, next) => {
 
     if(req.headers.token !== "undefined"){
         var encrypt_token = req.headers.token
-        let token = jwt.decode(encrypt_token, 'verySecretValue')
+        let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB)
         username = token.name
         // TODO: use token.iat and token.exp to use token expiration and force user to re-login
         User.findOne({$or: [{name:username}]})
@@ -917,7 +841,7 @@ function shuffleArray(arr) {
 
 function ValidateUser(encrypt_token){
     if(encrypt_token !== "undefined"){
-        let token = jwt.decode(encrypt_token, 'verySecretValue')
+        let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB)
 
         username = token.name
 
@@ -946,7 +870,6 @@ module.exports = {
     pool_creation,
     pool_list,
     get_pool_info,
-    new_participant,
     start_draft,
     chose_player,
     protected_players,

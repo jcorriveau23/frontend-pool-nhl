@@ -9,6 +9,10 @@ var debug = require('debug')('pool-jdope:server');
 var http = require('http');
 const jwt = require('jsonwebtoken');
 const fetch = require("node-fetch");
+
+// import { PRIVATE_KEY_DB } from '../controllers/constants'
+PRIVATE_KEY_DB = 'verySecretValue'
+
 /**
  * Get port from environment and store in Express.
  */
@@ -36,7 +40,7 @@ io.on('connection', function(socket){
   //console.log('Client connected with socket ID: '+ socket.client.id);
 
   socket.on('joinRoom', function(data, room){
-    let token = jwt.decode(data, 'verySecretValue')
+    let token = jwt.decode(data, PRIVATE_KEY_DB)
 
     if(token !== null){
     //TODO: valide token.name is a registered client in db
@@ -76,7 +80,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('leaveRoom', function(data, room){
-    let token = jwt.decode(data, 'verySecretValue')
+    let token = jwt.decode(data, )
 
     if(token !== null){
       socket.leave(room)
@@ -104,7 +108,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('playerReady', function(data, room){
-    let token = jwt.decode(data, 'verySecretValue')
+    let token = jwt.decode(data, PRIVATE_KEY_DB)
 
     var index = pools[room]["listClient"].findIndex(e => (e.name === token.name))
 
@@ -117,7 +121,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('playerNotReady', function(data, room){
-    let token = jwt.decode(data, 'verySecretValue')
+    let token = jwt.decode(data, PRIVATE_KEY_DB)
 
     var index = pools[room]["listClient"].findIndex(e => (e.name === token.name))
 
@@ -130,7 +134,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('changeRule', function(data, pool_info){
-    let token = jwt.decode(data, 'verySecretValue')
+    let token = jwt.decode(data, PRIVATE_KEY_DB)
 
     var index = pools[pool_info.name]["listClient"].findIndex(e => (e.name === token.name))
 

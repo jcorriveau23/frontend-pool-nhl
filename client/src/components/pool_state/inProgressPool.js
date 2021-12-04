@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 import logos from "../img/images"
-import Tabs from "../Tabs"
 
 function InProgressPool({ username, poolName, poolInfo }) {
 
@@ -194,33 +195,43 @@ function InProgressPool({ username, poolName, poolInfo }) {
 
     const render_tabs_choice_stats = () => {
         if(poolInfo['participants']){
-          var array = poolInfo['participants']
+          var poolers = poolInfo['participants']
 
           // replace pooler user name to be first
-          var index = array.findIndex(isUser)
-          array.splice(index, 1)
-          array.splice(0, 0, username)
+          var index = poolers.findIndex(isUser)
+          poolers.splice(index, 1)
+          poolers.splice(0, 0, username)
 
             return( 
                 <Tabs>
-                    {array.map(pooler =>
-                        <div label={pooler} >
-                            <Tabs>
-                                <div label="Forward">
-                                    <table class="content-table">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>name</th>
-                                            <th>team</th>
-                                            <th>Goal</th>
-                                            <th>Assist</th>
-                                            <th>Pts</th>
-                                            <th>Pts (pool)</th>
-                                        </tr>
-                                        {render_forward_stats(pooler)}
-                                    </table>
-                                    </div>
-                                    <div label="Defenders">
+                    <TabList>
+                        {poolers.map(pooler => <Tab>{pooler}</Tab>)}
+                    </TabList>
+                    {poolers.map(pooler => {
+                        return (
+                            <TabPanel>
+                                <Tabs>
+                                    <TabList>
+                                        <Tab>Forwards</Tab>
+                                        <Tab>Defenders</Tab>
+                                        <Tab>Goalies</Tab>
+                                        <Tab>Reservists</Tab>
+                                    </TabList>
+                                    <TabPanel>
+                                        <table class="content-table">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>name</th>
+                                                <th>team</th>
+                                                <th>Goal</th>
+                                                <th>Assist</th>
+                                                <th>Pts</th>
+                                                <th>Pts (pool)</th>
+                                            </tr>
+                                            {render_forward_stats(pooler)}
+                                        </table>
+                                    </TabPanel>
+                                    <TabPanel>
                                         <table class="content-table">
                                             <tr>
                                                 <th>#</th>
@@ -233,8 +244,8 @@ function InProgressPool({ username, poolName, poolInfo }) {
                                             </tr>
                                             {render_defender_stats(pooler)}
                                         </table>
-                                    </div>
-                                    <div label="Goalies">
+                                    </TabPanel>
+                                    <TabPanel>
                                         <table class="content-table">
                                             <tr>
                                                 <th>#</th>
@@ -248,8 +259,8 @@ function InProgressPool({ username, poolName, poolInfo }) {
                                             </tr>
                                             {render_goalies_stats(pooler)}
                                         </table>
-                                    </div>
-                                    <div label="Reservists">
+                                    </TabPanel>
+                                    <TabPanel>
                                         <table class="content-table">
                                             <tr>
                                                 <th>#</th>
@@ -258,14 +269,14 @@ function InProgressPool({ username, poolName, poolInfo }) {
                                             </tr>
                                             {render_reservist_stats(pooler)}
                                         </table>
-                                    </div>
-                            </Tabs>
-                        </div>
-                    )}
+                                    </TabPanel>
+                                </Tabs>
+                            </TabPanel>
+                        )
+                    })}
                 </Tabs>
-            
-            )}
-
+            )
+        }
         else{
           return
         }

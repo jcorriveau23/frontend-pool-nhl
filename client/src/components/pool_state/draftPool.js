@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 import logos from "../img/images"
-import Tabs from "../Tabs"
 
 function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     
@@ -72,21 +72,22 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     }
 
     const sort_players = async (stats, position) => {
-        var array = [];
+        var players = [];
+
         if(position === "D"){
-            array = def_l;
-            array = await sort_by_player_member(stats, def_l)
-            setDef_l([...array])
+            players = def_l;
+            players = await sort_by_player_member(stats, def_l)
+            setDef_l([...players])
         }
         else if(position === "F"){
-            array = forw_l;
-            array = await sort_by_player_member(stats, array)
-            setForw_l([...array])
+            players = forw_l;
+            players = await sort_by_player_member(stats, players)
+            setForw_l([...players])
         }
         else if(position === "G"){
-            array = goal_l;
-            array = await sort_by_player_member(stats, array)
-            setGoal_l([...array])
+            players = goal_l;
+            players = await sort_by_player_member(stats, players)
+            setGoal_l([...players])
         }
     }
 
@@ -246,16 +247,20 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
 
     const render_tabs_choice = () => {
     if(poolInfo['participants']){
-        var array = poolInfo['participants']
+        var poolers = poolInfo['participants']
 
         // replace pooler user name to be first
-        var index = array.findIndex(isUser)
-        array.splice(index, 1)
-        array.splice(0, 0, username)
+        var index = poolers.findIndex(isUser)
+        poolers.splice(index, 1)
+        poolers.splice(0, 0, username)
 
-        return <Tabs>
-                {array.map(pooler =>
-                    <div label={pooler}>
+        return (
+            <Tabs>
+                <TabList>
+                    {poolers.map(pooler => <Tab>{pooler}</Tab>)}
+                </TabList>
+                {poolers.map(pooler => {
+                    return <TabPanel>
                         <table class="content-table">
                             <h3>Forward</h3>
                             <tr>
@@ -286,9 +291,10 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                             </tr>
                             {render_reservist(pooler)}
                         </table>
-                    </div>
-                )}
-        </Tabs>
+                    </TabPanel>
+                })}
+            </Tabs>
+        )
         
     }
     else{
@@ -314,7 +320,12 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                     <div class="floatLeft">
                         <input type="text" placeholder="Search..." onChange={event => search_players(event.target.value)}/>
                         <Tabs>
-                            <div label="Forwards">
+                            <TabList>
+                                <Tab>Forwards</Tab>
+                                <Tab>Defenders</Tab>
+                                <Tab>Goalies</Tab>
+                            </TabList>
+                            <TabPanel>
                                 <table class="content-table">
                                     <tbody>
                                         <tr>
@@ -344,8 +355,8 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                         }
                                     </tbody>
                                 </table>
-                            </div> 
-                            <div label="Defenders">
+                            </TabPanel>
+                            <TabPanel>
                                 <table class="content-table">
                                     <tbody>
                                         <tr>
@@ -375,8 +386,8 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                         }
                                     </tbody>
                                 </table>
-                            </div>
-                            <div label="Goalies">
+                            </TabPanel>
+                            <TabPanel>
                                 <table class="content-table">
                                     <tbody>
                                         <tr>
@@ -406,7 +417,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                         }
                                     </tbody>
                                 </table>
-                            </div>
+                            </TabPanel>
                         </Tabs>
                     </div>
                     <div class="floatRight">

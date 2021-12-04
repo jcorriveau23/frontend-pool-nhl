@@ -2,6 +2,9 @@ const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+//const PRIVATE_KEY_DB = require('constants')
+PRIVATE_KEY_DB = 'verySecretValue'
+
 const register = (req, res, next) =>{
     var username = req.body.name
 
@@ -47,9 +50,6 @@ const register = (req, res, next) =>{
         }
     })
 }
-    
-    
-
 
 const login = (req, res, next) => {
     var username = req.body.name
@@ -66,7 +66,7 @@ const login = (req, res, next) => {
                     })
                 }
                 if(result){
-                    let token = jwt.sign({name: user.name}, 'verySecretValue', {expiresIn: '1h'})
+                    let token = jwt.sign({name: user.name}, PRIVATE_KEY_DB/*, {expiresIn: '1h'}*/)
                     res.json({
                         success: "True",
                         message: 'login Successful!',
@@ -90,13 +90,12 @@ const login = (req, res, next) => {
     })
 }
 
-
 const get_user = (req, res, next) => {
 
     if(req.headers.token !== "undefined"){
         var encrypt_token = req.headers.token
 
-        let token = jwt.decode(encrypt_token, 'verySecretValue')
+        let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB)
         // TODO: use token.iat and token.exp to use token expiration and force user to re-login
         User.findOne({$or: [{name:token.name}]})
         .then(user => {
@@ -126,7 +125,6 @@ const get_user = (req, res, next) => {
     }
     
 }
-
 
 module.exports = {
     register,
