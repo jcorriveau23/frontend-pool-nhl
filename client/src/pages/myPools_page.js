@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 import { PoolItem } from "../components/poolItem";
 
@@ -61,22 +63,44 @@ function MyPools(username) {
       <div>
           <h1>Pool list</h1>
             <button onClick={openCreatePoolModal} disabled={false}>Create a new Pool.</button>
-          <h2>Created</h2>
-          {poolCreated.map(pool => 
-            <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner} username={username} poolDeleted = {poolDeleted} setPoolDeleted={setPoolDeleted}></PoolItem></li>  
-          )}
-          <h2>Drafting</h2>
-          {poolDraft.map(pool => 
-            <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
-          )}
-          <h2>Dynastie</h2>
-          {poolDynastie.map(pool => 
-            <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
-          )}
-          <h2>in Progress</h2>
-          {poolInProgress.map(pool => 
-            <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
-          )}
+
+          <Tabs>
+            <TabList>
+              <Tab>Created</Tab>
+              {poolDraft.length > 0? <Tab>Drafting</Tab> : null}
+              {poolDynastie.length > 0? <Tab>Dynastie</Tab> : null}
+              {poolInProgress.length > 0? <Tab>Progress</Tab> : null}
+            </TabList>
+            <TabPanel>
+              {poolCreated.map(pool => 
+                <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner} username={username} poolDeleted = {poolDeleted} setPoolDeleted={setPoolDeleted}></PoolItem></li>  
+              )}
+            </TabPanel>
+            {poolDraft.length > 0?
+              <TabPanel>
+                {poolDraft.map(pool => 
+                  <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
+                )}
+              </TabPanel>
+              : null
+            }
+            {poolDynastie.length > 0?
+              <TabPanel>
+                {poolDynastie.map(pool => 
+                  <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
+                )}
+              </TabPanel>
+              : null
+            }
+            {poolInProgress.length > 0?
+              <TabPanel>
+                {poolInProgress.map(pool => 
+                  <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
+                )}
+              </TabPanel>
+              : null
+            }
+          </Tabs>
           <CreatePoolModal showCreatePoolModal={showCreatePoolModal} setShowCreatePoolModal={setShowCreatePoolModal} username={username}></CreatePoolModal>
       </div>
     );
