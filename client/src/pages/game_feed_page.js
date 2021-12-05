@@ -75,7 +75,17 @@ function GameFeedPage() {
         )
     }
 
-    const render_game_stats = (teams) => {
+    const render_game_stats = (teams, linescores) => {
+        let nAwayTeamShootoutScore = teams.away.teamStats.teamSkaterStats.goals
+        let nHomeTeamShootoutScore = teams.home.teamStats.teamSkaterStats.goals
+        
+        if(linescores.hasShootout)
+        {
+            if(linescores.shootoutInfo.away.scores > linescores.shootoutInfo.home.scores)
+                nAwayTeamShootoutScore = teams.away.teamStats.teamSkaterStats.goals + 1
+            else
+                nHomeTeamShootoutScore = teams.home.teamStats.teamSkaterStats.goals + 1
+        }
         return(
             <table  class="content-table">
                 <tr>
@@ -84,9 +94,9 @@ function GameFeedPage() {
                     <th><img src={logos[ teams.home.team.name ]} width="30" height="30"></img></th>
                 </tr>
                 <tr>
-                    <td>{teams.away.teamStats.teamSkaterStats.goals}</td>
+                    <td>{nAwayTeamShootoutScore}</td>
                     <th>Goals</th>
-                    <td>{teams.home.teamStats.teamSkaterStats.goals}</td>
+                    <td>{nHomeTeamShootoutScore}</td>
                 </tr>
                 <tr>
                     <td>{teams.away.teamStats.teamSkaterStats.shots}</td>
@@ -149,7 +159,7 @@ function GameFeedPage() {
                         {render_team_stats(gameInfo.liveData.boxscore.teams.home)}
                     </TabPanel>
                     <TabPanel>
-                        {render_game_stats(gameInfo.liveData.boxscore.teams)}
+                        {render_game_stats(gameInfo.liveData.boxscore.teams, gameInfo.liveData.linescore)}
                     </TabPanel>
                     <TabPanel>
                         {render_team_stats(gameInfo.liveData.boxscore.teams.away)}

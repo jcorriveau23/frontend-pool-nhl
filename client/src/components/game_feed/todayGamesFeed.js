@@ -30,15 +30,17 @@ function TodayGamesFeed() {
     }, [date]); // fetch all todays games info from nhl api on this component mount.
 
     const prevDate = () => {
-        const newDate = new Date()
+        const newDate = new Date(date)
         newDate.setDate(date.getDate() - 1)
+        console.log(newDate)
 
         setDate(newDate)
     }
 
     const nextDate = () => {
-        const newDate = new Date()
+        const newDate = new Date(date)
         newDate.setDate(date.getDate() + 1)
+        console.log(newDate)
 
         setDate(newDate)
     }
