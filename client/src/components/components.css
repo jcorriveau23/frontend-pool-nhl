@@ -5,36 +5,6 @@
 .red-text {color: red;}
 .green-text {color: green;}
 
-.tab-list {  
-    border-bottom: 1px solid #ccc;
-    padding-left: 0;
-    background-color: #757575;
-    color: #ffffff;
-    margin-bottom: -5px;
-  }
-  
-.tab-list-item {
-  display: inline-block;
-  list-style: none;
-  margin-bottom: -5px;
-  padding: 0.5rem 0.75rem;
-}
-  
-.tab-list-item:hover {
-  background-color: #000000
-}
-
-.tab-list-active:hover {
-  background-color: #7BDCB5
-}
-
-.tab-list-active {
-  border: solid #ccc;
-  border-width: 1px 1px 0 1px;
-  background-color: #7BDCB5;
-  color: #000000
-}
-
 .tab-background {
   background-color: #888888;
 }
@@ -43,6 +13,10 @@
   background-color: #888888;
 }
 
+
+
+
+
 .content-table {
   margin: 10px 0;
   font-size: 0.9em;
@@ -50,18 +24,18 @@
 }
 
 .content-table th {
-  background-color: #7BDCB5;
-  color: #000000;
+  background-color: #222222;
+  color: #eeeeee;
   text-align: center;
   font-weight: bold;
-  padding: 12px 10px;
+  padding: 6px 5px;
 }
 
 .content-table td {
-  padding: 12px 10px;
+  padding: 2px 2px;
   text-align: center;
-  color: #ffffff;
-  background-color: #32443B;
+  color: #000000;
+  background-color: #aaaaaa;
 }
 
 table.content-table tr:hover td{

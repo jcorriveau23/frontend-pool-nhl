@@ -51,7 +51,7 @@ function GameFeedPage() {
                         return(
                             <tr>
                                 <td>{team.players[key].jerseyNumber}</td>
-                                <td><Link to={"/playerInfo/"+team.players[key].person.id} style={{ textDecoration: 'none', color: "white" }}>{team.players[key].person.fullName}</Link></td>
+                                <td><Link to={"/playerInfo/"+team.players[key].person.id} style={{ textDecoration: 'none', color: "#000055" }}>{team.players[key].person.fullName}</Link></td>
                                 <td>{team.players[key].position.abbreviation}</td>
                                 <td>{team.players[key].stats.skaterStats.goals}</td>
                                 <td>{team.players[key].stats.skaterStats.assists}</td>
@@ -78,7 +78,7 @@ function GameFeedPage() {
     const render_game_stats = (teams, linescores) => {
         let nAwayTeamShootoutScore = teams.away.teamStats.teamSkaterStats.goals
         let nHomeTeamShootoutScore = teams.home.teamStats.teamSkaterStats.goals
-        
+
         if(linescores.hasShootout)
         {
             if(linescores.shootoutInfo.away.scores > linescores.shootoutInfo.home.scores)
