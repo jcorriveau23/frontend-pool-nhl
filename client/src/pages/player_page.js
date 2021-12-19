@@ -61,8 +61,8 @@ function PlayerPage() {
                         <th colspan="18">Career Stats</th>
                     </tr>
                     <tr>
-                        <th>Season</th>
                         <th>Team</th>
+                        <th>Season</th>
                         <th>League</th>
                         <th>Games</th>
                         <th>G</th>
@@ -83,8 +83,12 @@ function PlayerPage() {
                     {stats.map( (season, index) => {
                         return(
                             <tr>
-                                <td>{season.season.slice(0,4) + "-" + season.season.slice(4)}</td>                                
                                 <td>{season.team.name}</td>
+                                {
+                                    season.league.id == 133 ? // nhl league
+                                        <td><Link to={"/teamRosterBySeason/"+ season.team.id + "/" + season.season} style={{ textDecoration: 'none', color: "#000099" }}>{season.season.slice(0,4) + "-" + season.season.slice(4)}</Link></td>
+                                        : <td>{season.season.slice(0,4) + "-" + season.season.slice(4)}</td>
+                                }
                                 <td>{season.league.name}</td>
                                 <td>{season.stat.games}</td>
                                 <td>{season.stat.goals}</td>

@@ -198,7 +198,7 @@ nav a:hover::before{
 }
 
 .pool_item a {
-  color: inherit;
+  color: #000099;
   font-weight: normal;
   text-decoration: none;
   outline: 0 none;

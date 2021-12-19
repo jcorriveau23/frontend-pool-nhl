@@ -21,6 +21,7 @@ import PoolPage from "./pages/pool_page"
 import StatsPage from "./pages/stats_page"
 import GameFeedPage from "./pages/game_feed_page"
 import PlayerPage from "./pages/player_page"
+import TeamRosterBySeasonPage from "./pages/teamRosterBySeason_page"
 
 function App() {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
@@ -79,6 +80,7 @@ function App() {
           <Route exact path="/statsPage" component = {StatsPage}></Route>
           <Route path="/gameFeed/:id" component = {() => GameFeedPage()}></Route>
           <Route path="/playerInfo/:id" component = {() => PlayerPage()}></Route>
+          <Route path="/teamRosterBySeason/:teamID/:season" component = {() => TeamRosterBySeasonPage()}></Route>
         </Switch>
         </div>
       </Router>

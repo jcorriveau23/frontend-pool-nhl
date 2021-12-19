@@ -51,7 +51,7 @@ function GameFeedPage() {
                         return(
                             <tr>
                                 <td>{team.players[key].jerseyNumber}</td>
-                                <td><Link to={"/playerInfo/"+team.players[key].person.id} style={{ textDecoration: 'none', color: "#000055" }}>{team.players[key].person.fullName}</Link></td>
+                                <td><Link to={"/playerInfo/"+team.players[key].person.id} style={{ textDecoration: 'none', color: "#000077" }}>{team.players[key].person.fullName}</Link></td>
                                 <td>{team.players[key].position.abbreviation}</td>
                                 <td>{team.players[key].stats.skaterStats.goals}</td>
                                 <td>{team.players[key].stats.skaterStats.assists}</td>
