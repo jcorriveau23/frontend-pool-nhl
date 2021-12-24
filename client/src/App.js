@@ -23,6 +23,9 @@ import GameFeedPage from "./pages/game_feed_page"
 import PlayerPage from "./pages/player_page"
 import TeamRosterBySeasonPage from "./pages/teamRosterBySeason_page"
 
+// components
+import WalletCard from './components/web3/WalletCard';
+
 function App() {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
@@ -35,6 +38,7 @@ function App() {
   {
     console.log(ethereum)
     ethereum.on('accountsChanged', function (accounts){
+      console.log(accounts[0]) 
       setAddr(accounts[0])
     })
     console.log("listening")
@@ -73,7 +77,7 @@ function App() {
               <li onClick={openRegisterModal}><Link>Register</Link></li>
               {username? <li><Link onClick={() => Disconnect()}>Disconnect</Link></li> : <li onClick={openLoginModal}><Link>Login</Link></li>}
               {username?<li><Link>connected: {username}</Link></li> : null}
-              {addr? <li>Your addr: {addr}</li> : <button>Connect your wallet</button>}
+              <WalletCard/>
             </ul>
           </div>
         </nav>
