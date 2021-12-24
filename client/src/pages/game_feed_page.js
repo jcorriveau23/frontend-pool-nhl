@@ -44,7 +44,7 @@ function GameFeedPage() {
                     <th>PP TOI</th>
                     <th>SH TOI</th>
                 </tr>
-                {Object.keys(team.players).map( (key, index) => {
+                {Object.keys(team.players).map( (key, i) => {
                     if(team.players[key].stats.hasOwnProperty("skaterStats"))
                     {
                         return(

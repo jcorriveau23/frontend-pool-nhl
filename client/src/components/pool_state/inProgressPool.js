@@ -198,16 +198,16 @@ function InProgressPool({ username, poolName, poolInfo }) {
           var poolers = poolInfo['participants']
 
           // replace pooler user name to be first
-          var index = poolers.findIndex(isUser)
-          poolers.splice(index, 1)
+          var i = poolers.findIndex(isUser)
+          poolers.splice(i, 1)
           poolers.splice(0, 0, username)
 
             return( 
                 <Tabs>
                     <TabList>
-                        {poolers.map(pooler => <Tab>{pooler}</Tab>)}
+                        {poolers.map((pooler, i)  => <Tab>{pooler}</Tab>)}
                     </TabList>
-                    {poolers.map(pooler => {
+                    {poolers.map((pooler, i)  => {
                         return (
                             <TabPanel>
                                 <Tabs>
@@ -285,9 +285,9 @@ function InProgressPool({ username, poolName, poolInfo }) {
     const render_tabs_pool_rank = () => {
         if(ranking){
             return(
-                ranking.map((pooler_stats, index) =>
+                ranking.map((pooler_stats, i) =>
                     <tr>
-                        <td>{index + 1}</td>
+                        <td>{i + 1}</td>
                         <td>{pooler_stats.name}</td>
                         <td>{pooler_stats.forwards_total_pts}</td>
                         <td>{pooler_stats.defenders_total_pts}</td>
@@ -307,9 +307,9 @@ function InProgressPool({ username, poolName, poolInfo }) {
         if(playersStats[pooler]){
             return (
             <>
-                {playersStats[pooler]['chosen_defender'].map((player, index) =>
+                {playersStats[pooler]['chosen_defender'].map((player, i) =>
                 <tr>
-                    <td>{index + 1}</td>
+                    <td>{i + 1}</td>
                     <td>{player.name}</td>
                     <td>
                         <img src={logos[player.team]} width="30" height="30"></img>
@@ -343,9 +343,9 @@ function InProgressPool({ username, poolName, poolInfo }) {
         if(playersStats[pooler]){
             return( 
             <>
-                {playersStats[pooler]['chosen_forward'].map((player, index) =>
+                {playersStats[pooler]['chosen_forward'].map((player, i) =>
                     <tr class="content-table">
-                        <td>{index + 1}</td>
+                        <td>{i + 1}</td>
                         <td>{player.name}</td>
                         <td>
                             <img src={logos[player.team]} width="30" height="30"></img>
@@ -379,9 +379,9 @@ function InProgressPool({ username, poolName, poolInfo }) {
         return (
         <>
         
-        {playersStats[pooler]['chosen_reservist'].map((player, index) =>
+        {playersStats[pooler]['chosen_reservist'].map((player, i) =>
         <tr>
-        <td>{index + 1}</td>
+        <td>{i + 1}</td>
         <td>{player.name}</td>
         <td>
             <img src={logos[player.team]} width="30" height="30"></img>
@@ -415,9 +415,9 @@ function InProgressPool({ username, poolName, poolInfo }) {
         
         return (
         <>
-        {playersStats[pooler]['chosen_goalies'].map((player, index) =>
+        {playersStats[pooler]['chosen_goalies'].map((player, i) =>
         <tr>
-        <td>{index + 1}</td>
+        <td>{i + 1}</td>
         <td>{player.name}</td>
         <td>
             <img src={logos[player.team]} width="30" height="30"></img>

@@ -73,13 +73,13 @@ function MyPools(username) {
               {poolInProgress.length > 0? <Tab>Progress</Tab> : null}
             </TabList>
             <TabPanel>
-              {poolCreated.map(pool => 
+              {poolCreated.map((pool, i)  => 
                 <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner} username={username} poolDeleted = {poolDeleted} setPoolDeleted={setPoolDeleted}></PoolItem></li>  
               )}
             </TabPanel>
             {poolDraft.length > 0?
               <TabPanel>
-                {poolDraft.map(pool => 
+                {poolDraft.map((pool, i)  => 
                   <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
                 )}
               </TabPanel>
@@ -87,7 +87,7 @@ function MyPools(username) {
             }
             {poolDynastie.length > 0?
               <TabPanel>
-                {poolDynastie.map(pool => 
+                {poolDynastie.map((pool, i)  => 
                   <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
                 )}
               </TabPanel>
@@ -95,7 +95,7 @@ function MyPools(username) {
             }
             {poolInProgress.length > 0?
               <TabPanel>
-                {poolInProgress.map(pool => 
+                {poolInProgress.map((pool, i)  => 
                   <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
                 )}
               </TabPanel>

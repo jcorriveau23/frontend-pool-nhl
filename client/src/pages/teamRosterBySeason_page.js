@@ -37,7 +37,7 @@ function TeamRosterBySeasonPage() {
                 <h1>{teamName}</h1>
                <table  class="content-table">
                     <tr>
-                        <th colspan="18">{teamName} : {season}</th>
+                        <th colSpan="18">{teamName} : {season}</th>
                     </tr>
                     <tr>
                         <th>#</th>
@@ -59,7 +59,7 @@ function TeamRosterBySeasonPage() {
                         <th>PP TOI</th>
                         <th>SH TOI</th>
                     </tr>
-                    {roster.map( (player, index) => {
+                    {roster.map( (player, i) => {
                         return(
                             <tr>  
                                 <td>-</td>                             

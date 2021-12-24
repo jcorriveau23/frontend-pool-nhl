@@ -8,10 +8,10 @@ import logos from "./img/images"
 
 function TeamsStanding({data}) {
 
-    const renderDivisionTeams = (div) => div.teamRecords.map((team, index) => {
+    const renderDivisionTeams = (div) => div.teamRecords.map((team, i) => {
         return (
             <tr>
-                <td>{index + 1}</td>
+                <td>{i + 1}</td>
                 <td>
                     <img src={logos[ team.team.name ]} width="30" height="30"></img>
                 </td>
@@ -48,9 +48,9 @@ function TeamsStanding({data}) {
         return (
             <Tabs>
                 <TabList>
-                    {data["records"].map(div => <Tab>{div.division.name}</Tab>)}
+                    {data["records"].map((div, i) => <Tab>{div.division.name}</Tab>)}
                 </TabList>
-                {data["records"].map(div => {
+                {data["records"].map((div, i)  => {
                     return <TabPanel>
                         <div>
                             <table class="content-table">

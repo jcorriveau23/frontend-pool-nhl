@@ -174,9 +174,9 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
 
     const render_defender = (pooler) => {
     if(poolInfo['context'][pooler]){
-        return poolInfo['context'][pooler]['chosen_defender'].map((player, index) =>
+        return poolInfo['context'][pooler]['chosen_defender'].map((player, i) =>
             <tr>
-                <td>{index + 1}</td>
+                <td>{i + 1}</td>
                 <td>{player.name}</td>
                 <td>
                     <img src={logos[player.team]} width="30" height="30"></img>
@@ -191,9 +191,9 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
 
     const render_forward = (pooler) => {
     if(poolInfo['context'][pooler]){
-        return poolInfo['context'][pooler]['chosen_forward'].map((player, index) =>
+        return poolInfo['context'][pooler]['chosen_forward'].map((player, i) =>
         <tr>
-        <td>{index + 1}</td>
+        <td>{i + 1}</td>
         <td>{player.name}</td>
         <td>
             <img src={logos[player.team]} width="30" height="30"></img>
@@ -208,9 +208,9 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
 
     const render_reservist = (pooler) => {
     if(poolInfo['context'][pooler]){
-        return poolInfo['context'][pooler]['chosen_reservist'].map((player, index) =>
+        return poolInfo['context'][pooler]['chosen_reservist'].map((player, i) =>
         <tr>
-        <td>{index + 1}</td>
+        <td>{i + 1}</td>
         <td>{player.name}</td>
         <td>
             <img src={logos[player.team]} width="30" height="30"></img>
@@ -225,9 +225,9 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
 
     const render_goalies = (pooler) => {
     if(poolInfo['context'][pooler]){
-        return poolInfo['context'][pooler]['chosen_goalies'].map((player, index) =>
+        return poolInfo['context'][pooler]['chosen_goalies'].map((player, i) =>
         <tr>
-        <td>{index + 1}</td>
+        <td>{i + 1}</td>
         <td>{player.name}</td>
         <td>
             <img src={logos[player.team]} width="30" height="30"></img>
@@ -250,16 +250,16 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
         var poolers = poolInfo['participants']
 
         // replace pooler user name to be first
-        var index = poolers.findIndex(isUser)
-        poolers.splice(index, 1)
+        var i = poolers.findIndex(isUser)
+        poolers.splice(i, 1)
         poolers.splice(0, 0, username)
 
         return (
             <Tabs>
                 <TabList>
-                    {poolers.map(pooler => <Tab>{pooler}</Tab>)}
+                    {poolers.map((pooler, i)  => <Tab>{pooler}</Tab>)}
                 </TabList>
-                {poolers.map(pooler => {
+                {poolers.map((pooler, i)  => {
                     return <TabPanel>
                         <table class="content-table">
                             <h3>Forward</h3>
@@ -340,7 +340,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                                 if(filter_players(player) === false){
                                                     return player
                                                 }
-                                            }).map(player => 
+                                            }).map((player, i)  => 
                                                 <tr onClick={() => player_selection(player.name, player.team, "F")}>
                                                     <td>{player.name}</td>
                                                     <td>
@@ -371,7 +371,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                                 if(filter_players(player) === false){
                                                         return player
                                                 }
-                                            }).map(player => 
+                                            }).map((player, i)  => 
                                             <tr onClick={() => player_selection(player.name, player.team, "D")}>
                                                 <td>{player.name}</td>
                                                 <td>
@@ -402,7 +402,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                                 if(filter_players(player) === false){
                                                     return player
                                                 }
-                                            }).map(player => 
+                                            }).map((player, i)  => 
                                             <tr onClick={() => player_selection(player.name, player.team, "G")}>
                                                 <td>{player.name}</td>
                                                 <td>

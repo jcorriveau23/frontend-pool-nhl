@@ -45,7 +45,7 @@ function TodayGamesFeed() {
     return (
         <div>
             <div>
-                {gamesStats.map(game => {
+                {gamesStats.map((game, i)  => {
                     return <li class="pool_item"><GameItem gameData={game}/></li>
                 })}
             </div>

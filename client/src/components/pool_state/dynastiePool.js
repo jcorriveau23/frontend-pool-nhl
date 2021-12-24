@@ -112,10 +112,10 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                 if(!isReservist)
                 {
                     protected_player_array = defProtected
-                    var index = protected_player_array.indexOf(player)
-                    if(index > -1)
+                    var i = protected_player_array.indexOf(player)
+                    if(i > -1)
                     {
-                        protected_player_array.splice(index, 1)
+                        protected_player_array.splice(i, 1)
                     }
                     setDefProtected([...protected_player_array])
                 }
@@ -124,10 +124,10 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                 if(!isReservist)
                 {
                     protected_player_array = forwProtected
-                    var index = protected_player_array.indexOf(player)
-                    if(index > -1)
+                    var i = protected_player_array.indexOf(player)
+                    if(i > -1)
                     {
-                        protected_player_array.splice(index, 1)
+                        protected_player_array.splice(i, 1)
                     }
                     setForwProtected([...protected_player_array])
                 }
@@ -137,10 +137,10 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                 if(!isReservist)
                 {
                     protected_player_array = goalProtected
-                    var index = protected_player_array.indexOf(player)
-                    if(index > -1)
+                    var i = protected_player_array.indexOf(player)
+                    if(i > -1)
                     {
-                        protected_player_array.splice(index, 1)
+                        protected_player_array.splice(i, 1)
                     }
 
                     setGoalProtected([...protected_player_array])
@@ -151,10 +151,10 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
             if(isReservist)
             {
                 protected_player_array = reservProtected
-                var index = protected_player_array.indexOf(player)
-            if(index > -1)
+                var i = protected_player_array.indexOf(player)
+            if(i > -1)
             {
-                protected_player_array.splice(index, 1)
+                protected_player_array.splice(i, 1)
             }
                 setReservProtected([...protected_player_array])
             }
@@ -200,10 +200,10 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                 }
             }
             
-        }).map((player, index) =>
+        }).map((player, i) =>
             <tbody>
                 <tr onClick={() => protect_player(player)}>
-                    <td>{index + 1}</td>
+                    <td>{i + 1}</td>
                     <td>{player.name}</td>
                     <td>
                         <img src={logos[player.team]} width="30" height="30"></img>
@@ -222,9 +222,9 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                     return player
                 }
             }
-        }).map((player, index) =>
+        }).map((player, i) =>
             <tr onClick={() => protect_player(player)}>
-                <td>{index + 1}</td>
+                <td>{i + 1}</td>
                 <td>{player.name}</td>
                 <td>
                     <img src={logos[player.team]} width="30" height="30"></img>
@@ -242,9 +242,9 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                     return player
                 }
             }
-        }).map((player, index) =>
+        }).map((player, i) =>
             <tr onClick={() => protect_player(player)}>
-                <td>{index + 1}</td>
+                <td>{i + 1}</td>
                 <td>{player.name}</td>
                 <td>
                     <img src={logos[player.team]} width="30" height="30"></img>
@@ -262,9 +262,9 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                         return player
                     }
                 }
-            }).map((player, index) =>
+            }).map((player, i) =>
                 <tr onClick={() => protect_player(player)}>
-                <td>{index + 1}</td>
+                <td>{i + 1}</td>
                 <td>{player.name}</td>
                 <td>
                     <img src={logos[player.team]} width="30" height="30"></img>
@@ -333,9 +333,9 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                         <th>team</th>
                                     </tr>
                                 </thead>
-                                {forwProtected.map((player, index) =>
+                                {forwProtected.map((player, i) =>
                                     <tr onClick={() => unprotect_player(player, false)}>
-                                        <td>{index + 1}</td>
+                                        <td>{i + 1}</td>
                                         <td>{player.name}</td>
                                         <td>
                                             <img src={logos[player.team]} width="30" height="30"></img>
@@ -350,9 +350,9 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                         <th>team</th>
                                     </tr>
                                 </thead>
-                                {defProtected.map((player, index) => //TODO: when clicked on remove from protected player list
+                                {defProtected.map((player, i) => //TODO: when clicked on remove from protected player list
                                     <tr onClick={() => unprotect_player(player, false)}>
-                                        <td>{index + 1}</td>
+                                        <td>{i + 1}</td>
                                         <td>{player.name}</td>
                                         <td>
                                             <img src={logos[player.team]} width="30" height="30"></img>
@@ -367,9 +367,9 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                         <th>team</th>
                                     </tr>
                                 </thead>
-                                {goalProtected.map((player, index) => //TODO: when clicked on remove from protected player list
+                                {goalProtected.map((player, i) => //TODO: when clicked on remove from protected player list
                                     <tr onClick={() => unprotect_player(player, false)}>
-                                        <td>{index + 1}</td>
+                                        <td>{i + 1}</td>
                                         <td>{player.name}</td>
                                         <td>
                                             <img src={logos[player.team]} width="30" height="30"></img>
@@ -384,9 +384,9 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                         <th>team</th>
                                     </tr>
                                 </thead>
-                                {reservProtected.map((player, index) => //TODO: when clicked on remove from protected player list
+                                {reservProtected.map((player, i) => //TODO: when clicked on remove from protected player list
                                     <tr onClick={() => unprotect_player(player, true)}>
-                                        <td>{index + 1}</td>
+                                        <td>{i + 1}</td>
                                         <td>{player.name}</td>
                                         <td>
                                             <img src={logos[player.team]} width="30" height="30"></img>

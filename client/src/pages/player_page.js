@@ -57,7 +57,7 @@ function PlayerPage() {
                 </table>
                <table  class="content-table">
                     <tr>
-                        <th colspan="18">Career Stats</th>
+                        <th colSpan="18">Career Stats</th>
                     </tr>
                     <tr>
                         <th>Team</th>
@@ -79,7 +79,7 @@ function PlayerPage() {
                         <th>PP TOI</th>
                         <th>SH TOI</th>
                     </tr>
-                    {stats.map( (season, index) => {
+                    {stats.map( (season, i) => {
                         return(
                             <tr>
                                 <td>{season.team.name}</td>
