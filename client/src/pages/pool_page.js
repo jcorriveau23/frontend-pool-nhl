@@ -30,10 +30,9 @@ function PoolPage(username) {
             .then(response => response.json())
             .then(data => {
                 if(data.success === "False"){
-                    //props.history.push('/pool_list');
+                    // [TODO] display a page or notification to show that the pool was not found
                 }
                 else{
-                    console.log(data.message)
                     setPoolInfo(data.message)
                 }
             })

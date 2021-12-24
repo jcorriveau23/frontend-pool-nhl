@@ -10,7 +10,6 @@ function PlayerPage() {
     const [playerInfo, setPlayerInfo] = useState(null)
 
     const playerID = window.location.pathname.split('/').pop();
-    console.log(playerID)
     
     useEffect(() => {
         fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYear')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
@@ -116,7 +115,6 @@ function PlayerPage() {
 
     if(playerStats && playerInfo)
     { 
-        console.log(playerStats)
         return(
             <div>
                 {render_player_stats(playerStats.stats[0].splits, playerInfo.people[0])}

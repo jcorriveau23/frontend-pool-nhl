@@ -21,7 +21,6 @@ export const LoginModal = ({showLoginModal, setShowLoginModal, username, setUser
         fetch('/auth/login', requestOptions)
             .then(response => response.json())
             .then(data => {
-                console.log(data.message)
                 if(data.success === "True"){
                     setMsg(data.message);
                     Cookies.set('token', data.token);

@@ -36,7 +36,6 @@ function CreatedPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     }, [socket]);
 
     const handleChange = (event) => {
-        console.log("Start Draft!")
         if(event.target.type === "checkbox"){           // the host click on the start button
             if(event.target.checked){
                 socket.emit('playerReady', Cookies.get('token'), poolName);

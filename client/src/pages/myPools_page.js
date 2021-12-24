@@ -26,6 +26,7 @@ function MyPools(username) {
             .then(response => response.json())
             .then(data => {
               if(data.success === "False"){
+                // [TODO] display a page or notification to tell the user that the pool list could not be fetch.
                 console.log(data.message)
               }
               else{

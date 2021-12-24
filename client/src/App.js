@@ -27,12 +27,23 @@ function App() {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [username, setUsername] = useState("")
+  const [addr, setAddr] = useState("")
+
+  const ethereum = window.ethereum
+
+  if(ethereum)
+  {
+    console.log(ethereum)
+    ethereum.on('accountsChanged', function (accounts){
+      setAddr(accounts[0])
+    })
+    console.log("listening")
+  }
+
 
   useEffect(() => {
     const username = localStorage.getItem("username");
-    if (username) {
-      setUsername(username);
-    }
+    if (username) { setUsername(username) }
   }, []);
 
   const openRegisterModal = () => {
@@ -42,8 +53,6 @@ function App() {
   const openLoginModal = () => {
     setShowLoginModal(prev => !prev)
   }
-
-
 
   const Disconnect = () => {
     Cookies.remove('token')
@@ -64,6 +73,7 @@ function App() {
               <li onClick={openRegisterModal}><Link>Register</Link></li>
               {username? <li><Link onClick={() => Disconnect()}>Disconnect</Link></li> : <li onClick={openLoginModal}><Link>Login</Link></li>}
               {username?<li><Link>connected: {username}</Link></li> : null}
+              {addr? <li>Your addr: {addr}</li> : <button>Connect your wallet</button>}
             </ul>
           </div>
         </nav>

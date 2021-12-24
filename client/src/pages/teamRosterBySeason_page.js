@@ -16,13 +16,9 @@ function TeamRosterBySeasonPage() {
 
     const season = url.pop();
     const teamID = url.pop();
-
-    console.log(season)
-    console.log(teamID)
     
     useEffect(() => {
         const url = "https://nhl-pool-ethereum.herokuapp.com/http://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=" + teamID + "%20and%20gameTypeId=2%20and%20seasonId%3C=" + season + "%20and%20seasonId%3E=" + season // https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=8%20and%20gameTypeId=2%20and%20seasonId%3C=20172018%20and%20seasonId%3E=20172018
-        console.log(url)
         
         fetch(url, {
             method: 'GET',
@@ -32,10 +28,7 @@ function TeamRosterBySeasonPage() {
             setTeamName(playersStats.data[0].teamAbbrevs)
             setPlayerStatsList({...playersStats})
         })
-        .catch(error => {
-            //console.log(error)
-            alert('Error! ' + error)
-        })
+        .catch(error => {alert('Error! ' + error)})
     }, []);
     
     const render_team_players = (roster) => {
@@ -98,7 +91,6 @@ function TeamRosterBySeasonPage() {
 
     if( playerStatsList )
     { 
-        console.log(playerStatsList)
         return(
             <div>
                 {render_team_players(playerStatsList.data)}

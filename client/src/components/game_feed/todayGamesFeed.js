@@ -11,11 +11,10 @@ function TodayGamesFeed() {
     useEffect(() => {
         var formatDate = date.toISOString().slice(0, 10)
 
-        console.log(formatDate)
+        // [TODO] : fix that we dont look on next day at 19h because of timezone.
         fetch("https://statsapi.web.nhl.com/api/v1/schedule?startDate=" + formatDate + '&endDate=' + formatDate)
         .then(response => response.json())
         .then(todayGamesData => {
-            console.log(todayGamesData)
             if(todayGamesData.dates[0])
             {
                 setGamesStats([...todayGamesData.dates[0].games])
@@ -32,7 +31,6 @@ function TodayGamesFeed() {
     const prevDate = () => {
         const newDate = new Date(date)
         newDate.setDate(date.getDate() - 1)
-        console.log(newDate)
 
         setDate(newDate)
     }
@@ -40,7 +38,6 @@ function TodayGamesFeed() {
     const nextDate = () => {
         const newDate = new Date(date)
         newDate.setDate(date.getDate() + 1)
-        console.log(newDate)
 
         setDate(newDate)
     }

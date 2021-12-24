@@ -341,7 +341,6 @@ function InProgressPool({ username, poolName, poolInfo }) {
 
     const render_forward_stats = (pooler) => {
         if(playersStats[pooler]){
-            console.log(playersStats[pooler])
             return( 
             <>
                 {playersStats[pooler]['chosen_forward'].map((player, index) =>

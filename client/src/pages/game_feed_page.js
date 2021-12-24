@@ -12,7 +12,6 @@ function GameFeedPage() {
     const [tabIndex, setTabIndex] = useState(1);
 
     const gameID = window.location.pathname.split('/').pop();
-    console.log(gameID)
     
     useEffect(() => {
         fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/feed/live")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
@@ -51,7 +50,7 @@ function GameFeedPage() {
                         return(
                             <tr>
                                 <td>{team.players[key].jerseyNumber}</td>
-                                <td><Link to={"/playerInfo/"+team.players[key].person.id} style={{ textDecoration: 'none', color: "#000077" }}>{team.players[key].person.fullName}</Link></td>
+                                <td><Link to={"/playerInfo/"+team.players[key].person.id} style={{ textDecoration: 'none', color: "#000099" }}>{team.players[key].person.fullName}</Link></td>
                                 <td>{team.players[key].position.abbreviation}</td>
                                 <td>{team.players[key].stats.skaterStats.goals}</td>
                                 <td>{team.players[key].stats.skaterStats.assists}</td>
