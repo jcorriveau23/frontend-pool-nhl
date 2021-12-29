@@ -2,3 +2,5 @@ client/node_modules/
 node_modules/
 client/.eslintcache
 client/cors-anywhere
+contract/build
+contract/pool-prediction-idea.txt

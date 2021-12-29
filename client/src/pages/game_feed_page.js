@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 // teams logo
 import logos from "../components/img/images" 
+import GamePrediction from '../components/gamePrediction';
 
 function GameFeedPage() {
 
@@ -149,6 +150,7 @@ function GameFeedPage() {
     { 
         return(
             <div>
+                <GamePrediction gameID={gameID}/>
                 <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
                     <TabList>
                         <Tab>{gameInfo.liveData.boxscore.teams.home.team.name}</Tab>
