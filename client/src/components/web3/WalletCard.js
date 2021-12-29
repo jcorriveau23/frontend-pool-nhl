@@ -1,65 +1,145 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {ethers} from 'ethers'
-// import './WalletCard.css'
+import './WalletCard.css'
 
-const WalletCard = () => {
+// icons
+import LOCKED from "../img/web3/Locked_icon_red.svg"
+import UNLOCKED from "../img/web3/Green_dot.svg"
+
+import Cookies from 'js-cookie';
+
+const WalletCard = ({user, setUser}) => {
 
 	const [errorMessage, setErrorMessage] = useState(null);
-	const [defaultAccount, setDefaultAccount] = useState(null);
-	const [userBalance, setUserBalance] = useState(null);
-	const [connButtonText, setConnButtonText] = useState('Connect Wallet');
+	const [isWalletUnlocked, setIsWalletUnlocked] = useState(false);
+	const [isWalletConnected, setIsWalletConnected] = useState(false);
+	const [currentAddr, setCurrentAddr] = useState("");
+
+	useEffect(() => {
+		const user = JSON.parse(localStorage.getItem("persist-account"))
+
+		if (user) {
+			setUser(user)
+			setCurrentAddr(user.addr)
+		}
+	
+		if (window.ethereum && user) {
+			
+			console.log(user.addr)
+			const token = Cookies.get('token-' + user.addr)
+
+			console.log(token)
+
+			if( token ){	// TODO: also validate that the token is not expired
+				setIsWalletUnlocked(true) 
+				setIsWalletConnected(true) 
+				setErrorMessage("")
+			} 
+		} 		
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const connectWalletHandler = () => {
-		if (window.ethereum && window.ethereum.isMetaMask) {
-			console.log('MetaMask Here!');
+		// const provider = new ethers.providers.Web3Provider(window.ethereum) // TODO: use const provider = new ethers.providers.Web3Provider(window.ethereum) instead 
+		setIsWalletConnected(false)
+
+		if (window.ethereum && window.ethereum.isMetaMask ) {
 
 			window.ethereum.request({ method: 'eth_requestAccounts'})
 			.then(result => {
-				accountChangedHandler(result[0]);
-				setConnButtonText('Wallet Connected');
-				getAccountBalance(result[0]);
+				setCurrentAddr(result[0]);
+				setIsWalletConnected(true)
+
+				const token = Cookies.get('token-' + result[0])
+
+				if( token ){ // TODO: also validate that the token is not expired
+
+					setIsWalletUnlocked(true) 
+					setErrorMessage("")
+				}  
 			})
 			.catch(error => {
+
 				setErrorMessage(error.message);
-			
 			});
-		} else {
-			console.log('Need to install MetaMask');
-			setErrorMessage('Please install MetaMask browser extension to interact');
+		} 
+		else 
+			setErrorMessage('Please install MetaMask browser extension at: https://metamask.io/download.');
+	}
+
+	const unlockWallet = () => {
+		try{
+			if(!window.ethereum)
+				throw new Error("Please install MetaMask browser extension to interact")
+
+			window.ethereum.request({ method: 'eth_requestAccounts'})
+			.then(result => {
+	
+				const provider = new ethers.providers.Web3Provider(window.ethereum)
+				const signer = provider.getSigner()
+				signer.signMessage("Unlock wallet to access nhl-pool-ethereum.")
+				.then(sig => {
+
+					signer.getAddress()
+					.then(addr => {
+
+						const requestOptions = {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({ addr: addr, sig: sig})
+						};
+						fetch('/auth/login', requestOptions)
+						.then(response => response.json())
+						.then(data => {
+
+							if(data.success === "True"){
+
+								console.log(result[0])
+								console.log(addr)
+
+								Cookies.set('token-' + addr, data.token)
+								localStorage.setItem("persist-account", JSON.stringify(data.user))
+								setUser(data.user)
+								
+								setIsWalletUnlocked(true)
+								setErrorMessage("")
+							}
+							else
+								setErrorMessage(data.message);
+						});
+					})
+				})
+
+			})
+		}
+		catch(err){
+			setErrorMessage(err.message)
 		}
 	}
-
-	// update account, will cause component re-render
-	const accountChangedHandler = (newAccount) => {
-		setDefaultAccount(newAccount);
-		getAccountBalance(newAccount.toString());
-	}
-
-	const getAccountBalance = (account) => {
-		window.ethereum.request({method: 'eth_getBalance', params: [account, 'latest']})
-		.then(balance => {
-			setUserBalance(ethers.utils.formatEther(balance));
-		})
-		.catch(error => {
-			setErrorMessage(error.message);
-		});
-	};
 
 	const chainChangedHandler = () => {
 		// reload the page to avoid any errors with chain change mid use of application
 		window.location.reload();
 	}
 
-	window.ethereum.on('accountsChanged', accountChangedHandler);
+	const isCurrentWalletUnlocked = () => {
+		return user? (isWalletUnlocked && user.addr.toLowerCase() === currentAddr.toLowerCase()) : false	
+	}
 
-	window.ethereum.on('chainChanged', chainChangedHandler);
-	
+	if(window.ethereum){
+		window.ethereum.on('accountsChanged', connectWalletHandler);
+		window.ethereum.on('chainChanged', chainChangedHandler);
+	}
+
 	return (
+		
 		<li className='walletCard'>
-			<button disabled={defaultAccount} onClick={connectWalletHandler}>{connButtonText}</button>
-			<div className='accountDisplay'>
-				<h3>Address: {defaultAccount}</h3>
-			</div>
+			<button onClick={!isWalletConnected? connectWalletHandler : !isCurrentWalletUnlocked()? unlockWallet : null }>
+				<div className='accountDisplay'>
+					<img src={isCurrentWalletUnlocked()? UNLOCKED : LOCKED} width="15" height="15"></img>
+					<b>{currentAddr? currentAddr.substring(0,6) + "..." + currentAddr.slice(-4) : "Connect Wallet"}</b>
+					{/*user? <h3>session addr: {user.addr}</h3> : null*/}
+				</div>
+			</button>
 			{errorMessage}
 		</li>
 	);

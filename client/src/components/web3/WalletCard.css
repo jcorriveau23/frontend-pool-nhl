@@ -1,0 +1,25 @@
+.walletCard {
+    display: inline-block;
+    font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+    font-size: 15px;
+    line-height: 16px;
+    margin: 10px 200px;
+    padding: 5px 30px 5px 30px;
+    max-width: 468px;
+  }
+
+.walletCard button {
+    background-color: #888;
+    border-color: #000;
+    border-radius: 3px;
+    border: 2px solid #000;
+}
+ 
+.walletCard button:hover {
+    border-color: #fff;
+    background-color: #888;
+}
+
+.walletCard img {
+    padding: 0px 10px 0px 0px;
+}

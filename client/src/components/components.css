@@ -183,7 +183,17 @@ nav a:hover::before{
 
 
 
-.pool_item {
+.pool_item ul li:hover{
+  border-color: #fff;
+  border-width: 2px;
+}
+
+.pool_item ul {
+  margin: 0; padding: 0;
+}
+
+.pool_item ul li{
+  border-color: #000;
   display: inline-block;
   font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
   font-size: 12px;
@@ -195,16 +205,16 @@ nav a:hover::before{
   margin: 10px 5px;
   padding: 0 16px 0px 16px;
   max-width: 468px;
+} 
+
+.pool_item ul td{
+ text-decoration-color: #fff; 
 }
 
-.pool_item a {
-  color: #000099;
-  font-weight: normal;
-  text-decoration: none;
-  outline: 0 none;
+.pool_item ul a{
+  color: #000;
 }
 
-.pool_item a:hover,
-.pool_item a:focus {
-  text-decoration: underline;
+.pool_item ul button{
+  background-color: #a00;
 }

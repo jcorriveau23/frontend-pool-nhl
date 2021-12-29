@@ -13,7 +13,6 @@ import TodayGamesFeed from "./components/game_feed/todayGamesFeed"
 
 // modals
 import {RegisterModal} from "./modals/register"
-import {LoginModal} from "./modals/login"
 
 //pages
 import MyPools from "./pages/myPools_page"
@@ -28,39 +27,18 @@ import WalletCard from './components/web3/WalletCard';
 
 function App() {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
-  const [showLoginModal, setShowLoginModal] = useState(false)
-  const [username, setUsername] = useState("")
-  const [addr, setAddr] = useState("")
-
-  const ethereum = window.ethereum
-
-  if(ethereum)
-  {
-    console.log(ethereum)
-    ethereum.on('accountsChanged', function (accounts){
-      console.log(accounts[0]) 
-      setAddr(accounts[0])
-    })
-    console.log("listening")
-  }
-
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const username = localStorage.getItem("username");
-    if (username) { setUsername(username) }
   }, []);
 
   const openRegisterModal = () => {
     setShowRegisterModal(prev => !prev)
   }
 
-  const openLoginModal = () => {
-    setShowLoginModal(prev => !prev)
-  }
-
   const Disconnect = () => {
-    Cookies.remove('token')
-    localStorage.clear("username")
+    Cookies.remove('token-'+ user.addr)
+    localStorage.clear("persist-account")
     window.location.reload(true);
   }
 
@@ -70,14 +48,12 @@ function App() {
         <nav>
           <div>
             <ul>
-              <img src={Logo} width="100" height="75"></img>
+              <img src={Logo} alt="" width="100" height="75"></img>
               <li><Link to="/">Home</Link></li>
-              {username? <li><Link to="/MyPools">My Pools</Link></li> : null}
+              {user? <li><Link to="/MyPools">My Pools</Link></li> : null}
               <li><Link to="/statsPage">League Stats</Link></li>
-              <li onClick={openRegisterModal}><Link>Register</Link></li>
-              {username? <li><Link onClick={() => Disconnect()}>Disconnect</Link></li> : <li onClick={openLoginModal}><Link>Login</Link></li>}
-              {username?<li><Link>connected: {username}</Link></li> : null}
-              <WalletCard/>
+              {user? <li><Link onClick={() => Disconnect()}>Disconnect</Link></li> : null}
+              <WalletCard user={user} setUser={setUser}/>
             </ul>
           </div>
         </nav>
@@ -87,10 +63,9 @@ function App() {
         </div>
         <div>
         <RegisterModal showRegisterModal={showRegisterModal} setShowRegisterModal={setShowRegisterModal}></RegisterModal>
-        <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} username={username} setUsername={setUsername}></LoginModal>
         <Switch>
-          <Route exact path="/MyPools" component = {() => MyPools(username)}></Route>
-          <Route path="/MyPools/:name" component = {() => PoolPage(username)}></Route>
+          <Route exact path="/MyPools" component = {() => MyPools(user)}></Route>
+          <Route path="/MyPools/:name" component = {() => PoolPage(user)}></Route>
           <Route exact path="/statsPage" component = {StatsPage}></Route>
           <Route path="/gameFeed/:id" component = {() => GameFeedPage()}></Route>
           <Route path="/playerInfo/:id" component = {() => PlayerPage()}></Route>

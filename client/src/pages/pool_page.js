@@ -12,14 +12,14 @@ import io from "socket.io-client";
 
 var socket = io.connect()
 
-function PoolPage(username) {
+function PoolPage(user) {
 
     const [poolInfo, setPoolInfo] = useState({})
     const [poolName] = useState(useParams().name)   // get the name of the pool using the param url
 
     useEffect(() => {
-        if (username) {
-            var cookie = Cookies.get('token')
+        if (user) {
+            var cookie = Cookies.get('token-' + user.addr)
 
             // get pool info at start
             const requestOptions2 = {
@@ -37,40 +37,45 @@ function PoolPage(username) {
                 }
             })
         }
-    },[username]);
+    },[user]); // eslint-disable-line react-hooks/exhaustive-deps
     
-    if(poolInfo.status === "created")
-    {
-        return(
-            <CreatedPool username={username} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket}></CreatedPool>
-        )
-    }
-    else if(poolInfo.status === "draft")
-    {
-        return(
-            <DraftPool username={username} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket}></DraftPool>
-        )
-    }
-    else if(poolInfo.status === "in Progress")
-    {
-        return(
-            <InProgressPool username={username} poolName={poolName} poolInfo={poolInfo}></InProgressPool>
-        )
-    }
-    else if(poolInfo.status === "dynastie")
-    {
-        return(
-            <DynastiePool username={username} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket}></DynastiePool>
-        )
+    if(user){
+        if(poolInfo.status === "created")
+        {
+            return(
+                <CreatedPool username={user.addr} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket}></CreatedPool>
+            )
+        }
+        else if(poolInfo.status === "draft")
+        {
+            return(
+                <DraftPool username={user.addr} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket}></DraftPool>
+            )
+        }
+        else if(poolInfo.status === "in Progress")
+        {
+            return(
+                <InProgressPool username={user.addr} poolName={poolName} poolInfo={poolInfo}></InProgressPool>
+            )
+        }
+        else if(poolInfo.status === "dynastie")
+        {
+            return(
+                <DynastiePool username={user.addr} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket}></DynastiePool>
+            )
+        }
+        else
+        {
+            return(
+                <div>
+                    <h1>trying to fetch pool data info...</h1>
+                </div>
+            )
+        }
     }
     else
-    {
-        return(
-            <div>
-                <h1>trying to fetch pool data info...</h1>
-            </div>
-        )
-    }
+        return(<h1>You are not connected.</h1>);
+   
 
     
   

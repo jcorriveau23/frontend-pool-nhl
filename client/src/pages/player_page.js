@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 // teams logo
-import logos from "../components/img/images" 
+//import logos from "../components/img/images" 
 
 function PlayerPage() {
 
@@ -23,7 +23,7 @@ function PlayerPage() {
             setPlayerInfo({...playerInfo})
         })
 
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
     
     const render_player_stats = (stats, info) => {
         return(
@@ -84,7 +84,7 @@ function PlayerPage() {
                             <tr>
                                 <td>{season.team.name}</td>
                                 {
-                                    season.league.id == 133 ? // nhl league
+                                    season.league.id === 133 ? // nhl league
                                         <td><Link to={"/teamRosterBySeason/"+ season.team.id + "/" + season.season} style={{ textDecoration: 'none', color: "#000099" }}>{season.season.slice(0,4) + "-" + season.season.slice(4)}</Link></td>
                                         : <td>{season.season.slice(0,4) + "-" + season.season.slice(4)}</td>
                                 }

@@ -7,24 +7,24 @@ function CreatedPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     
     const [inRoom, setInRoom] = useState(false);
     const [userList, setUserList] = useState([]);
-    const [msg, setMsg] = useState(""); // TODO: add some error msg to display on the app.
+    //const [msg, setMsg] = useState(""); // TODO: add some error msg to display on the app.
 
     useEffect(() => {
         if (socket && poolName) {
             // TODO: add some validation server socket side to prevent someone joining the pool 
             // when there is already the maximum poolers in the room
-            socket.emit('joinRoom', Cookies.get('token'), poolName);
+            socket.emit('joinRoom', Cookies.get('token-' + username), poolName);
             setInRoom(true);
         }
         return () => {
             if(socket && poolName)
             {
-                socket.emit('leaveRoom', Cookies.get('token'), poolName);
+                socket.emit('leaveRoom', Cookies.get('token-' + username), poolName);
                 socket.off('roomData');
                 setInRoom(false);
             }
         }
-    }, []); // only run on this component mount and unmount
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if(socket){
@@ -33,27 +33,27 @@ function CreatedPool({username, poolName, poolInfo, setPoolInfo, socket}) {
             socket.on("poolInfo", (data) => { setPoolInfo(data) });
         }
         
-    }, [socket]);
+    }, [socket]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleChange = (event) => {
         if(event.target.type === "checkbox"){           // the host click on the start button
             if(event.target.checked){
-                socket.emit('playerReady', Cookies.get('token'), poolName);
+                socket.emit('playerReady', Cookies.get('token-' + username), poolName);
             }
             else{
-                socket.emit('playerNotReady', Cookies.get('token'), poolName);
+                socket.emit('playerNotReady', Cookies.get('token-' + username), poolName);
             }
         }
   
         else if(event.target.type === "submit"){        // the host click on the start button
-            socket.emit('startDraft', Cookies.get('token'), poolName)
+            socket.emit('startDraft', Cookies.get('token-' + username), poolName)
         }    
         else if( event.target.type === "select-one" ){  // the host change a value of the pool configuration
             var poolInfoChanged = poolInfo
     
             poolInfoChanged[event.target.name] = event.target.value
             setPoolInfo(poolInfoChanged)
-            socket.emit("changeRule", Cookies.get('token'), poolInfo )
+            socket.emit("changeRule", Cookies.get('token-' + username), poolInfo )
         }  
     }
 
@@ -62,10 +62,10 @@ function CreatedPool({username, poolName, poolInfo, setPoolInfo, socket}) {
 
         for(let i = 0; i < poolInfo.number_poolers; i++){
             if(i < userList.length){
-                participants.push(<li class="pool_item"><ParticipantItem name={userList[i].name} ready={userList[i].ready}></ParticipantItem></li>)
+                participants.push(<li><ParticipantItem name={userList[i].name} ready={userList[i].ready}></ParticipantItem></li>) // TODO: add a modal pop up to add that friend
             }
             else{
-                participants.push(<li class="pool_item"><ParticipantItem name="user not found" ready={false}></ParticipantItem></li>)
+                participants.push(<li><ParticipantItem name="user not found" ready={false}></ParticipantItem></li>)
             }
         }
         return participants
@@ -74,9 +74,9 @@ function CreatedPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     const render_start_draft_button = () => {
         let bDisable = false
 
-        if(userList.length == poolInfo.number_poolers){
+        if(userList.length === poolInfo.number_poolers){
             for(let i = 0; i < poolInfo.number_poolers; i++){
-                if(userList[i].ready == false)
+                if(userList[i].ready === false)
                     bDisable = true
             }
         }
@@ -91,7 +91,7 @@ function CreatedPool({username, poolName, poolInfo, setPoolInfo, socket}) {
         }
     }
 
-    if(poolInfo ){
+    if(poolInfo && inRoom){
         return(
             <div class="container">
                 <h1>Match Making for Pool {poolName}</h1>
@@ -392,7 +392,11 @@ function CreatedPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                     </label>
                     {render_start_draft_button()}
                     <h2>Participants: </h2>
-                    {render_participants()}
+                    <div class="pool_item">
+                        <ul>
+                            {render_participants()}
+                        </ul>
+                    </div>
                 </div>
             </div>
         );

@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 // teams logo
-import logos from "../components/img/images" 
+// import logos from "../components/img/images" 
 
 function TeamRosterBySeasonPage() {
 
@@ -29,7 +29,7 @@ function TeamRosterBySeasonPage() {
             setPlayerStatsList({...playersStats})
         })
         .catch(error => {alert('Error! ' + error)})
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
     
     const render_team_players = (roster) => {
         return(

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 
 // component
 import { GameItem } from "./gameItem";
+import DatePicker from "react-datepicker";
+
+// css
+import './todayGamesFeed.css'
+import "react-datepicker/dist/react-datepicker.css";
 
 function TodayGamesFeed() {
 
@@ -9,9 +15,9 @@ function TodayGamesFeed() {
     const [date, setDate] = useState(new Date())
 
     useEffect(() => {
-        var formatDate = date.toISOString().slice(0, 10)
+        const newDate = new Date(date.setHours(0))
+        var formatDate = newDate.toISOString().slice(0, 10)
 
-        // [TODO] : fix that we dont look on next day at 19h because of timezone.
         fetch("https://statsapi.web.nhl.com/api/v1/schedule?startDate=" + formatDate + '&endDate=' + formatDate)
         .then(response => response.json())
         .then(todayGamesData => {
@@ -28,32 +34,14 @@ function TodayGamesFeed() {
 
     }, [date]); // fetch all todays games info from nhl api on this component mount.
 
-    const prevDate = () => {
-        const newDate = new Date(date)
-        newDate.setDate(date.getDate() - 1)
-
-        setDate(newDate)
-    }
-
-    const nextDate = () => {
-        const newDate = new Date(date)
-        newDate.setDate(date.getDate() + 1)
-
-        setDate(newDate)
-    }
-
     return (
-        <div>
-            <div>
+        <div class="todayGamesFeed">
+            <DatePicker selected={date} onChange={(date) => setDate(date)} dateFormat="P"/>
+            <ul>
                 {gamesStats.map((game, i)  => {
-                    return <li class="pool_item"><GameItem gameData={game}/></li>
+                    return <Link to={'/gameFeed/' + game.gamePk}><li class="pool_item"><GameItem gameData={game}></GameItem></li></Link>
                 })}
-            </div>
-            <div>
-                <button onClick={prevDate} disabled={false}>prev</button>
-                <b>{date.toISOString().slice(0, 10)}</b>
-                <button onClick={nextDate} disabled={false}>next</button>
-            </div>
+            </ul>
         </div>
     )    
 }

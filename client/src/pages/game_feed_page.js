@@ -69,6 +69,7 @@ function GameFeedPage() {
                             </tr>
                         )
                     }
+                    return null
                 })}
             </table>
         )
@@ -88,9 +89,9 @@ function GameFeedPage() {
         return(
             <table  class="content-table">
                 <tr>
-                    <th><img src={logos[ teams.away.team.name ]} width="30" height="30"></img></th>
+                    <th><img src={logos[ teams.away.team.name ]} alt="" width="30" height="30"></img></th>
                     <th>Summary</th>
-                    <th><img src={logos[ teams.home.team.name ]} width="30" height="30"></img></th>
+                    <th><img src={logos[ teams.home.team.name ]} alt="" width="30" height="30"></img></th>
                 </tr>
                 <tr>
                     <td>{nAwayTeamShootoutScore}</td>

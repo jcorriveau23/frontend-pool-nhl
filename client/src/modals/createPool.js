@@ -14,7 +14,7 @@ export const CreatePoolModal = ({showCreatePoolModal, setShowCreatePoolModal, us
     const createPool = () => {
         const requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')},
+            headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token-' + username)},
             body: JSON.stringify({ name: poolNameInput,
                                     owner: username,
                                     number_pooler: numberPoolerInput

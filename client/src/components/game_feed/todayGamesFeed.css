@@ -1,0 +1,40 @@
+.todayGamesFeed ul li:hover{
+    border-color: #fff;
+    border-width: 2px;
+}
+
+.todayGamesFeed input{
+    text-align: center;
+    border-radius: 2px;
+    border-width: 2px;
+    border-color: #000;
+    margin: 3px; 
+    padding: 4px;
+}
+
+.todayGamesFeed ul {
+    margin: 0; padding: 0;
+}
+
+.todayGamesFeed ul li{
+    border-color: #000;
+    display: inline-block;
+    font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 16px;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 2px;
+    margin: 10px 5px;
+    padding: 0 16px 0px 16px;
+    max-width: 468px;
+}
+
+.todayGamesFeed ul td{
+   text-decoration-color: #fff; 
+}
+
+.todayGamesFeed ul a{
+    color: #000;
+}

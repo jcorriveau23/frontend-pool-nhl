@@ -13,7 +13,7 @@ function TeamsStanding({data}) {
             <tr>
                 <td>{i + 1}</td>
                 <td>
-                    <img src={logos[ team.team.name ]} width="30" height="30"></img>
+                    <img src={logos[ team.team.name ]} alt="" width="30" height="30"></img>
                 </td>
                 <td>{team.leagueRecord.wins + team.leagueRecord.losses + team.leagueRecord.ot}</td> 
                 <td>{team.leagueRecord.wins}</td>

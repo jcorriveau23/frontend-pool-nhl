@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom"
+
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -7,7 +9,7 @@ import { PoolItem } from "../components/poolItem";
 
 import { CreatePoolModal } from '../modals/createPool';
 
-function MyPools(username) {
+function MyPools(user) {
     
     const [showCreatePoolModal, setShowCreatePoolModal] = useState(false)
     const [poolDeleted, setPoolDeleted] = useState(false)
@@ -17,10 +19,10 @@ function MyPools(username) {
     const [poolDynastie, setPoolDynastie] = useState([])
 
     useEffect(() => {
-      if (username && showCreatePoolModal === false) {
+      if (user && showCreatePoolModal === false) {
         const requestOptions = {
               method: 'GET',
-              headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token')}
+              headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token-' + user.addr)}
             };
             fetch('pool/pool_list', requestOptions)
             .then(response => response.json())
@@ -54,57 +56,74 @@ function MyPools(username) {
               setPoolDeleted(false)
             })
       }
-    }, [username, showCreatePoolModal, poolDeleted]); // showCreatePoolModal force to refetch data when creating a new pool.
+    }, [user, showCreatePoolModal, poolDeleted]); // showCreatePoolModal force to refetch data when creating a new pool.
 
     const openCreatePoolModal = () => {
       setShowCreatePoolModal(true)
     }
 
-    return(
-      <div>
-          <h1>Pool list</h1>
-            <button onClick={openCreatePoolModal} disabled={false}>Create a new Pool.</button>
-
-          <Tabs>
-            <TabList>
-              <Tab>Created</Tab>
-              {poolDraft.length > 0? <Tab>Drafting</Tab> : null}
-              {poolDynastie.length > 0? <Tab>Dynastie</Tab> : null}
-              {poolInProgress.length > 0? <Tab>Progress</Tab> : null}
-            </TabList>
-            <TabPanel>
-              {poolCreated.map((pool, i)  => 
-                <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner} username={username} poolDeleted = {poolDeleted} setPoolDeleted={setPoolDeleted}></PoolItem></li>  
-              )}
-            </TabPanel>
-            {poolDraft.length > 0?
-              <TabPanel>
-                {poolDraft.map((pool, i)  => 
-                  <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
-                )}
+    if(user){
+      return(
+        <div>
+            <h1>Pool list</h1>
+              <button onClick={openCreatePoolModal} disabled={false}>Create a new Pool.</button>
+  
+            <Tabs>
+              <TabList>
+                <Tab>Created</Tab>
+                {poolDraft.length > 0? <Tab>Drafting</Tab> : null}
+                {poolDynastie.length > 0? <Tab>Dynastie</Tab> : null}
+                {poolInProgress.length > 0? <Tab>Progress</Tab> : null}
+              </TabList>
+              <TabPanel >
+                <div class="pool_item">
+                  <ul>
+                    {poolCreated.map((pool, i)  => 
+                      <Link to={'MyPools/' + pool.name}><li><PoolItem name={pool.name} owner={pool.owner} username={user.addr} poolDeleted = {poolDeleted} setPoolDeleted={setPoolDeleted}></PoolItem></li></Link>  
+                    )}
+                  </ul>
+                </div>
               </TabPanel>
-              : null
-            }
-            {poolDynastie.length > 0?
-              <TabPanel>
-                {poolDynastie.map((pool, i)  => 
-                  <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
-                )}
-              </TabPanel>
-              : null
-            }
-            {poolInProgress.length > 0?
-              <TabPanel>
-                {poolInProgress.map((pool, i)  => 
-                  <li class="pool_item"><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
-                )}
-              </TabPanel>
-              : null
-            }
-          </Tabs>
-          <CreatePoolModal showCreatePoolModal={showCreatePoolModal} setShowCreatePoolModal={setShowCreatePoolModal} username={username}></CreatePoolModal>
-      </div>
-    );
+              {poolDraft.length > 0?
+                <TabPanel>
+                  <div class="pool_item">
+                    <ul>
+                      {poolDraft.map((pool, i)  => 
+                        <li><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
+                      )}
+                    </ul>
+                  </div>
+                </TabPanel>
+                : null
+              }
+              {poolDynastie.length > 0?
+                <TabPanel>
+                  <ul>
+                    {poolDynastie.map((pool, i)  => 
+                      <li><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
+                    )}
+                  </ul>
+                </TabPanel>
+                : null
+              }
+              {poolInProgress.length > 0?
+                <TabPanel>
+                  <ul>
+                    {poolInProgress.map((pool, i)  => 
+                      <li><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
+                    )}
+                  </ul>
+                </TabPanel>
+                : null
+              }
+            </Tabs>
+            <CreatePoolModal showCreatePoolModal={showCreatePoolModal} setShowCreatePoolModal={setShowCreatePoolModal} username={user.addr}></CreatePoolModal>
+        </div>
+      );
+    }
+    else
+      return(<h1>You are not connected.</h1>);
+   
     
   
   }

@@ -16,19 +16,19 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
 
     useEffect(() => {
         if (socket && poolName && username) {
-            socket.emit('joinRoom', Cookies.get('token'), poolName);
+            socket.emit('joinRoom', Cookies.get('token-' + username), poolName);
             fetchPlayerDraft();
             setInRoom(true);
         }
         return () => {
             if(socket && poolName)
             {
-                socket.emit('leaveRoom', Cookies.get('token'), poolName);
+                socket.emit('leaveRoom', Cookies.get('token-' + username), poolName);
                 socket.off('roomData');
                 setInRoom(false);
             }
         }
-    }, [username]); // only run on this component mount and unmount
+    }, [username]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if(socket){
@@ -37,12 +37,12 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
              });
         }
         
-    }, [socket]);
+    }, [socket]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Draft methods
     const fetchPlayerDraft = async () => {
 
-        var cookie = Cookies.get('token')
+        var cookie = Cookies.get('token-' + username)
 
         // get all players stats from past season
         const requestOptions = {
@@ -114,7 +114,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     }
 
     const chose_player = (player) => {
-        socket.emit('pickPlayer', Cookies.get('token'), poolInfo.name, player, (ack)=>{
+        socket.emit('pickPlayer', Cookies.get('token-' + username), poolInfo.name, player, (ack)=>{
             if(ack.success === "False")
             {
                 setMessage(ack.message)
@@ -179,7 +179,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                 <td>{i + 1}</td>
                 <td>{player.name}</td>
                 <td>
-                    <img src={logos[player.team]} width="30" height="30"></img>
+                    <img src={logos[player.team]} alt="" width="30" height="30"></img>
                 </td>
             </tr>
         )
@@ -196,7 +196,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
         <td>{i + 1}</td>
         <td>{player.name}</td>
         <td>
-            <img src={logos[player.team]} width="30" height="30"></img>
+            <img src={logos[player.team]} alt="" width="30" height="30"></img>
         </td>
         </tr>
     )
@@ -213,7 +213,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
         <td>{i + 1}</td>
         <td>{player.name}</td>
         <td>
-            <img src={logos[player.team]} width="30" height="30"></img>
+            <img src={logos[player.team]} alt="" width="30" height="30"></img>
         </td>
         </tr>
     )
@@ -230,7 +230,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
         <td>{i + 1}</td>
         <td>{player.name}</td>
         <td>
-            <img src={logos[player.team]} width="30" height="30"></img>
+            <img src={logos[player.team]} alt="" width="30" height="30"></img>
         </td>
         </tr>
     )
@@ -340,11 +340,12 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                                 if(filter_players(player) === false){
                                                     return player
                                                 }
+                                                return null
                                             }).map((player, i)  => 
                                                 <tr onClick={() => player_selection(player.name, player.team, "F")}>
                                                     <td>{player.name}</td>
                                                     <td>
-                                                        <img src={logos[player.team]} width="30" height="30"></img>
+                                                        <img src={logos[player.team]} alt="" width="30" height="30"></img>
                                                     </td>
                                                     <td>{player.stats.games}</td>
                                                     <td>{player.stats.goals}</td>
@@ -371,11 +372,12 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                                 if(filter_players(player) === false){
                                                         return player
                                                 }
+                                                return null
                                             }).map((player, i)  => 
                                             <tr onClick={() => player_selection(player.name, player.team, "D")}>
                                                 <td>{player.name}</td>
                                                 <td>
-                                                    <img src={logos[player.team]} width="30" height="30"></img>
+                                                    <img src={logos[player.team]} alt="" width="30" height="30"></img>
                                                 </td>
                                                 <td>{player.stats.games}</td>
                                                 <td>{player.stats.goals}</td>
@@ -402,11 +404,12 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                                 if(filter_players(player) === false){
                                                     return player
                                                 }
+                                                return null
                                             }).map((player, i)  => 
                                             <tr onClick={() => player_selection(player.name, player.team, "G")}>
                                                 <td>{player.name}</td>
                                                 <td>
-                                                    <img src={logos[player.team]} width="30" height="30"></img>
+                                                    <img src={logos[player.team]} alt="" width="30" height="30"></img>
                                                 </td>
                                                 <td>{player.stats.games}</td>
                                                 <td>{player.stats.wins}</td>
