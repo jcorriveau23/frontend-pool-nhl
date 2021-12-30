@@ -9,7 +9,7 @@ import { PoolItem } from "../components/poolItem";
 
 import { CreatePoolModal } from '../modals/createPool';
 
-function MyPools(user) {
+function MyPoolsPage(user) {
     
     const [showCreatePoolModal, setShowCreatePoolModal] = useState(false)
     const [poolDeleted, setPoolDeleted] = useState(false)
@@ -127,4 +127,4 @@ function MyPools(user) {
     
   
   }
-  export default MyPools;
+  export default MyPoolsPage;

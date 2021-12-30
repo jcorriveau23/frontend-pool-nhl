@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from 'react'
 import {ethers} from 'ethers'
 import './WalletCard.css'
-
+import NHLGamePredictionsABI from "../../NHLGamePredictionsABI.json"
 // icons
 import LOCKED from "../img/web3/Locked_icon_red.svg"
 import UNLOCKED from "../img/web3/Green_dot.svg"
 
 import Cookies from 'js-cookie';
 
-const WalletCard = ({user, setUser}) => {
+const WalletCard = ({user, setUser, contract, setContract}) => {
 
 	const [errorMessage, setErrorMessage] = useState(null);
 	const [isWalletUnlocked, setIsWalletUnlocked] = useState(false);
@@ -16,6 +16,14 @@ const WalletCard = ({user, setUser}) => {
 	const [currentAddr, setCurrentAddr] = useState("");
 
 	useEffect(() => {
+		if(window.ethereum){
+			const provider = new ethers.providers.Web3Provider(window.ethereum)
+			const signer = provider.getSigner()
+			let c = new ethers.Contract("0x64a1c1B00F0A21880Ac6f800704a8daCe06737FD", NHLGamePredictionsABI, signer)
+			setContract(c)
+			console.log("contract setted")
+		}
+
 		const user = JSON.parse(localStorage.getItem("persist-account"))
 
 		if (user) {
@@ -76,6 +84,7 @@ const WalletCard = ({user, setUser}) => {
 	
 				const provider = new ethers.providers.Web3Provider(window.ethereum)
 				const signer = provider.getSigner()
+
 				signer.signMessage("Unlock wallet to access nhl-pool-ethereum.")
 				.then(sig => {
 

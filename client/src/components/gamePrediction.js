@@ -1,47 +1,107 @@
 import React, { useState, useEffect } from 'react';
 // import { Link } from 'react-router-dom'
 
-import { ethers } from 'ethers';
-import NHLGamePredictionsABI from "../NHLGamePredictionsABI.json"
 
-function GamePrediction({gameID}) {
+// modals
+import SendPredictionModal from '../modals/sendPrediction';
+
+import {Chart, ArcElement, Tooltip, Legend} from 'chart.js'
+import { Pie } from 'react-chartjs-2'
+Chart.register(ArcElement, Tooltip, Legend);
+
+
+
+
+function GamePrediction({gameID, gameInfo, user, contract}) {
 
     const [gameData, setGameData] = useState(null)
+    const [showSendPredictionModal, setShowSendPredictionModal] = useState(false)
+    const [reRender, setReRender] = useState(false)
 
-    useEffect(async() => {
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
-        console.log(NHLGamePredictionsABI)
-        const contract = new ethers.Contract("0xd750D26d9b1ae1a31cC6274B8DB6864D2D8EF816", NHLGamePredictionsABI, provider)
+    useEffect(() => {
+        contract.predictionGames(parseInt(gameID))
+        .then(g => {
+            let gData = {
+                accumulatedWeisHome: parseInt(g.accumulatedWeisHome),
+                accumulatedWeisAway: parseInt(g.accumulatedWeisAway),
+                isDone: g.isDone,
+                isCreated: g.isCreated,
+                isHomeWin: g.isHomeWin,
+                // predictByMeWeisHome: parseInt(g.accumulatedWeisHomeUsers("0x64e6981dFAb387D14f1Ee801c536Efd96a2b87f3")), // TODO: display the 
+                // predictByMeWeisAway: parseInt(g.accumulatedWeisAwayUsers("0x64e6981dFAb387D14f1Ee801c536Efd96a2b87f3"))
+            }
 
-        console.log(gameID)
-        //console.log(parseInt(gameID))
-        //console.log(contract.predictionGames)
-        // const owner = await contract.owner
-        // console.log( owner )
-        console.log( await provider.getNetwork() )
+            setGameData(gData)
+        })
 
-        const g = await contract.predictionGames(parseInt(gameID))
-        console.log(parseInt(g.accumulatedWeisFor))
-        
-        let gData = {
-            accumulatedWeisFor: parseInt(g.accumulatedWeisFor),
-            accumulatedWeisAgainst: parseInt(g.accumulatedWeisAgainst)
+        console.log("Rerender Done!!!!!!!!")
+    }, [gameID, reRender]);   // fetch the game predictions pools amount from the contract.
+
+    const create_prediction_market = async() => {
+        const overrides = {
+            gasLimit: 120000 //optional 
         }
-        setGameData(gData)
 
-    }, []); // fetch all todays games info from nhl api on this component mount.
+        const tx = await contract.createGame(gameInfo.gamePk, overrides)
+    }
 
-    if(gameData){
-        return (
-            <div>
-                <h1>{gameData.accumulatedWeisFor}</h1>
-                <h1>{gameData.accumulatedWeisAgainst}</h1>
-            </div>
-        )    
+    if(gameData && gameInfo){
+        if(gameData.isCreated){
+            return (
+                <div>
+                    { showSendPredictionModal?
+                        <SendPredictionModal 
+                            user={user} 
+                            gameID={gameID}
+                            gameInfo={gameInfo} 
+                            gamedata={gameData} 
+                            contract={contract}
+                            showSendPredictionModal={showSendPredictionModal}
+                            setShowSendPredictionModal={setShowSendPredictionModal}
+                            reRender={reRender}
+                            setRerender={setReRender}
+                        /> :
+                        null
+                    }
+                    <div style={{width: 300, height: 300}}>
+                        <Pie 
+                            data={{
+                                labels: [gameInfo.liveData.boxscore.teams.home.team.name, gameInfo.liveData.boxscore.teams.away.team.name],
+                                datasets: [
+                                    {
+                                        label: 'Eth',
+                                        data: [gameData.accumulatedWeisHome / (10**18), gameData.accumulatedWeisAway / (10**18)],   // from Weis to Ethers
+                                        backgroundColor: ['rgba(255,99,132,0.2)', 'rgba(54,162,235,0.2)'],
+                                        borderColor: ['rgba(255,99,132,1)', 'rgba(54,162,235,1)'],
+                                        borderWidth: 3
+                                    },
+                                ], 
+                            }}
+                            />
+                    </div>
+                    <div>
+                        <button 
+                        onClick={() => setShowSendPredictionModal(true)}
+                        disabled={gameData.isDone}
+                        > 
+                            {gameData.isDone? "Game is done" : "Predict"}
+                        </button>
+                    </div>
+                </div>
+            )    
+        }
+        else
+            return (
+                <div>
+                    <h1>No Prediction market open for that game yet</h1>
+                    <button onClick={create_prediction_market}>Create prediction market for that game</button>
+                </div>
+                
+            )
+       
     }
     else
         return(<h1>Trying to fetch Prediction game info.</h1>)
-    
 }
 
 export default GamePrediction;

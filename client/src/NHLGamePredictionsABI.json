@@ -5,6 +5,56 @@
 		"type": "constructor"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "CreatePredictionMarket",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "_isHome",
+				"type": "bool"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "SendBet",
+		"type": "event"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -13,7 +63,7 @@
 			},
 			{
 				"internalType": "bool",
-				"name": "isForWin",
+				"name": "isHomeWin",
 				"type": "bool"
 			}
 		],
@@ -55,6 +105,75 @@
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "i",
+				"type": "uint256"
+			}
+		],
+		"name": "get_all_user_bet",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "gameID",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "get_all_user_bets",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "bets",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "get_all_user_bets_length",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "gameBetsCount",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "get_user_bet_amount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "homeAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "awayAmount",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "owner",
 		"outputs": [
@@ -78,11 +197,6 @@
 		"name": "predictionGames",
 		"outputs": [
 			{
-				"internalType": "uint256",
-				"name": "id",
-				"type": "uint256"
-			},
-			{
 				"internalType": "bool",
 				"name": "isDone",
 				"type": "bool"
@@ -94,17 +208,17 @@
 			},
 			{
 				"internalType": "bool",
-				"name": "isForWin",
+				"name": "isHomeWin",
 				"type": "bool"
 			},
 			{
 				"internalType": "uint256",
-				"name": "accumulatedWeisFor",
+				"name": "accumulatedWeisHome",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "accumulatedWeisAgainst",
+				"name": "accumulatedWeisAway",
 				"type": "uint256"
 			}
 		],
@@ -120,7 +234,7 @@
 			},
 			{
 				"internalType": "bool",
-				"name": "_isForWin",
+				"name": "_isHomeWin",
 				"type": "bool"
 			}
 		],

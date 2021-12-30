@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import logos from "../components/img/images" 
 import GamePrediction from '../components/gamePrediction';
 
-function GameFeedPage() {
+function GameFeedPage({user, contract}) {
 
     const [gameInfo, setGameInfo] = useState(null)
     const [tabIndex, setTabIndex] = useState(1);
@@ -146,27 +146,31 @@ function GameFeedPage() {
         )
     }
 
-    if(gameInfo)
+    if(gameInfo && contract)
     { 
         return(
             <div>
-                <GamePrediction gameID={gameID}/>
-                <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
-                    <TabList>
-                        <Tab>{gameInfo.liveData.boxscore.teams.home.team.name}</Tab>
-                        <Tab>Game stats</Tab>
-                        <Tab>{gameInfo.liveData.boxscore.teams.away.team.name}</Tab>
-                    </TabList>
-                    <TabPanel>
-                        {render_team_stats(gameInfo.liveData.boxscore.teams.home)}
-                    </TabPanel>
-                    <TabPanel>
-                        {render_game_stats(gameInfo.liveData.boxscore.teams, gameInfo.liveData.linescore)}
-                    </TabPanel>
-                    <TabPanel>
-                        {render_team_stats(gameInfo.liveData.boxscore.teams.away)}
-                    </TabPanel>
-                </Tabs>
+                <div class="floatLeft">
+                    <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
+                        <TabList>
+                            <Tab>{gameInfo.liveData.boxscore.teams.home.team.name}</Tab>
+                            <Tab>Game stats</Tab>
+                            <Tab>{gameInfo.liveData.boxscore.teams.away.team.name}</Tab>
+                        </TabList>
+                        <TabPanel>
+                            {render_team_stats(gameInfo.liveData.boxscore.teams.home)}
+                        </TabPanel>
+                        <TabPanel>
+                            {render_game_stats(gameInfo.liveData.boxscore.teams, gameInfo.liveData.linescore)}
+                        </TabPanel>
+                        <TabPanel>
+                            {render_team_stats(gameInfo.liveData.boxscore.teams.away)}
+                        </TabPanel>
+                    </Tabs>
+                </div>
+                <div class="floatRight">
+                    <GamePrediction gameID={gameID} gameInfo={gameInfo} user={user} contract={contract}/>
+                </div>
             </div>
         )
        
