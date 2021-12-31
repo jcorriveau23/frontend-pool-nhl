@@ -46,7 +46,7 @@ function App() {
 
   return(
       <Router>
-      <div class="header">
+      <div className="header">
         <nav>
           <div>
             <ul>
@@ -55,7 +55,7 @@ function App() {
               {user? <li><Link to="/MyPools">My Pools</Link></li> : null}
               {user? <li><Link to="/MyGameBets">My Game Bets</Link></li> : null}
               <li><Link to="/statsPage">League Stats</Link></li>
-              {user? <li><Link onClick={() => Disconnect()}>Disconnect</Link></li> : null}
+              {user? <li><Link to="/" onClick={() => Disconnect()}>Disconnect</Link></li> : null}
               <WalletCard user={user} setUser={setUser} contract={contract} setContract={setContract}/>
             </ul>
           </div>

@@ -207,11 +207,11 @@ function InProgressPool({ username, poolName, poolInfo }) {
             return( 
                 <Tabs>
                     <TabList>
-                        {poolers.map((pooler, i)  => <Tab>{pooler}</Tab>)}
+                        {poolers.map((pooler, i)  => <Tab key={i}>{pooler}</Tab>)}
                     </TabList>
                     {poolers.map((pooler, i)  => {
                         return (
-                            <TabPanel>
+                            <TabPanel key={i}>
                                 <Tabs>
                                     <TabList>
                                         <Tab>Forwards</Tab>
@@ -220,56 +220,72 @@ function InProgressPool({ username, poolName, poolInfo }) {
                                         <Tab>Reservists</Tab>
                                     </TabList>
                                     <TabPanel>
-                                        <table class="content-table">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>name</th>
-                                                <th>team</th>
-                                                <th>Goal</th>
-                                                <th>Assist</th>
-                                                <th>Pts</th>
-                                                <th>Pts (pool)</th>
-                                            </tr>
-                                            {render_forward_stats(pooler)}
+                                        <table className="content-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>name</th>
+                                                    <th>team</th>
+                                                    <th>Goal</th>
+                                                    <th>Assist</th>
+                                                    <th>Pts</th>
+                                                    <th>Pts (pool)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {render_forward_stats(pooler)}
+                                            </tbody>
                                         </table>
                                     </TabPanel>
                                     <TabPanel>
-                                        <table class="content-table">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>name</th>
-                                                <th>team</th>
-                                                <th>Goal</th>
-                                                <th>Assist</th>
-                                                <th>Pts</th>
-                                                <th>Pts (pool)</th>
-                                            </tr>
-                                            {render_defender_stats(pooler)}
+                                        <table className="content-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>name</th>
+                                                    <th>team</th>
+                                                    <th>Goal</th>
+                                                    <th>Assist</th>
+                                                    <th>Pts</th>
+                                                    <th>Pts (pool)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {render_defender_stats(pooler)}
+                                            </tbody>
                                         </table>
                                     </TabPanel>
                                     <TabPanel>
-                                        <table class="content-table">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>name</th>
-                                                <th>team</th>
-                                                <th>Win</th>
-                                                <th>Loss</th>
-                                                <th>Shutout</th>
-                                                <th>Save %</th>
-                                                <th>Pts (pool)</th>
-                                            </tr>
-                                            {render_goalies_stats(pooler)}
+                                        <table className="content-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>name</th>
+                                                    <th>team</th>
+                                                    <th>Win</th>
+                                                    <th>Loss</th>
+                                                    <th>Shutout</th>
+                                                    <th>Save %</th>
+                                                    <th>Pts (pool)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {render_goalies_stats(pooler)}
+                                            </tbody>
                                         </table>
                                     </TabPanel>
                                     <TabPanel>
-                                        <table class="content-table">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>name</th>
-                                                <th>team</th>
-                                            </tr>
-                                            {render_reservist_stats(pooler)}
+                                        <table className="content-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>name</th>
+                                                    <th>team</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {render_reservist_stats(pooler)}
+                                            </tbody>
                                         </table>
                                     </TabPanel>
                                 </Tabs>
@@ -288,7 +304,7 @@ function InProgressPool({ username, poolName, poolInfo }) {
         if(ranking){
             return(
                 ranking.map((pooler_stats, i) =>
-                    <tr>
+                    <tr key={i}>
                         <td>{i + 1}</td>
                         <td>{pooler_stats.name}</td>
                         <td>{pooler_stats.forwards_total_pts}</td>
@@ -310,17 +326,17 @@ function InProgressPool({ username, poolName, poolInfo }) {
             return (
             <>
                 {playersStats[pooler]['chosen_defender'].map((player, i) =>
-                <tr>
-                    <td>{i + 1}</td>
-                    <td>{player.name}</td>
-                    <td>
-                        <img src={logos[player.team]} alt="" width="30" height="30"></img>
-                    </td>
-                    <td>{player.stats.goals}</td>
-                    <td>{player.stats.assists}</td>
-                    <td>{player.stats.pts}</td>
-                    <td>{player.pool_points}</td>
-                </tr> 
+                    <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>{player.name}</td>
+                        <td>
+                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
+                        </td>
+                        <td>{player.stats.goals}</td>
+                        <td>{player.stats.assists}</td>
+                        <td>{player.stats.pts}</td>
+                        <td>{player.pool_points}</td>
+                    </tr> 
                 )}
                 <tr>
                     <th>total</th>
@@ -346,7 +362,7 @@ function InProgressPool({ username, poolName, poolInfo }) {
             return( 
             <>
                 {playersStats[pooler]['chosen_forward'].map((player, i) =>
-                    <tr class="content-table">
+                    <tr className="content-table" key={i}>
                         <td>{i + 1}</td>
                         <td>{player.name}</td>
                         <td>
@@ -376,81 +392,75 @@ function InProgressPool({ username, poolName, poolInfo }) {
     }
 
     const render_reservist_stats = (pooler) => {
-    if(playersStats[pooler]){
-        
-        return (
-        <>
-        
-        {playersStats[pooler]['chosen_reservist'].map((player, i) =>
-        <tr>
-        <td>{i + 1}</td>
-        <td>{player.name}</td>
-        <td>
-            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-        </td>
-        <td>{player.stats.goals}</td>
-        <td>{player.stats.assists}</td>
-        <td>{player.stats.pts}</td>
-        <td>{player.pool_points}</td>
-        </tr>
-    )}
-    <tr>
-        <th>total</th>
-        <th> - </th>
-        <th> - </th>
-        <th> - </th>
-        <th> - </th>
-        <th> - </th>
-        <th>{playersStats[pooler]['reservists_total_pts']}</th>
-        </tr>
-    </>
-
-        )
-    }
-    else{
-        return
-    }
+        if(playersStats[pooler]){
+            return (
+                <>
+                    {playersStats[pooler]['chosen_reservist'].map((player, i) =>
+                        <tr key={i}>
+                            <td >{i + 1}</td>
+                            <td>{player.name}</td>
+                            <td>
+                                <img src={logos[player.team]} alt="" width="30" height="30"></img>
+                            </td>
+                            <td>{player.stats.goals}</td>
+                            <td>{player.stats.assists}</td>
+                            <td>{player.stats.pts}</td>
+                            <td>{player.pool_points}</td>
+                        </tr>
+                    )}
+                    <tr>
+                        <th>total</th>
+                        <th> - </th>
+                        <th> - </th>
+                        <th> - </th>
+                        <th> - </th>
+                        <th> - </th>
+                        <th>{playersStats[pooler]['reservists_total_pts']}</th>
+                    </tr>
+                </>
+            )
+        }
+        else{
+            return
+        }
     }
 
     const render_goalies_stats = (pooler) => {
-    if(playersStats[pooler]){
-        
-        return (
-        <>
-        {playersStats[pooler]['chosen_goalies'].map((player, i) =>
-        <tr>
-        <td>{i + 1}</td>
-        <td>{player.name}</td>
-        <td>
-            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-        </td>
-        <td>{player.stats.wins}</td>
-        <td>{player.stats.losses}</td>
-        <td>{player.stats.shutouts}</td>
-        <td>{player.stats.savePercentage}</td>
-        <td>{player.pool_points}</td>
+        if(playersStats[pooler]){
+            return (
+                <>
+                    {playersStats[pooler]['chosen_goalies'].map((player, i) =>
+                        <tr key={i}>
+                            <td>{i + 1}</td>
+                            <td>{player.name}</td>
+                            <td>
+                                <img src={logos[player.team]} alt="" width="30" height="30"></img>
+                            </td>
+                            <td>{player.stats.wins}</td>
+                            <td>{player.stats.losses}</td>
+                            <td>{player.stats.shutouts}</td>
+                            <td>{player.stats.savePercentage}</td>
+                            <td>{player.pool_points}</td>
+                        </tr>
+                    )}
+                <tr>
+                    <th>total</th>
+                    <th> - </th>
+                    <th> - </th>
+                    <th> - </th>
+                    <th> - </th>
+                    <th> - </th>
+                    <th> - </th>
+                    <th>{playersStats[pooler]['goalies_total_pts']}</th>
+                </tr>
+                </>
+            )
 
-        </tr>
-    )
         }
-        <tr>
-        <th>total</th>
-        <th> - </th>
-        <th> - </th>
-        <th> - </th>
-        <th> - </th>
-        <th> - </th>
-        <th> - </th>
-        <th>{playersStats[pooler]['goalies_total_pts']}</th>
-        </tr>
-        </>
-        )
 
-    }
-
-    else{
-        return
-    }
+        else{
+            return
+        }
     }
 
     const isUser = (participant) => {
@@ -460,26 +470,30 @@ function InProgressPool({ username, poolName, poolInfo }) {
 
     if(poolInfo){
         return(
-            <div class="back-site">
+            <div className="back-site">
                 <h1>Pool in progress...</h1>
-                <div class="floatLeft">
+                <div className="floatLeft">
                 <div>
                         {render_tabs_choice_stats()}
                 </div>
                 </div>
-                <div class="floatRight">
+                <div className="floatRight">
                     <h1>Today's ranking</h1>
-                    <table class="content-table">
-                        <tr>
-                            <th>rank</th>
-                            <th>pooler name</th>
-                            <th>forwards (pts)</th>
-                            <th>defenders (pts)</th>
-                            <th>goalies (pts)</th>
-                            <th>reservists (pts)</th>
-                            <th>total (pts)</th>
-                        </tr>
-                        {render_tabs_pool_rank()}
+                    <table className="content-table">
+                        <thead>
+                            <tr>
+                                <th>rank</th>
+                                <th>pooler name</th>
+                                <th>forwards (pts)</th>
+                                <th>defenders (pts)</th>
+                                <th>goalies (pts)</th>
+                                <th>reservists (pts)</th>
+                                <th>total (pts)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {render_tabs_pool_rank()}
+                        </tbody>
                     </table>
                 </div>
                 <button onClick={() => download_csv(poolInfo)} disabled={false}>Download CSV</button>

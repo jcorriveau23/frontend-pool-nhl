@@ -200,15 +200,13 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
             return null
             
         }).map((player, i) =>
-            <tbody>
-                <tr onClick={() => protect_player(player)}>
-                    <td>{i + 1}</td>
-                    <td>{player.name}</td>
-                    <td>
-                        <img src={logos[player.team]} alt="" width="30" height="30"></img>
-                    </td>
-                </tr>
-            </tbody>
+            <tr onClick={() => protect_player(player)} key={i}>
+                <td>{i + 1}</td>
+                <td>{player.name}</td>
+                <td>
+                    <img src={logos[player.team]} alt="" width="30" height="30"></img>
+                </td>
+            </tr>
         )
     }
 
@@ -223,7 +221,7 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
             }
             return null
         }).map((player, i) =>
-            <tr onClick={() => protect_player(player)}>
+            <tr onClick={() => protect_player(player)} key={i}>
                 <td>{i + 1}</td>
                 <td>{player.name}</td>
                 <td>
@@ -244,7 +242,7 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
             }
             return null
         }).map((player, i) =>
-            <tr onClick={() => protect_player(player)}>
+            <tr onClick={() => protect_player(player)} key={i}>
                 <td>{i + 1}</td>
                 <td>{player.name}</td>
                 <td>
@@ -265,12 +263,12 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                 }
                 return null
             }).map((player, i) =>
-                <tr onClick={() => protect_player(player)}>
-                <td>{i + 1}</td>
-                <td>{player.name}</td>
-                <td>
-                    <img src={logos[player.team]} alt="" width="30" height="30"></img>
-                </td>
+                <tr onClick={() => protect_player(player)} key={i}>
+                    <td>{i + 1}</td>
+                    <td>{player.name}</td>
+                    <td>
+                        <img src={logos[player.team]} alt="" width="30" height="30"></img>
+                    </td>
                 </tr>
             )
     }
@@ -282,51 +280,10 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
             return(
                 <div>
                     <h1>Protect player for pool: {poolInfo.name}</h1>
-                    <div class="container">
-                        <div class="floatLeft">
+                    <div className="container">
+                        <div className="floatLeft">
                             <h2>Protect {poolInfo.next_season_number_players_protected} players of your team</h2>
-                            <table class="content-table">
-                            <thead>
-                                <h3>Forwards</h3>
-                                <tr>
-                                <th>#</th>
-                                <th>name</th>
-                                <th>team</th>
-                                </tr>
-                            </thead>
-                            {render_forward_dynastie()}
-                            <thead>
-                                <h3>Defenders</h3>
-                                <tr>
-                                <th>#</th>
-                                <th>name</th>
-                                <th>team</th>
-                                </tr>
-                                {render_defender_dynastie()}
-                            </thead>
-                            <thead>
-                                <h3>Goalies</h3>
-                                <tr>
-                                <th>#</th>
-                                <th>name</th>
-                                <th>team</th>
-                                </tr>
-                                {render_goalies_dynastie()}
-                            </thead>
-                            <thead>
-                                <h3>Reservists</h3>
-                                <tr>
-                                <th>#</th>
-                                <th>name</th>
-                                <th>team</th>
-                                </tr>
-                                {render_reservist_dynastie()}
-                            </thead>
-                            </table>
-                        </div>
-                        <div class="floatRight">
-                            <h2>Protected players</h2>
-                            <table class="content-table">
+                            <table className="content-table">
                                 <thead>
                                     <h3>Forwards</h3>
                                     <tr>
@@ -335,15 +292,66 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                         <th>team</th>
                                     </tr>
                                 </thead>
-                                {forwProtected.map((player, i) =>
-                                    <tr onClick={() => unprotect_player(player, false)}>
-                                        <td>{i + 1}</td>
-                                        <td>{player.name}</td>
-                                        <td>
-                                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-                                        </td>
+                                <tbody>
+                                    {render_forward_dynastie()}
+                                </tbody>
+                                <thead>
+                                    <h3>Defenders</h3>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>name</th>
+                                        <th>team</th>
                                     </tr>
-                                )}
+                                    <tbody>
+                                        {render_defender_dynastie()}
+                                    </tbody>
+                                </thead>
+                                <thead>
+                                    <h3>Goalies</h3>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>name</th>
+                                        <th>team</th>
+                                    </tr>
+                                    <tbody>
+                                        {render_goalies_dynastie()}
+                                    </tbody>
+                                </thead>
+                                <thead>
+                                    <h3>Reservists</h3>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>name</th>
+                                        <th>team</th>
+                                    </tr>
+                                    <tbody>
+                                        {render_reservist_dynastie()}
+                                    </tbody>
+                                </thead>
+                            </table>
+                        </div>
+                        <div className="floatRight">
+                            <h2>Protected players</h2>
+                            <table className="content-table">
+                                <thead>
+                                    <h3>Forwards</h3>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>name</th>
+                                        <th>team</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {forwProtected.map((player, i) =>
+                                        <tr onClick={() => unprotect_player(player, false)} key={i}>
+                                            <td>{i + 1}</td>
+                                            <td>{player.name}</td>
+                                            <td>
+                                                <img src={logos[player.team]} alt="" width="30" height="30"></img>
+                                            </td>
+                                        </tr>  
+                                    )}
+                                </tbody>
                                 <thead>
                                     <h3>Defenders</h3>
                                     <tr>
@@ -352,15 +360,17 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                         <th>team</th>
                                     </tr>
                                 </thead>
-                                {defProtected.map((player, i) => //TODO: when clicked on remove from protected player list
-                                    <tr onClick={() => unprotect_player(player, false)}>
-                                        <td>{i + 1}</td>
-                                        <td>{player.name}</td>
-                                        <td>
-                                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-                                        </td>
-                                    </tr>
-                                )}
+                                <tbody>
+                                    {defProtected.map((player, i) => //TODO: when clicked on remove from protected player list
+                                        <tr onClick={() => unprotect_player(player, false)} key={i}>
+                                            <td>{i + 1}</td>
+                                            <td>{player.name}</td>
+                                            <td>
+                                                <img src={logos[player.team]} alt="" width="30" height="30"></img>
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
                                 <thead>
                                     <h3>Goalies</h3>
                                     <tr>
@@ -369,15 +379,17 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                         <th>team</th>
                                     </tr>
                                 </thead>
-                                {goalProtected.map((player, i) => //TODO: when clicked on remove from protected player list
-                                    <tr onClick={() => unprotect_player(player, false)}>
-                                        <td>{i + 1}</td>
-                                        <td>{player.name}</td>
-                                        <td>
-                                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-                                        </td>
-                                    </tr>
-                                )}
+                                <tbody>
+                                    {goalProtected.map((player, i) => //TODO: when clicked on remove from protected player list
+                                        <tr onClick={() => unprotect_player(player, false)} key={i}>
+                                            <td>{i + 1}</td>
+                                            <td>{player.name}</td>
+                                            <td>
+                                                <img src={logos[player.team]} alt="" width="30" height="30"></img>
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
                                 <thead>
                                     <h3>Reservist</h3>
                                     <tr>
@@ -386,15 +398,17 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                         <th>team</th>
                                     </tr>
                                 </thead>
-                                {reservProtected.map((player, i) => //TODO: when clicked on remove from protected player list
-                                    <tr onClick={() => unprotect_player(player, true)}>
-                                        <td>{i + 1}</td>
-                                        <td>{player.name}</td>
-                                        <td>
-                                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-                                        </td>
-                                    </tr>
-                                )}
+                                <tbody>
+                                    {reservProtected.map((player, i) => //TODO: when clicked on remove from protected player list   
+                                        <tr onClick={() => unprotect_player(player, true)} key={i}>
+                                            <td>{i + 1}</td>
+                                            <td>{player.name}</td>
+                                            <td>
+                                                <img src={logos[player.team]} alt="" width="30" height="30"></img>
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
                             </table>
                             <button onClick={() => send_protected_player()} disabled={false}>
                                 complete protecting player

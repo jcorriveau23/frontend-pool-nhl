@@ -175,7 +175,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     const render_defender = (pooler) => {
     if(poolInfo['context'][pooler]){
         return poolInfo['context'][pooler]['chosen_defender'].map((player, i) =>
-            <tr>
+            <tr key={i}>
                 <td>{i + 1}</td>
                 <td>{player.name}</td>
                 <td>
@@ -192,12 +192,12 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     const render_forward = (pooler) => {
     if(poolInfo['context'][pooler]){
         return poolInfo['context'][pooler]['chosen_forward'].map((player, i) =>
-        <tr>
-        <td>{i + 1}</td>
-        <td>{player.name}</td>
-        <td>
-            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-        </td>
+        <tr key={i}>
+            <td>{i + 1}</td>
+            <td>{player.name}</td>
+            <td>
+                <img src={logos[player.team]} alt="" width="30" height="30"></img>
+            </td>
         </tr>
     )
     }
@@ -209,12 +209,12 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     const render_reservist = (pooler) => {
     if(poolInfo['context'][pooler]){
         return poolInfo['context'][pooler]['chosen_reservist'].map((player, i) =>
-        <tr>
-        <td>{i + 1}</td>
-        <td>{player.name}</td>
-        <td>
-            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-        </td>
+        <tr key={i}>
+            <td>{i + 1}</td>
+            <td>{player.name}</td>
+            <td>
+                <img src={logos[player.team]} alt="" width="30" height="30"></img>
+            </td>
         </tr>
     )
     }
@@ -226,12 +226,12 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     const render_goalies = (pooler) => {
     if(poolInfo['context'][pooler]){
         return poolInfo['context'][pooler]['chosen_goalies'].map((player, i) =>
-        <tr>
-        <td>{i + 1}</td>
-        <td>{player.name}</td>
-        <td>
-            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-        </td>
+        <tr key={i}>
+            <td>{i + 1}</td>
+            <td>{player.name}</td>
+            <td>
+                <img src={logos[player.team]} alt="" width="30" height="30"></img>
+            </td>
         </tr>
     )
     }
@@ -257,39 +257,69 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
         return (
             <Tabs>
                 <TabList>
-                    {poolers.map((pooler, i)  => <Tab>{pooler}</Tab>)}
+                    {poolers.map((pooler, i)  => <Tab key={i}>{pooler}</Tab>)}
                 </TabList>
                 {poolers.map((pooler, i)  => {
                     return <TabPanel>
-                        <table class="content-table">
-                            <h3>Forward</h3>
-                            <tr>
-                                <th>#</th>
-                                <th>name</th>
-                                <th>team</th>
-                            </tr>
-                            {render_forward(pooler)}
-                            <h3>Def</h3>
-                            <tr>
-                                <th>#</th>
-                                <th>name</th>
-                                <th>team</th>
-                            </tr>
-                            {render_defender(pooler)}
-                            <h3>Goalies</h3>
-                            <tr>
-                                <th>#</th>
-                                <th>name</th>
-                                <th>team</th>
-                            </tr>
-                            {render_goalies(pooler)}
-                            <h3>Reservist</h3>
-                            <tr>
-                                <th>#</th>
-                                <th>name</th>
-                                <th>team</th>
-                            </tr>
-                            {render_reservist(pooler)}
+                        <table className="content-table">
+                            <thead>
+                                <tr>
+                                    <th colSpan={3}>Forwards</th>
+                                </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>name</th>
+                                    <th>team</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {render_forward(pooler)}
+                            </tbody>
+                        </table> 
+                        <table className="content-table">
+                            <thead>  
+                                <tr>
+                                    <th colSpan={3}>Defenders</th>
+                                </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>name</th>
+                                    <th>team</th>
+                                </tr>
+                            </thead> 
+                            <tbody>
+                                {render_defender(pooler)}
+                            </tbody>
+                        </table>
+                        <table className="content-table">
+                            <thead>
+                                <tr>
+                                    <th colSpan={3}>Goalies</th>
+                                </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>name</th>
+                                    <th>team</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {render_goalies(pooler)}
+                            </tbody>
+                        </table>
+                        <table className="content-table">
+                            <thead>
+                                <tr>
+                                    <th colSpan={3}>Reservists</th>
+                                </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>name</th>
+                                    <th>team</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {render_reservist(pooler)}
+                            </tbody>
                         </table>
                     </TabPanel>
                 })}
@@ -304,10 +334,10 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
 
     const render_color_user_turn = () => {
     if(poolInfo.next_drafter === username){
-        return <h2 class="green-text">{poolInfo.next_drafter}'s turn</h2>
+        return <h2 className="green-text">{poolInfo.next_drafter}'s turn</h2>
     }
     else{
-        return <h2 class="red-text">{poolInfo.next_drafter}'s turn</h2>
+        return <h2 className="red-text">{poolInfo.next_drafter}'s turn</h2>
     }
     }
 
@@ -315,9 +345,9 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
         return(
             <div>
                 <h1>Draft for pool {poolInfo.name}</h1>
-                <div class="container">
+                <div className="container">
                     <h1>Stats last season</h1>
-                    <div class="floatLeft">
+                    <div className="floatLeft">
                         <input type="text" placeholder="Search..." onChange={event => search_players(event.target.value)}/>
                         <Tabs>
                             <TabList>
@@ -326,7 +356,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                 <Tab>Goalies</Tab>
                             </TabList>
                             <TabPanel>
-                                <table class="content-table">
+                                <table className="content-table">
                                     <tbody>
                                         <tr>
                                             <th onClick={() => sort_players("name", "F")}>name</th>
@@ -342,7 +372,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                                 }
                                                 return null
                                             }).map((player, i)  => 
-                                                <tr onClick={() => player_selection(player.name, player.team, "F")}>
+                                                <tr onClick={() => player_selection(player.name, player.team, "F")} key={i}>
                                                     <td>{player.name}</td>
                                                     <td>
                                                         <img src={logos[player.team]} alt="" width="30" height="30"></img>
@@ -358,7 +388,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                 </table>
                             </TabPanel>
                             <TabPanel>
-                                <table class="content-table">
+                                <table className="content-table">
                                     <tbody>
                                         <tr>
                                             <th onClick={() => sort_players("name", "D")}>name</th>
@@ -374,7 +404,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                                 }
                                                 return null
                                             }).map((player, i)  => 
-                                            <tr onClick={() => player_selection(player.name, player.team, "D")}>
+                                            <tr onClick={() => player_selection(player.name, player.team, "D")} key={i}>
                                                 <td>{player.name}</td>
                                                 <td>
                                                     <img src={logos[player.team]} alt="" width="30" height="30"></img>
@@ -390,7 +420,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                 </table>
                             </TabPanel>
                             <TabPanel>
-                                <table class="content-table">
+                                <table className="content-table">
                                     <tbody>
                                         <tr>
                                             <th onClick={() => sort_players("name", "G")}>name</th>
@@ -406,7 +436,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                                                 }
                                                 return null
                                             }).map((player, i)  => 
-                                            <tr onClick={() => player_selection(player.name, player.team, "G")}>
+                                            <tr onClick={() => player_selection(player.name, player.team, "G")} key={i}>
                                                 <td>{player.name}</td>
                                                 <td>
                                                     <img src={logos[player.team]} alt="" width="30" height="30"></img>
@@ -423,14 +453,14 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
                             </TabPanel>
                         </Tabs>
                     </div>
-                    <div class="floatRight">
-                        <div class="floatLeft">
+                    <div className="floatRight">
+                        <div className="floatLeft">
                             {render_color_user_turn()}
                             <h1>{selectedPlayer.name}</h1>
-                            <h3 class="red-text">{message}</h3>
+                            <h3 className="red-text">{message}</h3>
                             <button onClick={() => chose_player(selectedPlayer)} disabled={false}>choose</button>
                         </div>
-                        <div class="floatRight">
+                        <div className="floatRight">
                             {render_tabs_choice()}
 
                         </div>

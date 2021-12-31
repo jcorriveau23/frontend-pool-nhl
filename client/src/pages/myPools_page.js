@@ -76,20 +76,20 @@ function MyPoolsPage(user) {
                 {poolInProgress.length > 0? <Tab>Progress</Tab> : null}
               </TabList>
               <TabPanel >
-                <div class="pool_item">
+                <div className="pool_item">
                   <ul>
                     {poolCreated.map((pool, i)  => 
-                      <Link to={'MyPools/' + pool.name}><li><PoolItem name={pool.name} owner={pool.owner} username={user.addr} poolDeleted = {poolDeleted} setPoolDeleted={setPoolDeleted}></PoolItem></li></Link>  
+                      <Link to={'MyPools/' + pool.name} key={i}><li><PoolItem name={pool.name} owner={pool.owner} username={user.addr} poolDeleted = {poolDeleted} setPoolDeleted={setPoolDeleted}></PoolItem></li></Link>  
                     )}
                   </ul>
                 </div>
               </TabPanel>
               {poolDraft.length > 0?
                 <TabPanel>
-                  <div class="pool_item">
+                  <div className="pool_item">
                     <ul>
                       {poolDraft.map((pool, i)  => 
-                        <li><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
+                        <li><PoolItem name={pool.name} owner={pool.owner} key={i}></PoolItem></li> 
                       )}
                     </ul>
                   </div>
@@ -100,7 +100,7 @@ function MyPoolsPage(user) {
                 <TabPanel>
                   <ul>
                     {poolDynastie.map((pool, i)  => 
-                      <li><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
+                      <li><PoolItem name={pool.name} owner={pool.owner} key={i}></PoolItem></li> 
                     )}
                   </ul>
                 </TabPanel>
@@ -110,7 +110,7 @@ function MyPoolsPage(user) {
                 <TabPanel>
                   <ul>
                     {poolInProgress.map((pool, i)  => 
-                      <li><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li> 
+                      <li><PoolItem name={pool.name} owner={pool.owner} key={i}></PoolItem></li> 
                     )}
                   </ul>
                 </TabPanel>

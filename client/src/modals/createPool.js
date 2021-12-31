@@ -35,7 +35,7 @@ export const CreatePoolModal = ({showCreatePoolModal, setShowCreatePoolModal, us
     const isLoggedRender = () => {
         if(username){
             return(    
-                <div class="modal_content">
+                <div className="modal_content">
                     <h1>Create a pool</h1>
                         <p>What name do you give to your pool {username}?</p>
                         <form>
@@ -69,7 +69,7 @@ export const CreatePoolModal = ({showCreatePoolModal, setShowCreatePoolModal, us
         }
         else{
             return(
-                <div class="modal_content">
+                <div className="modal_content">
                     <h1>{username}</h1>
                     <p>You need to be logged in to create a pool.</p>
                 </div>

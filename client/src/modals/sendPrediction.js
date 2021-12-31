@@ -21,7 +21,7 @@ function SendPredictionModal({user, gameID, gameInfo, gameData, contract, showSe
         return () => {
             contract.removeAllListeners("CreatePredictionMarket")
         }
-    }, []);
+    }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
     const sendPrediction = async() => {
         if(amountEthersInput === "" || predictedTeam === ""){
@@ -33,7 +33,7 @@ function SendPredictionModal({user, gameID, gameInfo, gameData, contract, showSe
 
         const overrides = {
             value: ethers.utils.parseEther(amountEthersInput), //sending one ether  
-            gasLimit: 120000 //optional 
+            gasLimit: 150000 //optional 
         }
         console.log(gameInfo.gamePk)
 
@@ -44,7 +44,7 @@ function SendPredictionModal({user, gameID, gameInfo, gameData, contract, showSe
     const listenEvents = () => {
         contract.on("CreatePredictionMarket", (from, id) => {
             console.log("Event CreatedPredictionMarket: " + parseInt(id) + "   From: " + from)
-            if(parseInt(id) == parseInt(gameID)){
+            if(parseInt(id) === parseInt(gameID)){
                 console.log("Rerenderplz: " + reRender)
                 setRerender(!reRender)
             }
@@ -53,12 +53,12 @@ function SendPredictionModal({user, gameID, gameInfo, gameData, contract, showSe
         contract.on("SendBet", (from, id, isHome, value) => {
             console.log("Event SendBet: " + parseInt(id) + "   From: " + from + "   Home: " + isHome + "amount: " + value)
             console.log(parseInt(gameID))
-            if(parseInt(id) == parseInt(gameID)){
+            if(parseInt(id) === parseInt(gameID)){
                 console.log("Rerenderplz: " + reRender)
                 setRerender(!reRender)
                 setWaitingTransaction(false)
-                setTransactionSuccessMsg("Transaction Succeeded :)!")
-                // if(from == contract.signer()){
+                setTransactionSuccessMsg("Transaction Succeeded :)!")   // TODO: should only returned this when the transaction is the user one.
+                // if(from === contract.signer()){
                 //     console.log("Transaction completed! ")
                 //     setWaitingTransaction(false)
                 // }
@@ -69,18 +69,18 @@ function SendPredictionModal({user, gameID, gameInfo, gameData, contract, showSe
     if(gameInfo)
     return (
         <Modal style={styleModal} isOpen={showSendPredictionModal} onRequestClose={() => setShowSendPredictionModal(false)}>
-            <div class="modal_content">
+            <div className="modal_content">
                 <h2>Send a Prediction</h2>
                     <div>
                         <p>Which team do you predict to win the game?</p>
                         <input type="number" placeholder="Amount of Ethers" min="0.05" step="0.001" onChange={event => setAmountEthersInput(event.target.value)} required/>
-                        <div class="floatLeft">
+                        <div className="floatLeft">
                             <div>
                                 <img src={logos[gameInfo.liveData.boxscore.teams.home.team.name]} alt="" width="100" height="100"></img>
                             </div>
                             <input type="radio" name="team[]" value={gameInfo.liveData.boxscore.teams.home.team.name} onChange={event => setPredictedTeam(event.target.value)} required/>
                         </div>
-                        <div class="floatRight">
+                        <div className="floatRight">
                             <div>
                                 <img src={logos[gameInfo.liveData.boxscore.teams.away.team.name]} alt="" width="100" height="100"></img>
                             </div>

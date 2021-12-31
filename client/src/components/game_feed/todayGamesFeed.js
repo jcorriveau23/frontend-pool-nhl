@@ -35,11 +35,11 @@ function TodayGamesFeed() {
     }, [date]); // fetch all todays games info from nhl api on this component mount.
 
     return (
-        <div class="todayGamesFeed">
+        <div className="todayGamesFeed">
             <DatePicker selected={date} onChange={(date) => setDate(date)} dateFormat="P"/>
             <ul>
                 {gamesStats.map((game, i)  => {
-                    return <Link to={'/gameFeed/' + game.gamePk}><li class="pool_item"><GameItem gameData={game}></GameItem></li></Link>
+                    return <Link to={'/gameFeed/' + game.gamePk} key={i}><li className="pool_item"><GameItem gameData={game}></GameItem></li></Link>
                 })}
             </ul>
         </div>

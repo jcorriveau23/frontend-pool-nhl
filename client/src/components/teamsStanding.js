@@ -10,8 +10,8 @@ function TeamsStanding({data}) {
 
     const renderDivisionTeams = (div) => div.teamRecords.map((team, i) => {
         return (
-            <tr>
-                <td>{i + 1}</td>
+            <tr key={i}>
+                <td></td>
                 <td>
                     <img src={logos[ team.team.name ]} alt="" width="30" height="30"></img>
                 </td>
@@ -29,18 +29,20 @@ function TeamsStanding({data}) {
 
     const renderHeader = () => {
         return (
-        <>
-            <th>#</th>
-            <th>Team</th>
-            <th>G</th>
-            <th>W</th>
-            <th>L</th>
-            <th>OT</th>
-            <th>RW</th>
-            <th>GA</th>
-            <th>GS</th>
-            <th>PTS</th>
-        </>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Team</th>
+                    <th>G</th>
+                    <th>W</th>
+                    <th>L</th>
+                    <th>OT</th>
+                    <th>RW</th>
+                    <th>GA</th>
+                    <th>GS</th>
+                    <th>PTS</th>
+                </tr>
+            </thead>
         )
     }
 
@@ -48,14 +50,16 @@ function TeamsStanding({data}) {
         return (
             <Tabs>
                 <TabList>
-                    {data["records"].map((div, i) => <Tab>{div.division.name}</Tab>)}
+                    {data["records"].map((div, i) => <Tab key={i}>{div.division.name}</Tab>)}
                 </TabList>
                 {data["records"].map((div, i)  => {
-                    return <TabPanel>
+                    return <TabPanel key={i}>
                         <div>
-                            <table class="content-table">
+                            <table className="content-table">
                                 {renderHeader()}
-                                {renderDivisionTeams(div)}
+                                <tbody>
+                                    {renderDivisionTeams(div)}
+                                </tbody>
                             </table>
                         </div>  
                     </TabPanel>

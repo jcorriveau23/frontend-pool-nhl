@@ -19,9 +19,20 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 		if(window.ethereum){
 			const provider = new ethers.providers.Web3Provider(window.ethereum)
 			const signer = provider.getSigner()
-			let c = new ethers.Contract("0x64a1c1B00F0A21880Ac6f800704a8daCe06737FD", NHLGamePredictionsABI, signer)
-			setContract(c)
-			console.log("contract setted")
+			
+
+			provider.getNetwork()
+			.then(network => {
+				console.log(network)
+				if(network.name === "kovan"){
+					let c = new ethers.Contract("0x4e5e10C3Ef12663ba231d16b915372E0E69D1ffe", NHLGamePredictionsABI, signer)
+					setContract(c)
+				}
+				else
+					setErrorMessage("You need to select Kovan Network in metamask!")
+			})
+			
+			
 		}
 
 		const user = JSON.parse(localStorage.getItem("persist-account"))
@@ -144,12 +155,14 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 		<li className='walletCard'>
 			<button onClick={!isWalletConnected? connectWalletHandler : !isCurrentWalletUnlocked()? unlockWallet : null }>
 				<div className='accountDisplay'>
-					<img src={isCurrentWalletUnlocked()? UNLOCKED : LOCKED} width="15" height="15"></img>
+					<img src={isCurrentWalletUnlocked()? UNLOCKED : LOCKED} alt="" width="15" height="15"></img>
 					<b>{currentAddr? currentAddr.substring(0,6) + "..." + currentAddr.slice(-4) : "Connect Wallet"}</b>
 					{/*user? <h3>session addr: {user.addr}</h3> : null*/}
 				</div>
 			</button>
-			{errorMessage}
+			<div>
+			<b style={{Color: "#a00"}}>{errorMessage}</b>
+			</div>
 		</li>
 	);
 }

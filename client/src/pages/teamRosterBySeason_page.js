@@ -35,55 +35,59 @@ function TeamRosterBySeasonPage() {
         return(
             <div>
                 <h1>{teamName}</h1>
-               <table  class="content-table">
-                    <tr>
-                        <th colSpan="18">{teamName} : {season}</th>
-                    </tr>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>GP</th>
-                        <th>G</th>
-                        <th>A</th>
-                        <th>P</th>
-                        <th>+/-</th>
-                        <th>PIM</th>
-                        <th>SOG</th>
-                        <th>HITS</th>
-                        <th>BLKS</th>
-                        <th>GVA</th>
-                        <th>TKA</th>
-                        <th>FO%</th>
-                        <th>TOI</th>
-                        <th>PP TOI</th>
-                        <th>SH TOI</th>
-                    </tr>
-                    {roster.map( (player, i) => {
-                        return(
-                            <tr>  
-                                <td>-</td>                             
-                                <td><Link to={"/playerInfo/"+ player.playerId} style={{ textDecoration: 'none', color: "#000099" }}>{player.skaterFullName}</Link></td>
-                                <td>{player.positionCode}</td>
-                                <td>{player.gamesPlayed}</td>
-                                <td>{player.goals}</td>
-                                <td>{player.assists}</td>
-                                <td>{player.points}</td>
-                                <td>{player.plusMinus}</td>  
-                                <td>{player.penaltyMinutes}</td>
-                                <td>{player.shots}</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>{player.faceoffWinPct}</td>
-                                <td>{player.timeOnIcePerGame}</td>
-                                <td>-</td>
-                                <td>-</td>
+               <table  className="content-table">
+                    <thead>
+                        <tr>
+                            <th colSpan="18">{teamName} : {season}</th>
+                        </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>GP</th>
+                            <th>G</th>
+                            <th>A</th>
+                            <th>P</th>
+                            <th>+/-</th>
+                            <th>PIM</th>
+                            <th>SOG</th>
+                            <th>HITS</th>
+                            <th>BLKS</th>
+                            <th>GVA</th>
+                            <th>TKA</th>
+                            <th>FO%</th>
+                            <th>TOI</th>
+                            <th>PP TOI</th>
+                            <th>SH TOI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {roster.map( (player, i) => {
+                            return(
+                                <tr key={i}>  
+                                    <td>-</td>                             
+                                    <td><Link to={"/playerInfo/"+ player.playerId} style={{ textDecoration: 'none', color: "#000099" }}>{player.skaterFullName}</Link></td>
+                                    <td>{player.positionCode}</td>
+                                    <td>{player.gamesPlayed}</td>
+                                    <td>{player.goals}</td>
+                                    <td>{player.assists}</td>
+                                    <td>{player.points}</td>
+                                    <td>{player.plusMinus}</td>  
+                                    <td>{player.penaltyMinutes}</td>
+                                    <td>{player.shots}</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>{player.faceoffWinPct}</td>
+                                    <td>{player.timeOnIcePerGame}</td>
+                                    <td>-</td>
+                                    <td>-</td>
 
-                            </tr>
-                        )                       
-                    })}
+                                </tr>
+                            )                       
+                        })}
+                    </tbody>
                 </table> 
             </div>
         )

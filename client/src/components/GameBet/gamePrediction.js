@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 
 // modals
-import SendPredictionModal from '../modals/sendPrediction';
+import SendPredictionModal from '../../modals/sendPrediction';
 
 import {Chart, ArcElement, Tooltip, Legend} from 'chart.js'
 import { Pie } from 'react-chartjs-2'
@@ -27,14 +27,23 @@ function GamePrediction({gameID, gameInfo, user, contract}) {
                 isDone: g.isDone,
                 isCreated: g.isCreated,
                 isHomeWin: g.isHomeWin,
-                // predictByMeWeisHome: parseInt(g.accumulatedWeisHomeUsers("0x64e6981dFAb387D14f1Ee801c536Efd96a2b87f3")), // TODO: display the 
-                // predictByMeWeisAway: parseInt(g.accumulatedWeisAwayUsers("0x64e6981dFAb387D14f1Ee801c536Efd96a2b87f3"))
+                predictByMeWeisHome: 0,
+                predictByMeWeisAway: 0
             }
-
-            setGameData(gData)
+            
+            contract.get_user_bet_amount(parseInt(gameID))
+            .then(values => {
+                gData.predictByMeWeisHome = parseInt(values[0])
+                gData.predictByMeWeisAway = parseInt(values[1])
+                setGameData(gData)
+            })
+            .catch(e => {
+                console.log(e.data.message)
+                console.log(gData.isCreated)
+                setGameData(gData)
+            })
         })
 
-        console.log("Rerender Done!!!!!!!!")
     }, [gameID, reRender]);   // fetch the game predictions pools amount from the contract.
 
     const create_prediction_market = async() => {
@@ -42,7 +51,7 @@ function GamePrediction({gameID, gameInfo, user, contract}) {
             gasLimit: 120000 //optional 
         }
 
-        const tx = await contract.createGame(gameInfo.gamePk, overrides)
+        await contract.createGame(gameInfo.gamePk, overrides)
     }
 
     if(gameData && gameInfo){
@@ -81,11 +90,39 @@ function GamePrediction({gameID, gameInfo, user, contract}) {
                     </div>
                     <div>
                         <button 
-                        onClick={() => setShowSendPredictionModal(true)}
-                        disabled={gameData.isDone}
+                            onClick={() => setShowSendPredictionModal(true)}
+                            disabled={gameData.isDone}
                         > 
                             {gameData.isDone? "Game is done" : "Predict"}
                         </button>
+                    </div>
+                    <div>
+                        <table className="content-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>{gameInfo.liveData.boxscore.teams.home.team.name}</th>
+                                    <th>{gameInfo.liveData.boxscore.teams.away.team.name}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Pool amount (Ethers)</th>
+                                    <td>{gameData.accumulatedWeisHome / (10**18)}</td>
+                                    <td>{gameData.accumulatedWeisAway / (10**18)}</td>
+                                </tr>
+                                <tr>
+                                    <th>Invested by me (Ethers)</th>
+                                    <td>{gameData.predictByMeWeisHome / (10**18)}</td>
+                                    <td>{gameData.predictByMeWeisAway / (10**18)}</td>
+                                </tr>
+                                <tr>
+                                    <th>My part (%)</th>
+                                    <td>{gameData.accumulatedWeisHome !== 0? (gameData.predictByMeWeisHome / gameData.accumulatedWeisHome)*100 : "-"}</td>
+                                    <td>{gameData.accumulatedWeisAway !== 0? (gameData.predictByMeWeisAway / gameData.accumulatedWeisAway)*100 : "-"}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             )    
