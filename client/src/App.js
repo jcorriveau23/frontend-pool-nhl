@@ -9,7 +9,7 @@ import './components/components.css';
 import Logo from "./components/img/logo/logo.svg"
 
 // component
-import TodayGamesFeed from "./components/game_feed/todayGamesFeed"
+import TodayGamesFeed from "./components/game_feed/dayGamesFeed"
 
 // modals
 import {RegisterModal} from "./modals/register"
@@ -33,10 +33,6 @@ function App() {
 
   useEffect(() => {
   }, []);
-
-  const openRegisterModal = () => {
-    setShowRegisterModal(prev => !prev)
-  }
 
   const Disconnect = () => {
     Cookies.remove('token-'+ user.addr)

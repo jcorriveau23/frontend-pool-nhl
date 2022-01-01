@@ -5,6 +5,9 @@ import 'react-tabs/style/react-tabs.css';
 
 import logos from "../img/images"
 
+// Loader
+import ClipLoader from "react-spinners/ClipLoader"
+
 function InProgressPool({ username, poolName, poolInfo }) {
 
     const [playersStats, setPlayersStats] = useState({});
@@ -503,7 +506,8 @@ function InProgressPool({ username, poolName, poolInfo }) {
     else{
         return(
             <div>
-                <h1>trying to fetch pool data info2...</h1>
+                <h1>trying to fetch pool data info...</h1>
+                <ClipLoader color="#fff" loading={true} size={75} />
             </div>
         )
     }

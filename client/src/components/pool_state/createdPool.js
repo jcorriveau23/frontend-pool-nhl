@@ -3,6 +3,9 @@ import Cookies from 'js-cookie';
 
 import { ParticipantItem } from './participantItem';
 
+// Loader
+import ClipLoader from "react-spinners/ClipLoader"
+
 function CreatedPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     
     const [inRoom, setInRoom] = useState(false);
@@ -408,7 +411,8 @@ function CreatedPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     else{
         return(
             <div>
-                <h1>trying to fetch pool data info2...</h1>
+                <h1>Trying to fetch pool data info...</h1>
+                <ClipLoader color="#fff" loading={true} /*css={override}*/ size={75} />
             </div>
         )
     }

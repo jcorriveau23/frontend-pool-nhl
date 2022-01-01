@@ -10,6 +10,9 @@ import DynastiePool from '../components/pool_state/dynastiePool';
 
 import io from "socket.io-client";
 
+// Loader
+import ClipLoader from "react-spinners/ClipLoader"
+
 var socket = io.connect()
 
 function PoolPage(user) {
@@ -68,7 +71,8 @@ function PoolPage(user) {
         {
             return(
                 <div>
-                    <h1>trying to fetch pool data info...</h1>
+                    <h1>Trying to fetch pool data info...</h1>
+                    <ClipLoader color="#fff" loading={true} size={75}/>
                 </div>
             )
         }

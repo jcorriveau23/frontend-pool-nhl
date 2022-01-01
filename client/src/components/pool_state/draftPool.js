@@ -4,6 +4,9 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import logos from "../img/images"
 
+// Loader
+import ClipLoader from "react-spinners/ClipLoader"
+
 function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
     
     const [inRoom, setInRoom] = useState(false);
@@ -473,6 +476,7 @@ function DraftPool({username, poolName, poolInfo, setPoolInfo, socket}) {
         return(
             <div>
                 <h1>trying to join the pool draft...</h1>
+                <ClipLoader color="#fff" loading={true} /*css={override}*/ size={75} />
             </div>
         )
     }

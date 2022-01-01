@@ -4,8 +4,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
-// teams logo
-// import logos from "../components/img/images" 
+// Loader
+import ClipLoader from "react-spinners/ClipLoader"
 
 function TeamRosterBySeasonPage() {
 
@@ -105,7 +105,8 @@ function TeamRosterBySeasonPage() {
     {
         return(
             <div>
-                <h1>Trying to fetch player data from nhl api...</h1>
+                <h1>Trying to fetch team roster data from nhl api...</h1>
+                <ClipLoader color="#fff" loading={true} size={75}/>
             </div>
         )
     }

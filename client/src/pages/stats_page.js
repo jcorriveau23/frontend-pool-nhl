@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import TeamsStanding from "../components/teamsStanding";
 
+// Loader
+import ClipLoader from "react-spinners/ClipLoader"
+
 function StatsPage() {
     
     const [teamsStats, setTeamsStats] = useState(null)
@@ -27,7 +30,8 @@ function StatsPage() {
     {
         return(
             <div>
-                <h1>Trying to fetch data from nhl api...</h1>
+                <h1>Trying to fetch teams data from nhl api...</h1>
+                <ClipLoader color="#fff" loading={true} size={75}/>
             </div>
         )
     }

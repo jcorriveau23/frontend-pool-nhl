@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
 
+// Loader
+import ClipLoader from "react-spinners/ClipLoader"
+        
 function BetItem({user, contract, gameID}){
     
     const [gameData, setGameData] = useState(null)
@@ -30,7 +33,7 @@ function BetItem({user, contract, gameID}){
             })
         })
 
-    }, []);   // fetch the game predictions pools amount from the contract.
+    }, []);   // eslint-disable-line react-hooks/exhaustive-deps
 
     if(gameData){
         return (
@@ -69,7 +72,7 @@ function BetItem({user, contract, gameID}){
         )
     }
     else
-        return(<h1>fetching game bet</h1>)
+        return(<ClipLoader color="#fff" loading={true} /*css={override}*/ size={75} />)
 }
 
 export default BetItem;

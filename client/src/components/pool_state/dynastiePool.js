@@ -3,6 +3,9 @@ import Cookies from 'js-cookie';
 
 import logos from "../img/images"
 
+// Loader
+import ClipLoader from "react-spinners/ClipLoader"
+
 function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
     
     const [inRoom, setInRoom] = useState([]);
@@ -423,6 +426,7 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
             return(
                 <div>
                     <h1>Waiting for other player to protect their player...</h1>
+                    <ClipLoader color="#fff" loading={true} size={75} />
                 </div>
             )
         }
@@ -432,6 +436,7 @@ function DynastiePool({username, poolName, poolInfo, setPoolInfo, socket}) {
         return(
             <div>
                 <h1>trying to fetch pool data info...</h1>
+                <ClipLoader color="#fff" loading={true} size={75} />
             </div>
         )
     }

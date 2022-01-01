@@ -7,6 +7,9 @@ import { Link } from "react-router-dom";
 import logos from "../components/img/images" 
 import GamePrediction from '../components/GameBet/gamePrediction';
 
+// Loader
+import ClipLoader from "react-spinners/ClipLoader"
+
 function GameFeedPage({user, contract}) {
 
     const [gameInfo, setGameInfo] = useState(null)
@@ -18,8 +21,13 @@ function GameFeedPage({user, contract}) {
         fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/feed/live")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
         .then(response => response.json())
         .then(gameInfo => {
-            setGameInfo({...gameInfo})
+            console.log(gameInfo)
+            setGameInfo(gameInfo)
         })
+
+        // return () => {
+        //     setGameInfo({}); // cleanup the state on unmount
+        // };
 
     }, [gameID]);
     
@@ -191,6 +199,7 @@ function GameFeedPage({user, contract}) {
         return(
             <div>
                 <h1>Trying to fetch game data from nhl api...</h1>
+                <ClipLoader color="#fff" loading={true} size={75} />
             </div>
         )
     }

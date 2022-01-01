@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-// import { Link } from 'react-router-dom'
-
 
 // modals
 import SendPredictionModal from '../../modals/sendPrediction';
 
+// Loader
+import ClipLoader from "react-spinners/ClipLoader"
+
+// chart
 import {Chart, ArcElement, Tooltip, Legend} from 'chart.js'
 import { Pie } from 'react-chartjs-2'
 Chart.register(ArcElement, Tooltip, Legend);
-
-
-
 
 function GamePrediction({gameID, gameInfo, user, contract}) {
 
     const [gameData, setGameData] = useState(null)
     const [showSendPredictionModal, setShowSendPredictionModal] = useState(false)
     const [reRender, setReRender] = useState(false)
+    const [owner, setOwner] = useState("")
 
     useEffect(() => {
         contract.predictionGames(parseInt(gameID))
@@ -38,13 +38,16 @@ function GamePrediction({gameID, gameInfo, user, contract}) {
                 setGameData(gData)
             })
             .catch(e => {
-                console.log(e.data.message)
-                console.log(gData.isCreated)
-                setGameData(gData)
+                setGameData(gData)  // the user does not have bet yet in this pool.
+            })
+
+            contract.owner()
+            .then(owner => {
+                setOwner(owner)
             })
         })
 
-    }, [gameID, reRender]);   // fetch the game predictions pools amount from the contract.
+    }, [gameID, reRender]);   // eslint-disable-line react-hooks/exhaustive-deps
 
     const create_prediction_market = async() => {
         const overrides = {
@@ -130,15 +133,15 @@ function GamePrediction({gameID, gameInfo, user, contract}) {
         else
             return (
                 <div>
-                    <h1>No Prediction market open for that game yet</h1>
-                    <button onClick={create_prediction_market}>Create prediction market for that game</button>
+                    <h1>No Prediction market open for that game yet.</h1>
+                    {(contract && user.addr === owner)? <button onClick={create_prediction_market}>Create</button> : null}
                 </div>
                 
             )
        
     }
     else
-        return(<h1>Trying to fetch Prediction game info.</h1>)
+        return(<div><h1>Trying to fetch Prediction game info from the smart contract.</h1><ClipLoader color="#fff" loading={true} size={75} /></div>)
 }
 
 export default GamePrediction;

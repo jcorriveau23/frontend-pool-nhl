@@ -194,7 +194,7 @@ nav a:hover::before{
 
 .pool_item ul li{
   border-color: #000;
-  display: inline-block;
+  display: block;
   font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
   font-size: 12px;
   font-weight: bold;

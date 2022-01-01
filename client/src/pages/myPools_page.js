@@ -67,13 +67,12 @@ function MyPoolsPage(user) {
         <div>
             <h1>Pool list</h1>
               <button onClick={openCreatePoolModal} disabled={false}>Create a new Pool.</button>
-  
             <Tabs>
               <TabList>
                 <Tab>Created</Tab>
                 {poolDraft.length > 0? <Tab>Drafting</Tab> : null}
                 {poolDynastie.length > 0? <Tab>Dynastie</Tab> : null}
-                {poolInProgress.length > 0? <Tab>Progress</Tab> : null}
+                {poolInProgress.length > 0? <Tab>in Progress</Tab> : null}
               </TabList>
               <TabPanel >
                 <div className="pool_item">
@@ -89,7 +88,7 @@ function MyPoolsPage(user) {
                   <div className="pool_item">
                     <ul>
                       {poolDraft.map((pool, i)  => 
-                        <li><PoolItem name={pool.name} owner={pool.owner} key={i}></PoolItem></li> 
+                        <Link to={'MyPools/' + pool.name} key={i}><li><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li></Link>
                       )}
                     </ul>
                   </div>
@@ -98,21 +97,25 @@ function MyPoolsPage(user) {
               }
               {poolDynastie.length > 0?
                 <TabPanel>
-                  <ul>
-                    {poolDynastie.map((pool, i)  => 
-                      <li><PoolItem name={pool.name} owner={pool.owner} key={i}></PoolItem></li> 
-                    )}
-                  </ul>
+                  <div className="pool_item">
+                    <ul>
+                      {poolDynastie.map((pool, i)  => 
+                        <Link to={'MyPools/' + pool.name} key={i}><li><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li></Link> 
+                      )}
+                    </ul>
+                  </div>
                 </TabPanel>
                 : null
               }
               {poolInProgress.length > 0?
                 <TabPanel>
-                  <ul>
-                    {poolInProgress.map((pool, i)  => 
-                      <li><PoolItem name={pool.name} owner={pool.owner} key={i}></PoolItem></li> 
-                    )}
-                  </ul>
+                  <div className="pool_item">
+                    <ul>
+                      {poolInProgress.map((pool, i)  => 
+                        <Link to={'MyPools/' + pool.name} key={i}><li><PoolItem name={pool.name} owner={pool.owner} key={i}></PoolItem></li></Link> 
+                      )}
+                    </ul>
+                  </div>
                 </TabPanel>
                 : null
               }
