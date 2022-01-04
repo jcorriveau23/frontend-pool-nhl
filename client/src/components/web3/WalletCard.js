@@ -17,22 +17,28 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 
 	useEffect(() => {
 		if(window.ethereum){
+			console.log("trying to connect to read wallet")
 			const provider = new ethers.providers.Web3Provider(window.ethereum)
 			const signer = provider.getSigner()
-			
 
-			provider.getNetwork()
-			.then(network => {
-				console.log(network)
-				if(network.name === "kovan"){
-					let c = new ethers.Contract("0x4e5e10C3Ef12663ba231d16b915372E0E69D1ffe", NHLGamePredictionsABI, signer)
-					setContract(c)
-				}
-				else
-					setErrorMessage("You need to select Kovan Network in metamask!")
+			signer
+			.getAddress()
+			.then((address) => {
+				console.log("wallet is unlocked: " + address)
+				provider.getNetwork()
+				.then(network => {
+					console.log(network)
+					if(network.name === "kovan"){
+						
+						let c = new ethers.Contract("0x4e5e10C3Ef12663ba231d16b915372E0E69D1ffe", NHLGamePredictionsABI, signer)
+						console.log(c)
+						setContract(c)
+					}
+					else
+						setErrorMessage("You need to select Kovan Network in metamask plugin.")
+				})
 			})
-			
-			
+			.catch((err) => setErrorMessage("You need to unlocked the metamask account using the plugin."));	
 		}
 
 		const user = JSON.parse(localStorage.getItem("persist-account"))
@@ -161,7 +167,7 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 				</div>
 			</button>
 			<div>
-			<b style={{Color: "#a00"}}>{errorMessage}</b>
+			<b style={{ color: '#b00' }}>{errorMessage}</b>
 			</div>
 		</li>
 	);

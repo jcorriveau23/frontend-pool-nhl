@@ -27,7 +27,7 @@ function GameFeedPage({user, contract}) {
 
         // return () => {
         //     setGameInfo({}); // cleanup the state on unmount
-        // };
+        // };   // TODO: there is a leak warning here and we need to investigate why when repairing the leak, we get the error corrected.
 
     }, [gameID]);
     
@@ -162,7 +162,7 @@ function GameFeedPage({user, contract}) {
         )
     }
 
-    if(gameInfo && contract)
+    if(gameInfo)
     { 
         return(
             <div>
@@ -188,7 +188,7 @@ function GameFeedPage({user, contract}) {
                     <h1>{gameInfo.liveData.plays.currentPlay.result.event}</h1> */}
                 </div>
                 <div className="floatRight">
-                    <GamePrediction gameID={gameID} gameInfo={gameInfo} user={user} contract={contract}/>
+                    {contract? <GamePrediction gameID={gameID} gameInfo={gameInfo} user={user} contract={contract}/> : null}
                 </div>
             </div>
         )

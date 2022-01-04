@@ -4,3 +4,4 @@ client/.eslintcache
 client/cors-anywhere
 contract/build
 contract/pool-prediction-idea.txt
+client/public/.well-known

@@ -1,0 +1,11 @@
+1 - D:\nginx-1.20.2>   certbot certonly
+
+2 - select Place files in webroot directory
+
+3 - enter domain name -> hockeypool.live
+
+4 - Input the webroot for hockeypool.live: (Enter 'c' to cancel): C:\Users\jf_co\pool-jdope\client\public
+
+5 - modify the nginx conf file to point on the localy generated files from certbot (2 files)
+
+6 - have fun with https.

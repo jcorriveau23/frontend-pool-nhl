@@ -4,6 +4,9 @@
 }
 .dayGamesFeed ul {
     margin: 0; padding: 0;
+    overflow: auto;
+    white-space: nowrap; /*next list item wont go next line*/
+    -webkit-overflow-scrolling: touch; /* to scroll on mobile*/
 }
 
 .dayGamesFeed ul li{

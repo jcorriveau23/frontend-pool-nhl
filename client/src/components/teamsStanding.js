@@ -11,7 +11,7 @@ function TeamsStanding({data}) {
     const renderDivisionTeams = (div) => div.teamRecords.map((team, i) => {
         return (
             <tr key={i}>
-                <td></td>
+                <td>{i + 1}</td>
                 <td>
                     <img src={logos[ team.team.name ]} alt="" width="30" height="30"></img>
                 </td>
