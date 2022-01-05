@@ -202,9 +202,7 @@ const get_pool_info = (req, res, next) =>{
         return
     }
 
-    console.log(req.headers)
     var pool_name = req.headers.poolname
-    console.log(pool_name)
 
     Pool.findOne({name: pool_name})
     .then(pool => {

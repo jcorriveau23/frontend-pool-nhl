@@ -14,14 +14,32 @@ function GameFeedPage({user, contract}) {
 
     const [gameInfo, setGameInfo] = useState(null)
     const [tabIndex, setTabIndex] = useState(1);
+    const [homeRosterPreview, setHomeRosterPreview] = useState(null)
+    const [awayRosterPreview, setAwayRosterPreview] = useState(null)
+    const [isPreview, setIsPreview] = useState(false)
 
     const gameID = window.location.pathname.split('/').pop();
     
     useEffect(() => {
+        setIsPreview(false)
         fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/feed/live")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
         .then(response => response.json())
         .then(gameInfo => {
-            console.log(gameInfo)
+            if(gameInfo.gameData.status.abstractGameState === "Preview"){
+                setIsPreview(true)
+                fetch('https://statsapi.web.nhl.com/api/v1/teams/' + gameInfo.gameData.teams.away.id + '/roster') // https://statsapi.web.nhl.com/api/v1/teams/22/roster
+                .then(response => response.json())
+                .then(teamInfo => {
+                    setAwayRosterPreview(teamInfo.roster)
+                })
+
+                fetch('https://statsapi.web.nhl.com/api/v1/teams/' + gameInfo.gameData.teams.home.id + '/roster') // https://statsapi.web.nhl.com/api/v1/teams/22/roster
+                .then(response => response.json())
+                .then(teamInfo => {
+                    setHomeRosterPreview(teamInfo.roster)
+                })
+            }
+            
             setGameInfo(gameInfo)
         })
 
@@ -33,8 +51,12 @@ function GameFeedPage({user, contract}) {
     
     const render_team_stats = (team) => {
         return(
+            <div>
             <table  className="content-table">
                 <thead>
+                    <tr>
+                        <th colSpan={17}>Skaters</th>
+                    </tr>
                     <tr>
                         <th>#</th>
                         <th>Name</th>
@@ -85,6 +107,76 @@ function GameFeedPage({user, contract}) {
                     })}
                 </tbody>
             </table>
+            <table  className="content-table">
+                <thead>
+                    <tr>
+                        <th colSpan={9}>Goalie(s)</th>
+                    </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>R</th>
+                        <th>TOI</th>
+                        <th>G</th>
+                        <th>A</th>
+                        <th>Shots</th>
+                        <th>Saves</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {Object.keys(team.players).map( (key, i) => {
+                        if(team.players[key].stats.hasOwnProperty("goalieStats"))
+                        {
+                            return(
+                                <tr key={i}>
+                                    <td>{team.players[key].jerseyNumber}</td>
+                                    <td><Link to={"/playerInfo/"+team.players[key].person.id} style={{ textDecoration: 'none', color: "#000099" }}>{team.players[key].person.fullName}</Link></td>
+                                    <td>{team.players[key].position.abbreviation}</td>
+                                    <td>{team.players[key].stats.goalieStats.timeOnIce}</td>
+                                    <td>{team.players[key].stats.goalieStats.goals}</td>
+                                    <td>{team.players[key].stats.goalieStats.assists}</td>
+                                    <td>{team.players[key].stats.goalieStats.shots}</td>
+                                    <td>{team.players[key].stats.goalieStats.saves}</td>
+                                    <td>{team.players[key].stats.goalieStats.savePercentage}</td>
+                                </tr>
+                            )
+                        }
+                        return null
+                    })}
+                </tbody>
+            </table>
+        </div>
+        )
+    }
+
+    const render_team_roster = (roster) => {
+        return(
+            <div>
+            <table  className="content-table">
+                <thead>
+                    <tr>
+                        <th colSpan={17}>Skaters</th>
+                    </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>R</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {roster.map( (player, i) => {
+                        return(
+                            <tr key={i}>
+                                <td>{player.jerseyNumber}</td>
+                                <td><Link to={"/playerInfo/" + player.person.id} style={{ textDecoration: 'none', color: "#000099" }}>{player.person.fullName}</Link></td>
+                                <td>{player.position.abbreviation}</td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
+        </div>
         )
     }
 
@@ -174,13 +266,13 @@ function GameFeedPage({user, contract}) {
                             <Tab>{gameInfo.liveData.boxscore.teams.away.team.name}</Tab>
                         </TabList>
                         <TabPanel>
-                            {render_team_stats(gameInfo.liveData.boxscore.teams.home)}
+                            {isPreview && homeRosterPreview? render_team_roster(homeRosterPreview) : render_team_stats(gameInfo.liveData.boxscore.teams.home)}
                         </TabPanel>
                         <TabPanel>
                             {render_game_stats(gameInfo.liveData.boxscore.teams, gameInfo.liveData.linescore)}
                         </TabPanel>
                         <TabPanel>
-                            {render_team_stats(gameInfo.liveData.boxscore.teams.away)}
+                            {isPreview && awayRosterPreview? render_team_roster(awayRosterPreview) : render_team_stats(gameInfo.liveData.boxscore.teams.away)}
                         </TabPanel>
                     </Tabs>
                     {/* <h1>{gameInfo.gameData.status.abstractGameState}</h1>

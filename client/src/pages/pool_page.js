@@ -37,7 +37,6 @@ function PoolPage(user) {
                     // [TODO] display a page or notification to show that the pool was not found
                 }
                 else{
-                    console.log(data)
                     setPoolInfo(data.message)
                 }
             })
