@@ -17,7 +17,7 @@ function InProgressPool({ username, poolName, poolInfo }) {
         if ( poolName ) {
             const requestOptions3 = {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token-' + username), 'pool_name': poolName}
+                headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token-' + username), 'poolname': poolName}
             };
             fetch('../pool/get_pool_stats', requestOptions3)
             .then(response => response.json())

@@ -27,15 +27,17 @@ function PoolPage(user) {
             // get pool info at start
             const requestOptions2 = {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json', 'token': cookie, 'pool_name': poolName}
+                headers: { 'Content-Type': 'application/json', 'token': cookie, 'poolname': poolName}
             };
             fetch('../pool/get_pool_info', requestOptions2)
             .then(response => response.json())
             .then(data => {
                 if(data.success === "False"){
+                    console.log(data)
                     // [TODO] display a page or notification to show that the pool was not found
                 }
                 else{
+                    console.log(data)
                     setPoolInfo(data.message)
                 }
             })

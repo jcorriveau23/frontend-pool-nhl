@@ -202,9 +202,11 @@ const get_pool_info = (req, res, next) =>{
         return
     }
 
-    var pool_name = req.headers.pool_name
+    console.log(req.headers)
+    var pool_name = req.headers.poolname
+    console.log(pool_name)
 
-    Pool.findOne({name:pool_name})
+    Pool.findOne({name: pool_name})
     .then(pool => {
         if(!pool){
             res.json({
@@ -285,7 +287,7 @@ const start_draft = (req, res, next) =>{
     var pool_name = req.body.pool_name
     participants = req.body.participants
 
-    Pool.findOne({name:pool_name})
+    Pool.findOne({name: pool_name})
     .then(pool => {
         if(!pool){
             res.json({
@@ -732,7 +734,7 @@ const get_pool_stats = (req, res, next) => {
         return
     }
 
-    var pool_name = req.headers.pool_name
+    var pool_name = req.headers.poolname
     var players_name = []
     var players_team = []
 

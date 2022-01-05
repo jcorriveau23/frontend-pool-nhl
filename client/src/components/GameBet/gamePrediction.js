@@ -134,7 +134,7 @@ function GamePrediction({gameID, gameInfo, user, contract}) {
             return (
                 <div>
                     <h1>No Prediction market open for that game yet.</h1>
-                    {(contract && user.addr === owner)? <button onClick={create_prediction_market}>Create</button> : null}
+                    {(contract && user && user.addr === owner)? <button onClick={create_prediction_market}>Create</button> : null}
                 </div>
                 
             )
