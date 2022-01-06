@@ -25,6 +25,8 @@ function GameFeedPage({user, contract}) {
         fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/feed/live")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
         .then(response => response.json())
         .then(gameInfo => {
+            setGameInfo(gameInfo)
+
             if(gameInfo.gameData.status.abstractGameState === "Preview"){
                 setIsPreview(true)
                 fetch('https://statsapi.web.nhl.com/api/v1/teams/' + gameInfo.gameData.teams.away.id + '/roster') // https://statsapi.web.nhl.com/api/v1/teams/22/roster
@@ -39,8 +41,6 @@ function GameFeedPage({user, contract}) {
                     setHomeRosterPreview(teamInfo.roster)
                 })
             }
-            
-            setGameInfo(gameInfo)
         })
 
         // return () => {

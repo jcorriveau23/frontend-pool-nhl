@@ -9,7 +9,8 @@ import ClipLoader from "react-spinners/ClipLoader"
 
 function TeamRosterBySeasonPage() {
 
-    const [playerStatsList, setPlayerStatsList] = useState(null)
+    const [skatersStats, setSkatersStats] = useState(null)
+    const [goaliesStats, setGoaliesStats] = useState(null)
     const [teamName, setTeamName] = useState("")
 
     var url = window.location.pathname.split('/')
@@ -18,20 +19,30 @@ function TeamRosterBySeasonPage() {
     const teamID = url.pop();
     
     useEffect(() => {
-        const url = "https://nhl-pool-ethereum.herokuapp.com/http://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=" + teamID + "%20and%20gameTypeId=2%20and%20seasonId%3C=" + season + "%20and%20seasonId%3E=" + season // https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=8%20and%20gameTypeId=2%20and%20seasonId%3C=20172018%20and%20seasonId%3E=20172018
+        const urlSkaters = "https://nhl-pool-ethereum.herokuapp.com/http://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=" + teamID + "%20and%20gameTypeId=2%20and%20seasonId%3C=" + season + "%20and%20seasonId%3E=" + season // https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=8%20and%20gameTypeId=2%20and%20seasonId%3C=20172018%20and%20seasonId%3E=20172018
+        const urlgoalies = "https://nhl-pool-ethereum.herokuapp.com/http://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=" + teamID + "%20and%20gameTypeId=2%20and%20seasonId%3C=" + season + "%20and%20seasonId%3E=" + season // https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=8%20and%20gameTypeId=2%20and%20seasonId%3C=20172018%20and%20seasonId%3E=20172018
         
-        fetch(url, {
+        fetch(urlSkaters, {
             method: 'GET',
         })
         .then(response => response.json())
         .then(playersStats => {
             setTeamName(playersStats.data[0].teamAbbrevs)
-            setPlayerStatsList({...playersStats})
+            setSkatersStats({...playersStats})
+        })
+        .catch(error => {alert('Error! ' + error)})
+
+        fetch(urlgoalies, {
+            method: 'GET',
+        })
+        .then(response => response.json())
+        .then(playersStats => {
+            setGoaliesStats({...playersStats})
         })
         .catch(error => {alert('Error! ' + error)})
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
     
-    const render_team_players = (roster) => {
+    const render_team_skaters = (roster) => {
         return(
             <div>
                 <h1>{teamName}</h1>
@@ -39,6 +50,7 @@ function TeamRosterBySeasonPage() {
                     <thead>
                         <tr>
                             <th colSpan="18">{teamName} : {season}</th>
+                            <th colSpan="18">Skaters</th>
                         </tr>
                         <tr>
                             <th>#</th>
@@ -88,16 +100,79 @@ function TeamRosterBySeasonPage() {
                             )                       
                         })}
                     </tbody>
-                </table> 
+                </table>
             </div>
         )
     }
 
-    if( playerStatsList )
+    const render_team_goalies = (roster) => {
+        return(
+            <div>
+                <h1>{teamName}</h1>
+               <table  className="content-table">
+                    <thead>
+                        <tr>
+                            <th colSpan="17">Goalies</th>
+                        </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>GP</th>
+                            <th>GS</th>
+                            <th>G</th>
+                            <th>P</th>
+                            <th>GA</th>
+                            <th>GAA</th>
+                            <th>W</th>
+                            <th>L</th>
+                            <th>OTL</th>
+                            <th>PIM</th>
+                            <th>SAVE %</th>
+                            <th>S</th>
+                            <th>SO</th>
+                            <th>TOI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {roster.map( (goalie, i) => {
+                            return(
+                                <tr key={i}>  
+                                    <td>-</td>                             
+                                    <td><Link to={"/playerInfo/"+ goalie.playerId} style={{ textDecoration: 'none', color: "#000099" }}>{goalie.goalieFullName}</Link></td>
+                                    <td>G</td>
+                                    <td>{goalie.gamesPlayed}</td>
+                                    <td>{goalie.gamesStarted}</td>
+                                    <td>{goalie.goals}</td>
+                                    <td>{goalie.points}</td>
+                                    <td>{goalie.goalsAgainst}</td>
+                                    <td>{goalie.goalsAgainstAverage}</td>  
+                                    <td>{goalie.wins}</td>
+                                    <td>{goalie.losses}</td>
+                                    <td>{goalie.otLosses}</td>
+                                    <td>{goalie.penaltyMinutes}</td>
+                                    <td>{goalie.savePct}</td>
+                                    <td>{goalie.saves}</td>
+                                    <td>{goalie.shutouts}</td>
+                                    <td>{goalie.timeOnIcePerGame}</td>
+
+                                </tr>
+                            )                       
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+
+
+
+    if( skatersStats && goaliesStats )
     { 
         return(
             <div>
-                {render_team_players(playerStatsList.data)}
+                {render_team_skaters(skatersStats.data)}
+                {render_team_goalies(goaliesStats.data)}
             </div>
         )
     }

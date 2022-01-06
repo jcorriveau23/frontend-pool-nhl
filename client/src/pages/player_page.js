@@ -26,6 +26,12 @@ function PlayerPage() {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
     
     const render_player_stats = (stats, info) => {
+        var totGames = 0
+        var totGoals = 0
+        var totAssists = 0
+        var totPoints = 0
+        var totPenaltyMinutes = 0
+
         return(
             <div>
                 <table  className="content-table">
@@ -89,6 +95,13 @@ function PlayerPage() {
                     </thead>
                     <tbody>
                         {stats.map( (season, i) => {
+                            if(season.league.id === 133){
+                                totGames += season.stat.games
+                                totGoals += season.stat.goals
+                                totAssists += season.stat.assists
+                                totPoints += season.stat.points
+                                totPenaltyMinutes += parseInt(season.stat.penaltyMinutes)
+                            }
                             return(
                                 <tr key={i}>
                                     <td>{season.team.name}</td>
@@ -117,6 +130,26 @@ function PlayerPage() {
                                 </tr>
                             )                       
                         })}
+                        <tr>
+                            <th>total nhl</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>{totGames}</th>
+                            <th>{totGoals}</th>
+                            <th>{totAssists}</th>
+                            <th>{totPoints}</th>
+                            <th>-</th>
+                            <th>{totPenaltyMinutes}</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                        </tr>
                     </tbody>
                 </table> 
             </div>
