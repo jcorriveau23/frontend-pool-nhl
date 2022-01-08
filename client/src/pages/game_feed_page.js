@@ -8,7 +8,9 @@ import logos from "../components/img/images"
 import GamePrediction from '../components/GameBet/gamePrediction';
 
 // component
-import { GoalItem } from '../components/game_feed_page/goalItem';
+import { GameRecap } from '../components/game_feed_page/gameRecap';
+import { PeriodRecap } from '../components/game_feed_page/periodRecap';
+import { OtherGameContent } from '../components/game_feed_page/otherGameContent';
 
 // Loader
 import ClipLoader from "react-spinners/ClipLoader"
@@ -265,17 +267,6 @@ function GameFeedPage({user, contract}) {
         )
     }
 
-    const Render_game_content = (goals) => {
-
-        return(
-            goals.map((goal, i) => {
-                return (
-                    <GoalItem goalContent={goal}></GoalItem>
-                )
-            })
-        )
-    }
-
     if(gameInfo && gameContent)
     { 
         return(
@@ -298,7 +289,27 @@ function GameFeedPage({user, contract}) {
                         </TabPanel>
                     </Tabs>
                     <div>
-                        {Render_game_content(gameContent.highlights.scoreboard.items)}
+                        <Tabs>
+                            <TabList>
+                                <Tab>Short Recap</Tab>
+                                <Tab>Long Recap</Tab>
+                            </TabList>  
+                        
+                            <TabPanel>
+                                <div>
+                                    <GameRecap gameContent={gameContent} isEditorial={true}></GameRecap>
+                                </div>
+                            </TabPanel>
+                            <TabPanel>
+                                <div>
+                                    <GameRecap gameContent={gameContent} isEditorial={false}></GameRecap>
+                                </div>
+                            </TabPanel>
+                        </Tabs>
+                        <PeriodRecap gameContent={gameContent} period={"1"}></PeriodRecap>
+                        <PeriodRecap gameContent={gameContent} period={"2"}></PeriodRecap>
+                        <PeriodRecap gameContent={gameContent} period={"3"}></PeriodRecap>
+                        <OtherGameContent gameContent={gameContent}></OtherGameContent>
                     </div>
                     {/* <h1>{gameInfo.gameData.status.abstractGameState}</h1>
                     <h1>{gameInfo.liveData.plays.currentPlay.result.eventCode}</h1>
