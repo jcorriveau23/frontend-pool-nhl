@@ -26,12 +26,6 @@ function PlayerPage() {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
     
     const render_player_stats = (stats, info) => {
-        var totGames = 0
-        var totGoals = 0
-        var totAssists = 0
-        var totPoints = 0
-        var totPenaltyMinutes = 0
-
         return(
             <div>
                 <table  className="content-table">
@@ -67,96 +61,202 @@ function PlayerPage() {
                         </tr>
                     </tbody>
                 </table>
-               <table  className="content-table">
-                    <thead>
-                        <tr>
-                            <th colSpan="18">Career Stats</th>
-                        </tr>
-                        <tr>
-                            <th>Team</th>
-                            <th>Season</th>
-                            <th>League</th>
-                            <th>Games</th>
-                            <th>G</th>
-                            <th>A</th>
-                            <th>P</th>
-                            <th>+/-</th>
-                            <th>PIM</th>
-                            <th>SOG</th>
-                            <th>HITS</th>
-                            <th>BLKS</th>
-                            <th>GVA</th>
-                            <th>TKA</th>
-                            <th>FO%</th>
-                            <th>TOI</th>
-                            <th>PP TOI</th>
-                            <th>SH TOI</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {stats.map( (season, i) => {
-                            if(season.league.id === 133){
-                                totGames += season.stat.games
-                                totGoals += season.stat.goals
-                                totAssists += season.stat.assists
-                                totPoints += season.stat.points
-                                totPenaltyMinutes += parseInt(season.stat.penaltyMinutes)
-                            }
-                            return(
-                                <tr key={i}>
-                                    <td>{season.team.name}</td>
-                                    {
-                                        season.league.id === 133 ? // nhl league
-                                            <td><Link to={"/teamRosterBySeason/"+ season.team.id + "/" + season.season} style={{ textDecoration: 'none', color: "#000099" }}>{season.season.slice(0,4) + "-" + season.season.slice(4)}</Link></td>
-                                            : <td>{season.season.slice(0,4) + "-" + season.season.slice(4)}</td>
-                                    }
-                                    <td>{season.league.name}</td>
-                                    <td>{season.stat.games}</td>
-                                    <td>{season.stat.goals}</td>
-                                    <td>{season.stat.assists}</td>
-                                    <td>{season.stat.points}</td>
-                                    <td>-</td>  
-                                    <td>{season.stat.penaltyMinutes}</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>{season.stat.faceOffPct}</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-
-                                </tr>
-                            )                       
-                        })}
-                        <tr>
-                            <th>total nhl</th>
-                            <th>-</th>
-                            <th>-</th>
-                            <th>{totGames}</th>
-                            <th>{totGoals}</th>
-                            <th>{totAssists}</th>
-                            <th>{totPoints}</th>
-                            <th>-</th>
-                            <th>{totPenaltyMinutes}</th>
-                            <th>-</th>
-                            <th>-</th>
-                            <th>-</th>
-                            <th>-</th>
-                            <th>-</th>
-                            <th>-</th>
-                            <th>-</th>
-                            <th>-</th>
-                            <th>-</th>
-                        </tr>
-                    </tbody>
-                </table> 
+                {
+                    info.primaryPosition.abbreviation !== "G"?
+                    render_skater_stats(stats) :
+                    render_goalie_stats(stats)
+                }
             </div>
         )
     }
 
-    if(playerStats && playerInfo)
+    const render_skater_stats = (stats) => {
+        var totGames = 0
+        var totGoals = 0
+        var totAssists = 0
+        var totPoints = 0
+        var totPenaltyMinutes = 0
+        return(
+            <table  className="content-table">
+                <thead>
+                    <tr>
+                        <th colSpan="18">Career Stats</th>
+                    </tr>
+                    <tr>
+                        <th>Team</th>
+                        <th>Season</th>
+                        <th>League</th>
+                        <th>Games</th>
+                        <th>G</th>
+                        <th>A</th>
+                        <th>P</th>
+                        <th>+/-</th>
+                        <th>PIM</th>
+                        <th>SOG</th>
+                        <th>HITS</th>
+                        <th>BLKS</th>
+                        <th>GVA</th>
+                        <th>TKA</th>
+                        <th>FO%</th>
+                        <th>TOI</th>
+                        <th>PP TOI</th>
+                        <th>SH TOI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {stats.map( (season, i) => {
+                        if(season.league.id === 133){
+                            totGames += season.stat.games
+                            totGoals += season.stat.goals
+                            totAssists += season.stat.assists
+                            totPoints += season.stat.points
+                            totPenaltyMinutes += parseInt(season.stat.penaltyMinutes)
+                        }
+                        return(
+                            <tr key={i}>
+                                <td>{season.team.name}</td>
+                                {
+                                    season.league.id === 133 ? // nhl league
+                                        <td><Link to={"/teamRosterBySeason/"+ season.team.id + "/" + season.season} style={{ textDecoration: 'none', color: "#000099" }}>{season.season.slice(0,4) + "-" + season.season.slice(4)}</Link></td>
+                                        : <td>{season.season.slice(0,4) + "-" + season.season.slice(4)}</td>
+                                }
+                                <td>{season.league.name}</td>
+                                <td>{season.stat.games}</td>
+                                <td>{season.stat.goals}</td>
+                                <td>{season.stat.assists}</td>
+                                <td>{season.stat.points}</td>
+                                <td>-</td>  
+                                <td>{season.stat.penaltyMinutes}</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>{season.stat.faceOffPct}</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+
+                            </tr>
+                        )                       
+                    })}
+                    <tr>
+                        <th>total nhl</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>{totGames}</th>
+                        <th>{totGoals}</th>
+                        <th>{totAssists}</th>
+                        <th>{totPoints}</th>
+                        <th>-</th>
+                        <th>{totPenaltyMinutes}</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                    </tr>
+                </tbody>
+            </table> 
+        )
+    }
+
+    const render_goalie_stats = (stats) => {
+        var totGames = 0
+        var totGameStarted = 0
+        var totGoalAgainst = 0
+        var totWins = 0
+        var totLosses = 0
+        var totOT = 0
+        var totSaves = 0
+        var totShotAgainst = 0
+        var totShutout = 0
+        console.log(stats)
+        return(
+            <table  className="content-table">
+                <thead>
+                    <tr>
+                        <th colSpan="14">Career Stats</th>
+                    </tr>
+                    <tr>
+                        <th>Team</th>
+                        <th>Season</th>
+                        <th>League</th>
+                        <th>Games</th>
+                        <th>GS</th>
+                        <th>GAA</th>
+                        <th>GA</th>
+                        <th>W</th>
+                        <th>L</th>
+                        <th>OT</th>
+                        <th>save %</th>
+                        <th>S</th>
+                        <th>SA</th>
+                        <th>SO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {stats.map( (season, i) => {
+                        if(season.league.id === 133){
+                            totGames += season.stat.games
+                            totGameStarted += season.stat.gamesStarted
+                            totGoalAgainst += season.stat.goalsAgainst
+                            totWins += season.stat.wins
+                            totLosses += season.stat.losses
+                            totOT += season.stat.ot
+                            totSaves += season.stat.saves
+                            totShotAgainst += season.stat.shotsAgainst
+                            totShutout += season.stat.shutouts
+                        }
+                        return(
+                            <tr key={i}>
+                                <td>{season.team.name}</td>
+                                {
+                                    season.league.id === 133 ? // nhl league
+                                        <td><Link to={"/teamRosterBySeason/"+ season.team.id + "/" + season.season} style={{ textDecoration: 'none', color: "#000099" }}>{season.season.slice(0,4) + "-" + season.season.slice(4)}</Link></td>
+                                        : <td>{season.season.slice(0,4) + "-" + season.season.slice(4)}</td>
+                                }
+                                <td>{season.league.name}</td>
+                                <td>{season.stat.games}</td>
+                                <td>{season.stat.gamesStarted}</td>
+                                <td>{season.stat.goalAgainstAverage}</td>
+                                <td>{season.stat.goalsAgainst}</td>
+                                <td>{season.stat.wins}</td>
+                                <td>{season.stat.losses}</td>
+                                <td>{season.stat.ot}</td>
+                                <td>{season.stat.savePercentage}</td>
+                                <td>{season.stat.saves}</td>
+                                <td>{season.stat.shotsAgainst}</td>
+                                <td>{season.stat.shutouts}</td>
+                            </tr>
+                        )                       
+                    })}
+                    <tr>
+                        <th>total nhl</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>{totGames}</th>
+                        <th>{totGameStarted}</th>
+                        <th>-</th>
+                        <th>{totGoalAgainst}</th>
+                        <th>{totWins}</th>
+                        <th>{totLosses}</th>
+                        <th>{totOT}</th>
+                        <th>-</th>
+                        <th>{totSaves}</th>
+                        <th>{totShotAgainst}</th>
+                        <th>{totShutout}</th>
+                    </tr>
+                </tbody>
+            </table> 
+        )
+    }
+
+    if( playerStats && playerInfo )
     { 
         return(
             <div>

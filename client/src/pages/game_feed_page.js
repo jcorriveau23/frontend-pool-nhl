@@ -309,6 +309,7 @@ function GameFeedPage({user, contract}) {
                         <PeriodRecap gameContent={gameContent} period={"1"}></PeriodRecap>
                         <PeriodRecap gameContent={gameContent} period={"2"}></PeriodRecap>
                         <PeriodRecap gameContent={gameContent} period={"3"}></PeriodRecap>
+                        <PeriodRecap gameContent={gameContent} period={"4"}></PeriodRecap>
                         <OtherGameContent gameContent={gameContent}></OtherGameContent>
                     </div>
                     {/* <h1>{gameInfo.gameData.status.abstractGameState}</h1>

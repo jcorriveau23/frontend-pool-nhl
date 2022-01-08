@@ -16,7 +16,7 @@ export const PeriodRecap = ({gameContent, period}) => {
     {
         return(
             <div>
-                <h1>Period: {period}</h1>
+                <h1>{period === "4"? "OT" : "Period: " + period}</h1>
                 {gameContent.media.milestones.items.filter(highlight => {
                     return (highlight.type === "GOAL" && highlight.period === period) 
                 }).map(highlight => {
