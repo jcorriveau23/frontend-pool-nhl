@@ -7,12 +7,16 @@ import { Link } from "react-router-dom";
 import logos from "../components/img/images" 
 import GamePrediction from '../components/GameBet/gamePrediction';
 
+// component
+import { GoalItem } from '../components/game_feed_page/goalItem';
+
 // Loader
 import ClipLoader from "react-spinners/ClipLoader"
 
 function GameFeedPage({user, contract}) {
 
     const [gameInfo, setGameInfo] = useState(null)
+    const [gameContent, setGameContent] = useState(null)
     const [tabIndex, setTabIndex] = useState(1);
     const [homeRosterPreview, setHomeRosterPreview] = useState(null)
     const [awayRosterPreview, setAwayRosterPreview] = useState(null)
@@ -41,6 +45,13 @@ function GameFeedPage({user, contract}) {
                     setHomeRosterPreview(teamInfo.roster)
                 })
             }
+        })
+
+        fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/content")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
+        .then(response => response.json())
+        .then(gameContent => {
+            //console.log(gameContent)
+            setGameContent(gameContent)
         })
 
         // return () => {
@@ -254,7 +265,18 @@ function GameFeedPage({user, contract}) {
         )
     }
 
-    if(gameInfo)
+    const Render_game_content = (goals) => {
+
+        return(
+            goals.map((goal, i) => {
+                return (
+                    <GoalItem goalContent={goal}></GoalItem>
+                )
+            })
+        )
+    }
+
+    if(gameInfo && gameContent)
     { 
         return(
             <div>
@@ -275,9 +297,13 @@ function GameFeedPage({user, contract}) {
                             {isPreview && awayRosterPreview? render_team_roster(awayRosterPreview) : render_team_stats(gameInfo.liveData.boxscore.teams.away)}
                         </TabPanel>
                     </Tabs>
+                    <div>
+                        {Render_game_content(gameContent.highlights.scoreboard.items)}
+                    </div>
                     {/* <h1>{gameInfo.gameData.status.abstractGameState}</h1>
                     <h1>{gameInfo.liveData.plays.currentPlay.result.eventCode}</h1>
                     <h1>{gameInfo.liveData.plays.currentPlay.result.event}</h1> */}
+                    
                 </div>
                 <div className="floatRight">
                     {contract? <GamePrediction gameID={gameID} gameInfo={gameInfo} user={user} contract={contract}/> : null}
