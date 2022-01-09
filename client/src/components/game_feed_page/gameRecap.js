@@ -14,8 +14,9 @@ export const GameRecap = ({gameContent, isEditorial}) => {
         }
     }, [gameContent])
 
-    if(isEditorial && gameContent.editorial && gameContent.editorial.recap.items?.length > 0)
+    if(isEditorial && gameContent.editorial && gameContent.media.epg[3].items?.length > 0)
     {
+        console.log(gameContent)
         return (
             <div>
                 <table>
@@ -26,8 +27,8 @@ export const GameRecap = ({gameContent, isEditorial}) => {
                         <th>{gameContent.description}</th>
                     </tr>
                     <tr>
-                        <video width="598" height="336" controls ref={videoRef}>
-                            <source src={gameContent.editorial.recap.items[0].media.playbacks[3].url} type="video/mp4"/>
+                        <video width="700" height="394" poster={gameContent.media.epg[3].items[0].image.cuts["640x360"].src} controls ref={videoRef}>
+                            <source src={gameContent.media.epg[3].items[0].playbacks[3].url} type="video/mp4"/>
                         </video>
                     </tr>
                 </table>
@@ -46,7 +47,7 @@ export const GameRecap = ({gameContent, isEditorial}) => {
                         <th>{gameContent.description}</th>
                     </tr>
                     <tr>
-                        <video width="598" height="336" controls ref={videoRef}>
+                        <video width="700" height="394" controls  poster={gameContent.media.epg[2].items[0].image.cuts["640x360"].src} ref={videoRef}>
                             <source src={gameContent.media.epg[2].items[0].playbacks[3].url} type="video/mp4"/>
                         </video>
                     </tr>
