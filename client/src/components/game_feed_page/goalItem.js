@@ -40,7 +40,7 @@ export const GoalItem = ({goalContent, statsData, team}) => {
                     <td rowSpan={4} width="225">
                         {
                             goalContent.highlight.playbacks?.length > 3?
-                            <video width="224" height="126" controls ref={videoRef}>
+                            <video width="224" height="126" poster={goalContent.highlight.image.cuts["248x140"]?.src} controls ref={videoRef}>
                                 <source src={goalContent.highlight.playbacks[3].url} type="video/mp4"/>
                             </video> :
                             <a>No video yet</a>

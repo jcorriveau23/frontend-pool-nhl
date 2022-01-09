@@ -27,7 +27,7 @@ export const GameRecap = ({gameContent, isEditorial}) => {
                         <th>{gameContent.description}</th>
                     </tr>
                     <tr>
-                        <video width="700" height="394" poster={gameContent.media.epg[3].items[0].image.cuts["640x360"].src} controls ref={videoRef}>
+                        <video width="700" height="394" poster={gameContent.media.epg[3].items[0].image.cuts["640x360"]?.src} controls ref={videoRef}>
                             <source src={gameContent.media.epg[3].items[0].playbacks[3].url} type="video/mp4"/>
                         </video>
                     </tr>
@@ -47,7 +47,7 @@ export const GameRecap = ({gameContent, isEditorial}) => {
                         <th>{gameContent.description}</th>
                     </tr>
                     <tr>
-                        <video width="700" height="394" controls  poster={gameContent.media.epg[2].items[0].image.cuts["640x360"].src} ref={videoRef}>
+                        <video width="700" height="394" controls  poster={gameContent.media.epg[2].items[0].image.cuts["640x360"]?.src} ref={videoRef}>
                             <source src={gameContent.media.epg[2].items[0].playbacks[3].url} type="video/mp4"/>
                         </video>
                     </tr>
