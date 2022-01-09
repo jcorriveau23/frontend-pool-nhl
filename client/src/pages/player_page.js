@@ -15,6 +15,7 @@ function PlayerPage() {
         fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYear')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
         .then(response => response.json())
         .then(playerStats => {
+            
             setPlayerStats({...playerStats})
         })
         fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID)  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
@@ -75,7 +76,14 @@ function PlayerPage() {
         var totGoals = 0
         var totAssists = 0
         var totPoints = 0
+        var totPlusMinus = 0
         var totPenaltyMinutes = 0
+        var totShots = 0
+        var totHits = 0
+        var totBlocks = 0
+        var totPPG = 0
+        
+        console.log(stats)
         return(
             <table  className="content-table">
                 <thead>
@@ -92,11 +100,11 @@ function PlayerPage() {
                         <th>P</th>
                         <th>+/-</th>
                         <th>PIM</th>
-                        <th>SOG</th>
+                        <th>S</th>
+                        <th>S%</th>
                         <th>HITS</th>
                         <th>BLKS</th>
-                        <th>GVA</th>
-                        <th>TKA</th>
+                        <th>PPG</th>
                         <th>FO%</th>
                         <th>TOI</th>
                         <th>PP TOI</th>
@@ -110,7 +118,12 @@ function PlayerPage() {
                             totGoals += season.stat.goals
                             totAssists += season.stat.assists
                             totPoints += season.stat.points
+                            totPlusMinus += season.stat.plusMinus
                             totPenaltyMinutes += parseInt(season.stat.penaltyMinutes)
+                            totShots += season.stat.shots
+                            totHits += season.stat.hits
+                            totBlocks += season.stat.blocked
+                            totPPG += season.stat.powerPlayGoals
                         }
                         return(
                             <tr key={i}>
@@ -125,17 +138,17 @@ function PlayerPage() {
                                 <td>{season.stat.goals}</td>
                                 <td>{season.stat.assists}</td>
                                 <td>{season.stat.points}</td>
-                                <td>-</td>  
+                                <td>{season.stat.plusMinus}</td>  
                                 <td>{season.stat.penaltyMinutes}</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
+                                <td>{season.stat.shots}</td>
+                                <td>{season.stat.shotPct}</td>
+                                <td>{season.stat.hits}</td>
+                                <td>{season.stat.blocked}</td>
+                                <td>{season.stat.powerPlayGoals}</td>
                                 <td>{season.stat.faceOffPct}</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
+                                <td>{season.stat.timeOnIce}</td>
+                                <td>{season.stat.powerPlayTimeOnIce}</td>
+                                <td>{season.stat.shortHandedTimeOnIce}</td>
 
                             </tr>
                         )                       
@@ -148,13 +161,13 @@ function PlayerPage() {
                         <th>{totGoals}</th>
                         <th>{totAssists}</th>
                         <th>{totPoints}</th>
-                        <th>-</th>
+                        <th>{totPlusMinus}</th>
                         <th>{totPenaltyMinutes}</th>
+                        <th>{totShots}</th>
                         <th>-</th>
-                        <th>-</th>
-                        <th>-</th>
-                        <th>-</th>
-                        <th>-</th>
+                        <th>{totHits}</th>
+                        <th>{totBlocks}</th>
+                        <th>{totPPG}</th>
                         <th>-</th>
                         <th>-</th>
                         <th>-</th>
