@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 
 // css
 import './components/components.css';
+import './App.css';
 
 // Logo of web site
 import Logo from "./components/img/logo/logo.svg"
@@ -46,13 +47,17 @@ function App() {
         <nav>
           <div>
             <ul>
-              <img src={Logo} alt="" width="100" height="75"></img>
-              <li><Link to="/">Home</Link></li>
-              {user? <li><Link to="/MyPools">My Pools</Link></li> : null}
-              {user? <li><Link to="/MyGameBets">My Game Bets</Link></li> : null}
-              <li><Link to="/statsPage">League Stats</Link></li>
-              {user? <li><Link to="/" onClick={() => Disconnect()}>Disconnect</Link></li> : null}
-              <WalletCard user={user} setUser={setUser} contract={contract} setContract={setContract}/>
+              <div>
+                <img src={Logo} alt="" width="100" height="75"></img>
+              </div>
+              <div className="inline-left-right">
+                <li><Link to="/">Home</Link></li>
+                {user? <li><Link to="/MyPools">My Pools</Link></li> : null}
+                {user? <li><Link to="/MyGameBets">My Game Bets</Link></li> : null}
+                <li><Link to="/statsPage">League Stats</Link></li>
+                {user? <li><Link to="/" onClick={() => Disconnect()}>Disconnect</Link></li> : null}
+                <WalletCard user={user} setUser={setUser} contract={contract} setContract={setContract}/>
+              </div>
             </ul>
           </div>
         </nav>

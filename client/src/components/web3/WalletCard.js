@@ -27,11 +27,10 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 				console.log("wallet is unlocked: " + address)
 				provider.getNetwork()
 				.then(network => {
-					console.log(network)
+					//console.log(network)
 					if(network.name === "kovan"){
 						
 						let c = new ethers.Contract("0x4e5e10C3Ef12663ba231d16b915372E0E69D1ffe", NHLGamePredictionsABI, signer)
-						console.log(c)
 						setContract(c)
 					}
 					else
@@ -52,8 +51,6 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 			
 			console.log(user.addr)
 			const token = Cookies.get('token-' + user.addr)
-
-			console.log(token)
 
 			if( token ){	// TODO: also validate that the token is not expired
 				setIsWalletUnlocked(true) 
@@ -119,8 +116,8 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 
 							if(data.success === "True"){
 
-								console.log(result[0])
-								console.log(addr)
+								// console.log(result[0])
+								// console.log(addr)
 
 								Cookies.set('token-' + addr, data.token)
 								localStorage.setItem("persist-account", JSON.stringify(data.user))

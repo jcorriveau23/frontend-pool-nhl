@@ -50,6 +50,8 @@ function TeamRosterBySeasonPage() {
                     <thead>
                         <tr>
                             <th colSpan="18">{teamName} : {season}</th>
+                        </tr>
+                        <tr>
                             <th colSpan="18">Skaters</th>
                         </tr>
                         <tr>

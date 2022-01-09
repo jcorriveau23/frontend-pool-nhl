@@ -27,8 +27,6 @@ function BetItem({user, contract, gameID}){
                 setGameData(gData)
             })
             .catch(e => {
-                console.log(e.data.message)
-                console.log(gData.isCreated)
                 setGameData(gData)
             })
         })

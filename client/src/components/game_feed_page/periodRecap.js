@@ -1,11 +1,15 @@
-import React, {useRef, useEffect } from 'react'
+import React, {useRef, useEffect, useState } from 'react'
 
 // component
 import { GoalItem } from './goalItem'
 
+// css
+import "./goalItem.css"
+
 export const PeriodRecap = ({gameContent, period}) => {
 
     const videoRef = useRef()
+    const [isItem, setIsItem] = useState(false)
     // const previousUrl = useRef(recapVideo.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
 
     useEffect(() => {
@@ -16,14 +20,29 @@ export const PeriodRecap = ({gameContent, period}) => {
     {
         return(
             <div>
-                <h1>{period === "4"? "OT" : "Period: " + period}</h1>
-                {gameContent.media.milestones.items.filter(highlight => {
-                    return (highlight.type === "GOAL" && highlight.period === period) 
-                }).map(highlight => {
-                    return(
-                        <GoalItem goalContent={highlight.highlight}></GoalItem>
-                    )
-                } )}
+                <table className='goalItem'>
+                    {
+                        isItem?
+                        <tr>
+                            <th>{ period === "4"? "OT" : "Period: " + period}</th>
+                        </tr> : 
+                        null
+                    }
+                    
+                    {gameContent.media.milestones.items.filter(highlight => {
+                        return (highlight.type === "GOAL" && highlight.period === period) 
+                    }).map(highlight => {
+                        if(isItem === false)
+                            setIsItem(true)
+                        return(
+                            <tr>
+                                <td>
+                                    <GoalItem goalContent={highlight}></GoalItem>
+                                </td>
+                            </tr>
+                        )
+                    } )}
+                </table>
             </div>
         )
     }

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
+import '../components/react-tabs.css';
 
 import { PoolItem } from "../components/poolItem";
 
@@ -65,8 +65,11 @@ function MyPoolsPage(user) {
     if(user){
       return(
         <div>
+          <div>
             <h1>Pool list</h1>
-              <button onClick={openCreatePoolModal} disabled={false}>Create a new Pool.</button>
+            <button onClick={openCreatePoolModal} disabled={false}>Create a new Pool.</button>
+          </div>
+          <div>
             <Tabs>
               <TabList>
                 <Tab>Created</Tab>
@@ -121,6 +124,7 @@ function MyPoolsPage(user) {
               }
             </Tabs>
             <CreatePoolModal showCreatePoolModal={showCreatePoolModal} setShowCreatePoolModal={setShowCreatePoolModal} username={user.addr}></CreatePoolModal>
+          </div>
         </div>
       );
     }

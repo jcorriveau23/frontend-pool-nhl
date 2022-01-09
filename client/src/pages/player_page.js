@@ -175,7 +175,6 @@ function PlayerPage() {
         var totSaves = 0
         var totShotAgainst = 0
         var totShutout = 0
-        console.log(stats)
         return(
             <table  className="content-table">
                 <thead>

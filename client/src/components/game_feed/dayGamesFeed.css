@@ -1,3 +1,7 @@
+.dayGamesFeed {
+    min-width: 700px;
+}
+
 .dayGamesFeed ul li:hover{
     border-color: #fff;
     border-width: 2px;

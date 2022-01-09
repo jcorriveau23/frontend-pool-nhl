@@ -2,9 +2,12 @@
 
 import React from 'react'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
 
-import logos from "./img/images"
+import logos from "../img/images"
+
+// css
+import "./teamStanding.css"
+import '../react-tabs.css';
 
 function TeamsStanding({data}) {
 
@@ -54,7 +57,7 @@ function TeamsStanding({data}) {
                 </TabList>
                 {data["records"].map((div, i)  => {
                     return <TabPanel key={i}>
-                        <div>
+                        <div >
                             <table className="content-table">
                                 {renderHeader()}
                                 <tbody>

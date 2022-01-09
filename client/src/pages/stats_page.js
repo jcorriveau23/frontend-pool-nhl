@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import TeamsStanding from "../components/teamsStanding";
+import TeamsStanding from "../components/stats_page/teamsStanding";
 
 // Loader
 import ClipLoader from "react-spinners/ClipLoader"

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
 import { Link } from "react-router-dom";
 
 // teams logo
@@ -15,46 +14,57 @@ import { OtherGameContent } from '../components/game_feed_page/otherGameContent'
 // Loader
 import ClipLoader from "react-spinners/ClipLoader"
 
+// css
+import '../components/react-tabs.css';
+import "../components/game_feed_page/goalItem.css";
+
+
 function GameFeedPage({user, contract}) {
 
     const [gameInfo, setGameInfo] = useState(null)
     const [gameContent, setGameContent] = useState(null)
-    const [tabIndex, setTabIndex] = useState(1);
+    const [tabIndex, setTabIndex] = useState(0);
     const [homeRosterPreview, setHomeRosterPreview] = useState(null)
     const [awayRosterPreview, setAwayRosterPreview] = useState(null)
     const [isPreview, setIsPreview] = useState(false)
+    const [prevGameID, setPrevGameID] = useState("")
 
     const gameID = window.location.pathname.split('/').pop();
     
     useEffect(() => {
-        setIsPreview(false)
-        fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/feed/live")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
-        .then(response => response.json())
-        .then(gameInfo => {
-            setGameInfo(gameInfo)
-
-            if(gameInfo.gameData.status.abstractGameState === "Preview"){
-                setIsPreview(true)
-                fetch('https://statsapi.web.nhl.com/api/v1/teams/' + gameInfo.gameData.teams.away.id + '/roster') // https://statsapi.web.nhl.com/api/v1/teams/22/roster
-                .then(response => response.json())
-                .then(teamInfo => {
-                    setAwayRosterPreview(teamInfo.roster)
-                })
-
-                fetch('https://statsapi.web.nhl.com/api/v1/teams/' + gameInfo.gameData.teams.home.id + '/roster') // https://statsapi.web.nhl.com/api/v1/teams/22/roster
-                .then(response => response.json())
-                .then(teamInfo => {
-                    setHomeRosterPreview(teamInfo.roster)
-                })
-            }
-        })
-
-        fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/content")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
-        .then(response => response.json())
-        .then(gameContent => {
-            //console.log(gameContent)
-            setGameContent(gameContent)
-        })
+        if(prevGameID !== gameID)
+        {
+            setIsPreview(false)
+            fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/feed/live")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
+            .then(response => response.json())
+            .then(gameInfo => {
+                setGameInfo(gameInfo)
+    
+                if(gameInfo.gameData.status.abstractGameState === "Preview"){
+                    setIsPreview(true)
+                    fetch('https://statsapi.web.nhl.com/api/v1/teams/' + gameInfo.gameData.teams.away.id + '/roster') // https://statsapi.web.nhl.com/api/v1/teams/22/roster
+                    .then(response => response.json())
+                    .then(teamInfo => {
+                        setAwayRosterPreview(teamInfo.roster)
+                    })
+    
+                    fetch('https://statsapi.web.nhl.com/api/v1/teams/' + gameInfo.gameData.teams.home.id + '/roster') // https://statsapi.web.nhl.com/api/v1/teams/22/roster
+                    .then(response => response.json())
+                    .then(teamInfo => {
+                        setHomeRosterPreview(teamInfo.roster)
+                    })
+                }
+            })
+    
+            fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/content")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/content
+            .then(response => response.json())
+            .then(gameContent => {
+                //console.log(gameContent)
+                setGameContent(gameContent)
+            })
+        }
+        
+        setPrevGameID(gameID)
 
         // return () => {
         //     setGameInfo({}); // cleanup the state on unmount
@@ -205,7 +215,7 @@ function GameFeedPage({user, contract}) {
                 nHomeTeamShootoutScore = teams.home.teamStats.teamSkaterStats.goals + 1
         }
         return(
-            <table  className="content-table">
+            <table  className="goalItem">
                 <thead>
                     <tr>
                         <th><img src={logos[ teams.away.team.name ]} alt="" width="30" height="30"></img></th>
@@ -271,55 +281,61 @@ function GameFeedPage({user, contract}) {
     { 
         return(
             <div>
-                <div className="floatLeft">
+                <div>
                     <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
                         <TabList>
-                            <Tab>{gameInfo.liveData.boxscore.teams.home.team.name}</Tab>
                             <Tab>Game stats</Tab>
-                            <Tab>{gameInfo.liveData.boxscore.teams.away.team.name}</Tab>
+                            <Tab>Game recap</Tab>
+                            <Tab>{<img src={logos[ gameInfo.liveData.boxscore.teams.home.team.name ]} alt="" width="30" height="30"></img>}</Tab>
+                            <Tab>{<img src={logos[ gameInfo.liveData.boxscore.teams.away.team.name ]} alt="" width="30" height="30"></img>}</Tab>
+                            {contract? <Tab>Prediction Market</Tab> : null}
                         </TabList>
-                        <TabPanel>
-                            {isPreview && homeRosterPreview? render_team_roster(homeRosterPreview) : render_team_stats(gameInfo.liveData.boxscore.teams.home)}
-                        </TabPanel>
                         <TabPanel>
                             {render_game_stats(gameInfo.liveData.boxscore.teams, gameInfo.liveData.linescore)}
                         </TabPanel>
                         <TabPanel>
+                            <div>
+                            <Tabs>
+                                <TabList>
+                                    <Tab>Short Recap</Tab>
+                                    <Tab>Long Recap</Tab>
+                                </TabList>  
+                                <TabPanel>
+                                    <div className='min-width'>
+                                        <GameRecap gameContent={gameContent} isEditorial={true}></GameRecap>
+                                    </div>
+                                </TabPanel>
+                                <TabPanel>
+                                    <div>
+                                        <GameRecap gameContent={gameContent} isEditorial={false}></GameRecap>
+                                    </div>
+                                </TabPanel>
+                            </Tabs>
+                            </div>
+                        </TabPanel>
+                        <TabPanel>
+                            {isPreview && homeRosterPreview? render_team_roster(homeRosterPreview) : render_team_stats(gameInfo.liveData.boxscore.teams.home)}
+                        </TabPanel>
+                        <TabPanel>
                             {isPreview && awayRosterPreview? render_team_roster(awayRosterPreview) : render_team_stats(gameInfo.liveData.boxscore.teams.away)}
+                        </TabPanel>
+                        <TabPanel>
+                            <div>
+                                {contract? <GamePrediction gameID={gameID} gameInfo={gameInfo} user={user} contract={contract}/> : null}
+                            </div>
                         </TabPanel>
                     </Tabs>
                     <div>
-                        <Tabs>
-                            <TabList>
-                                <Tab>Short Recap</Tab>
-                                <Tab>Long Recap</Tab>
-                            </TabList>  
-                        
-                            <TabPanel>
-                                <div>
-                                    <GameRecap gameContent={gameContent} isEditorial={true}></GameRecap>
-                                </div>
-                            </TabPanel>
-                            <TabPanel>
-                                <div>
-                                    <GameRecap gameContent={gameContent} isEditorial={false}></GameRecap>
-                                </div>
-                            </TabPanel>
-                        </Tabs>
                         <PeriodRecap gameContent={gameContent} period={"1"}></PeriodRecap>
                         <PeriodRecap gameContent={gameContent} period={"2"}></PeriodRecap>
                         <PeriodRecap gameContent={gameContent} period={"3"}></PeriodRecap>
                         <PeriodRecap gameContent={gameContent} period={"4"}></PeriodRecap>
                         <OtherGameContent gameContent={gameContent}></OtherGameContent>
                     </div>
-                    {/* <h1>{gameInfo.gameData.status.abstractGameState}</h1>
-                    <h1>{gameInfo.liveData.plays.currentPlay.result.eventCode}</h1>
-                    <h1>{gameInfo.liveData.plays.currentPlay.result.event}</h1> */}
-                    
+                    {/* <h1>{gameInfo.liveData.plays.currentPlay.about.goals.away}</h1>
+                    <h1>{gameInfo.liveData.plays.currentPlay.about.goals.home}</h1> */}
                 </div>
-                <div className="floatRight">
-                    {contract? <GamePrediction gameID={gameID} gameInfo={gameInfo} user={user} contract={contract}/> : null}
-                </div>
+                
             </div>
         )
        
@@ -333,8 +349,6 @@ function GameFeedPage({user, contract}) {
             </div>
         )
     }
-
-    
-  
   }
+
   export default GameFeedPage;

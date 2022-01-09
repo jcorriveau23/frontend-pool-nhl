@@ -3,9 +3,12 @@
     font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
     font-size: 15px;
     line-height: 16px;
-    margin: 10px 200px;
-    padding: 5px 30px 5px 30px;
     max-width: 468px;
+    text-align: right;
+    position: absolute;
+    right:1%;
+    top: 60px
+    
   }
 
 .walletCard button {

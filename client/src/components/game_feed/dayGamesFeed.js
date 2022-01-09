@@ -41,7 +41,6 @@ function TodayGamesFeed() {
     const prevDate = () => {
         const newDate = new Date(date)
         newDate.setDate(date.getDate() - 1)
-        console.log(newDate)
 
         setDate(newDate)
     }
@@ -49,7 +48,6 @@ function TodayGamesFeed() {
     const nextDate = () => {
         const newDate = new Date(date)
         newDate.setDate(date.getDate() + 1)
-        console.log(newDate)
 
         setDate(newDate)
     }

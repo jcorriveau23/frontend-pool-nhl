@@ -35,7 +35,6 @@ function SendPredictionModal({user, gameID, gameInfo, gameData, contract, showSe
             value: ethers.utils.parseEther(amountEthersInput), //sending one ether  
             gasLimit: 150000 //optional 
         }
-        console.log(gameInfo.gamePk)
 
         await contract.sendBet(gameInfo.gamePk, isHome, overrides)
         setWaitingTransaction(true)
@@ -45,16 +44,16 @@ function SendPredictionModal({user, gameID, gameInfo, gameData, contract, showSe
         contract.on("CreatePredictionMarket", (from, id) => {
             console.log("Event CreatedPredictionMarket: " + parseInt(id) + "   From: " + from)
             if(parseInt(id) === parseInt(gameID)){
-                console.log("Rerenderplz: " + reRender)
+                // console.log("Rerenderplz: " + reRender)
                 setRerender(!reRender)
             }
         }) 
 
         contract.on("SendBet", (from, id, isHome, value) => {
             console.log("Event SendBet: " + parseInt(id) + "   From: " + from + "   Home: " + isHome + "amount: " + value)
-            console.log(parseInt(gameID))
+            // console.log(parseInt(gameID))
             if(parseInt(id) === parseInt(gameID)){
-                console.log("Rerenderplz: " + reRender)
+                // console.log("Rerenderplz: " + reRender)
                 setRerender(!reRender)
                 setWaitingTransaction(false)
                 setTransactionSuccessMsg("Transaction Succeeded :)!")   // TODO: should only returned this when the transaction is the user one.
