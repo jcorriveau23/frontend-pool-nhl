@@ -1,3 +1,8 @@
+# Live on Kovan Network
+
+https://hockeypool.live
+
+
 # pool-nhl-ethereum
 
 nhl hockey pool that automatically distribute fund to the winner without 3rd party with the use of smart contract.
