@@ -133,7 +133,11 @@ function PlayerPage() {
                                         <td><Link to={"/teamRosterBySeason/"+ season.team.id + "/" + season.season} style={{ textDecoration: 'none', color: "#000099" }}>{season.season.slice(0,4) + "-" + season.season.slice(4)}</Link></td>
                                         : <td>{season.season.slice(0,4) + "-" + season.season.slice(4)}</td>
                                 }
-                                <td>{season.league.name}</td>
+                                {
+                                    season.league.id === 133 ? // nhl league
+                                    <td>NHL</td>
+                                    : <td>{season.league.name}</td>
+                                }
                                 <td>{season.stat.games}</td>
                                 <td>{season.stat.goals}</td>
                                 <td>{season.stat.assists}</td>
