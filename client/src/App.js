@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {BrowserRouter as Router, Link, Switch, Route} from "react-router-dom"
+import {BrowserRouter as Router, Link, Routes, Route} from "react-router-dom"
 import Cookies from 'js-cookie';
 
 // css
@@ -67,15 +67,15 @@ function App() {
         </div>
         <div>
         <RegisterModal showRegisterModal={showRegisterModal} setShowRegisterModal={setShowRegisterModal}></RegisterModal>
-        <Switch>
-          <Route exact path="/MyPools" component = {() => MyPoolsPage(user)}></Route>
-          <Route exact path="/MyGameBets" component = {() => MyGameBetsPage({user, contract})}></Route>
-          <Route path="/MyPools/:name" component = {() => PoolPage(user)}></Route>
-          <Route exact path="/statsPage" component = {StatsPage}></Route>
-          <Route path="/gameFeed/:id" component = {() => GameFeedPage({user, contract})}></Route>
-          <Route path="/playerInfo/:id" component = {() => PlayerPage()}></Route>
-          <Route path="/teamRosterBySeason/:teamID/:season" component = {() => TeamRosterBySeasonPage()}></Route>
-        </Switch>
+        <Routes>
+          <Route path="/MyPools" element = {<MyPoolsPage user={user}/>}></Route>
+          <Route path="/MyGameBets" element = {<MyGameBetsPage user={user} contract={contract}/>}></Route>
+          <Route path="/MyPools/:name" element = {<PoolPage user={user}/>}></Route>
+          <Route path="/statsPage" element = {<StatsPage/>}></Route>
+          <Route path="/gameFeed/:id" element = {<GameFeedPage user={user} contract={contract}/>}></Route>
+          <Route path="/playerInfo/:id" element = {<PlayerPage/>}></Route>
+          <Route path="/teamRosterBySeason/:teamID/:season" element = {<TeamRosterBySeasonPage/>}></Route>
+        </Routes>
         </div>
       </Router>
   )

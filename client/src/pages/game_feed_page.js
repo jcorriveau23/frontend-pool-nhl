@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 // teams logo
 import logos from "../components/img/images" 
@@ -28,6 +28,7 @@ function GameFeedPage({user, contract}) {
     const [awayRosterPreview, setAwayRosterPreview] = useState(null)
     const [isPreview, setIsPreview] = useState(false)
     const [prevGameID, setPrevGameID] = useState("")
+    const location = useLocation()
 
     const gameID = window.location.pathname.split('/').pop();
     
@@ -70,7 +71,7 @@ function GameFeedPage({user, contract}) {
         //     setGameInfo({}); // cleanup the state on unmount
         // };   // TODO: there is a leak warning here and we need to investigate why when repairing the leak, we get the error corrected.
 
-    }, [gameID]);
+    }, [location]);   // eslint-disable-line react-hooks/exhaustive-deps
     
     const render_team_stats = (team) => {
         return(
@@ -319,11 +320,16 @@ function GameFeedPage({user, contract}) {
                         <TabPanel>
                             {isPreview && awayRosterPreview? render_team_roster(awayRosterPreview) : render_team_stats(gameInfo.liveData.boxscore.teams.away)}
                         </TabPanel>
-                        <TabPanel>
-                            <div>
-                                {contract? <GamePrediction gameID={gameID} gameInfo={gameInfo} user={user} contract={contract}/> : null}
-                            </div>
-                        </TabPanel>
+                        {
+                            contract?
+                            <TabPanel>
+                                <div>
+                                    {<GamePrediction gameID={gameID} gameInfo={gameInfo} user={user} contract={contract}/>}
+                                </div>
+                            </TabPanel>
+                            : null
+                        }
+                        
                     </Tabs>
                     <div>
                         <PeriodRecap gameContent={gameContent} period={"1"}></PeriodRecap>

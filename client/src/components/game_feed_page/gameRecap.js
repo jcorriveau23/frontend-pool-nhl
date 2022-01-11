@@ -12,7 +12,7 @@ export const GameRecap = ({gameContent, isEditorial}) => {
             videoRef?.current?.load();
             setPrevGameContent(gameContent)
         }
-    }, [gameContent])
+    }, [gameContent])   // eslint-disable-line react-hooks/exhaustive-deps
 
     if(isEditorial && gameContent.editorial && gameContent.media.epg[3].items?.length > 0)
     {

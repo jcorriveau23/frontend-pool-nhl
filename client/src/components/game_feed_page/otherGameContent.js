@@ -59,6 +59,6 @@ export const OtherGameContent = ({gameContent}) => {
         )
     }
     else
-        return (<h1></h1>)
+        return (<h1>Nothing to display</h1>)
     
 }

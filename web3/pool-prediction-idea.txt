@@ -1,0 +1,12 @@
+win lose winners take all depending on the position they have on the market
+
+every participants gets 100 sportsBetsTokens (ERC20 tokens minted every time they participates in a bets)
+
+custom bets for all the season that creates pool for amm market (Ex: how much goals wich ovechkin scores at the end of the season)
+
+short bets for game results every day.
+
+un NFT de la game est distribué au hasard parmis les participants (gagnant perdant) lorsque le résultat de la game est process.
+les Games peuvent etre trader contre de coins.
+
+Les participants vote pour approuver le résultat d'une partie + de 50% pour approuver le résultat et création du NFT avec ce résultat de l'oracle.

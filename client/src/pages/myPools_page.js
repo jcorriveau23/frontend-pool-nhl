@@ -9,7 +9,7 @@ import { PoolItem } from "../components/poolItem";
 
 import { CreatePoolModal } from '../modals/createPool';
 
-function MyPoolsPage(user) {
+function MyPoolsPage({user}) {
     
     const [showCreatePoolModal, setShowCreatePoolModal] = useState(false)
     const [poolDeleted, setPoolDeleted] = useState(false)
@@ -81,7 +81,7 @@ function MyPoolsPage(user) {
                 <div className="pool_item">
                   <ul>
                     {poolCreated.map((pool, i)  => 
-                      <Link to={'MyPools/' + pool.name} key={i}><li><PoolItem name={pool.name} owner={pool.owner} username={user.addr} poolDeleted = {poolDeleted} setPoolDeleted={setPoolDeleted}></PoolItem></li></Link>  
+                      <Link to={'/MyPools/' + pool.name} key={i}><li><PoolItem name={pool.name} owner={pool.owner} username={user.addr} poolDeleted = {poolDeleted} setPoolDeleted={setPoolDeleted}></PoolItem></li></Link>  
                     )}
                   </ul>
                 </div>
@@ -91,7 +91,7 @@ function MyPoolsPage(user) {
                   <div className="pool_item">
                     <ul>
                       {poolDraft.map((pool, i)  => 
-                        <Link to={'MyPools/' + pool.name} key={i}><li><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li></Link>
+                        <Link to={'/MyPools/' + pool.name} key={i}><li><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li></Link>
                       )}
                     </ul>
                   </div>
@@ -103,7 +103,7 @@ function MyPoolsPage(user) {
                   <div className="pool_item">
                     <ul>
                       {poolDynastie.map((pool, i)  => 
-                        <Link to={'MyPools/' + pool.name} key={i}><li><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li></Link> 
+                        <Link to={'/MyPools/' + pool.name} key={i}><li><PoolItem name={pool.name} owner={pool.owner}></PoolItem></li></Link> 
                       )}
                     </ul>
                   </div>
@@ -115,7 +115,7 @@ function MyPoolsPage(user) {
                   <div className="pool_item">
                     <ul>
                       {poolInProgress.map((pool, i)  => 
-                        <Link to={'MyPools/' + pool.name} key={i}><li><PoolItem name={pool.name} owner={pool.owner} key={i}></PoolItem></li></Link> 
+                        <Link to={'/MyPools/' + pool.name} key={i}><li><PoolItem name={pool.name} owner={pool.owner} key={i}></PoolItem></li></Link> 
                       )}
                     </ul>
                   </div>

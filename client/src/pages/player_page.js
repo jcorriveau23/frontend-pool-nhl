@@ -32,7 +32,7 @@ function PlayerPage() {
                 <table  className="content-table">
                     <thead>
                         <tr>
-                            <th colSpan={2}>{info.fullName}</th>
+                            <th colSpan={2}><h3>{info.fullName}</h3></th>
                         </tr>
                     </thead>
                     <tbody>

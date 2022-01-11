@@ -15,7 +15,7 @@ import ClipLoader from "react-spinners/ClipLoader"
 
 var socket = io.connect()
 
-function PoolPage(user) {
+function PoolPage({user}) {
 
     const [poolInfo, setPoolInfo] = useState({})
     const [poolName] = useState(useParams().name)   // get the name of the pool using the param url
