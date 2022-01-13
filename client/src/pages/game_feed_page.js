@@ -332,11 +332,16 @@ function GameFeedPage({user, contract}) {
                         
                     </Tabs>
                     <div>
-                        <PeriodRecap gameContent={gameContent} period={"1"}></PeriodRecap>
-                        <PeriodRecap gameContent={gameContent} period={"2"}></PeriodRecap>
-                        <PeriodRecap gameContent={gameContent} period={"3"}></PeriodRecap>
-                        <PeriodRecap gameContent={gameContent} period={"4"}></PeriodRecap>
-                        <OtherGameContent gameContent={gameContent}></OtherGameContent>
+                        {gameInfo.gameData.status.abstractGameState !== "Preview"?
+                            <>
+                                <PeriodRecap gameContent={gameContent} period={"1"}></PeriodRecap>
+                                <PeriodRecap gameContent={gameContent} period={"2"}></PeriodRecap>
+                                <PeriodRecap gameContent={gameContent} period={"3"}></PeriodRecap>
+                                <PeriodRecap gameContent={gameContent} period={"4"}></PeriodRecap>
+                                <OtherGameContent gameContent={gameContent}></OtherGameContent>
+                            </> :
+                            <h1>Game not started yet.</h1>
+                        }
                     </div>
                     {/* <h1>{gameInfo.liveData.plays.currentPlay.about.goals.away}</h1>
                     <h1>{gameInfo.liveData.plays.currentPlay.about.goals.home}</h1> */}

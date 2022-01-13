@@ -20,21 +20,23 @@ export const OtherGameContent = ({gameContent}) => {
         return(
             <div>
                 <table className="goalItem">
-                    {
-                        isItem? 
-                        <tr>
-                            <th colSpan={3}>Other games content</th>
-                        </tr> :
-                        null
-                    }
+                    <thead>
+                        {
+                            isItem? 
+                            <tr>
+                                <th colSpan={3}>Other games content</th>
+                            </tr> :
+                            null
+                        }
+                    </thead>
                     {gameContent.media.milestones.items.filter(highlight => {
                         return (highlight.type !== "GOAL" && highlight.highlight && highlight.highlight.playbacks) 
-                    }).map(highlight => {
+                    }).map((highlight, i) => {
                         if(isItem === false)
                             setIsItem(true)
                         //console.log(highlight)
                         return(
-                            <tbody>
+                            <tbody key={i}>
                                 <tr>
                                     <td colSpan={3}><Link to={"/playerInfo/" + highlight.playerId } style={{ textDecoration: 'none', color: "#000099" }}>{highlight.highlight.description}</Link></td>
                                 </tr>

@@ -14,7 +14,6 @@ export const GoalItem = ({goalContent, statsData, team}) => {
     // const previousUrl = useRef(goalContent.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
 
     useEffect(() => {
-        console.log(goalContent)
             videoRef?.current?.load();
 
             var goalInfos = goalContent.description.split(", ")
@@ -34,34 +33,34 @@ export const GoalItem = ({goalContent, statsData, team}) => {
     return (
         <div>
             <table className="goalItem">
-                <tr>
-                    <th width="75">Time:</th>
-                    <td width="300">{goalContent.periodTime}</td>
-                    <td rowSpan={4} width="225">
-                        {
-                            goalContent.highlight.playbacks?.length > 3?
-                            <video width="224" height="126" poster={goalContent.highlight.image.cuts["248x140"]?.src} controls ref={videoRef}>
-                                <source src={goalContent.highlight.playbacks[3].url} type="video/mp4"/>
-                            </video> :
-                            <p>No video yet</p>
-                        }
-                    </td>
-                    
-                </tr>
-                <tr>
-                    <th>Scorer:</th>
-                    <td><Link to={"/playerInfo/" + goalContent.playerId } style={{ textDecoration: 'none', color: "#000099" }}>{scorer}</Link></td>
-                </tr>
-                <tr>
-                    <th>Assists:</th>
-                    <td>{assists}</td>
-                </tr>
-                <tr>
-                    <th>Type:</th>
-                    <td>{goalType}</td>
-                </tr>
-
-                
+                <tbody>
+                    <tr>
+                        <th width="75">Time:</th>
+                        <td width="300">{goalContent.periodTime}</td>
+                        <td rowSpan={4} width="225">
+                            {
+                                goalContent.highlight.playbacks?.length > 3?
+                                <video width="224" height="126" poster={goalContent.highlight.image.cuts["248x140"]?.src} controls ref={videoRef}>
+                                    <source src={goalContent.highlight.playbacks[3].url} type="video/mp4"/>
+                                </video> :
+                                <p>No video yet</p>
+                            }
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <th>Scorer:</th>
+                        <td><Link to={"/playerInfo/" + goalContent.playerId } style={{ textDecoration: 'none', color: "#000099" }}>{scorer}</Link></td>
+                    </tr>
+                    <tr>
+                        <th>Assists:</th>
+                        <td>{assists}</td>
+                    </tr>
+                    <tr>
+                        <th>Type:</th>
+                        <td>{goalType}</td>
+                    </tr>
+                </tbody>
             </table>                
         </div>
     )    

@@ -16,6 +16,7 @@ import TodayGamesFeed from "./components/game_feed/dayGamesFeed"
 import {RegisterModal} from "./modals/register"
 
 //pages
+import HomePage from './pages/home_page';
 import MyPoolsPage from "./pages/myPools_page"
 import PoolPage from "./pages/pool_page"
 import StatsPage from "./pages/stats_page"
@@ -68,6 +69,7 @@ function App() {
         <div>
         <RegisterModal showRegisterModal={showRegisterModal} setShowRegisterModal={setShowRegisterModal}></RegisterModal>
         <Routes>
+          <Route path="/" element = {<HomePage/>}></Route>
           <Route path="/MyPools" element = {<MyPoolsPage user={user}/>}></Route>
           <Route path="/MyGameBets" element = {<MyGameBetsPage user={user} contract={contract}/>}></Route>
           <Route path="/MyPools/:name" element = {<PoolPage user={user}/>}></Route>

@@ -1,8 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-contract NHLGamePredictions {
+import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 
+contract NHLGamePredictions is ChainlinkClient {
+    using Chainlink for Chainlink.Request;
+    
     address public owner;  // owner of the contract.
 
     mapping(uint => Game) public predictionGames;  // map a game ID with the Game data structure.
@@ -117,16 +120,75 @@ contract NHLGamePredictions {
         return users[msg.sender].bets[i];
     }
 
-    function claimBet(uint _id, bool isHomeWin) public view {
-        require(predictionGames[_id].isDone == true, "The game result needs to be processed before enabling claiming.");
+    function claimBet(uint _id) public view {
+        uint256 amountToGiveClaimer = get_claim_amount(_id);
+        amountToGiveClaimer;
 
-        uint256 amountToGiveClaimer = 0;
-
-        if(isHomeWin)
-            amountToGiveClaimer = predictionGames[_id].accumulatedWeisHomeUsers[msg.sender]; // TODO: need to calculate how much the user deserve here.
-        else
-            amountToGiveClaimer = predictionGames[_id].accumulatedWeisAwayUsers[msg.sender]; // TODO: need to calculate how much the user deserve here.
-
-        // transferFrom(owner, msg.sender, amountToGiveClaimer);
+        // transferTo(owner, msg.sender, amountToGiveClaimer);
     }
+
+    function get_claim_amount(uint _id) public view returns(uint amount){
+        require(predictionGames[_id].isDone == true, "The game result needs to be processed before enabling claiming.");
+        require(predictionGames[_id].accumulatedWeisHome != 0 || predictionGames[_id].accumulatedWeisAway != 0, "The pool doesn't have fund at all.");
+        require(users[msg.sender].isCreated, "User does not exist.");
+        
+        // the user take its part using this formula
+        // [user amount in winning pool] / [total amount in winning pool] * [total amount in winning pool + total amount in losers pool]
+
+        if(predictionGames[_id].isHomeWin)
+        {
+            require(predictionGames[_id].accumulatedWeisHomeUsers[msg.sender] > 0, "The user does not win anything.");
+
+            return (predictionGames[_id].accumulatedWeisHomeUsers[msg.sender] * predictionGames[_id].accumulatedWeisAway / predictionGames[_id].accumulatedWeisHome) 
+                 + (predictionGames[_id].accumulatedWeisHomeUsers[msg.sender] * predictionGames[_id].accumulatedWeisHome / predictionGames[_id].accumulatedWeisHome);
+        }
+        else
+        {
+            require(predictionGames[_id].accumulatedWeisAwayUsers[msg.sender] > 0, "The user does not win anything.");
+
+            return  (predictionGames[_id].accumulatedWeisAwayUsers[msg.sender] * predictionGames[_id].accumulatedWeisAway / predictionGames[_id].accumulatedWeisAway) 
+                  + (predictionGames[_id].accumulatedWeisAwayUsers[msg.sender] * predictionGames[_id].accumulatedWeisHome / predictionGames[_id].accumulatedWeisAway);
+        }
+
+           
+        // transferTo(owner, msg.sender, amountToGiveClaimer);
+    }
+}
+
+function requestGameResult(uint _id) public returns (bytes32 requestId) 
+    {
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
+        
+        // Set the URL to perform the GET request on
+        request.add("get", "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD");
+        
+        // Set the path to find the desired data in the API response, where the response format is:
+        // {"RAW":
+        //   {"ETH":
+        //    {"USD":
+        //     {
+        //      "VOLUME24HOUR": xxx.xxx,
+        //     }
+        //    }
+        //   }
+        //  }
+        request.add("path", "RAW.ETH.USD.VOLUME24HOUR");
+        
+        // Multiply the result by 1000000000000000000 to remove decimals
+        int timesAmount = 10**18;
+        request.addInt("times", timesAmount);
+        
+        // Sends the request
+        return sendChainlinkRequestTo(oracle, request, fee);
+    }
+    
+    /**
+     * Receive the response in the form of uint256
+     */ 
+    function fulfill(bytes32 _requestId, uint256 _volume) public recordChainlinkFulfillment(_requestId)
+    {
+        volume = _volume;
+    }
+
+    // function withdrawLink() external {} - Implement a withdraw function to avoid locking your LINK in the contract
 }

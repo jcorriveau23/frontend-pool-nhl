@@ -16,32 +16,35 @@ export const PeriodRecap = ({gameContent, period}) => {
             videoRef?.current?.load();
     }, [gameContent])
 
-    if(gameContent.media && gameContent.media.milestones.items)
+    if(gameContent.media && gameContent.media.milestones.items )
     {
         return(
             <div>
                 <table className='goalItem'>
-                    {
-                        isItem?
-                        <tr>
-                            <th>{ period === "4"? "OT" : "Period: " + period}</th>
-                        </tr> : 
-                        null
-                    }
-                    
-                    {gameContent.media.milestones.items.filter(highlight => {
-                        return (highlight.type === "GOAL" && highlight.period === period) 
-                    }).map(highlight => {
-                        if(isItem === false)
-                            setIsItem(true)
-                        return(
+                    <thead>
+                        {
+                            isItem?
                             <tr>
-                                <td>
-                                    <GoalItem goalContent={highlight}></GoalItem>
-                                </td>
-                            </tr>
-                        )
-                    } )}
+                                <th>{ period === "4"? "OT" : "Period: " + period}</th>
+                            </tr> : 
+                            null
+                        }
+                    </thead>
+                    <tbody>
+                        {gameContent.media.milestones.items.filter(highlight => {
+                            return (highlight.type === "GOAL" && highlight.period === period) 
+                        }).map((highlight, i) => {
+                            if(isItem === false)
+                                setIsItem(true)
+                            return(
+                                <tr key={i}>
+                                    <td>
+                                        <GoalItem goalContent={highlight}></GoalItem>
+                                    </td>
+                                </tr>
+                            )
+                        } )}
+                    </tbody>
                 </table>
             </div>
         )
