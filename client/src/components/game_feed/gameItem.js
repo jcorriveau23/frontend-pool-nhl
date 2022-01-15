@@ -6,7 +6,7 @@ import logos from "../img/images"
 import liveGame from "../img/icons/live-game.png"
 
 export const GameItem = ({gameData}) => {
-    console.log(gameData)
+    //console.log(gameData)
     return (
         <table>
             <thead>

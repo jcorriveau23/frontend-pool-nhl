@@ -1,0 +1,7 @@
+.inFront div {
+    z-index: 200;
+    position: absolute;
+}
+.inBack div {
+    z-index: 0;
+}

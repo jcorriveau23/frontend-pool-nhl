@@ -10,7 +10,8 @@ import Cookies from 'js-cookie';
 
 const WalletCard = ({user, setUser, contract, setContract}) => {
 
-	const [errorMessage, setErrorMessage] = useState(null);
+	const [networkName, setNetworkName] = useState("");
+	const [isWrongNetwork, setIsWrongNetwork] = useState(false);
 	const [isWalletUnlocked, setIsWalletUnlocked] = useState(false);
 	const [isWalletConnected, setIsWalletConnected] = useState(false);
 	const [currentAddr, setCurrentAddr] = useState("");
@@ -27,17 +28,21 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 				console.log("wallet is unlocked: " + address)
 				provider.getNetwork()
 				.then(network => {
-					//console.log(network)
+					console.log(network)
+					network.chainId === 1? setNetworkName("Ethereum") : setNetworkName(network.name)
 					if(network.name === "kovan"){
 						
 						let c = new ethers.Contract("0x4e5e10C3Ef12663ba231d16b915372E0E69D1ffe", NHLGamePredictionsABI, signer)
 						setContract(c)
 					}
-					else
-						setErrorMessage("You need to select Kovan Network in metamask plugin.")
+					else{
+						setIsWrongNetwork(true)
+						alert("You need to select Kovan Network in metamask plugin.")
+					}
+						
 				})
 			})
-			.catch((err) => setErrorMessage("You need to unlocked the metamask account using the plugin."));	
+			.catch((err) => alert("Your metamask account is not unlocked!"));	
 		}
 
 		const user = JSON.parse(localStorage.getItem("persist-account"))
@@ -54,8 +59,7 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 
 			if( token ){	// TODO: also validate that the token is not expired
 				setIsWalletUnlocked(true) 
-				setIsWalletConnected(true) 
-				setErrorMessage("")
+				setIsWalletConnected(true)
 			} 
 		} 		
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -76,16 +80,14 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 				if( token ){ // TODO: also validate that the token is not expired
 
 					setIsWalletUnlocked(true) 
-					setErrorMessage("")
 				}  
 			})
 			.catch(error => {
-
-				setErrorMessage(error.message);
+				alert(error.message);
 			});
 		} 
 		else 
-			setErrorMessage('Please install MetaMask browser extension at: https://metamask.io/download.');
+			alert('Please install MetaMask browser extension at: https://metamask.io/download.');
 	}
 
 	const unlockWallet = () => {
@@ -124,10 +126,9 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 								setUser(data.user)
 								
 								setIsWalletUnlocked(true)
-								setErrorMessage("")
 							}
 							else
-								setErrorMessage(data.message);
+								alert(data.message);
 						});
 					})
 				})
@@ -135,7 +136,7 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 			})
 		}
 		catch(err){
-			setErrorMessage(err.message)
+			alert(err.message)
 		}
 	}
 
@@ -153,8 +154,16 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 		window.ethereum.on('chainChanged', chainChangedHandler);
 	}
 
+	const switchChain = () => {
+		// reload the page to avoid any errors with chain change mid use of application
+		console.log("try to switch chain!")
+		window.ethereum.request({ method: 'wallet_switchEthereumChain', params:[{chainId: '0x2A'}]})
+		.catch(error => {
+			console.log(error)
+		})
+	}
+
 	return (
-		
 		<li className='walletCard'>
 			<button onClick={!isWalletConnected? connectWalletHandler : !isCurrentWalletUnlocked()? unlockWallet : null }>
 				<div className='accountDisplay'>
@@ -163,9 +172,16 @@ const WalletCard = ({user, setUser, contract, setContract}) => {
 					{/*user? <h3>session addr: {user.addr}</h3> : null*/}
 				</div>
 			</button>
-			<div>
-			<b style={{ color: '#b00' }}>{errorMessage}</b>
-			</div>
+			{
+				isWalletConnected?
+				<button onClick={isWrongNetwork? switchChain : null} disabled={!isWrongNetwork}>
+					<b style={isWrongNetwork? { color: '#b00' } : { color: '#00a' }}>{networkName}</b>
+				</button>
+				: null
+			}
+			{/* <div>
+				<b style={{ color: '#b00' }}>{errorMessage}</b>
+			</div> */}
 		</li>
 	);
 }

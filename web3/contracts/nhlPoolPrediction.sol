@@ -8,6 +8,10 @@ contract NHLGamePredictions is ChainlinkClient {
     
     address public owner;  // owner of the contract.
 
+    address private oracle;
+    bytes32 private jobId;
+    uint256 private fee;
+
     mapping(uint => Game) public predictionGames;  // map a game ID with the Game data structure.
     mapping(address => User) public users;         // map Ethereum address with the User data structure.
     uint[] public createdGames;
@@ -21,6 +25,10 @@ contract NHLGamePredictions is ChainlinkClient {
     {
         owner = msg.sender;
         numCreatedGames = 0;
+
+        oracle = 0xc57B33452b4F7BB189bB5AfaE9cc4aBa1f7a4FD8;
+        jobId = "d5270d1c311941d0b08bead21fea7747";
+        fee = 0.1 * 10 ** 18; // (Varies by network and job)
     }
 
     struct Game {                                                   // id of the game of nhl api.
@@ -31,6 +39,7 @@ contract NHLGamePredictions is ChainlinkClient {
         uint256 accumulatedWeisAway;                                // amount of wei accumulated for "Away team win" prediction.
         mapping(address => uint256) accumulatedWeisHomeUsers;       // map a user with a his amount of weis sent to "Home team win" prediction.
         mapping(address => uint256) accumulatedWeisAwayUsers;       // map a user with a his amount of weis sent to "Away team win" prediction.
+        uint8 homeScore;
     }
 
     struct User {
@@ -153,30 +162,41 @@ contract NHLGamePredictions is ChainlinkClient {
            
         // transferTo(owner, msg.sender, amountToGiveClaimer);
     }
-}
 
-function requestGameResult(uint _id) public returns (bytes32 requestId) 
+    function requestGameResult(uint _id) public returns (bytes32 requestId) 
     {
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
         
+        //TODO: format a string for the game ID
+        _id;
+        // url_1 = "https://statsapi.web.nhl.com/api/v1/game/";
+        // url_3 = "/feed/live";
+
+        // bytes memory burl_1 = bytes(url_1);
+        // bytes memory burl_2 = bytes(_id);
+        // bytes memory burl_3 = bytes(url_3);
+
+        // string memory url = string(burl_1.length + burl_2.length + burl_3.length);
+        // bytes memory burl = bytes(url);
+
+        // uint k = 0;
+        // for (uint i = 0; i < burl_1.length; i++) burl[k++] = burl_1[i];
+        // for (i = 0; i < burl_2.length; i++) burl[k++] = burl_2[i];
+        // for (i = 0; i < burl_3.length; i++) burl[k++] = burl_3[i];
+
+        // url = string(burl);
+
         // Set the URL to perform the GET request on
-        request.add("get", "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD");
+        request.add("get", "https://statsapi.web.nhl.com/api/v1/game/2021020661/feed/live");
+
+        // Paths needed:
+        // home team score     -> liveData.linescore.teams.home.goals
+        // away team score     -> liveData.linescore.teams.away.goals
+        // has shoutout        -> liveData.linescore.hasShootout
+        // home shootout Infos -> liveData.linescore.shootoutInfo.home.scores
+        // away shootout Infos -> liveData.linescore.shootoutInfo.away.scores
         
-        // Set the path to find the desired data in the API response, where the response format is:
-        // {"RAW":
-        //   {"ETH":
-        //    {"USD":
-        //     {
-        //      "VOLUME24HOUR": xxx.xxx,
-        //     }
-        //    }
-        //   }
-        //  }
-        request.add("path", "RAW.ETH.USD.VOLUME24HOUR");
-        
-        // Multiply the result by 1000000000000000000 to remove decimals
-        int timesAmount = 10**18;
-        request.addInt("times", timesAmount);
+        request.add("path", "liveData.linescore.teams.home.goals");
         
         // Sends the request
         return sendChainlinkRequestTo(oracle, request, fee);
@@ -185,9 +205,11 @@ function requestGameResult(uint _id) public returns (bytes32 requestId)
     /**
      * Receive the response in the form of uint256
      */ 
-    function fulfill(bytes32 _requestId, uint256 _volume) public recordChainlinkFulfillment(_requestId)
+    function fulfill(bytes32 _requestId, uint256 _score) public recordChainlinkFulfillment(_requestId)
     {
-        volume = _volume;
+        predictionGames[2021020661].homeScore = _score;
+        predictionGames[2021020661].isHomeWin = true;
+        predictionGames[2021020661].isDone = true;
     }
 
     // function withdrawLink() external {} - Implement a withdraw function to avoid locking your LINK in the contract

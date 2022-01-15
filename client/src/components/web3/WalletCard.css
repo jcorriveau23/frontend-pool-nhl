@@ -15,12 +15,12 @@
     border-color: #000;
     border-radius: 3px;
     border: 2px solid #000;
-    cursor: pointer;
 }
  
-.walletCard button:hover {
+.walletCard button:hover:enabled {
     border-color: #fff;
     background-color: #888;
+    cursor: pointer;
 }
 
 .walletCard img {

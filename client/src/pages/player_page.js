@@ -1,31 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 // Loader
 import ClipLoader from "react-spinners/ClipLoader"
+
+// components
+import { SearchPlayer } from '../components/player_page/searchPlayer';
+
+// css
+import "../components/player_page/player_page.css"
 
 function PlayerPage() {
 
     const [playerStats, setPlayerStats] = useState(null)
     const [playerInfo, setPlayerInfo] = useState(null)
+    const [prevPlayerID, setPrevPlayerID] = useState("")
+    const location = useLocation()
 
     const playerID = window.location.pathname.split('/').pop();
-    
+    console.log(playerID)
     useEffect(() => {
-        fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYear')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
-        .then(response => response.json())
-        .then(playerStats => {
-            
-            setPlayerStats({...playerStats})
-        })
-        fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID)  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
-        .then(response => response.json())
-        .then(playerInfo => {
-            setPlayerInfo({...playerInfo})
-        })
-
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+        if(prevPlayerID !== playerID && !isNaN(playerID))
+        {
+            console.log("fetching")
+            fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYear')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
+            .then(response => response.json())
+            .then(playerStats => {
+                setPlayerStats({...playerStats})
+            })
+            fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID)  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
+            .then(response => response.json())
+            .then(playerInfo => {
+                setPlayerInfo({...playerInfo})
+            })
+        }
     
+        setPrevPlayerID(playerID)
+
+    }, [location]); // eslint-disable-line react-hooks/exhaustive-deps
+
     const render_player_stats = (stats, info) => {
         return(
             <div>
@@ -45,7 +58,7 @@ function PlayerPage() {
                             <td>{info.primaryNumber}</td>                        
                         </tr>
                         <tr>
-                            <th>bitrhDate</th>
+                            <th>BitrhDate</th>
                             <td>{info.birthDate}</td>                        
                         </tr>
                         <tr>
@@ -82,8 +95,7 @@ function PlayerPage() {
         var totHits = 0
         var totBlocks = 0
         var totPPG = 0
-        
-        console.log(stats)
+
         return(
             <table  className="content-table">
                 <thead>
@@ -118,12 +130,12 @@ function PlayerPage() {
                             totGoals += season.stat.goals
                             totAssists += season.stat.assists
                             totPoints += season.stat.points
-                            totPlusMinus += season.stat.plusMinus
+                            totPlusMinus += isNaN(season.stat.plusMinus)? 0 :season.stat.plusMinus
                             totPenaltyMinutes += parseInt(season.stat.penaltyMinutes)
-                            totShots += season.stat.shots
-                            totHits += season.stat.hits
-                            totBlocks += season.stat.blocked
-                            totPPG += season.stat.powerPlayGoals
+                            totShots += isNaN(season.stat.shots)? 0 : season.stat.shots
+                            totHits += isNaN(season.stat.hits)? 0 : season.stat.hits
+                            totBlocks += isNaN(season.stat.blocked)? 0 : season.stat.blocked
+                            totPPG += isNaN(season.stat.powerPlayGoals)? 0 : season.stat.powerPlayGoals
                         }
                         return(
                             <tr key={i}>
@@ -223,9 +235,9 @@ function PlayerPage() {
                             totGoalAgainst += season.stat.goalsAgainst
                             totWins += season.stat.wins
                             totLosses += season.stat.losses
-                            totOT += season.stat.ot
-                            totSaves += season.stat.saves
-                            totShotAgainst += season.stat.shotsAgainst
+                            totOT += isNaN(season.stat.ot)? 0 : season.stat.ot
+                            totSaves += isNaN(season.stat.saves)? 0 : season.stat.saves
+                            totShotAgainst += isNaN(season.stat.shotsAgainst)? 0 : season.stat.shotsAgainst
                             totShutout += season.stat.shutouts
                         }
                         return(
@@ -271,24 +283,26 @@ function PlayerPage() {
             </table> 
         )
     }
+    
+    return(
+        <div>
+            <SearchPlayer/>
+            {playerStats && playerInfo?
+                <div>
+                    {render_player_stats(playerStats.stats[0].splits, playerInfo.people[0])}
+                </div> :
+                !isNaN(playerID) && playerID !== ""?
+                    <div>
+                        <h1>Trying to fetch player data from nhl api...</h1>
+                        <ClipLoader color="#fff" loading={true} size={75} />
+                    </div> :
+                    null
+            }
 
-    if( playerStats && playerInfo )
-    { 
-        return(
-            <div>
-                {render_player_stats(playerStats.stats[0].splits, playerInfo.people[0])}
-            </div>
-        )
-    }
-    else
-    {
-        return(
-            <div>
-                <h1>Trying to fetch player data from nhl api...</h1>
-                <ClipLoader color="#fff" loading={true} size={75} />
-            </div>
-        )
-    }
+        </div> 
+    
+    
+    )
   }
 
   export default PlayerPage;
