@@ -7,8 +7,7 @@
     text-align: right;
     position: absolute;
     right:1%;
-    top: 60px
-    
+    top: 60px;
   }
 
 .walletCard button {
@@ -16,6 +15,7 @@
     border-color: #000;
     border-radius: 3px;
     border: 2px solid #000;
+    cursor: pointer;
 }
  
 .walletCard button:hover {

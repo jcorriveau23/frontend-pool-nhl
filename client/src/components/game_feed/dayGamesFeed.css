@@ -53,6 +53,7 @@
     margin: 0px; 
     padding: 4px;
     background: url(../img/icons/calendar.png) no-repeat scroll 7px 3px;
+    cursor: pointer;
 }
 
 .dateSelector input:hover{
@@ -63,5 +64,5 @@
 .dateSelector img{
     margin: 0px 0px 0px 0px; 
     padding: 0px 0px 0px 0px;
-    align: center;
+    cursor: pointer;
 }
