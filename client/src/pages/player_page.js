@@ -10,6 +10,9 @@ import { SearchPlayer } from '../components/player_page/searchPlayer';
 // css
 import "../components/player_page/player_page.css"
 
+// images
+import logos, {team_name_from_id} from "../components/img/images"
+
 function PlayerPage() {
 
     const [playerStats, setPlayerStats] = useState(null)
@@ -147,17 +150,19 @@ function PlayerPage() {
                             totPPG += isNaN(season.stat.powerPlayGoals)? 0 : season.stat.powerPlayGoals
                         }
                         return(
-                            <tr key={i}>
+                            <tr key={i} backgroundColor='yellow'>
                                 <td>{season.team.name}</td>
                                 {
                                     season.league.id === 133 ? // nhl league
-                                        <td><Link to={"/teamRosterBySeason/"+ season.team.id + "/" + season.season} style={{ textDecoration: 'none', color: "#000099" }}>{season.season.slice(0,4) + "-" + season.season.slice(4)}</Link></td>
-                                        : <td>{season.season.slice(0,4) + "-" + season.season.slice(4)}</td>
-                                }
-                                {
-                                    season.league.id === 133 ? // nhl league
-                                    <td>NHL</td>
-                                    : <td>{season.league.name}</td>
+                                        <>
+                                            <td><Link to={"/teamRosterBySeason/"+ season.team.id + "/" + season.season} style={{ textDecoration: 'none', color: "#000099" }}>{season.season.slice(0,4) + "-" + season.season.slice(4)}</Link></td>
+                                            <td>NHL</td>
+                                        </>
+                                        : 
+                                        <>
+                                            <td>{season.season.slice(0,4) + "-" + season.season.slice(4)}</td>
+                                            <td>{season.league.name}</td>
+                                        </>
                                 }
                                 <td>{season.stat.games}</td>
                                 <td>{season.stat.goals}</td>
@@ -179,7 +184,7 @@ function PlayerPage() {
                         )                       
                     })}
                     <tr>
-                        <th>total nhl</th>
+                        <th>Total nhl</th>
                         <th>-</th>
                         <th>-</th>
                         <th>{totGames}</th>

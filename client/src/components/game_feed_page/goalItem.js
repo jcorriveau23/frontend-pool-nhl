@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 // css
 import "./goalItem.css"
 
+// images
+import logos, {team_name_from_id} from "../img/images"
+
 export const GoalItem = ({goalContent, statsData, team}) => {
 
     const videoRef = useRef()
@@ -14,19 +17,20 @@ export const GoalItem = ({goalContent, statsData, team}) => {
     // const previousUrl = useRef(goalContent.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
 
     useEffect(() => {
-            videoRef?.current?.load();
+        console.log(goalContent)
+        videoRef?.current?.load();
 
-            var goalInfos = goalContent.description.split(", ")
+        var goalInfos = goalContent.description.split(", ")
 
-            var goalSubInfos = goalInfos[0].split(") ")
+        var goalSubInfos = goalInfos[0].split(") ")
 
-            setScorer(goalSubInfos[0] + ")")
-            setGoalType(goalSubInfos[1]) //
+        setScorer(goalSubInfos[0] + ")")
+        setGoalType(goalSubInfos[1]) //
 
-            if(goalInfos.length > 2)
-                setAssists(goalInfos[1].substr(9) + ", " + goalInfos[2])
-            else if(goalInfos.length > 1)
-                setAssists(goalInfos[1].substr(9))
+        if(goalInfos.length > 2)
+            setAssists(goalInfos[1].substr(9) + ", " + goalInfos[2])
+        else if(goalInfos.length > 1)
+            setAssists(goalInfos[1].substr(9))
 
     }, [goalContent])
 
@@ -35,6 +39,7 @@ export const GoalItem = ({goalContent, statsData, team}) => {
             <table className="goalItem">
                 <tbody>
                     <tr>
+                        <th rowSpan={4} width="30"><img src={logos[team_name_from_id[goalContent.teamId]] } alt="" width="30" height="30"/></th>
                         <th width="75">Time:</th>
                         <td width="300">{goalContent.periodTime}</td>
                         <td rowSpan={4} width="225">

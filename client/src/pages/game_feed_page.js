@@ -26,7 +26,6 @@ function GameFeedPage({user, contract}) {
     const [tabIndex, setTabIndex] = useState(0);
     const [homeRosterPreview, setHomeRosterPreview] = useState(null)
     const [awayRosterPreview, setAwayRosterPreview] = useState(null)
-    const [isPreview, setIsPreview] = useState(false)
     const [prevGameID, setPrevGameID] = useState("")
     const [homeTeamSkaters, setHomeTeamSkaters] = useState([])
     const [awayTeamSkaters, setAwayTeamSkaters] = useState([])
@@ -37,7 +36,6 @@ function GameFeedPage({user, contract}) {
     useEffect(() => {
         if(prevGameID !== gameID)
         {
-            setIsPreview(false)
             fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/feed/live")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
             .then(response => response.json())
             .then(gameInfo => {
@@ -45,7 +43,6 @@ function GameFeedPage({user, contract}) {
                 setGameInfo(gameInfo)
     
                 if(gameInfo.gameData.status.abstractGameState === "Preview"){
-                    setIsPreview(true)
                     fetch('https://statsapi.web.nhl.com/api/v1/teams/' + gameInfo.gameData.teams.away.id + '/roster') // https://statsapi.web.nhl.com/api/v1/teams/22/roster
                     .then(response => response.json())
                     .then(teamInfo => {
@@ -344,10 +341,10 @@ function GameFeedPage({user, contract}) {
                             </div>
                         </TabPanel>
                         <TabPanel>
-                            {isPreview && homeRosterPreview? render_team_roster(homeRosterPreview) : render_team_stats(gameInfo.liveData.boxscore.teams.home, true)}
+                            {gameInfo.gameData.status.abstractGameState === "Preview" && homeRosterPreview? render_team_roster(homeRosterPreview) : gameInfo.gameData.status.abstractGameState !== "Preview"? render_team_stats(gameInfo.liveData.boxscore.teams.home, true) : null}
                         </TabPanel>
                         <TabPanel>
-                            {isPreview && awayRosterPreview? render_team_roster(awayRosterPreview) : render_team_stats(gameInfo.liveData.boxscore.teams.away, false)}
+                            {gameInfo.gameData.status.abstractGameState === "Preview" && awayRosterPreview? render_team_roster(awayRosterPreview) : gameInfo.gameData.status.abstractGameState !== "Preview"? render_team_stats(gameInfo.liveData.boxscore.teams.away, false) : null}
                         </TabPanel>
                         {
                             contract?

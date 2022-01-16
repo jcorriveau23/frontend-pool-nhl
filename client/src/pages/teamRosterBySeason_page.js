@@ -7,6 +7,9 @@ import { Link } from "react-router-dom";
 // Loader
 import ClipLoader from "react-spinners/ClipLoader"
 
+// images
+import logos, {team_name_from_id} from "../components/img/images"
+
 function TeamRosterBySeasonPage() {
 
     const [skatersStats, setSkatersStats] = useState(null)
@@ -45,11 +48,13 @@ function TeamRosterBySeasonPage() {
     const render_team_skaters = (roster) => {
         return(
             <div>
-                <h1>{teamName}</h1>
                <table  className="content-table">
                     <thead>
                         <tr>
-                            <th colSpan="18">{teamName} : {season}</th>
+                            <th colSpan="18">Season : {season.substring(0,4) + "-" + season.substring(4)}</th>
+                        </tr>
+                        <tr>
+                            <th colSpan="18"><img src={logos[team_name_from_id[teamID]] } alt="" width="30" height="30"></img></th>
                         </tr>
                         <tr>
                             <th colSpan="18">Skaters</th>
@@ -110,7 +115,6 @@ function TeamRosterBySeasonPage() {
     const render_team_goalies = (roster) => {
         return(
             <div>
-                <h1>{teamName}</h1>
                <table  className="content-table">
                     <thead>
                         <tr>
@@ -166,8 +170,6 @@ function TeamRosterBySeasonPage() {
             </div>
         )
     }
-
-
 
     if( skatersStats && goaliesStats )
     { 
