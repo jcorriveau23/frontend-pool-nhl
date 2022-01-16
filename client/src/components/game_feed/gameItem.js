@@ -15,7 +15,7 @@ export const GameItem = ({gameData}) => {
                     <td></td>
                     {
                         gameData.status.abstractGameState === "Live"?
-                            <td><img src={liveGame}></img></td> :
+                            <td><img src={liveGame} alt=""></img></td> :
                             gameData.status.detailedState === "Postponed"?
                                 <td>PPD</td> :
                                 null

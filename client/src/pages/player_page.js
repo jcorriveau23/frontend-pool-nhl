@@ -14,67 +14,76 @@ function PlayerPage() {
 
     const [playerStats, setPlayerStats] = useState(null)
     const [playerInfo, setPlayerInfo] = useState(null)
+    const [prospectInfo, setProspectInfo] = useState(null)
     const [prevPlayerID, setPrevPlayerID] = useState("")
     const location = useLocation()
 
     const playerID = window.location.pathname.split('/').pop();
-    console.log(playerID)
+    
     useEffect(() => {
         if(prevPlayerID !== playerID && !isNaN(playerID))
         {
-            console.log("fetching")
-            fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYear')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
-            .then(response => response.json())
-            .then(playerStats => {
-                setPlayerStats({...playerStats})
-            })
-            fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID)  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
-            .then(response => response.json())
-            .then(playerInfo => {
-                setPlayerInfo({...playerInfo})
-            })
+            if(parseInt(playerID) > 8000000)
+            {
+                //console.log("fetching NHL player")
+                fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYear')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
+                .then(response => response.json())
+                .then(playerStats => {
+                    setPlayerStats({...playerStats})
+                })
+                fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID)  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
+                .then(response => response.json())
+                .then(playerInfo => {
+                    setPlayerInfo({...playerInfo})
+                })
+            }
+            else
+            {
+                //console.log("fetching prospect")
+                fetch('https://statsapi.web.nhl.com/api/v1/draft/prospects/' + playerID )  // https://statsapi.web.nhl.com/api/v1/draft/prospects/76849
+                .then(response => response.json())
+                .then(prospect => {
+                    setProspectInfo({...prospect.prospects[0]})
+                    //console.log(prospect.prospects[0])
+                    if(prospect.prospects[0].nhlPlayerId > 8000000)
+                    {
+                        var newID = prospect.prospects[0].nhlPlayerId
+
+                        //console.log("fetching NHL player finally")
+                        fetch('https://statsapi.web.nhl.com/api/v1/people/' + newID + '/stats?stats=yearByYear')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
+                        .then(response => response.json())
+                        .then(playerStats => {
+                            console.log(playerStats)
+                            setPlayerStats({...playerStats})
+                        })
+                        fetch('https://statsapi.web.nhl.com/api/v1/people/' + newID)  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
+                        .then(response => response.json())
+                        .then(playerInfo => {
+                            console.log(playerInfo)
+                            setPlayerInfo({...playerInfo})
+                        })
+                    }
+                })
+            }   
+            setPrevPlayerID(playerID)         
         }
+        else
+        {
+            setPlayerInfo(null)
+            setPlayerStats(null)
+            setProspectInfo(null)
+            setPrevPlayerID("")
+        }
+            
     
-        setPrevPlayerID(playerID)
+        
 
     }, [location]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const render_player_stats = (stats, info) => {
+    const render_player_info_stats = (stats, info) => {
         return(
             <div>
-                <table  className="content-table">
-                    <thead>
-                        <tr>
-                            <th colSpan={2}><h3>{info.fullName}</h3></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>Position</th>
-                            <td>{info.primaryPosition.abbreviation}</td>                        
-                        </tr>
-                        <tr>
-                            <th>Number</th>
-                            <td>{info.primaryNumber}</td>                        
-                        </tr>
-                        <tr>
-                            <th>BitrhDate</th>
-                            <td>{info.birthDate}</td>                        
-                        </tr>
-                        <tr>
-                            <th>Age</th>
-                            <td>{info.currentAge}</td>                        
-                        </tr>
-                        <tr>
-                            <th>Height</th>
-                            <td>{info.height}</td>                        
-                        </tr>
-                        <tr>
-                            <th>Weight</th>
-                            <td>{info.weight}</td>                        
-                        </tr>
-                    </tbody>
-                </table>
+                {render_player_info(info)}
                 {
                     info.primaryPosition.abbreviation !== "G"?
                     render_skater_stats(stats) :
@@ -284,25 +293,93 @@ function PlayerPage() {
         )
     }
     
-    return(
-        <div>
-            <SearchPlayer/>
-            {playerStats && playerInfo?
-                <div>
-                    {render_player_stats(playerStats.stats[0].splits, playerInfo.people[0])}
-                </div> :
-                !isNaN(playerID) && playerID !== ""?
-                    <div>
-                        <h1>Trying to fetch player data from nhl api...</h1>
-                        <ClipLoader color="#fff" loading={true} size={75} />
-                    </div> :
-                    null
-            }
+    const render_player_info = (p) => {
+        var today = new Date()
+        var birthDate = new Date(p.birthDate)
+        var age_time = today - birthDate
 
-        </div> 
-    
-    
-    )
+        var age = new Date(age_time).getFullYear() - 1970
+        return(
+            <table  className="content-table">
+                    <thead>
+                        <tr>
+                            <th colSpan={2}><h3>{p.fullName}</h3></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Position</th>
+                            <td>{p.primaryPosition.abbreviation}</td>                        
+                        </tr>
+                        <tr>
+                            <th>Shoot Catches</th>
+                            <td>{p.shootsCatches}</td>                        
+                        </tr>
+                        <tr>
+                            <th>Birth date</th>
+                            <td>{p.birthDate}</td>                        
+                        </tr>
+                        <tr>
+                            <th>Age</th>
+                            <td>{age}</td>                        
+                        </tr>
+                        <tr>
+                            <th>Birth city</th>
+                            <td>{p.birthCity}</td>                        
+                        </tr>
+                        <tr>
+                            <th>Birth country</th>
+                            <td>{p.birthCountry}</td>                        
+                        </tr>
+                        <tr>
+                            <th>Height</th>
+                            <td>{p.height}</td>                        
+                        </tr>
+                        <tr>
+                            <th>Weight</th>
+                            <td>{p.weight}</td>                        
+                        </tr>
+                    </tbody>
+                </table>
+        )
+    }
+
+
+    if(playerStats && playerInfo){
+        return(
+            <div>
+                <SearchPlayer/>
+                {render_player_info_stats(playerStats.stats[0].splits, playerInfo.people[0])}
+            </div>
+        )
+    }
+    else if(!isNaN(playerID) && playerID !== "" && !prospectInfo){
+        return(
+            <div>
+                <h1>Trying to fetch player data from nhl api...</h1>
+                <ClipLoader color="#fff" loading={true} size={75} />
+            </div>
+        )
+    }
+    else if(prospectInfo){
+        return(
+            <div>
+                <SearchPlayer/>
+                {render_player_info(prospectInfo)}
+            </div>
+        )
+    }
+    else if(isNaN(playerID) || playerID === ""){
+        return <SearchPlayer/>
+    }
+    else{
+        return (
+            <div>
+                <SearchPlayer/>
+                <h1>Player does not exist</h1>
+            </div>
+        )
+    }
   }
 
   export default PlayerPage;

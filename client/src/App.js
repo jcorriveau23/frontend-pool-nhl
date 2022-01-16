@@ -24,6 +24,7 @@ import GameFeedPage from "./pages/game_feed_page"
 import PlayerPage from "./pages/player_page"
 import TeamRosterBySeasonPage from "./pages/teamRosterBySeason_page"
 import MyGameBetsPage from './pages/myGameBets_page';
+import DraftPage from './pages/draft_page';
 
 // components
 import WalletCard from './components/web3/WalletCard';
@@ -57,6 +58,7 @@ function App() {
                 {user? <li><Link to="/MyGameBets">My Game Bets</Link></li> : null}
                 <li><Link to="/statsPage">League Stats</Link></li>
                 <li><Link to="/playerInfo">Search Players</Link></li>
+                <li><Link to="/draft">Draft</Link></li>
                 {user? <li><Link to="/" onClick={() => Disconnect()}>Disconnect</Link></li> : null}
                 <WalletCard user={user} setUser={setUser} contract={contract} setContract={setContract}/>
               </div>
@@ -76,9 +78,11 @@ function App() {
           <Route path="/MyPools/:name" element = {<PoolPage user={user}/>}></Route>
           <Route path="/statsPage" element = {<StatsPage/>}></Route>
           <Route path="/gameFeed/:id" element = {<GameFeedPage user={user} contract={contract}/>}></Route>
-          <Route path="/playerInfo/" element = {<PlayerPage/>}></Route>
+          <Route path="/playerInfo" element = {<PlayerPage/>}></Route>
           <Route path="/playerInfo/:id" element = {<PlayerPage/>}></Route>
           <Route path="/teamRosterBySeason/:teamID/:season" element = {<TeamRosterBySeasonPage/>}></Route>
+          <Route path="/draft" element = {<DraftPage/>}></Route>
+          <Route path="/draft/:year" element = {<DraftPage/>}></Route>
         </Routes>
         </div>
       </Router>
