@@ -320,12 +320,12 @@ function PlayerPage() {
                                 <td>{season.league.name}</td>
                                 <td>{season.stat.games}</td>
                                 <td>{season.stat.gamesStarted}</td>
-                                <td>{season.stat.goalAgainstAverage}</td>
+                                <td>{season.stat.goalAgainstAverage? Math.round((season.stat.goalAgainstAverage + Number.EPSILON) * 100) / 100 : null}</td>
                                 <td>{season.stat.goalsAgainst}</td>
                                 <td>{season.stat.wins}</td>
                                 <td>{season.stat.losses}</td>
                                 <td>{season.stat.ot}</td>
-                                <td>{season.stat.savePercentage}</td>
+                                <td>{season.stat.savePercentage? Math.round((season.stat.savePercentage + Number.EPSILON) * 1000) / 1000 : null}</td>
                                 <td>{season.stat.saves}</td>
                                 <td>{season.stat.shotsAgainst}</td>
                                 <td>{season.stat.shutouts}</td>

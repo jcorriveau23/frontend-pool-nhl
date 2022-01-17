@@ -177,7 +177,7 @@ function GameFeedPage({user, contract}) {
                                 <td>{team.players[key].stats.goalieStats.assists}</td>
                                 <td>{team.players[key].stats.goalieStats.shots}</td>
                                 <td>{team.players[key].stats.goalieStats.saves}</td>
-                                <td>{team.players[key].stats.goalieStats.savePercentage}</td>
+                                <td>{Math.round((team.players[key].stats.goalieStats.savePercentage + Number.EPSILON) * 100) / 100}</td>
                             </tr>
                         )
                     })}
