@@ -10,12 +10,10 @@ import { SearchPlayer } from '../components/player_page/searchPlayer';
 // css
 import "../components/player_page/player_page.css"
 
-// images
-import logos, {team_name_from_id} from "../components/img/images"
-
 function PlayerPage() {
 
     const [playerStats, setPlayerStats] = useState(null)
+    const [playerPlayoffStats, setPlayerPlayoffStats] = useState(null)
     const [playerInfo, setPlayerInfo] = useState(null)
     const [prospectInfo, setProspectInfo] = useState(null)
     const [prevPlayerID, setPrevPlayerID] = useState("")
@@ -32,7 +30,14 @@ function PlayerPage() {
                 fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYear')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
                 .then(response => response.json())
                 .then(playerStats => {
+                    console.log(playerStats)
                     setPlayerStats({...playerStats})
+                })
+                fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYearPlayoffs')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYearPlayoffs
+                .then(response => response.json())
+                .then(playerPlayoffStats => {
+                    console.log(playerPlayoffStats)
+                    setPlayerPlayoffStats({...playerPlayoffStats})
                 })
                 fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID)  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
                 .then(response => response.json())
@@ -96,6 +101,16 @@ function PlayerPage() {
         )
     }
 
+    const get_playoff_stats = (season) => {
+        for(var i = 0; i < playerPlayoffStats.stats[0].splits.length; i++){
+            if(playerPlayoffStats.stats[0].splits[i].season === season.season && playerPlayoffStats.stats[0].splits[i].league.name === season.league.name){
+                console.log("found")
+                return playerPlayoffStats.stats[0].splits[i]
+            }
+        }
+        return null
+    }
+
     const render_skater_stats = (stats) => {
         var totGames = 0
         var totGoals = 0
@@ -103,16 +118,27 @@ function PlayerPage() {
         var totPoints = 0
         var totPlusMinus = 0
         var totPenaltyMinutes = 0
-        var totShots = 0
-        var totHits = 0
-        var totBlocks = 0
-        var totPPG = 0
+        // var totShots = 0
+        // var totHits = 0
+        // var totBlocks = 0
+        // var totPPG = 0
+        var playoffTotGames = 0
+        var playoffTotGoals = 0
+        var playoffTotAssists = 0
+        var playoffTotPoints = 0
+        var playoffTotPlusMinus = 0
+        var playoffTotPenaltyMinutes = 0
 
         return(
             <table  className="content-table">
                 <thead>
                     <tr>
-                        <th colSpan="18">Career Stats</th>
+                        <th colSpan="15">Career Stats</th>
+                    </tr>
+                    <tr>
+                        <th colSpan="3"></th>
+                        <th colSpan="6">Regular Season</th>
+                        <th colSpan="6">Playoffs</th>
                     </tr>
                     <tr>
                         <th>Team</th>
@@ -124,7 +150,7 @@ function PlayerPage() {
                         <th>P</th>
                         <th>+/-</th>
                         <th>PIM</th>
-                        <th>S</th>
+                        {/* <th>S</th>
                         <th>S%</th>
                         <th>HITS</th>
                         <th>BLKS</th>
@@ -132,11 +158,19 @@ function PlayerPage() {
                         <th>FO%</th>
                         <th>TOI</th>
                         <th>PP TOI</th>
-                        <th>SH TOI</th>
+                        <th>SH TOI</th> */}
+                        <th>Games</th>
+                        <th>G</th>
+                        <th>A</th>
+                        <th>P</th>
+                        <th>+/-</th>
+                        <th>PIM</th>
                     </tr>
                 </thead>
                 <tbody>
                     {stats.map( (season, i) => {
+                        var playoffStats = get_playoff_stats(season)
+
                         if(season.league.id === 133){
                             totGames += season.stat.games
                             totGoals += season.stat.goals
@@ -144,13 +178,22 @@ function PlayerPage() {
                             totPoints += season.stat.points
                             totPlusMinus += isNaN(season.stat.plusMinus)? 0 :season.stat.plusMinus
                             totPenaltyMinutes += parseInt(season.stat.penaltyMinutes)
-                            totShots += isNaN(season.stat.shots)? 0 : season.stat.shots
-                            totHits += isNaN(season.stat.hits)? 0 : season.stat.hits
-                            totBlocks += isNaN(season.stat.blocked)? 0 : season.stat.blocked
-                            totPPG += isNaN(season.stat.powerPlayGoals)? 0 : season.stat.powerPlayGoals
+                            if(playoffStats){
+                                playoffTotGames += playoffStats.stat.games
+                                playoffTotGoals += playoffStats.stat.goals
+                                playoffTotAssists += playoffStats.stat.assists
+                                playoffTotPoints += playoffStats.stat.points
+                                playoffTotPlusMinus += isNaN(playoffStats.stat.plusMinus)? 0 :playoffStats.stat.plusMinus
+                                playoffTotPenaltyMinutes += parseInt(playoffStats.stat.penaltyMinutes)
+                            }
+                            // totShots += isNaN(season.stat.shots)? 0 : season.stat.shots
+                            // totHits += isNaN(season.stat.hits)? 0 : season.stat.hits
+                            // totBlocks += isNaN(season.stat.blocked)? 0 : season.stat.blocked
+                            // totPPG += isNaN(season.stat.powerPlayGoals)? 0 : season.stat.powerPlayGoals
                         }
+
                         return(
-                            <tr key={i} backgroundColor='yellow'>
+                            <tr key={i}>
                                 <td>{season.team.name}</td>
                                 {
                                     season.league.id === 133 ? // nhl league
@@ -170,7 +213,13 @@ function PlayerPage() {
                                 <td>{season.stat.points}</td>
                                 <td>{season.stat.plusMinus}</td>  
                                 <td>{season.stat.penaltyMinutes}</td>
-                                <td>{season.stat.shots}</td>
+                                <td>{playoffStats? playoffStats.stat.games : "-"}</td>
+                                <td>{playoffStats? playoffStats.stat.goals : "-"}</td>
+                                <td>{playoffStats? playoffStats.stat.assists : "-"}</td>
+                                <td>{playoffStats? playoffStats.stat.points : "-"}</td>
+                                <td>{playoffStats? playoffStats.stat.plusMinus : "-"}</td>
+                                <td>{playoffStats? playoffStats.stat.penaltyMinutes : "-"}</td>
+                                {/* <td>{season.stat.shots}</td>
                                 <td>{season.stat.shotPct}</td>
                                 <td>{season.stat.hits}</td>
                                 <td>{season.stat.blocked}</td>
@@ -178,7 +227,7 @@ function PlayerPage() {
                                 <td>{season.stat.faceOffPct}</td>
                                 <td>{season.stat.timeOnIce}</td>
                                 <td>{season.stat.powerPlayTimeOnIce}</td>
-                                <td>{season.stat.shortHandedTimeOnIce}</td>
+                                <td>{season.stat.shortHandedTimeOnIce}</td> */}
 
                             </tr>
                         )                       
@@ -193,7 +242,7 @@ function PlayerPage() {
                         <th>{totPoints}</th>
                         <th>{totPlusMinus}</th>
                         <th>{totPenaltyMinutes}</th>
-                        <th>{totShots}</th>
+                        {/* <th>{totShots}</th>
                         <th>-</th>
                         <th>{totHits}</th>
                         <th>{totBlocks}</th>
@@ -201,7 +250,13 @@ function PlayerPage() {
                         <th>-</th>
                         <th>-</th>
                         <th>-</th>
-                        <th>-</th>
+                        <th>-</th> */}
+                        <th>{playoffTotGames}</th>
+                        <th>{playoffTotGoals}</th>
+                        <th>{playoffTotAssists}</th>
+                        <th>{playoffTotPoints}</th>
+                        <th>{playoffTotPlusMinus}</th>
+                        <th>{playoffTotPenaltyMinutes}</th>
                     </tr>
                 </tbody>
             </table> 
@@ -350,7 +405,7 @@ function PlayerPage() {
     }
 
 
-    if(playerStats && playerInfo){
+    if(playerStats && playerPlayoffStats && playerInfo){
         return(
             <div>
                 <SearchPlayer/>

@@ -14,7 +14,6 @@ function TeamRosterBySeasonPage() {
 
     const [skatersStats, setSkatersStats] = useState(null)
     const [goaliesStats, setGoaliesStats] = useState(null)
-    const [teamName, setTeamName] = useState("")
 
     var url = window.location.pathname.split('/')
 
@@ -30,7 +29,6 @@ function TeamRosterBySeasonPage() {
         })
         .then(response => response.json())
         .then(playersStats => {
-            setTeamName(playersStats.data[0].teamAbbrevs)
             setSkatersStats({...playersStats})
         })
         .catch(error => {alert('Error! ' + error)})

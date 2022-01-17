@@ -36,6 +36,9 @@ function GameFeedPage({user, contract}) {
     useEffect(() => {
         if(prevGameID !== gameID)
         {
+            setHomeTeamSkaters(null)
+            setAwayTeamSkaters(null)
+
             fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/feed/live")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
             .then(response => response.json())
             .then(gameInfo => {
@@ -86,8 +89,9 @@ function GameFeedPage({user, contract}) {
     }, [location]);   // eslint-disable-line react-hooks/exhaustive-deps
     
     const render_team_stats = (team, isHome) => {
-        if(isHome) var skaters = homeTeamSkaters
-        else var skaters = awayTeamSkaters
+        var skaters
+        if(isHome) skaters = homeTeamSkaters
+        else skaters = awayTeamSkaters
         //console.log(team.players)
         return(
             <div>
@@ -288,15 +292,17 @@ function GameFeedPage({user, contract}) {
     }
 
     const sort_by_stats = (isHome, stat) => {
+        var array
+
         if(isHome){
-            var array = homeTeamSkaters.sort((first, second) => {
+            array = homeTeamSkaters.sort((first, second) => {
                 if(stat === "points") return ((gameInfo.liveData.boxscore.teams.home.players["ID" + second].stats.skaterStats.goals + gameInfo.liveData.boxscore.teams.home.players["ID" + second].stats.skaterStats.assists) - (gameInfo.liveData.boxscore.teams.home.players["ID" + first].stats.skaterStats.goals + gameInfo.liveData.boxscore.teams.home.players["ID" + first].stats.skaterStats.assists))
                 else return (gameInfo.liveData.boxscore.teams.home.players["ID" + second].stats.skaterStats[stat] - gameInfo.liveData.boxscore.teams.home.players["ID" + first].stats.skaterStats[stat])
             })
             setHomeTeamSkaters([...array])
         }
         else{
-            var array = awayTeamSkaters.sort((first, second) => {
+            array = awayTeamSkaters.sort((first, second) => {
                 if(stat === "points") return ((gameInfo.liveData.boxscore.teams.away.players["ID" + second].stats.skaterStats.goals + gameInfo.liveData.boxscore.teams.away.players["ID" + second].stats.skaterStats.assists) - (gameInfo.liveData.boxscore.teams.away.players["ID" + first].stats.skaterStats.goals + gameInfo.liveData.boxscore.teams.away.players["ID" + first].stats.skaterStats.assists))
                 else return (gameInfo.liveData.boxscore.teams.away.players["ID" + second].stats.skaterStats[stat] - gameInfo.liveData.boxscore.teams.away.players["ID" + first].stats.skaterStats[stat])
             })
@@ -341,10 +347,10 @@ function GameFeedPage({user, contract}) {
                             </div>
                         </TabPanel>
                         <TabPanel>
-                            {gameInfo.gameData.status.abstractGameState === "Preview" && homeRosterPreview? render_team_roster(homeRosterPreview) : gameInfo.gameData.status.abstractGameState !== "Preview"? render_team_stats(gameInfo.liveData.boxscore.teams.home, true) : null}
+                            {gameInfo.gameData.status.abstractGameState === "Preview" && homeRosterPreview? render_team_roster(homeRosterPreview) : gameInfo.gameData.status.abstractGameState !== "Preview" && homeTeamSkaters? render_team_stats(gameInfo.liveData.boxscore.teams.home, true) : null}
                         </TabPanel>
                         <TabPanel>
-                            {gameInfo.gameData.status.abstractGameState === "Preview" && awayRosterPreview? render_team_roster(awayRosterPreview) : gameInfo.gameData.status.abstractGameState !== "Preview"? render_team_stats(gameInfo.liveData.boxscore.teams.away, false) : null}
+                            {gameInfo.gameData.status.abstractGameState === "Preview" && awayRosterPreview? render_team_roster(awayRosterPreview) : gameInfo.gameData.status.abstractGameState !== "Preview" && awayTeamSkaters? render_team_stats(gameInfo.liveData.boxscore.teams.away, false) : null}
                         </TabPanel>
                         {
                             contract?
