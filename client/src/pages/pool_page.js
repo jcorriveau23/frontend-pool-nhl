@@ -33,7 +33,7 @@ function PoolPage({user}) {
             .then(response => response.json())
             .then(data => {
                 if(data.success === "False"){
-                    console.log(data)
+                    //console.log(data)
                     // [TODO] display a page or notification to show that the pool was not found
                 }
                 else{

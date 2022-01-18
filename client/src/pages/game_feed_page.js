@@ -42,7 +42,7 @@ function GameFeedPage({user, contract}) {
             fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/feed/live")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
             .then(response => response.json())
             .then(gameInfo => {
-                //console.log(gameInfo)
+                console.log(gameInfo)
                 setGameInfo(gameInfo)
     
                 if(gameInfo.gameData.status.abstractGameState === "Preview"){
@@ -218,18 +218,8 @@ function GameFeedPage({user, contract}) {
     }
 
     const render_game_stats = (teams, linescores) => {
-        let nAwayTeamShootoutScore = teams.away.teamStats.teamSkaterStats.goals
-        let nHomeTeamShootoutScore = teams.home.teamStats.teamSkaterStats.goals
-
-        if(linescores.hasShootout)
-        {
-            if(linescores.shootoutInfo.away.scores > linescores.shootoutInfo.home.scores)
-                nAwayTeamShootoutScore = teams.away.teamStats.teamSkaterStats.goals + 1
-            else
-                nHomeTeamShootoutScore = teams.home.teamStats.teamSkaterStats.goals + 1
-        }
         return(
-            <table  className="goalItem">
+            <table className="goalItem">
                 <thead>
                     <tr>
                         <th><img src={logos[ teams.away.team.name ]} alt="" width="30" height="30"></img></th>
@@ -239,9 +229,9 @@ function GameFeedPage({user, contract}) {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{nAwayTeamShootoutScore}</td>
+                        <td>{linescores.teams.away.goals}</td>
                         <th>Goals</th>
-                        <td>{nHomeTeamShootoutScore}</td>
+                        <td>{linescores.teams.home.goals}</td>
                     </tr>
                     <tr>
                         <td>{teams.away.teamStats.teamSkaterStats.shots}</td>
@@ -310,6 +300,46 @@ function GameFeedPage({user, contract}) {
         }
     }
 
+    const render_shootout = (liveData) => {
+        return(
+            <table className="goalItem">
+                <thead>
+                    <tr>
+                        <th colSpan={3}>
+                            Shootout results
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Team</th>
+                        <th>Shooter</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {liveData.plays.playsByPeriod[4].plays.map(i => {
+                        if(liveData.plays.allPlays[i].result.event === "Shot" || liveData.plays.allPlays[i].result.event === "Goal")
+                        {
+                            return(
+                                <tr>
+                                    <td><img src={logos[ liveData.plays.allPlays[i].team.name ]} alt="" width="30" height="30"></img></td>
+                                    <td><Link to={"/playerInfo/" + liveData.plays.allPlays[i].players[0].player.id} style={{ textDecoration: 'none', color: "#000099" }}>{liveData.plays.allPlays[i].players[0].player.fullName}</Link></td>
+                                    {
+                                        liveData.plays.allPlays[i].result.event === "Shot"? 
+                                            <td><b style={{color: "#ee0000" }}>Missed</b></td>
+                                            : liveData.plays.allPlays[i].result.event === "Goal"? 
+                                                <td><b style={{color: "#008800" }}>Goal</b></td> :
+                                                null
+                                    }
+                                </tr>
+                            )
+                        }
+                        return null
+                    })}
+                </tbody>
+            </table>
+        )
+    }
+
     if(gameInfo && gameContent)
     { 
         return(
@@ -370,6 +400,7 @@ function GameFeedPage({user, contract}) {
                                 <PeriodRecap gameContent={gameContent} period={"2"}></PeriodRecap>
                                 <PeriodRecap gameContent={gameContent} period={"3"}></PeriodRecap>
                                 <PeriodRecap gameContent={gameContent} period={"4"}></PeriodRecap>
+                                {gameInfo.liveData.linescore.hasShootout? render_shootout(gameInfo.liveData) : null}
                                 <OtherGameContent gameContent={gameContent}></OtherGameContent>
                             </> :
                             <h1>Game not started yet.</h1>

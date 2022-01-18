@@ -30,13 +30,13 @@ function PlayerPage() {
                 fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYear')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
                 .then(response => response.json())
                 .then(playerStats => {
-                    console.log(playerStats)
+                    // console.log(playerStats)
                     setPlayerStats({...playerStats})
                 })
                 fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYearPlayoffs')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYearPlayoffs
                 .then(response => response.json())
                 .then(playerPlayoffStats => {
-                    console.log(playerPlayoffStats)
+                    // console.log(playerPlayoffStats)
                     setPlayerPlayoffStats({...playerPlayoffStats})
                 })
                 fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID)  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
@@ -61,13 +61,13 @@ function PlayerPage() {
                         fetch('https://statsapi.web.nhl.com/api/v1/people/' + newID + '/stats?stats=yearByYear')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
                         .then(response => response.json())
                         .then(playerStats => {
-                            console.log(playerStats)
+                            // console.log(playerStats)
                             setPlayerStats({...playerStats})
                         })
                         fetch('https://statsapi.web.nhl.com/api/v1/people/' + newID)  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
                         .then(response => response.json())
                         .then(playerInfo => {
-                            console.log(playerInfo)
+                            // console.log(playerInfo)
                             setPlayerInfo({...playerInfo})
                         })
                     }
@@ -104,7 +104,6 @@ function PlayerPage() {
     const get_playoff_stats = (season) => {
         for(var i = 0; i < playerPlayoffStats.stats[0].splits.length; i++){
             if(playerPlayoffStats.stats[0].splits[i].season === season.season && playerPlayoffStats.stats[0].splits[i].league.name === season.league.name){
-                console.log("found")
                 return playerPlayoffStats.stats[0].splits[i]
             }
         }

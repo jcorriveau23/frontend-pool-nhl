@@ -190,8 +190,8 @@ contract NHLGamePredictions is ChainlinkClient {
         request.add("get", "https://statsapi.web.nhl.com/api/v1/game/2021020661/feed/live");
 
         // Paths needed:
-        // home team score     -> liveData.linescore.teams.home.goals
-        // away team score     -> liveData.linescore.teams.away.goals
+        // home team score     -> liveData.linescore.teams.home.goals   // this should be enough finally
+        // away team score     -> liveData.linescore.teams.away.goals   // this should be enough finally
         // has shoutout        -> liveData.linescore.hasShootout
         // home shootout Infos -> liveData.linescore.shootoutInfo.home.scores
         // away shootout Infos -> liveData.linescore.shootoutInfo.away.scores

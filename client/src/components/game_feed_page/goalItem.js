@@ -17,7 +17,7 @@ export const GoalItem = ({goalContent, statsData, team}) => {
     // const previousUrl = useRef(goalContent.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
 
     useEffect(() => {
-        console.log(goalContent)
+        // console.log(goalContent)
         videoRef?.current?.load();
 
         var goalInfos = goalContent.description.split(", ")

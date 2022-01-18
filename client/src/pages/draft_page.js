@@ -26,7 +26,7 @@ function DraftPage() {
             })
             .then(response => response.json())
             .then(draftInfo => {
-                console.log(draftInfo)
+                //console.log(draftInfo)
                 setDraftInfo(draftInfo)
             })
             .catch(error => {alert('Error! ' + error)})
@@ -113,7 +113,7 @@ function DraftPage() {
                 <table>
                     <tbody>
                         {availableYears.map((year, i) => {
-                            return <tr key={i}><Link to={"/draft/" + year}><td>{year}</td></Link></tr>
+                            return <tr key={i}><td><Link to={"/draft/" + year}>{year}</Link></td></tr>
                         })}
                     </tbody>
                 </table>
