@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate  } from "react-router-dom";
 
 // Loader
 import ClipLoader from "react-spinners/ClipLoader"
@@ -18,6 +18,8 @@ function PlayerPage() {
     const [prospectInfo, setProspectInfo] = useState(null)
     const [prevPlayerID, setPrevPlayerID] = useState("")
     const location = useLocation()
+    const navigate = useNavigate ()
+    const [hasNavigated, setHaseNavigated] = useState(false)
 
     const playerID = window.location.pathname.split('/').pop();
     
@@ -53,24 +55,11 @@ function PlayerPage() {
                 .then(prospect => {
                     setProspectInfo({...prospect.prospects[0]})
                     //console.log(prospect.prospects[0])
-                    if(prospect.prospects[0].nhlPlayerId > 8000000)
-                    {
-                        var newID = prospect.prospects[0].nhlPlayerId
-
-                        //console.log("fetching NHL player finally")
-                        fetch('https://statsapi.web.nhl.com/api/v1/people/' + newID + '/stats?stats=yearByYear')  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
-                        .then(response => response.json())
-                        .then(playerStats => {
-                            // console.log(playerStats)
-                            setPlayerStats({...playerStats})
-                        })
-                        fetch('https://statsapi.web.nhl.com/api/v1/people/' + newID)  // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
-                        .then(response => response.json())
-                        .then(playerInfo => {
-                            // console.log(playerInfo)
-                            setPlayerInfo({...playerInfo})
-                        })
+                    if(prospect.prospects[0].nhlPlayerId > 8000000 && !hasNavigated){
+                        setHaseNavigated(true)
+                        navigate("/playerInfo/" + prospect.prospects[0].nhlPlayerId)
                     }
+                        
                 })
             }   
             setPrevPlayerID(playerID)         

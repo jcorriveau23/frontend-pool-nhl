@@ -42,7 +42,7 @@ function GameFeedPage({user, contract}) {
             fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/feed/live")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
             .then(response => response.json())
             .then(gameInfo => {
-                console.log(gameInfo)
+                //console.log(gameInfo)
                 setGameInfo(gameInfo)
     
                 if(gameInfo.gameData.status.abstractGameState === "Preview"){
@@ -82,10 +82,6 @@ function GameFeedPage({user, contract}) {
         
         setPrevGameID(gameID)
 
-        // return () => {
-        //     setGameInfo({}); // cleanup the state on unmount
-        // };   // TODO: there is a leak warning here and we need to investigate why when repairing the leak, we get the error corrected.
-
     }, [location]);   // eslint-disable-line react-hooks/exhaustive-deps
     
     const render_team_stats = (team, isHome) => {
@@ -104,20 +100,20 @@ function GameFeedPage({user, contract}) {
                         <th>#</th>
                         <th>Name</th>
                         <th>R</th>
-                        <th onClick={() => sort_by_stats(isHome, "goals")}>G</th>
-                        <th onClick={() => sort_by_stats(isHome, "assists")}>A</th>
-                        <th onClick={() => sort_by_stats(isHome, "points")}>P</th>
-                        <th onClick={() => sort_by_stats(isHome, "plusMinus")}>+/-</th>
-                        <th onClick={() => sort_by_stats(isHome, "penaltyMinutes")}>PIM</th>
-                        <th onClick={() => sort_by_stats(isHome, "shots")}>SOG</th>
-                        <th onClick={() => sort_by_stats(isHome, "hits")}>HITS</th>
-                        <th onClick={() => sort_by_stats(isHome, "blocked")}>BLKS</th>
-                        <th onClick={() => sort_by_stats(isHome, "giveaways")}>GVA</th>
-                        <th onClick={() => sort_by_stats(isHome, "takeaways")}>TKA</th>
-                        <th>FO%</th>
-                        <th>TOI</th>
-                        <th>PP TOI</th>
-                        <th>SH TOI</th>
+                        <th onClick={() => sort_by_int(isHome, "goals")}>G</th>
+                        <th onClick={() => sort_by_int(isHome, "assists")}>A</th>
+                        <th onClick={() => sort_by_int(isHome, "points")}>P</th>
+                        <th onClick={() => sort_by_int(isHome, "plusMinus")}>+/-</th>
+                        <th onClick={() => sort_by_int(isHome, "penaltyMinutes")}>PIM</th>
+                        <th onClick={() => sort_by_int(isHome, "shots")}>SOG</th>
+                        <th onClick={() => sort_by_int(isHome, "hits")}>HITS</th>
+                        <th onClick={() => sort_by_int(isHome, "blocked")}>BLKS</th>
+                        <th onClick={() => sort_by_int(isHome, "giveaways")}>GVA</th>
+                        <th onClick={() => sort_by_int(isHome, "takeaways")}>TKA</th>
+                        <th onClick={() => sort_by_float(isHome, "faceOffPct")}>FO%</th>
+                        <th onClick={() => sort_by_float(isHome, "timeOnIce")}>TOI</th>
+                        <th onClick={() => sort_by_float(isHome, "powerPlayTimeOnIce")}>PP TOI</th>
+                        <th onClick={() => sort_by_float(isHome, "shortHandedTimeOnIce")}>SH TOI</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -281,7 +277,7 @@ function GameFeedPage({user, contract}) {
         )
     }
 
-    const sort_by_stats = (isHome, stat) => {
+    const sort_by_int = (isHome, stat) => {
         var array
 
         if(isHome){
@@ -295,6 +291,23 @@ function GameFeedPage({user, contract}) {
             array = awayTeamSkaters.sort((first, second) => {
                 if(stat === "points") return ((gameInfo.liveData.boxscore.teams.away.players["ID" + second].stats.skaterStats.goals + gameInfo.liveData.boxscore.teams.away.players["ID" + second].stats.skaterStats.assists) - (gameInfo.liveData.boxscore.teams.away.players["ID" + first].stats.skaterStats.goals + gameInfo.liveData.boxscore.teams.away.players["ID" + first].stats.skaterStats.assists))
                 else return (gameInfo.liveData.boxscore.teams.away.players["ID" + second].stats.skaterStats[stat] - gameInfo.liveData.boxscore.teams.away.players["ID" + first].stats.skaterStats[stat])
+            })
+            setAwayTeamSkaters([...array])
+        }
+    }
+
+    const sort_by_float = (isHome, stat) => {
+        var array
+
+        if(isHome){
+            array = homeTeamSkaters.sort((first, second) => {
+                return ( parseFloat(gameInfo.liveData.boxscore.teams.home.players["ID" + second].stats.skaterStats[stat]) - parseFloat(gameInfo.liveData.boxscore.teams.home.players["ID" + first].stats.skaterStats[stat]))
+            })
+            setHomeTeamSkaters([...array])
+        }
+        else{
+            array = awayTeamSkaters.sort((first, second) => {
+                return (parseFloat(gameInfo.liveData.boxscore.teams.away.players["ID" + second].stats.skaterStats[stat]) - parseFloat(gameInfo.liveData.boxscore.teams.away.players["ID" + first].stats.skaterStats[stat]))
             })
             setAwayTeamSkaters([...array])
         }

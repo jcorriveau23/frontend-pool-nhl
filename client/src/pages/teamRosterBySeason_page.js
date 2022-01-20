@@ -29,7 +29,8 @@ function TeamRosterBySeasonPage() {
         })
         .then(response => response.json())
         .then(playersStats => {
-            setSkatersStats({...playersStats})
+            console.log(playersStats)
+            setSkatersStats([...playersStats.data])
         })
         .catch(error => {alert('Error! ' + error)})
 
@@ -38,7 +39,7 @@ function TeamRosterBySeasonPage() {
         })
         .then(response => response.json())
         .then(playersStats => {
-            setGoaliesStats({...playersStats})
+            setGoaliesStats([...playersStats.data])
         })
         .catch(error => {alert('Error! ' + error)})
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -49,33 +50,33 @@ function TeamRosterBySeasonPage() {
                <table  className="content-table">
                     <thead>
                         <tr>
-                            <th colSpan="18">Season : {season.substring(0,4) + "-" + season.substring(4)}</th>
+                            <th colSpan="12">Season : {season.substring(0,4) + "-" + season.substring(4)}</th>
                         </tr>
                         <tr>
-                            <th colSpan="18"><img src={logos[team_name_from_id[teamID]] } alt="" width="30" height="30"></img></th>
+                            <th colSpan="12"><img src={logos[team_name_from_id[teamID]] } alt="" width="30" height="30"></img></th>
                         </tr>
                         <tr>
-                            <th colSpan="18">Skaters</th>
+                            <th colSpan="12">Skaters</th>
                         </tr>
                         <tr>
                             <th>#</th>
                             <th>Name</th>
                             <th>Position</th>
-                            <th>GP</th>
-                            <th>G</th>
-                            <th>A</th>
-                            <th>P</th>
-                            <th>+/-</th>
-                            <th>PIM</th>
-                            <th>SOG</th>
-                            <th>HITS</th>
+                            <th onClick={() => sort_by_int(true, "gamesPlayed")}>GP</th>
+                            <th onClick={() => sort_by_int(true, "goals")}>G</th>
+                            <th onClick={() => sort_by_int(true, "assists")}>A</th>
+                            <th onClick={() => sort_by_int(true, "points")}>P</th>
+                            <th onClick={() => sort_by_int(true, "plusMinus")}>+/-</th>
+                            <th onClick={() => sort_by_int(true, "penaltyMinutes")}>PIM</th>
+                            <th onClick={() => sort_by_int(true, "shots")}>SOG</th>
+                            {/* <th>HITS</th>
                             <th>BLKS</th>
                             <th>GVA</th>
-                            <th>TKA</th>
-                            <th>FO%</th>
-                            <th>TOI</th>
-                            <th>PP TOI</th>
-                            <th>SH TOI</th>
+                            <th>TKA</th> */}
+                            <th onClick={() => sort_by_int(true, "faceoffWinPct")}>FO%</th>
+                            <th onClick={() => sort_by_int(true, "timeOnIcePerGame")}>TOI</th>
+                            {/* <th>PP TOI</th>
+                            <th>SH TOI</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -92,14 +93,14 @@ function TeamRosterBySeasonPage() {
                                     <td>{player.plusMinus}</td>  
                                     <td>{player.penaltyMinutes}</td>
                                     <td>{player.shots}</td>
+                                    {/* <td>-</td>
                                     <td>-</td>
                                     <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>{player.faceoffWinPct}</td>
-                                    <td>{player.timeOnIcePerGame}</td>
-                                    <td>-</td>
-                                    <td>-</td>
+                                    <td>-</td> */}
+                                    <td>{Math.round((player.faceoffWinPct + Number.EPSILON) * 100) / 100}</td>
+                                    <td>{Math.round((player.timeOnIcePerGame + Number.EPSILON) * 100) / 100}</td>
+                                    {/* <td>-</td>
+                                    <td>-</td> */}
 
                                 </tr>
                             )                       
@@ -108,6 +109,24 @@ function TeamRosterBySeasonPage() {
                 </table>
             </div>
         )
+    }
+
+    const sort_by_int = (isSkater, stat) => {
+        var array
+
+        if(isSkater){
+            array = skatersStats.sort((first, second) => {
+                return ( second[stat] - first[stat])
+             })
+             setSkatersStats([...array])
+        }
+        else{
+            array = goaliesStats.sort((first, second) => {
+                return ( second[stat] - first[stat])
+             })
+             setGoaliesStats([...array])
+        }
+        
     }
 
     const render_team_goalies = (roster) => {
@@ -122,20 +141,20 @@ function TeamRosterBySeasonPage() {
                             <th>#</th>
                             <th>Name</th>
                             <th>Position</th>
-                            <th>GP</th>
-                            <th>GS</th>
-                            <th>G</th>
-                            <th>P</th>
-                            <th>GA</th>
-                            <th>GAA</th>
-                            <th>W</th>
-                            <th>L</th>
-                            <th>OTL</th>
-                            <th>PIM</th>
-                            <th>SAVE %</th>
-                            <th>S</th>
-                            <th>SO</th>
-                            <th>TOI</th>
+                            <th onClick={() => sort_by_int(false, "gamesPlayed")}>GP</th>
+                            <th onClick={() => sort_by_int(false, "gamesStarted")}>GS</th>
+                            <th onClick={() => sort_by_int(false, "goals")}>G</th>
+                            <th onClick={() => sort_by_int(false, "points")}>P</th>
+                            <th onClick={() => sort_by_int(false, "goalsAgainst")}>GA</th>
+                            <th onClick={() => sort_by_int(false, "goalsAgainstAverage")}>GAA</th>
+                            <th onClick={() => sort_by_int(false, "wins")}>W</th>
+                            <th onClick={() => sort_by_int(false, "losses")}>L</th>
+                            <th onClick={() => sort_by_int(false, "otLosses")}>OTL</th>
+                            <th onClick={() => sort_by_int(false, "penaltyMinutes")}>PIM</th>
+                            <th onClick={() => sort_by_int(false, "savePct")}>SAVE %</th>
+                            <th onClick={() => sort_by_int(false, "saves")}>S</th>
+                            <th onClick={() => sort_by_int(false, "shutouts")}>SO</th>
+                            {/* <th onClick={() => sort_by_int(false, "timeOnIcePerGame")}>TOI</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -158,7 +177,7 @@ function TeamRosterBySeasonPage() {
                                     <td>{goalie.savePct}</td>
                                     <td>{goalie.saves}</td>
                                     <td>{goalie.shutouts}</td>
-                                    <td>{goalie.timeOnIcePerGame}</td>
+                                    {/* <td>{goalie.timeOnIcePerGame}</td> */}
 
                                 </tr>
                             )                       
@@ -173,8 +192,8 @@ function TeamRosterBySeasonPage() {
     { 
         return(
             <div>
-                {render_team_skaters(skatersStats.data)}
-                {render_team_goalies(goaliesStats.data)}
+                {render_team_skaters(skatersStats)}
+                {render_team_goalies(goaliesStats)}
             </div>
         )
     }
