@@ -42,7 +42,7 @@ function GameFeedPage({user, contract}) {
             fetch('https://statsapi.web.nhl.com/api/v1/game/' + gameID + "/feed/live")  // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
             .then(response => response.json())
             .then(gameInfo => {
-                //console.log(gameInfo)
+                console.log(gameInfo)
                 setGameInfo(gameInfo)
     
                 if(gameInfo.gameData.status.abstractGameState === "Preview"){
@@ -409,10 +409,10 @@ function GameFeedPage({user, contract}) {
                     <div>
                         {gameInfo.gameData.status.abstractGameState !== "Preview"?
                             <>
-                                <PeriodRecap gameContent={gameContent} period={"1"}></PeriodRecap>
-                                <PeriodRecap gameContent={gameContent} period={"2"}></PeriodRecap>
-                                <PeriodRecap gameContent={gameContent} period={"3"}></PeriodRecap>
-                                <PeriodRecap gameContent={gameContent} period={"4"}></PeriodRecap>
+                                <PeriodRecap gameInfo={gameInfo} gameContent={gameContent} period={"1"}></PeriodRecap>
+                                <PeriodRecap gameInfo={gameInfo} gameContent={gameContent} period={"2"}></PeriodRecap>
+                                <PeriodRecap gameInfo={gameInfo} gameContent={gameContent} period={"3"}></PeriodRecap>
+                                <PeriodRecap gameInfo={gameInfo} gameContent={gameContent} period={"4"}></PeriodRecap>
                                 {gameInfo.liveData.linescore.hasShootout? render_shootout(gameInfo.liveData) : null}
                                 <OtherGameContent gameContent={gameContent}></OtherGameContent>
                             </> :

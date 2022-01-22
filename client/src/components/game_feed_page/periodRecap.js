@@ -6,17 +6,19 @@ import { GoalItem } from './goalItem'
 // css
 import "./goalItem.css"
 
-export const PeriodRecap = ({gameContent, period}) => {
+export const PeriodRecap = ({gameInfo, gameContent, period}) => {
 
     const videoRef = useRef()
     const [isItem, setIsItem] = useState(false)
     // const previousUrl = useRef(recapVideo.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
 
     useEffect(() => {
-            videoRef?.current?.load();
+        console.log(gameInfo)
+        // console.log(gameContent)
+        videoRef?.current?.load();
     }, [gameContent])
 
-    if(gameContent.media && gameContent.media.milestones.items )
+    if(gameInfo.liveData && gameInfo.liveData.plays)
     {
         return(
             <div>
@@ -31,15 +33,15 @@ export const PeriodRecap = ({gameContent, period}) => {
                         }
                     </thead>
                     <tbody>
-                        {gameContent.media.milestones.items.filter(highlight => {
-                            return (highlight.type === "GOAL" && highlight.period === period) 
-                        }).map((highlight, i) => {
+                        {gameInfo.liveData.plays.scoringPlays.filter(i => {
+                            return gameInfo.liveData.plays.allPlays[i].about.period === parseInt(period)
+                        }).map((i) => {
                             if(isItem === false)
                                 setIsItem(true)
                             return(
                                 <tr key={i}>
                                     <td>
-                                        <GoalItem goalContent={highlight}></GoalItem>
+                                        <GoalItem goalData ={gameInfo.liveData.plays.allPlays[i]} gameContent={gameContent}></GoalItem>
                                     </td>
                                 </tr>
                             )
@@ -50,6 +52,6 @@ export const PeriodRecap = ({gameContent, period}) => {
         )
     }
     else
-        return (<h1>Nothing to display</h1>)
+        return (<h1> </h1>)
     
 }

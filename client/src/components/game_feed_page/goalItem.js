@@ -7,44 +7,65 @@ import "./goalItem.css"
 // images
 import logos, {team_name_from_id} from "../img/images"
 
-export const GoalItem = ({goalContent, statsData, team}) => {
+export const GoalItem = ({goalData, gameContent}) => {
 
     const videoRef = useRef()
+    const [goalContent, setGoalContent] = useState(null)
     const [scorer, setScorer] = useState("")
-    const [assists, setAssists] = useState("")
-    const [goalType, setGoalType] = useState("")
+    const [firstAssist, setFirstAssist] = useState(null)
+    const [secondAssist, setSecondAssist] = useState(null)
+    const [rowSpan, setRowSpan] = useState(2)
 
     // const previousUrl = useRef(goalContent.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
 
+    //       3 - use the goal.eventId to map into the gameContent.media.milestones.items(item)
+    //       4 - if goal.eventId == item.statsEventId, display the video.
+
+
     useEffect(() => {
-        // console.log(goalContent)
+        //console.log(goalData)
+        //console.log(gameContent)
         videoRef?.current?.load();
 
-        var goalInfos = goalContent.description.split(", ")
+        if(gameContent.media.milestones.items){
+            for(var i = 0; i < gameContent.media.milestones.items.length; i++){
+                if(parseInt(gameContent.media.milestones.items[i].statsEventId) === goalData.about.eventId)
+                    setGoalContent(gameContent.media.milestones.items[i])
+            }
+        }
 
-        var goalSubInfos = goalInfos[0].split(") ")
+        var bFirstAssist = false
 
-        setScorer(goalSubInfos[0] + ")")
-        setGoalType(goalSubInfos[1]) //
+        goalData.players.map(player => {
+            if(player.playerType === "Scorer")
+                setScorer(player)
 
-        if(goalInfos.length > 2)
-            setAssists(goalInfos[1].substr(9) + ", " + goalInfos[2])
-        else if(goalInfos.length > 1)
-            setAssists(goalInfos[1].substr(9))
+            if(player.playerType === "Assist"){
+                if(bFirstAssist === false){
+                    bFirstAssist = true
+                    setFirstAssist(player)
+                    setRowSpan(3)
+                }
+                else{
+                    setSecondAssist(player)
+                    setRowSpan(4)
+                }
+            }  
+        })     
 
-    }, [goalContent])
+    }, [goalData])
 
     return (
         <div>
             <table className="goalItem">
                 <tbody>
                     <tr>
-                        <th rowSpan={4} width="30"><img src={logos[team_name_from_id[goalContent.teamId]] } alt="" width="30" height="30"/></th>
-                        <th width="75">Time:</th>
-                        <td width="300">{goalContent.periodTime}</td>
-                        <td rowSpan={4} width="225">
+                        <th rowSpan={rowSpan} width="30"><img src={logos[goalData.team.name] } alt="" width="30" height="30"/></th>
+                        <th width="125">Time:</th>
+                        <td width="250">{goalData.about.periodTime}</td>
+                        <td rowSpan={rowSpan} width="225">
                             {
-                                goalContent.highlight.playbacks?.length > 3?
+                                goalContent && goalContent.highlight.playbacks?.length > 3?
                                 <video width="224" height="126" poster={goalContent.highlight.image.cuts["248x140"]?.src} controls ref={videoRef}>
                                     <source src={goalContent.highlight.playbacks[3].url} type="video/mp4"/>
                                 </video> :
@@ -53,18 +74,30 @@ export const GoalItem = ({goalContent, statsData, team}) => {
                         </td>
                         
                     </tr>
-                    <tr>
-                        <th>Scorer:</th>
-                        <td><Link to={"/playerInfo/" + goalContent.playerId } style={{ textDecoration: 'none', color: "#000099" }}>{scorer}</Link></td>
-                    </tr>
-                    <tr>
-                        <th>Assists:</th>
-                        <td>{assists}</td>
-                    </tr>
-                    <tr>
-                        <th>Type:</th>
-                        <td>{goalType}</td>
-                    </tr>
+                    {
+                        scorer?
+                            <tr>
+                                <th>Scorer:</th>
+                                <td><Link to={"/playerInfo/" + scorer.player.id } style={{ textDecoration: 'none', color: "#000099" }}>{scorer.player.fullName}</Link></td>
+                            </tr> : 
+                            null
+                    }
+                    {
+                        firstAssist?
+                            <tr>
+                                <th>1st Assists:</th>
+                                <td><Link to={"/playerInfo/" + firstAssist.player.id } style={{ textDecoration: 'none', color: "#000099" }}>{firstAssist.player.fullName}</Link></td>
+                            </tr> :
+                            null
+                    }
+                    {
+                        secondAssist?
+                            <tr>
+                                <th>2nd Assists:</th>
+                                <td><Link to={"/playerInfo/" + secondAssist.player.id } style={{ textDecoration: 'none', color: "#000099" }}>{secondAssist.player.fullName}</Link></td>
+                            </tr> :
+                            null
+                    }
                 </tbody>
             </table>                
         </div>
