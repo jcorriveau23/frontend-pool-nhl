@@ -78,7 +78,7 @@ export const GoalItem = ({goalData, gameContent}) => {
                         scorer?
                             <tr>
                                 <th>Scorer:</th>
-                                <td><Link to={"/playerInfo/" + scorer.player.id } style={{ textDecoration: 'none', color: "#000099" }}>{scorer.player.fullName}</Link></td>
+                                <td><Link to={"/playerInfo/" + scorer.player.id } style={{ textDecoration: 'none', color: "#000099" }}>{scorer.player.fullName + " (" + scorer.seasonTotal + ")"}</Link></td>
                             </tr> : 
                             null
                     }
@@ -86,7 +86,7 @@ export const GoalItem = ({goalData, gameContent}) => {
                         firstAssist?
                             <tr>
                                 <th>1st Assists:</th>
-                                <td><Link to={"/playerInfo/" + firstAssist.player.id } style={{ textDecoration: 'none', color: "#000099" }}>{firstAssist.player.fullName}</Link></td>
+                                <td><Link to={"/playerInfo/" + firstAssist.player.id } style={{ textDecoration: 'none', color: "#000099" }}>{firstAssist.player.fullName + " (" + firstAssist.seasonTotal + ")"}</Link></td>
                             </tr> :
                             null
                     }
@@ -94,7 +94,7 @@ export const GoalItem = ({goalData, gameContent}) => {
                         secondAssist?
                             <tr>
                                 <th>2nd Assists:</th>
-                                <td><Link to={"/playerInfo/" + secondAssist.player.id } style={{ textDecoration: 'none', color: "#000099" }}>{secondAssist.player.fullName}</Link></td>
+                                <td><Link to={"/playerInfo/" + secondAssist.player.id } style={{ textDecoration: 'none', color: "#000099" }}>{secondAssist.player.fullName + " (" + secondAssist.seasonTotal + ")"}</Link></td>
                             </tr> :
                             null
                     }
