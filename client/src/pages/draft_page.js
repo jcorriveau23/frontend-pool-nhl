@@ -107,7 +107,7 @@ function DraftPage() {
         )
     }
     else if(availableYears){
-        console.log(availableYears)
+        //console.log(availableYears)
         return(
             <div>
                 <table>

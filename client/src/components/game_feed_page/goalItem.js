@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "./goalItem.css"
 
 // images
-import logos, {team_name_from_id} from "../img/images"
+import logos from "../img/images"
 
 export const GoalItem = ({goalData, gameContent}) => {
 
@@ -18,19 +18,19 @@ export const GoalItem = ({goalData, gameContent}) => {
 
     // const previousUrl = useRef(goalContent.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
 
-    //       3 - use the goal.eventId to map into the gameContent.media.milestones.items(item)
-    //       4 - if goal.eventId == item.statsEventId, display the video.
-
-
     useEffect(() => {
         //console.log(goalData)
         //console.log(gameContent)
-        videoRef?.current?.load();
 
         if(gameContent.media.milestones.items){
             for(var i = 0; i < gameContent.media.milestones.items.length; i++){
                 if(parseInt(gameContent.media.milestones.items[i].statsEventId) === goalData.about.eventId)
-                    setGoalContent(gameContent.media.milestones.items[i])
+                    if(gameContent.media.milestones.items[i].highlight && gameContent.media.milestones.items[i].highlight.playbacks?.length > 3)
+                    {
+                        console.log("found the video")
+                        setGoalContent({...gameContent.media.milestones.items[i].highlight})
+                    }
+                        
             }
         }
 
@@ -53,7 +53,11 @@ export const GoalItem = ({goalData, gameContent}) => {
             }  
         })     
 
-    }, [goalData])
+    }, [goalData, gameContent])  // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        videoRef?.current?.load();   
+    }, [goalContent])  // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div>
@@ -65,11 +69,11 @@ export const GoalItem = ({goalData, gameContent}) => {
                         <td width="250">{goalData.about.periodTime}</td>
                         <td rowSpan={rowSpan} width="225">
                             {
-                                goalContent && goalContent.highlight.playbacks?.length > 3?
-                                <video width="224" height="126" poster={goalContent.highlight.image.cuts["248x140"]?.src} controls ref={videoRef}>
-                                    <source src={goalContent.highlight.playbacks[3].url} type="video/mp4"/>
-                                </video> :
-                                <p>No video yet</p>
+                                goalContent?
+                                    <video width="224" height="126" poster={goalContent.image.cuts["248x140"]?.src} controls ref={videoRef}>
+                                        <source src={goalContent.playbacks[3].url} type="video/mp4"/>
+                                    </video> :
+                                    <p>No video yet</p>
                             }
                         </td>
                         

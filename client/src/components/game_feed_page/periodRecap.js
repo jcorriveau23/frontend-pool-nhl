@@ -8,15 +8,8 @@ import "./goalItem.css"
 
 export const PeriodRecap = ({gameInfo, gameContent, period}) => {
 
-    const videoRef = useRef()
     const [isItem, setIsItem] = useState(false)
     // const previousUrl = useRef(recapVideo.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
-
-    useEffect(() => {
-        console.log(gameInfo)
-        // console.log(gameContent)
-        videoRef?.current?.load();
-    }, [gameContent])
 
     if(gameInfo.liveData && gameInfo.liveData.plays)
     {

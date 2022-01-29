@@ -29,7 +29,7 @@ function TeamRosterBySeasonPage() {
         })
         .then(response => response.json())
         .then(playersStats => {
-            console.log(playersStats)
+            //console.log(playersStats)
             setSkatersStats([...playersStats.data])
         })
         .catch(error => {alert('Error! ' + error)})
