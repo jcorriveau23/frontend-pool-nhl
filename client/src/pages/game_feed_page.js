@@ -214,67 +214,70 @@ function GameFeedPage({user, contract}) {
     }
 
     const render_game_stats = (teams, linescores) => {
-        return(
-            <table className="goalItem">
-                <thead>
-                    <tr>
-                        <th><img src={logos[ teams.away.team.name ]} alt="" width="30" height="30"></img></th>
-                        <th>Summary</th>
-                        <th><img src={logos[ teams.home.team.name ]} alt="" width="30" height="30"></img></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{linescores.teams.away.goals}</td>
-                        <th>Goals</th>
-                        <td>{linescores.teams.home.goals}</td>
-                    </tr>
-                    <tr>
-                        <td>{teams.away.teamStats.teamSkaterStats.shots}</td>
-                        <th>Shots on Goal</th>
-                        <td>{teams.home.teamStats.teamSkaterStats.shots}</td>
-                    </tr>
-                    <tr>
-                        <td>{teams.away.teamStats.teamSkaterStats.faceOffWinPercentage}</td>
-                        <th>Faceoff %</th>
-                        <td>{teams.home.teamStats.teamSkaterStats.faceOffWinPercentage}</td>
-                    </tr>
-                    <tr>
-                        <td>{teams.away.teamStats.teamSkaterStats.powerPlayGoals + " / " + teams.away.teamStats.teamSkaterStats.powerPlayOpportunities}</td>
-                        <th>Power Play</th>
-                        <td>{teams.home.teamStats.teamSkaterStats.powerPlayGoals + " / " + teams.home.teamStats.teamSkaterStats.powerPlayOpportunities}</td>
-                    </tr>
-                    <tr>
-                        <td>{teams.away.teamStats.teamSkaterStats.pim}</td>
-                        <th>PIM</th>
-                        <td>{teams.home.teamStats.teamSkaterStats.pim}</td>
-                    </tr>
-                    <tr>
-                        <td>{teams.away.teamStats.teamSkaterStats.hits}</td>
-                        <th>Hits</th>
-                        <td>{teams.home.teamStats.teamSkaterStats.hits}</td>
-                    </tr>
-
-                    <tr>
-                        <td>{teams.away.teamStats.teamSkaterStats.blocked}</td>
-                        <th>Blocks</th>
-                        <td>{teams.home.teamStats.teamSkaterStats.blocked}</td>
-                    </tr>
-
-                    <tr>
-                        <td>{teams.away.teamStats.teamSkaterStats.giveaways}</td>
-                        <th>Giveaways</th>
-                        <td>{teams.home.teamStats.teamSkaterStats.giveaways}</td>
-                    </tr>
-
-                    <tr>
-                        <td>{teams.away.teamStats.teamSkaterStats.takeaways}</td>
-                        <th>Takeaways</th>
-                        <td>{teams.home.teamStats.teamSkaterStats.takeaways}</td>
-                    </tr>
-                </tbody>
-            </table>
-        )
+        if(teams.away.teamStats.teamSkaterStats){
+            return(
+                <table className="goalItem">
+                    <thead>
+                        <tr>
+                            <th><img src={logos[ teams.away.team.name ]} alt="" width="30" height="30"></img></th>
+                            <th>Summary</th>
+                            <th><img src={logos[ teams.home.team.name ]} alt="" width="30" height="30"></img></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{linescores.teams.away.goals}</td>
+                            <th>Goals</th>
+                            <td>{linescores.teams.home.goals}</td>
+                        </tr>
+                        <tr>
+                            <td>{teams.away.teamStats.teamSkaterStats.shots}</td>
+                            <th>Shots on Goal</th>
+                            <td>{teams.home.teamStats.teamSkaterStats.shots}</td>
+                        </tr>
+                        <tr>
+                            <td>{teams.away.teamStats.teamSkaterStats.faceOffWinPercentage}</td>
+                            <th>Faceoff %</th>
+                            <td>{teams.home.teamStats.teamSkaterStats.faceOffWinPercentage}</td>
+                        </tr>
+                        <tr>
+                            <td>{teams.away.teamStats.teamSkaterStats.powerPlayGoals + " / " + teams.away.teamStats.teamSkaterStats.powerPlayOpportunities}</td>
+                            <th>Power Play</th>
+                            <td>{teams.home.teamStats.teamSkaterStats.powerPlayGoals + " / " + teams.home.teamStats.teamSkaterStats.powerPlayOpportunities}</td>
+                        </tr>
+                        <tr>
+                            <td>{teams.away.teamStats.teamSkaterStats.pim}</td>
+                            <th>PIM</th>
+                            <td>{teams.home.teamStats.teamSkaterStats.pim}</td>
+                        </tr>
+                        <tr>
+                            <td>{teams.away.teamStats.teamSkaterStats.hits}</td>
+                            <th>Hits</th>
+                            <td>{teams.home.teamStats.teamSkaterStats.hits}</td>
+                        </tr>
+    
+                        <tr>
+                            <td>{teams.away.teamStats.teamSkaterStats.blocked}</td>
+                            <th>Blocks</th>
+                            <td>{teams.home.teamStats.teamSkaterStats.blocked}</td>
+                        </tr>
+    
+                        <tr>
+                            <td>{teams.away.teamStats.teamSkaterStats.giveaways}</td>
+                            <th>Giveaways</th>
+                            <td>{teams.home.teamStats.teamSkaterStats.giveaways}</td>
+                        </tr>
+    
+                        <tr>
+                            <td>{teams.away.teamStats.teamSkaterStats.takeaways}</td>
+                            <th>Takeaways</th>
+                            <td>{teams.home.teamStats.teamSkaterStats.takeaways}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            )
+        }
+        
     }
 
     const sort_by_int = (isHome, stat) => {

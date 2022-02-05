@@ -30,6 +30,10 @@ import ANA from "./anaheim-ducks-logo.svg"
 import CLB from "./columbus-blue-jackets-logo.svg"
 import VGK from "./vegas-golden-knights-logo.svg"
 import KRK from "./kraken.svg"
+import MET from "./MET.png"
+import CEN from "./CEN.png"
+import PAC from "./PAC.png"
+import ATL from "./ATL.png"
 
 
 export const logos = { 
@@ -64,7 +68,11 @@ export const logos = {
     "Anaheim Ducks": ANA,
     "Columbus Blue Jackets": CLB,
     "Vegas Golden Knights": VGK,
-    "Seattle Kraken": KRK
+    "Seattle Kraken": KRK,
+    "Team Atlantic": ATL,
+    "Team Metropolitan": MET,
+    "Team Central": CEN,
+    "Team Pacific": PAC
  }
 
  export const team_name_from_id = {
