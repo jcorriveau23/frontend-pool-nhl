@@ -25,6 +25,7 @@ import PlayerPage from "./pages/player_page"
 import TeamRosterBySeasonPage from "./pages/teamRosterBySeason_page"
 import MyGameBetsPage from './pages/myGameBets_page';
 import DraftPage from './pages/draft_page';
+import LeagueLeadersPage from './pages/leagueLeaders_page';
 
 // components
 import WalletCard from './components/web3/WalletCard';
@@ -59,6 +60,7 @@ function App() {
                 <li><Link to="/statsPage">League Stats</Link></li>
                 <li><Link to="/playerInfo">Search Players</Link></li>
                 <li><Link to="/draft">Draft</Link></li>
+                <li><Link to="/leaders">Leaders</Link></li>
                 {user? <li><Link to="/" onClick={() => Disconnect()}>Disconnect</Link></li> : null}
                 <WalletCard user={user} setUser={setUser} contract={contract} setContract={setContract}/>
               </div>
@@ -83,6 +85,7 @@ function App() {
           <Route path="/teamRosterBySeason/:teamID/:season" element = {<TeamRosterBySeasonPage/>}></Route>
           <Route path="/draft" element = {<DraftPage/>}></Route>
           <Route path="/draft/:year" element = {<DraftPage/>}></Route>
+          <Route path="/leaders" element = {<LeagueLeadersPage/>}></Route>
         </Routes>
         </div>
       </Router>

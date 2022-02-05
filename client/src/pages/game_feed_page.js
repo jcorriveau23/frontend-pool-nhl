@@ -91,7 +91,7 @@ function GameFeedPage({user, contract}) {
         //console.log(team.players)
         return(
             <div>
-            <table  className="content-table">
+            <table className="content-table">
                 <thead>
                     <tr>
                         <th colSpan={17}>Skaters</th>
