@@ -47,7 +47,7 @@ function LeagueLeadersPage() {
             <table className="content-table">
                 <thead>
                     <tr>
-                        <th colSpan={4}>{season}</th>
+                        <th colSpan={4}>{season.substring(0,4) + "-" + season.substring(4)}</th>
                     </tr>
                     <tr>
                         <th>#</th>
@@ -63,7 +63,7 @@ function LeagueLeadersPage() {
                         return(
                             <tr key={i}>
                                 <td>{player.rank}</td>
-                                <td>{player.person.fullName}</td>
+                                <td><Link to={"/playerInfo/"+ player.person.id} style={{ textDecoration: 'none', color: "#000099" }}>{player.person.fullName}</Link></td>
                                 <td><img src={logos[player.team.name]} alt="" width="30" height="30"></img></td>
                                 {/* <td>{player.player.positionCode}</td> */}
                                 <td>{player.value}</td>
@@ -91,13 +91,19 @@ function LeagueLeadersPage() {
         return(
             types.map((type, i) =>{
                 return(
-                    <option key={i} value={type.displayName} selected={type.displayName === statsType? "selected" : null}>{type.displayName}</option>
+                    <option 
+                        key={i} 
+                        value={type.displayName} 
+                        selected={type.displayName === statsType? "selected" : null}
+                    >
+                        {type.displayName}
+                    </option>
                 )
             })
         )
     }
 
-    const SeasonOptions = (types) => {
+    const SeasonOptions = () => {
         var seasonArray = []
 
         for(var i = 2021; i > 1916; i--)
@@ -135,7 +141,7 @@ function LeagueLeadersPage() {
                                 <select
                                     onChange={handleChangeSeason} 
                                 >
-                                    {SeasonOptions(leagueLeaderTypes)}
+                                    {SeasonOptions()}
                                 </select>
                             </td>
                         </tr>

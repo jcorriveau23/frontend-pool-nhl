@@ -1,7 +1,7 @@
 // get the draft and display it on this page for a year
 
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation} from "react-router-dom";
+import { Link, useLocation, useNavigate} from "react-router-dom";
 
 // Loader
 import ClipLoader from "react-spinners/ClipLoader"
@@ -13,7 +13,7 @@ function DraftPage() {
 
     const [draftInfo, setDraftInfo] = useState(null)
     const [prevYear, setPrevYear] = useState("")
-    const [availableYears, setAvailableYears] = useState(null)
+    const navigate = useNavigate ()
     const location = useLocation()
 
     var year = window.location.pathname.split('/').pop()
@@ -35,18 +35,8 @@ function DraftPage() {
         }
         else
         {
-            setDraftInfo(null)
-            setPrevYear("")
+            navigate("/draft/2021") 
         }
-            
-        var years = []
-        for(var i = 2021; i > 1979; i--){
-            years.push(i)
-        }
-        // console.log(years)
-
-        setAvailableYears(years)
-
     }, [location]); // eslint-disable-line react-hooks/exhaustive-deps
     
     const render_round = (roundInfo, i) => {
@@ -55,7 +45,7 @@ function DraftPage() {
                <table  className="content-table">
                     <thead>
                         <tr>
-                            <th colSpan="3">Round #: {roundInfo.round}</th>
+                            <th colSpan="3">Round # {roundInfo.round}</th>
                         </tr>
                         <tr>
                             <th>#</th>
@@ -84,11 +74,56 @@ function DraftPage() {
         )
     }
 
+    const SeasonOptions = () => {
+        var seasonArray = []
+
+        for(var i = 2021; i > 1979; i--)
+            seasonArray.push(i)
+
+        return(
+            seasonArray.map((s, i) => {
+                return(
+                    <option 
+                        key={i} 
+                        value={s.toString()} 
+                        selected={s.toString() === year? "selected" : null}
+                    >
+                        {s.toString()}
+                    </option>
+                )
+            })
+        )  
+    }
+
+    const handleChangeSeason = (event) => {
+        setDraftInfo(null)
+        navigate("/draft/" + event.target.value)
+    }
+
+    const seasonDropDown = () => {
+        return(
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Season</th>
+                        <td>
+                            <select
+                                onChange={handleChangeSeason} 
+                            >
+                                {SeasonOptions()}
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        )
+    }
+
     if( draftInfo && draftInfo.drafts.length > 0)
     { 
         return(
             <div>
-                <h1>Draft year : {draftInfo.drafts[0].draftYear}</h1>
+                {seasonDropDown()}
                 {
                     draftInfo.drafts[0].rounds.map((round, i) => {
                         return render_round(round, i)
@@ -106,23 +141,12 @@ function DraftPage() {
             </div>
         )
     }
-    else if(availableYears){
-        //console.log(availableYears)
+    else{
         return(
             <div>
-                <table>
-                    <tbody>
-                        {availableYears.map((year, i) => {
-                            return <tr key={i}><td><Link to={"/draft/" + year}>{year}</Link></td></tr>
-                        })}
-                    </tbody>
-                </table>
-                
+                {seasonDropDown()}
             </div>
         )
-    }
-    else{
-        return <h1>Preparing the page...</h1>
     }
   }
 
