@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 
-import TeamsStanding from "../components/stats_page/teamsStanding";
+import TeamsStanding from "../components/standing_page/teamsStanding";
 
 // Loader
 import ClipLoader from "react-spinners/ClipLoader"
 
-function StatsPage() {
+function StandingPage() {
     
     const [teamsStats, setTeamsStats] = useState(null)
 
     useEffect(() => {
         fetch('https://statsapi.web.nhl.com/api/v1/standings')
         .then(response => response.json())
-        .then(data => setTeamsStats(data))
+        .then(data => {
+            //console.log(data)
+            setTeamsStats(data)
+        })
 
 
     }, []); // fetch team standing stats from nhl api.
@@ -39,4 +42,4 @@ function StatsPage() {
     
   
   }
-  export default StatsPage;
+  export default StandingPage;

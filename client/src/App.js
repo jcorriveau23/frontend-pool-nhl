@@ -19,7 +19,7 @@ import {RegisterModal} from "./modals/register"
 import HomePage from './pages/home_page';
 import MyPoolsPage from "./pages/myPools_page"
 import PoolPage from "./pages/pool_page"
-import StatsPage from "./pages/stats_page"
+import StandingPage from "./pages/standing_page"
 import GameFeedPage from "./pages/game_feed_page"
 import PlayerPage from "./pages/player_page"
 import TeamRosterBySeasonPage from "./pages/teamRosterBySeason_page"
@@ -57,10 +57,10 @@ function App() {
                 <li><Link to="/">Home</Link></li>
                 {user? <li><Link to="/MyPools">My Pools</Link></li> : null}
                 {user? <li><Link to="/MyGameBets">My Game Bets</Link></li> : null}
-                <li><Link to="/statsPage">League Stats</Link></li>
+                <li><Link to="/standing">Standing</Link></li>
+                <li><Link to="/leaders">League leaders</Link></li>
                 <li><Link to="/playerInfo">Search Players</Link></li>
                 <li><Link to="/draft">Draft</Link></li>
-                <li><Link to="/leaders">Leaders</Link></li>
                 {user? <li><Link to="/" onClick={() => Disconnect()}>Disconnect</Link></li> : null}
                 <WalletCard user={user} setUser={setUser} contract={contract} setContract={setContract}/>
               </div>
@@ -78,7 +78,7 @@ function App() {
           <Route path="/MyPools" element = {<MyPoolsPage user={user}/>}></Route>
           <Route path="/MyGameBets" element = {<MyGameBetsPage user={user} contract={contract}/>}></Route>
           <Route path="/MyPools/:name" element = {<PoolPage user={user}/>}></Route>
-          <Route path="/statsPage" element = {<StatsPage/>}></Route>
+          <Route path="/standing" element = {<StandingPage/>}></Route>
           <Route path="/gameFeed/:id" element = {<GameFeedPage user={user} contract={contract}/>}></Route>
           <Route path="/playerInfo" element = {<PlayerPage/>}></Route>
           <Route path="/playerInfo/:id" element = {<PlayerPage/>}></Route>
