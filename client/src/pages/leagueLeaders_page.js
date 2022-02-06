@@ -36,7 +36,7 @@ function LeagueLeadersPage() {
         })
         .then(response => response.json())
         .then(leagueLeaderTypes => {
-            console.log(leagueLeaderTypes)
+            //console.log(leagueLeaderTypes)
             setLeagueLeaderTypes([...leagueLeaderTypes])
         })
 

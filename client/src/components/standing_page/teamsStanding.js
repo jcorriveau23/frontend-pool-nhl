@@ -32,9 +32,7 @@ function TeamsStanding({data}) {
                     westernTeams.push(data.records[i].teamRecords[j])
             }
         }
-
-        console.log(easternTeams)
-
+        
         setLeagueTeams([...teams])
         setEasternTeams([...easternTeams])
         setWesternTeams([...westernTeams])
