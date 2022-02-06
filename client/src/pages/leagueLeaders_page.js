@@ -16,6 +16,7 @@ function LeagueLeadersPage() {
     const [statsType, setStatsType] = useState("points")
     const [season, setSeason] = useState("20212022")
     const [leagueLeaderTypes, setLeagueLeaderTypes] = useState()
+    const [noDataFoThisYear, setNoDataFoThisYear] = useState(false)
 
     useEffect(() => {
         const urlLeaders = "https://statsapi.web.nhl.com/api/v1/stats/leaders?leaderCategories=" + statsType + "&season=" + season + "&limit=100"  // https://statsapi.web.nhl.com/api/v1/stats/leaders?leaderCategories=gaa&season=20212022&limit=100
@@ -25,7 +26,10 @@ function LeagueLeadersPage() {
         })
         .then(response => response.json())
         .then(leagueLeaders => {
-            //console.log(leagueLeaders.leagueLeaders[0])
+            console.log(leagueLeaders.leagueLeaders[0])
+            if(leagueLeaders.leagueLeaders[0] === undefined)
+                setNoDataFoThisYear(true)
+                
             setLeagueLeaders({...leagueLeaders.leagueLeaders[0]})
         })
 
@@ -79,11 +83,13 @@ function LeagueLeadersPage() {
 
     const handleChangeStatsType = (event) => {
         setLeagueLeaders(null)
+        setNoDataFoThisYear(false)
         setStatsType(event.target.value)
     }
 
     const handleChangeSeason = (event) => {
         setLeagueLeaders(null)
+        setNoDataFoThisYear(false)
         setSeason(event.target.value)
     }
 
@@ -118,37 +124,50 @@ function LeagueLeadersPage() {
         )  
     }
 
-    if( leagueLeaders && leagueLeaderTypes)
+    const displayDropDowns = () => {
+        return(
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Stats Type</th>
+                        <td>
+                            <select 
+                                onChange={handleChangeStatsType} 
+                                // value={poolInfo.number_poolers}
+                            >
+                                {leagueLeadersTypeOptions(leagueLeaderTypes)}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Season</th>
+                        <td>
+                            <select
+                                onChange={handleChangeSeason} 
+                            >
+                                {SeasonOptions()}
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        )
+    }
+
+    if( leagueLeaders && leagueLeaderTypes && !noDataFoThisYear)
     { 
         return(
             <div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Stats Type</th>
-                            <td>
-                                <select 
-                                    onChange={handleChangeStatsType} 
-                                    // value={poolInfo.number_poolers}
-                                >
-                                    {leagueLeadersTypeOptions(leagueLeaderTypes)}
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Season</th>
-                            <td>
-                                <select
-                                    onChange={handleChangeSeason} 
-                                >
-                                    {SeasonOptions()}
-                                </select>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                
+                {displayDropDowns()}
                 {render_leaders(leagueLeaders.leaders)}
+            </div>
+        )
+    }
+    else if(noDataFoThisYear){
+        return(
+            <div>
+                {displayDropDowns()}
+                <h1>There is no data for this year.</h1>
             </div>
         )
     }
