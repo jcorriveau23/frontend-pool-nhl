@@ -125,7 +125,9 @@ function DraftPage() {
             <div>
                 {seasonDropDown()}
                 {
-                    draftInfo.drafts[0].rounds.map((round, i) => {
+                    draftInfo.drafts[0].rounds.sort((round1, round2) => {
+                        return round1.round - round2.round
+                    }).map((round, i) => {
                         return render_round(round, i)
                     })
                 }
