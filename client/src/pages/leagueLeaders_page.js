@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 // images
-import logos, { team_name_from_id } from '../components/img/images';
+import logos from '../components/img/images';
 
 function LeagueLeadersPage() {
   const [leagueLeaders, setLeagueLeaders] = useState(null);
@@ -31,14 +31,12 @@ function LeagueLeadersPage() {
       .then(response => response.json())
       .then(leagueLeaders => {
         console.log(leagueLeaders.leagueLeaders[0]);
-        if (leagueLeaders.leagueLeaders[0] === undefined)
-          setNoDataFoThisYear(true);
+        if (leagueLeaders.leagueLeaders[0] === undefined) setNoDataFoThisYear(true);
 
         setLeagueLeaders({ ...leagueLeaders.leagueLeaders[0] });
       });
 
-    const urlLeagueLeaderTypes =
-      'https://statsapi.web.nhl.com/api/v1/leagueLeaderTypes';
+    const urlLeagueLeaderTypes = 'https://statsapi.web.nhl.com/api/v1/leagueLeaderTypes';
 
     fetch(urlLeagueLeaderTypes, {
       method: 'GET',
@@ -55,9 +53,7 @@ function LeagueLeadersPage() {
       <table className="content-table">
         <thead>
           <tr>
-            <th colSpan={4}>
-              {season.substring(0, 4) + '-' + season.substring(4)}
-            </th>
+            <th colSpan={4}>{season.substring(0, 4) + '-' + season.substring(4)}</th>
           </tr>
           <tr>
             <th>#</th>
@@ -73,20 +69,12 @@ function LeagueLeadersPage() {
               <tr key={i}>
                 <td>{player.rank}</td>
                 <td>
-                  <Link
-                    to={'/playerInfo/' + player.person.id}
-                    style={{ textDecoration: 'none', color: '#000099' }}
-                  >
+                  <Link to={'/playerInfo/' + player.person.id} style={{ textDecoration: 'none', color: '#000099' }}>
                     {player.person.fullName}
                   </Link>
                 </td>
                 <td>
-                  <img
-                    src={logos[player.team.name]}
-                    alt=""
-                    width="30"
-                    height="30"
-                  ></img>
+                  <img src={logos[player.team.name]} alt="" width="30" height="30"></img>
                 </td>
                 {/* <td>{player.player.positionCode}</td> */}
                 <td>{player.value}</td>
@@ -113,11 +101,7 @@ function LeagueLeadersPage() {
   const leagueLeadersTypeOptions = types => {
     return types.map((type, i) => {
       return (
-        <option
-          key={i}
-          value={type.displayName}
-          selected={type.displayName === statsType ? 'selected' : null}
-        >
+        <option key={i} value={type.displayName} selected={type.displayName === statsType ? 'selected' : null}>
           {type.displayName}
         </option>
       );
@@ -134,9 +118,7 @@ function LeagueLeadersPage() {
         <option
           key={i}
           value={s.toString() + (s + 1).toString()}
-          selected={
-            s.toString() + (s + 1).toString() === season ? 'selected' : null
-          }
+          selected={s.toString() + (s + 1).toString() === season ? 'selected' : null}
         >
           {s.toString() + '-' + (s + 1).toString()}
         </option>
@@ -151,9 +133,7 @@ function LeagueLeadersPage() {
           <tr>
             <th>Stats Type</th>
             <td>
-              <select onChange={handleChangeStatsType}>
-                {leagueLeadersTypeOptions(leagueLeaderTypes)}
-              </select>
+              <select onChange={handleChangeStatsType}>{leagueLeadersTypeOptions(leagueLeaderTypes)}</select>
             </td>
           </tr>
           <tr>

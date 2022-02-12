@@ -65,18 +65,11 @@ function TeamRosterBySeasonPage() {
         <table className="content-table">
           <thead>
             <tr>
-              <th colSpan="12">
-                Season : {season.substring(0, 4) + '-' + season.substring(4)}
-              </th>
+              <th colSpan="12">Season : {season.substring(0, 4) + '-' + season.substring(4)}</th>
             </tr>
             <tr>
               <th colSpan="12">
-                <img
-                  src={logos[team_name_from_id[teamID]]}
-                  alt=""
-                  width="30"
-                  height="30"
-                ></img>
+                <img src={logos[team_name_from_id[teamID]]} alt="" width="30" height="30"></img>
               </th>
             </tr>
             <tr>
@@ -109,10 +102,7 @@ function TeamRosterBySeasonPage() {
                 <tr key={i}>
                   <td>-</td>
                   <td>
-                    <Link
-                      to={'/playerInfo/' + player.playerId}
-                      style={{ textDecoration: 'none', color: '#000099' }}
-                    >
+                    <Link to={'/playerInfo/' + player.playerId} style={{ textDecoration: 'none', color: '#000099' }}>
                       {player.skaterFullName}
                     </Link>
                   </td>
@@ -128,15 +118,8 @@ function TeamRosterBySeasonPage() {
                                     <td>-</td>
                                     <td>-</td>
                                     <td>-</td> */}
-                  <td>
-                    {Math.round((player.faceoffWinPct + Number.EPSILON) * 100) /
-                      100}
-                  </td>
-                  <td>
-                    {Math.round(
-                      (player.timeOnIcePerGame + Number.EPSILON) * 100
-                    ) / 100}
-                  </td>
+                  <td>{Math.round((player.faceoffWinPct + Number.EPSILON) * 100) / 100}</td>
+                  <td>{Math.round((player.timeOnIcePerGame + Number.EPSILON) * 100) / 100}</td>
                   {/* <td>-</td>
                                     <td>-</td> */}
                 </tr>
@@ -181,9 +164,7 @@ function TeamRosterBySeasonPage() {
               <th onClick={() => sort_by_int(false, 'goals')}>G</th>
               <th onClick={() => sort_by_int(false, 'points')}>P</th>
               <th onClick={() => sort_by_int(false, 'goalsAgainst')}>GA</th>
-              <th onClick={() => sort_by_int(false, 'goalsAgainstAverage')}>
-                GAA
-              </th>
+              <th onClick={() => sort_by_int(false, 'goalsAgainstAverage')}>GAA</th>
               <th onClick={() => sort_by_int(false, 'wins')}>W</th>
               <th onClick={() => sort_by_int(false, 'losses')}>L</th>
               <th onClick={() => sort_by_int(false, 'otLosses')}>OTL</th>
@@ -200,10 +181,7 @@ function TeamRosterBySeasonPage() {
                 <tr key={i}>
                   <td>-</td>
                   <td>
-                    <Link
-                      to={'/playerInfo/' + goalie.playerId}
-                      style={{ textDecoration: 'none', color: '#000099' }}
-                    >
+                    <Link to={'/playerInfo/' + goalie.playerId} style={{ textDecoration: 'none', color: '#000099' }}>
                       {goalie.goalieFullName}
                     </Link>
                   </td>

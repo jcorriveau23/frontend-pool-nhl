@@ -26,21 +26,13 @@ function PlayerPage() {
     if (prevPlayerID !== playerID && !isNaN(playerID)) {
       if (parseInt(playerID) > 8000000) {
         //console.log("fetching NHL player")
-        fetch(
-          'https://statsapi.web.nhl.com/api/v1/people/' +
-            playerID +
-            '/stats?stats=yearByYear'
-        ) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
+        fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYear') // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
           .then(response => response.json())
           .then(playerStats => {
             // console.log(playerStats)
             setPlayerStats({ ...playerStats });
           });
-        fetch(
-          'https://statsapi.web.nhl.com/api/v1/people/' +
-            playerID +
-            '/stats?stats=yearByYearPlayoffs'
-        ) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYearPlayoffs
+        fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYearPlayoffs') // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYearPlayoffs
           .then(response => response.json())
           .then(playerPlayoffStats => {
             // console.log(playerPlayoffStats)
@@ -77,9 +69,7 @@ function PlayerPage() {
     return (
       <div>
         {render_player_info(info)}
-        {info.primaryPosition.abbreviation !== 'G'
-          ? render_skater_stats(stats)
-          : render_goalie_stats(stats)}
+        {info.primaryPosition.abbreviation !== 'G' ? render_skater_stats(stats) : render_goalie_stats(stats)}
       </div>
     );
   };
@@ -111,7 +101,6 @@ function PlayerPage() {
         return '#a3cf97';
       case 'ECAC':
       case 'NCAA':
-      case 'ECAC':
       case 'CCHA':
         return '#bfb8e7';
       case 'CJHL':
@@ -201,21 +190,15 @@ function PlayerPage() {
               totGoals += season.stat.goals;
               totAssists += season.stat.assists;
               totPoints += season.stat.points;
-              totPlusMinus += isNaN(season.stat.plusMinus)
-                ? 0
-                : season.stat.plusMinus;
+              totPlusMinus += isNaN(season.stat.plusMinus) ? 0 : season.stat.plusMinus;
               totPenaltyMinutes += parseInt(season.stat.penaltyMinutes);
               if (playoffStats) {
                 playoffTotGames += playoffStats.stat.games;
                 playoffTotGoals += playoffStats.stat.goals;
                 playoffTotAssists += playoffStats.stat.assists;
                 playoffTotPoints += playoffStats.stat.points;
-                playoffTotPlusMinus += isNaN(playoffStats.stat.plusMinus)
-                  ? 0
-                  : playoffStats.stat.plusMinus;
-                playoffTotPenaltyMinutes += parseInt(
-                  playoffStats.stat.penaltyMinutes
-                );
+                playoffTotPlusMinus += isNaN(playoffStats.stat.plusMinus) ? 0 : playoffStats.stat.plusMinus;
+                playoffTotPenaltyMinutes += parseInt(playoffStats.stat.penaltyMinutes);
               }
               // totShots += isNaN(season.stat.shots)? 0 : season.stat.shots
               // totHits += isNaN(season.stat.hits)? 0 : season.stat.hits
@@ -224,37 +207,23 @@ function PlayerPage() {
             }
 
             return (
-              <tr
-                key={i}
-                style={{
-                  backgroundColor: get_league_row_color(season.league.name),
-                }}
-              >
+              <tr key={i} style={{ backgroundColor: get_league_row_color(season.league.name) }}>
                 <td>{season.team.name}</td>
                 {season.league.id === 133 ? ( // nhl league
                   <>
                     <td>
                       <Link
-                        to={
-                          '/teamRosterBySeason/' +
-                          season.team.id +
-                          '/' +
-                          season.season
-                        }
+                        to={'/teamRosterBySeason/' + season.team.id + '/' + season.season}
                         style={{ textDecoration: 'none', color: '#0000ff' }}
                       >
-                        {season.season.slice(0, 4) +
-                          '-' +
-                          season.season.slice(4)}
+                        {season.season.slice(0, 4) + '-' + season.season.slice(4)}
                       </Link>
                     </td>
                     <td>NHL</td>
                   </>
                 ) : (
                   <>
-                    <td>
-                      {season.season.slice(0, 4) + '-' + season.season.slice(4)}
-                    </td>
+                    <td>{season.season.slice(0, 4) + '-' + season.season.slice(4)}</td>
                     <td>{season.league.name}</td>
                   </>
                 )}
@@ -357,9 +326,7 @@ function PlayerPage() {
               totLosses += season.stat.losses;
               totOT += isNaN(season.stat.ot) ? 0 : season.stat.ot;
               totSaves += isNaN(season.stat.saves) ? 0 : season.stat.saves;
-              totShotAgainst += isNaN(season.stat.shotsAgainst)
-                ? 0
-                : season.stat.shotsAgainst;
+              totShotAgainst += isNaN(season.stat.shotsAgainst) ? 0 : season.stat.shotsAgainst;
               totShutout += season.stat.shutouts;
             }
             return (
@@ -374,26 +341,17 @@ function PlayerPage() {
                   <>
                     <td>
                       <Link
-                        to={
-                          '/teamRosterBySeason/' +
-                          season.team.id +
-                          '/' +
-                          season.season
-                        }
+                        to={'/teamRosterBySeason/' + season.team.id + '/' + season.season}
                         style={{ textDecoration: 'none', color: '#000099' }}
                       >
-                        {season.season.slice(0, 4) +
-                          '-' +
-                          season.season.slice(4)}
+                        {season.season.slice(0, 4) + '-' + season.season.slice(4)}
                       </Link>
                     </td>
                     <td>NHL</td>
                   </>
                 ) : (
                   <>
-                    <td>
-                      {season.season.slice(0, 4) + '-' + season.season.slice(4)}
-                    </td>
+                    <td>{season.season.slice(0, 4) + '-' + season.season.slice(4)}</td>
                     <td>{season.league.name}</td>
                   </>
                 )}
@@ -402,9 +360,7 @@ function PlayerPage() {
                 <td>{season.stat.gamesStarted}</td>
                 <td>
                   {season.stat.goalAgainstAverage
-                    ? Math.round(
-                        (season.stat.goalAgainstAverage + Number.EPSILON) * 100
-                      ) / 100
+                    ? Math.round((season.stat.goalAgainstAverage + Number.EPSILON) * 100) / 100
                     : null}
                 </td>
                 <td>{season.stat.goalsAgainst}</td>
@@ -413,9 +369,7 @@ function PlayerPage() {
                 <td>{season.stat.ot}</td>
                 <td>
                   {season.stat.savePercentage
-                    ? Math.round(
-                        (season.stat.savePercentage + Number.EPSILON) * 1000
-                      ) / 1000
+                    ? Math.round((season.stat.savePercentage + Number.EPSILON) * 1000) / 1000
                     : null}
                 </td>
                 <td>{season.stat.saves}</td>
@@ -502,10 +456,7 @@ function PlayerPage() {
     return (
       <div>
         <SearchPlayer />
-        {render_player_info_stats(
-          playerStats.stats[0].splits,
-          playerInfo.people[0]
-        )}
+        {render_player_info_stats(playerStats.stats[0].splits, playerInfo.people[0])}
       </div>
     );
   } else if (!isNaN(playerID) && playerID !== '' && !prospectInfo) {

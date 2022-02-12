@@ -112,10 +112,7 @@ function MyPoolsPage({ user }) {
                     {poolDraft.map((pool, i) => (
                       <Link to={'/MyPools/' + pool.name} key={i}>
                         <li>
-                          <PoolItem
-                            name={pool.name}
-                            owner={pool.owner}
-                          ></PoolItem>
+                          <PoolItem name={pool.name} owner={pool.owner}></PoolItem>
                         </li>
                       </Link>
                     ))}
@@ -130,10 +127,7 @@ function MyPoolsPage({ user }) {
                     {poolDynastie.map((pool, i) => (
                       <Link to={'/MyPools/' + pool.name} key={i}>
                         <li>
-                          <PoolItem
-                            name={pool.name}
-                            owner={pool.owner}
-                          ></PoolItem>
+                          <PoolItem name={pool.name} owner={pool.owner}></PoolItem>
                         </li>
                       </Link>
                     ))}
@@ -148,11 +142,7 @@ function MyPoolsPage({ user }) {
                     {poolInProgress.map((pool, i) => (
                       <Link to={'/MyPools/' + pool.name} key={i}>
                         <li>
-                          <PoolItem
-                            name={pool.name}
-                            owner={pool.owner}
-                            key={i}
-                          ></PoolItem>
+                          <PoolItem name={pool.name} owner={pool.owner} key={i}></PoolItem>
                         </li>
                       </Link>
                     ))}

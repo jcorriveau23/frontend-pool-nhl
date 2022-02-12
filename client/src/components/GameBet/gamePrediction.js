@@ -81,14 +81,8 @@ function GamePrediction({ gameID, gameInfo, user, contract }) {
                 datasets: [
                   {
                     label: 'Eth',
-                    data: [
-                      gameData.accumulatedWeisHome / 10 ** 18,
-                      gameData.accumulatedWeisAway / 10 ** 18,
-                    ], // from Weis to Ethers
-                    backgroundColor: [
-                      'rgba(255,99,132,0.2)',
-                      'rgba(54,162,235,0.2)',
-                    ],
+                    data: [gameData.accumulatedWeisHome / 10 ** 18, gameData.accumulatedWeisAway / 10 ** 18], // from Weis to Ethers
+                    backgroundColor: ['rgba(255,99,132,0.2)', 'rgba(54,162,235,0.2)'],
                     borderColor: ['rgba(255,99,132,1)', 'rgba(54,162,235,1)'],
                     borderWidth: 3,
                   },
@@ -97,10 +91,7 @@ function GamePrediction({ gameID, gameInfo, user, contract }) {
             />
           </div>
           <div>
-            <button
-              onClick={() => setShowSendPredictionModal(true)}
-              disabled={gameData.isDone}
-            >
+            <button onClick={() => setShowSendPredictionModal(true)} disabled={gameData.isDone}>
               {gameData.isDone ? 'Game is done' : 'Predict'}
             </button>
           </div>
@@ -128,16 +119,12 @@ function GamePrediction({ gameID, gameInfo, user, contract }) {
                   <th>My part (%)</th>
                   <td>
                     {gameData.accumulatedWeisHome !== 0
-                      ? (gameData.predictByMeWeisHome /
-                          gameData.accumulatedWeisHome) *
-                        100
+                      ? (gameData.predictByMeWeisHome / gameData.accumulatedWeisHome) * 100
                       : '-'}
                   </td>
                   <td>
                     {gameData.accumulatedWeisAway !== 0
-                      ? (gameData.predictByMeWeisAway /
-                          gameData.accumulatedWeisAway) *
-                        100
+                      ? (gameData.predictByMeWeisAway / gameData.accumulatedWeisAway) * 100
                       : '-'}
                   </td>
                 </tr>
@@ -150,9 +137,7 @@ function GamePrediction({ gameID, gameInfo, user, contract }) {
       return (
         <div>
           <h1>No Prediction market open for that game yet.</h1>
-          {contract && user && user.addr === owner ? (
-            <button onClick={create_prediction_market}>Create</button>
-          ) : null}
+          {contract && user && user.addr === owner ? <button onClick={create_prediction_market}>Create</button> : null}
         </div>
       );
   } else

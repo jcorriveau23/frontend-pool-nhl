@@ -54,11 +54,7 @@ export const SearchPlayer = () => {
             {isSearching ? (
               <tr>
                 <td>
-                  <ClipLoader
-                    color="#fff"
-                    loading={true}
-                    /*css={override}*/ size={25}
-                  />
+                  <ClipLoader color="#fff" loading={true} /*css={override}*/ size={25} />
                 </td>
               </tr>
             ) : null}

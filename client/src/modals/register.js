@@ -35,11 +35,7 @@ export const RegisterModal = ({ showRegisterModal, setShowRegisterModal }) => {
   };
 
   return (
-    <Modal
-      style={styleModal}
-      isOpen={showRegisterModal}
-      onRequestClose={() => setShowRegisterModal(false)}
-    >
+    <Modal style={styleModal} isOpen={showRegisterModal} onRequestClose={() => setShowRegisterModal(false)}>
       <div className="modal_content">
         <h2>Register an account</h2>
         <form>

@@ -12,10 +12,10 @@ export const GameItem = ({ gameData }) => {
       <thead>
         <tr>
           <td>
-            {new Date(Date.parse(gameData.gameDate)).toLocaleString(
-              navigator.language,
-              { hour: '2-digit', minute: '2-digit' }
-            )}
+            {new Date(Date.parse(gameData.gameDate)).toLocaleString(navigator.language, {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
           </td>
           <td></td>
           {gameData.status.abstractGameState === 'Live' ? (
@@ -30,23 +30,13 @@ export const GameItem = ({ gameData }) => {
       <tbody>
         <tr>
           <td>
-            <img
-              src={logos[gameData.teams.away.team.name]}
-              alt=""
-              width="30"
-              height="30"
-            ></img>
+            <img src={logos[gameData.teams.away.team.name]} alt="" width="30" height="30"></img>
           </td>
           <td>{gameData.teams.away.score}</td>
         </tr>
         <tr>
           <td>
-            <img
-              src={logos[gameData.teams.home.team.name]}
-              alt=""
-              width="30"
-              height="30"
-            ></img>
+            <img src={logos[gameData.teams.home.team.name]} alt="" width="30" height="30"></img>
           </td>
           <td>{gameData.teams.home.score}</td>
         </tr>

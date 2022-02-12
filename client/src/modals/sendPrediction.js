@@ -38,8 +38,7 @@ function SendPredictionModal({
       return;
     }
 
-    const isHome =
-      gameInfo.liveData.boxscore.teams.home.team.name === predictedTeam;
+    const isHome = gameInfo.liveData.boxscore.teams.home.team.name === predictedTeam;
 
     const overrides = {
       value: ethers.utils.parseEther(amountEthersInput), //sending one ether
@@ -52,9 +51,7 @@ function SendPredictionModal({
 
   const listenEvents = () => {
     contract.on('CreatePredictionMarket', (from, id) => {
-      console.log(
-        'Event CreatedPredictionMarket: ' + parseInt(id) + '   From: ' + from
-      );
+      console.log('Event CreatedPredictionMarket: ' + parseInt(id) + '   From: ' + from);
       if (parseInt(id) === parseInt(gameID)) {
         // console.log("Rerenderplz: " + reRender)
         setRerender(!reRender);
@@ -62,16 +59,7 @@ function SendPredictionModal({
     });
 
     contract.on('SendBet', (from, id, isHome, value) => {
-      console.log(
-        'Event SendBet: ' +
-          parseInt(id) +
-          '   From: ' +
-          from +
-          '   Home: ' +
-          isHome +
-          'amount: ' +
-          value
-      );
+      console.log('Event SendBet: ' + parseInt(id) + '   From: ' + from + '   Home: ' + isHome + 'amount: ' + value);
       // console.log(parseInt(gameID))
       if (parseInt(id) === parseInt(gameID)) {
         // console.log("Rerenderplz: " + reRender)
@@ -107,12 +95,7 @@ function SendPredictionModal({
             />
             <div className="floatLeft">
               <div>
-                <img
-                  src={logos[gameInfo.liveData.boxscore.teams.home.team.name]}
-                  alt=""
-                  width="100"
-                  height="100"
-                ></img>
+                <img src={logos[gameInfo.liveData.boxscore.teams.home.team.name]} alt="" width="100" height="100"></img>
               </div>
               <input
                 type="radio"
@@ -124,12 +107,7 @@ function SendPredictionModal({
             </div>
             <div className="floatRight">
               <div>
-                <img
-                  src={logos[gameInfo.liveData.boxscore.teams.away.team.name]}
-                  alt=""
-                  width="100"
-                  height="100"
-                ></img>
+                <img src={logos[gameInfo.liveData.boxscore.teams.away.team.name]} alt="" width="100" height="100"></img>
               </div>
               <input
                 type="radio"
@@ -141,10 +119,7 @@ function SendPredictionModal({
             </div>
           </div>
           <div>
-            <button
-              onClick={() => sendPrediction()}
-              disabled={waitingTransaction}
-            >
+            <button onClick={() => sendPrediction()} disabled={waitingTransaction}>
               Predict {predictedTeam}{' '}
             </button>
           </div>
@@ -154,11 +129,7 @@ function SendPredictionModal({
                 <b>The transaction is being processed...</b>
               </div>
               <div>
-                <ClipLoader
-                  color="#fff"
-                  loading={true}
-                  /*css={override}*/ size={75}
-                />
+                <ClipLoader color="#fff" loading={true} /*css={override}*/ size={75} />
               </div>
             </div>
           ) : null}

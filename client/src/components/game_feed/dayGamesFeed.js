@@ -21,12 +21,7 @@ function TodayGamesFeed() {
     const newDate = new Date(date.setHours(0));
     var formatDate = newDate.toISOString().slice(0, 10);
 
-    fetch(
-      'https://statsapi.web.nhl.com/api/v1/schedule?startDate=' +
-        formatDate +
-        '&endDate=' +
-        formatDate
-    )
+    fetch('https://statsapi.web.nhl.com/api/v1/schedule?startDate=' + formatDate + '&endDate=' + formatDate)
       .then(response => response.json())
       .then(todayGamesData => {
         if (todayGamesData.dates[0]) {
@@ -61,11 +56,7 @@ function TodayGamesFeed() {
                 <img src={goPrev} onClick={prevDate} alt=""></img>
               </td>
               <td>
-                <DatePicker
-                  selected={date}
-                  onChange={date => setDate(date)}
-                  dateFormat="P"
-                ></DatePicker>
+                <DatePicker selected={date} onChange={date => setDate(date)} dateFormat="P"></DatePicker>
               </td>
               <td>
                 <img src={goNext} onClick={nextDate} alt=""></img>

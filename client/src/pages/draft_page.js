@@ -58,19 +58,11 @@ function DraftPage() {
                 <tr key={i}>
                   <td>{pick.pickOverall}</td>
                   <td>
-                    <img
-                      src={logos[pick.team.name]}
-                      alt=""
-                      width="30"
-                      height="30"
-                    ></img>
+                    <img src={logos[pick.team.name]} alt="" width="30" height="30"></img>
                   </td>
                   {pick.prospect.id > 0 ? (
                     <td>
-                      <Link
-                        to={'/playerInfo/' + pick.prospect.id}
-                        style={{ textDecoration: 'none', color: '#000099' }}
-                      >
+                      <Link to={'/playerInfo/' + pick.prospect.id} style={{ textDecoration: 'none', color: '#000099' }}>
                         {pick.prospect.fullName}
                       </Link>
                     </td>
@@ -93,11 +85,7 @@ function DraftPage() {
 
     return seasonArray.map((s, i) => {
       return (
-        <option
-          key={i}
-          value={s.toString()}
-          selected={s.toString() === year ? 'selected' : null}
-        >
+        <option key={i} value={s.toString()} selected={s.toString() === year ? 'selected' : null}>
           {s.toString()}
         </option>
       );

@@ -40,8 +40,7 @@ function DynastiePool({ username, poolName, poolInfo, setPoolInfo, socket }) {
 
   const protect_player = player => {
     var changedArray = [];
-    var number_protected =
-      defProtected.length + forwProtected.length + goalProtected.length;
+    var number_protected = defProtected.length + forwProtected.length + goalProtected.length;
 
     var add_to_reservist = false;
 
@@ -87,13 +86,7 @@ function DynastiePool({ username, poolName, poolInfo, setPoolInfo, socket }) {
   };
 
   const unprotect_player = (player, isReservist) => {
-    if (
-      defProtected.length +
-        forwProtected.length +
-        goalProtected.length +
-        reservProtected.length >
-      0
-    ) {
+    if (defProtected.length + forwProtected.length + goalProtected.length + reservProtected.length > 0) {
       var protected_player_array = [];
       var i = 0;
 
@@ -143,14 +136,9 @@ function DynastiePool({ username, poolName, poolInfo, setPoolInfo, socket }) {
 
   const send_protected_player = () => {
     var number_protected_player =
-      defProtected.length +
-      forwProtected.length +
-      goalProtected.length +
-      reservProtected.length;
+      defProtected.length + forwProtected.length + goalProtected.length + reservProtected.length;
 
-    if (
-      number_protected_player === poolInfo.next_season_number_players_protected
-    ) {
+    if (number_protected_player === poolInfo.next_season_number_players_protected) {
       var cookie = Cookies.get('token-' + username);
 
       // validate login
@@ -178,16 +166,8 @@ function DynastiePool({ username, poolName, poolInfo, setPoolInfo, socket }) {
   const render_forward_dynastie = () => {
     return poolInfo.context[username].chosen_forward
       .filter(player => {
-        if (
-          forwProtected.findIndex(
-            p => p.name === player.name && p.team === player.team
-          ) === -1
-        ) {
-          if (
-            reservProtected.findIndex(
-              p => p.name === player.name && p.team === player.team
-            ) === -1
-          ) {
+        if (forwProtected.findIndex(p => p.name === player.name && p.team === player.team) === -1) {
+          if (reservProtected.findIndex(p => p.name === player.name && p.team === player.team) === -1) {
             return player;
           }
         }
@@ -207,16 +187,8 @@ function DynastiePool({ username, poolName, poolInfo, setPoolInfo, socket }) {
   const render_defender_dynastie = () => {
     return poolInfo.context[username].chosen_defender
       .filter(player => {
-        if (
-          defProtected.findIndex(
-            p => p.name === player.name && p.team === player.team
-          ) === -1
-        ) {
-          if (
-            reservProtected.findIndex(
-              p => p.name === player.name && p.team === player.team
-            ) === -1
-          ) {
+        if (defProtected.findIndex(p => p.name === player.name && p.team === player.team) === -1) {
+          if (reservProtected.findIndex(p => p.name === player.name && p.team === player.team) === -1) {
             return player;
           }
         }
@@ -236,16 +208,8 @@ function DynastiePool({ username, poolName, poolInfo, setPoolInfo, socket }) {
   const render_goalies_dynastie = () => {
     return poolInfo.context[username].chosen_goalies
       .filter(player => {
-        if (
-          goalProtected.findIndex(
-            p => p.name === player.name && p.team === player.team
-          ) === -1
-        ) {
-          if (
-            reservProtected.findIndex(
-              p => p.name === player.name && p.team === player.team
-            ) === -1
-          ) {
+        if (goalProtected.findIndex(p => p.name === player.name && p.team === player.team) === -1) {
+          if (reservProtected.findIndex(p => p.name === player.name && p.team === player.team) === -1) {
             return player;
           }
         }
@@ -265,16 +229,8 @@ function DynastiePool({ username, poolName, poolInfo, setPoolInfo, socket }) {
   const render_reservist_dynastie = () => {
     return poolInfo.context[username].chosen_reservist
       .filter(player => {
-        if (
-          forwProtected.findIndex(
-            p => p.name === player.name && p.team === player.team
-          ) === -1
-        ) {
-          if (
-            reservProtected.findIndex(
-              p => p.name === player.name && p.team === player.team
-            ) === -1
-          ) {
+        if (forwProtected.findIndex(p => p.name === player.name && p.team === player.team) === -1) {
+          if (reservProtected.findIndex(p => p.name === player.name && p.team === player.team) === -1) {
             return player;
           }
         }
@@ -303,10 +259,7 @@ function DynastiePool({ username, poolName, poolInfo, setPoolInfo, socket }) {
           <h1>Protect player for pool: {poolInfo.name}</h1>
           <div className="container">
             <div className="floatLeft">
-              <h2>
-                Protect {poolInfo.next_season_number_players_protected} players
-                of your team
-              </h2>
+              <h2>Protect {poolInfo.next_season_number_players_protected} players of your team</h2>
               <table className="content-table">
                 <thead>
                   <h3>Forwards</h3>
@@ -363,12 +316,7 @@ function DynastiePool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                       <td>{i + 1}</td>
                       <td>{player.name}</td>
                       <td>
-                        <img
-                          src={logos[player.team]}
-                          alt=""
-                          width="30"
-                          height="30"
-                        ></img>
+                        <img src={logos[player.team]} alt="" width="30" height="30"></img>
                       </td>
                     </tr>
                   ))}
@@ -387,19 +335,11 @@ function DynastiePool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                       player,
                       i //TODO: when clicked on remove from protected player list
                     ) => (
-                      <tr
-                        onClick={() => unprotect_player(player, false)}
-                        key={i}
-                      >
+                      <tr onClick={() => unprotect_player(player, false)} key={i}>
                         <td>{i + 1}</td>
                         <td>{player.name}</td>
                         <td>
-                          <img
-                            src={logos[player.team]}
-                            alt=""
-                            width="30"
-                            height="30"
-                          ></img>
+                          <img src={logos[player.team]} alt="" width="30" height="30"></img>
                         </td>
                       </tr>
                     )
@@ -419,19 +359,11 @@ function DynastiePool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                       player,
                       i //TODO: when clicked on remove from protected player list
                     ) => (
-                      <tr
-                        onClick={() => unprotect_player(player, false)}
-                        key={i}
-                      >
+                      <tr onClick={() => unprotect_player(player, false)} key={i}>
                         <td>{i + 1}</td>
                         <td>{player.name}</td>
                         <td>
-                          <img
-                            src={logos[player.team]}
-                            alt=""
-                            width="30"
-                            height="30"
-                          ></img>
+                          <img src={logos[player.team]} alt="" width="30" height="30"></img>
                         </td>
                       </tr>
                     )
@@ -451,19 +383,11 @@ function DynastiePool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                       player,
                       i //TODO: when clicked on remove from protected player list
                     ) => (
-                      <tr
-                        onClick={() => unprotect_player(player, true)}
-                        key={i}
-                      >
+                      <tr onClick={() => unprotect_player(player, true)} key={i}>
                         <td>{i + 1}</td>
                         <td>{player.name}</td>
                         <td>
-                          <img
-                            src={logos[player.team]}
-                            alt=""
-                            width="30"
-                            height="30"
-                          ></img>
+                          <img src={logos[player.team]} alt="" width="30" height="30"></img>
                         </td>
                       </tr>
                     )

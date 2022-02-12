@@ -45,11 +45,7 @@ function CreatedPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
       if (event.target.checked) {
         socket.emit('playerReady', Cookies.get('token-' + username), poolName);
       } else {
-        socket.emit(
-          'playerNotReady',
-          Cookies.get('token-' + username),
-          poolName
-        );
+        socket.emit('playerNotReady', Cookies.get('token-' + username), poolName);
       }
     } else if (event.target.type === 'submit') {
       // the host click on the start button
@@ -71,19 +67,13 @@ function CreatedPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
       if (i < userList.length) {
         participants.push(
           <li>
-            <ParticipantItem
-              name={userList[i].name}
-              ready={userList[i].ready}
-            ></ParticipantItem>
+            <ParticipantItem name={userList[i].name} ready={userList[i].ready}></ParticipantItem>
           </li>
         ); // TODO: add a modal pop up to add that friend
       } else {
         participants.push(
           <li>
-            <ParticipantItem
-              name="user not found"
-              ready={false}
-            ></ParticipantItem>
+            <ParticipantItem name="user not found" ready={false}></ParticipantItem>
           </li>
         );
       }

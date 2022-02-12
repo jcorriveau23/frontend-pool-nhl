@@ -5,11 +5,7 @@ import { styleModal } from './styleModal';
 
 import Cookies from 'js-cookie';
 
-export const CreatePoolModal = ({
-  showCreatePoolModal,
-  setShowCreatePoolModal,
-  username,
-}) => {
+export const CreatePoolModal = ({ showCreatePoolModal, setShowCreatePoolModal, username }) => {
   const [msg, setMsg] = useState('');
   const [poolNameInput, setPoolNameInput] = useState('');
   const [numberPoolerInput, setNumberPoolerInput] = useState(4);
@@ -56,10 +52,7 @@ export const CreatePoolModal = ({
             </div>
             <div>
               <b>number of poolers: </b>
-              <select
-                name="number_poolers"
-                onChange={event => setNumberPoolerInput(event.target.value)}
-              >
+              <select name="number_poolers" onChange={event => setNumberPoolerInput(event.target.value)}>
                 <option>2</option>
                 <option>3</option>
                 <option selected>4</option>
@@ -91,11 +84,7 @@ export const CreatePoolModal = ({
   };
 
   return (
-    <Modal
-      style={styleModal}
-      isOpen={showCreatePoolModal}
-      onRequestClose={() => setShowCreatePoolModal(false)}
-    >
+    <Modal style={styleModal} isOpen={showCreatePoolModal} onRequestClose={() => setShowCreatePoolModal(false)}>
       {isLoggedRender()}
     </Modal>
   );

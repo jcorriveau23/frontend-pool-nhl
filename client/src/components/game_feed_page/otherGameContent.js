@@ -27,11 +27,7 @@ export const OtherGameContent = ({ gameContent }) => {
           </thead>
           {gameContent.media.milestones.items
             .filter(highlight => {
-              return (
-                highlight.type !== 'GOAL' &&
-                highlight.highlight &&
-                highlight.highlight.playbacks
-              );
+              return highlight.type !== 'GOAL' && highlight.highlight && highlight.highlight.playbacks;
             })
             .map((highlight, i) => {
               if (isItem === false) setIsItem(true);
@@ -53,10 +49,7 @@ export const OtherGameContent = ({ gameContent }) => {
                     <td>{highlight.period}</td>
                     <td rowSpan={2}>
                       <video width="224" height="126" controls ref={videoRef}>
-                        <source
-                          src={highlight.highlight.playbacks[3].url}
-                          type="video/mp4"
-                        />
+                        <source src={highlight.highlight.playbacks[3].url} type="video/mp4" />
                       </video>
                     </td>
                   </tr>

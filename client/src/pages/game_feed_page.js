@@ -43,45 +43,27 @@ function GameFeedPage({ user, contract }) {
           setGameInfo(gameInfo);
 
           if (gameInfo.gameData.status.abstractGameState === 'Preview') {
-            fetch(
-              'https://statsapi.web.nhl.com/api/v1/teams/' +
-                gameInfo.gameData.teams.away.id +
-                '/roster'
-            ) // https://statsapi.web.nhl.com/api/v1/teams/22/roster
+            fetch('https://statsapi.web.nhl.com/api/v1/teams/' + gameInfo.gameData.teams.away.id + '/roster') // https://statsapi.web.nhl.com/api/v1/teams/22/roster
               .then(response => response.json())
               .then(teamInfo => {
                 setAwayRosterPreview(teamInfo.roster);
               });
 
-            fetch(
-              'https://statsapi.web.nhl.com/api/v1/teams/' +
-                gameInfo.gameData.teams.home.id +
-                '/roster'
-            ) // https://statsapi.web.nhl.com/api/v1/teams/22/roster
+            fetch('https://statsapi.web.nhl.com/api/v1/teams/' + gameInfo.gameData.teams.home.id + '/roster') // https://statsapi.web.nhl.com/api/v1/teams/22/roster
               .then(response => response.json())
               .then(teamInfo => {
                 setHomeRosterPreview(teamInfo.roster);
               });
           } else {
-            var homeSkaters =
-              gameInfo.liveData.boxscore.teams.home.skaters.filter(key => {
-                if (
-                  gameInfo.liveData.boxscore.teams.home.players['ID' + key]
-                    .stats.skaterStats
-                )
-                  return key;
-                else return null;
-              });
+            var homeSkaters = gameInfo.liveData.boxscore.teams.home.skaters.filter(key => {
+              if (gameInfo.liveData.boxscore.teams.home.players['ID' + key].stats.skaterStats) return key;
+              else return null;
+            });
             setHomeTeamSkaters(homeSkaters);
-            var awaySkaters =
-              gameInfo.liveData.boxscore.teams.away.skaters.filter(key => {
-                if (
-                  gameInfo.liveData.boxscore.teams.away.players['ID' + key]
-                    .stats.skaterStats
-                )
-                  return key;
-                else return null;
-              });
+            var awaySkaters = gameInfo.liveData.boxscore.teams.away.skaters.filter(key => {
+              if (gameInfo.liveData.boxscore.teams.away.players['ID' + key].stats.skaterStats) return key;
+              else return null;
+            });
             setAwayTeamSkaters(awaySkaters);
           }
         });
@@ -125,12 +107,8 @@ function GameFeedPage({ user, contract }) {
               <th onClick={() => sort_by_int(isHome, 'takeaways')}>TKA</th>
               <th onClick={() => sort_by_float(isHome, 'faceOffPct')}>FO%</th>
               <th onClick={() => sort_by_float(isHome, 'timeOnIce')}>TOI</th>
-              <th onClick={() => sort_by_float(isHome, 'powerPlayTimeOnIce')}>
-                PP TOI
-              </th>
-              <th onClick={() => sort_by_float(isHome, 'shortHandedTimeOnIce')}>
-                SH TOI
-              </th>
+              <th onClick={() => sort_by_float(isHome, 'powerPlayTimeOnIce')}>PP TOI</th>
+              <th onClick={() => sort_by_float(isHome, 'shortHandedTimeOnIce')}>SH TOI</th>
             </tr>
           </thead>
           <tbody>
@@ -150,10 +128,7 @@ function GameFeedPage({ user, contract }) {
                   <td>{team.players[key].position.abbreviation}</td>
                   <td>{team.players[key].stats.skaterStats.goals}</td>
                   <td>{team.players[key].stats.skaterStats.assists}</td>
-                  <td>
-                    {team.players[key].stats.skaterStats.goals +
-                      team.players[key].stats.skaterStats.assists}
-                  </td>
+                  <td>{team.players[key].stats.skaterStats.goals + team.players[key].stats.skaterStats.assists}</td>
                   <td>{team.players[key].stats.skaterStats.plusMinus}</td>
                   <td>{team.players[key].stats.skaterStats.penaltyMinutes}</td>
                   <td>{team.players[key].stats.skaterStats.shots}</td>
@@ -163,12 +138,8 @@ function GameFeedPage({ user, contract }) {
                   <td>{team.players[key].stats.skaterStats.takeaways}</td>
                   <td>{team.players[key].stats.skaterStats.faceOffPct}</td>
                   <td>{team.players[key].stats.skaterStats.timeOnIce}</td>
-                  <td>
-                    {team.players[key].stats.skaterStats.powerPlayTimeOnIce}
-                  </td>
-                  <td>
-                    {team.players[key].stats.skaterStats.shortHandedTimeOnIce}
-                  </td>
+                  <td>{team.players[key].stats.skaterStats.powerPlayTimeOnIce}</td>
+                  <td>{team.players[key].stats.skaterStats.shortHandedTimeOnIce}</td>
                 </tr>
               );
             })}
@@ -212,11 +183,7 @@ function GameFeedPage({ user, contract }) {
                   <td>{team.players[key].stats.goalieStats.shots}</td>
                   <td>{team.players[key].stats.goalieStats.saves}</td>
                   <td>
-                    {Math.round(
-                      (team.players[key].stats.goalieStats.savePercentage +
-                        Number.EPSILON) *
-                        100
-                    ) / 100}
+                    {Math.round((team.players[key].stats.goalieStats.savePercentage + Number.EPSILON) * 100) / 100}
                   </td>
                 </tr>
               );
@@ -247,10 +214,7 @@ function GameFeedPage({ user, contract }) {
                 <tr key={i}>
                   <td>{player.jerseyNumber}</td>
                   <td>
-                    <Link
-                      to={'/playerInfo/' + player.person.id}
-                      style={{ textDecoration: 'none', color: '#000099' }}
-                    >
+                    <Link to={'/playerInfo/' + player.person.id} style={{ textDecoration: 'none', color: '#000099' }}>
                       {player.person.fullName}
                     </Link>
                   </td>
@@ -271,21 +235,11 @@ function GameFeedPage({ user, contract }) {
           <thead>
             <tr>
               <th>
-                <img
-                  src={logos[teams.away.team.name]}
-                  alt=""
-                  width="30"
-                  height="30"
-                ></img>
+                <img src={logos[teams.away.team.name]} alt="" width="30" height="30"></img>
               </th>
               <th>Summary</th>
               <th>
-                <img
-                  src={logos[teams.home.team.name]}
-                  alt=""
-                  width="30"
-                  height="30"
-                ></img>
+                <img src={logos[teams.home.team.name]} alt="" width="30" height="30"></img>
               </th>
             </tr>
           </thead>
@@ -301,13 +255,9 @@ function GameFeedPage({ user, contract }) {
               <td>{teams.home.teamStats.teamSkaterStats.shots}</td>
             </tr>
             <tr>
-              <td>
-                {teams.away.teamStats.teamSkaterStats.faceOffWinPercentage}
-              </td>
+              <td>{teams.away.teamStats.teamSkaterStats.faceOffWinPercentage}</td>
               <th>Faceoff %</th>
-              <td>
-                {teams.home.teamStats.teamSkaterStats.faceOffWinPercentage}
-              </td>
+              <td>{teams.home.teamStats.teamSkaterStats.faceOffWinPercentage}</td>
             </tr>
             <tr>
               <td>
@@ -363,21 +313,15 @@ function GameFeedPage({ user, contract }) {
       array = homeTeamSkaters.sort((first, second) => {
         if (stat === 'points')
           return (
-            gameInfo.liveData.boxscore.teams.home.players['ID' + second].stats
-              .skaterStats.goals +
-            gameInfo.liveData.boxscore.teams.home.players['ID' + second].stats
-              .skaterStats.assists -
-            (gameInfo.liveData.boxscore.teams.home.players['ID' + first].stats
-              .skaterStats.goals +
-              gameInfo.liveData.boxscore.teams.home.players['ID' + first].stats
-                .skaterStats.assists)
+            gameInfo.liveData.boxscore.teams.home.players['ID' + second].stats.skaterStats.goals +
+            gameInfo.liveData.boxscore.teams.home.players['ID' + second].stats.skaterStats.assists -
+            (gameInfo.liveData.boxscore.teams.home.players['ID' + first].stats.skaterStats.goals +
+              gameInfo.liveData.boxscore.teams.home.players['ID' + first].stats.skaterStats.assists)
           );
         else
           return (
-            gameInfo.liveData.boxscore.teams.home.players['ID' + second].stats
-              .skaterStats[stat] -
-            gameInfo.liveData.boxscore.teams.home.players['ID' + first].stats
-              .skaterStats[stat]
+            gameInfo.liveData.boxscore.teams.home.players['ID' + second].stats.skaterStats[stat] -
+            gameInfo.liveData.boxscore.teams.home.players['ID' + first].stats.skaterStats[stat]
           );
       });
       setHomeTeamSkaters([...array]);
@@ -385,21 +329,15 @@ function GameFeedPage({ user, contract }) {
       array = awayTeamSkaters.sort((first, second) => {
         if (stat === 'points')
           return (
-            gameInfo.liveData.boxscore.teams.away.players['ID' + second].stats
-              .skaterStats.goals +
-            gameInfo.liveData.boxscore.teams.away.players['ID' + second].stats
-              .skaterStats.assists -
-            (gameInfo.liveData.boxscore.teams.away.players['ID' + first].stats
-              .skaterStats.goals +
-              gameInfo.liveData.boxscore.teams.away.players['ID' + first].stats
-                .skaterStats.assists)
+            gameInfo.liveData.boxscore.teams.away.players['ID' + second].stats.skaterStats.goals +
+            gameInfo.liveData.boxscore.teams.away.players['ID' + second].stats.skaterStats.assists -
+            (gameInfo.liveData.boxscore.teams.away.players['ID' + first].stats.skaterStats.goals +
+              gameInfo.liveData.boxscore.teams.away.players['ID' + first].stats.skaterStats.assists)
           );
         else
           return (
-            gameInfo.liveData.boxscore.teams.away.players['ID' + second].stats
-              .skaterStats[stat] -
-            gameInfo.liveData.boxscore.teams.away.players['ID' + first].stats
-              .skaterStats[stat]
+            gameInfo.liveData.boxscore.teams.away.players['ID' + second].stats.skaterStats[stat] -
+            gameInfo.liveData.boxscore.teams.away.players['ID' + first].stats.skaterStats[stat]
           );
       });
       setAwayTeamSkaters([...array]);
@@ -412,28 +350,16 @@ function GameFeedPage({ user, contract }) {
     if (isHome) {
       array = homeTeamSkaters.sort((first, second) => {
         return (
-          parseFloat(
-            gameInfo.liveData.boxscore.teams.home.players['ID' + second].stats
-              .skaterStats[stat]
-          ) -
-          parseFloat(
-            gameInfo.liveData.boxscore.teams.home.players['ID' + first].stats
-              .skaterStats[stat]
-          )
+          parseFloat(gameInfo.liveData.boxscore.teams.home.players['ID' + second].stats.skaterStats[stat]) -
+          parseFloat(gameInfo.liveData.boxscore.teams.home.players['ID' + first].stats.skaterStats[stat])
         );
       });
       setHomeTeamSkaters([...array]);
     } else {
       array = awayTeamSkaters.sort((first, second) => {
         return (
-          parseFloat(
-            gameInfo.liveData.boxscore.teams.away.players['ID' + second].stats
-              .skaterStats[stat]
-          ) -
-          parseFloat(
-            gameInfo.liveData.boxscore.teams.away.players['ID' + first].stats
-              .skaterStats[stat]
-          )
+          parseFloat(gameInfo.liveData.boxscore.teams.away.players['ID' + second].stats.skaterStats[stat]) -
+          parseFloat(gameInfo.liveData.boxscore.teams.away.players['ID' + first].stats.skaterStats[stat])
         );
       });
       setAwayTeamSkaters([...array]);
@@ -462,19 +388,11 @@ function GameFeedPage({ user, contract }) {
               return (
                 <tr>
                   <td>
-                    <img
-                      src={logos[liveData.plays.allPlays[i].team.name]}
-                      alt=""
-                      width="30"
-                      height="30"
-                    ></img>
+                    <img src={logos[liveData.plays.allPlays[i].team.name]} alt="" width="30" height="30"></img>
                   </td>
                   <td>
                     <Link
-                      to={
-                        '/playerInfo/' +
-                        liveData.plays.allPlays[i].players[0].player.id
-                      }
+                      to={'/playerInfo/' + liveData.plays.allPlays[i].players[0].player.id}
                       style={{ textDecoration: 'none', color: '#000099' }}
                     >
                       {liveData.plays.allPlays[i].players[0].player.fullName}
@@ -508,33 +426,14 @@ function GameFeedPage({ user, contract }) {
               <Tab>Game stats</Tab>
               <Tab>Game recap</Tab>
               <Tab>
-                {
-                  <img
-                    src={logos[gameInfo.liveData.boxscore.teams.home.team.name]}
-                    alt=""
-                    width="30"
-                    height="30"
-                  ></img>
-                }
+                {<img src={logos[gameInfo.liveData.boxscore.teams.home.team.name]} alt="" width="30" height="30"></img>}
               </Tab>
               <Tab>
-                {
-                  <img
-                    src={logos[gameInfo.liveData.boxscore.teams.away.team.name]}
-                    alt=""
-                    width="30"
-                    height="30"
-                  ></img>
-                }
+                {<img src={logos[gameInfo.liveData.boxscore.teams.away.team.name]} alt="" width="30" height="30"></img>}
               </Tab>
               {contract ? <Tab>Prediction Market</Tab> : null}
             </TabList>
-            <TabPanel>
-              {render_game_stats(
-                gameInfo.liveData.boxscore.teams,
-                gameInfo.liveData.linescore
-              )}
-            </TabPanel>
+            <TabPanel>{render_game_stats(gameInfo.liveData.boxscore.teams, gameInfo.liveData.linescore)}</TabPanel>
             <TabPanel>
               <div>
                 <Tabs>
@@ -544,85 +443,45 @@ function GameFeedPage({ user, contract }) {
                   </TabList>
                   <TabPanel>
                     <div className="min-width">
-                      <GameRecap
-                        gameContent={gameContent}
-                        isEditorial={true}
-                      ></GameRecap>
+                      <GameRecap gameContent={gameContent} isEditorial={true}></GameRecap>
                     </div>
                   </TabPanel>
                   <TabPanel>
                     <div>
-                      <GameRecap
-                        gameContent={gameContent}
-                        isEditorial={false}
-                      ></GameRecap>
+                      <GameRecap gameContent={gameContent} isEditorial={false}></GameRecap>
                     </div>
                   </TabPanel>
                 </Tabs>
               </div>
             </TabPanel>
             <TabPanel>
-              {gameInfo.gameData.status.abstractGameState === 'Preview' &&
-              homeRosterPreview
+              {gameInfo.gameData.status.abstractGameState === 'Preview' && homeRosterPreview
                 ? render_team_roster(homeRosterPreview)
-                : gameInfo.gameData.status.abstractGameState !== 'Preview' &&
-                  homeTeamSkaters
+                : gameInfo.gameData.status.abstractGameState !== 'Preview' && homeTeamSkaters
                 ? render_team_stats(gameInfo.liveData.boxscore.teams.home, true)
                 : null}
             </TabPanel>
             <TabPanel>
-              {gameInfo.gameData.status.abstractGameState === 'Preview' &&
-              awayRosterPreview
+              {gameInfo.gameData.status.abstractGameState === 'Preview' && awayRosterPreview
                 ? render_team_roster(awayRosterPreview)
-                : gameInfo.gameData.status.abstractGameState !== 'Preview' &&
-                  awayTeamSkaters
-                ? render_team_stats(
-                    gameInfo.liveData.boxscore.teams.away,
-                    false
-                  )
+                : gameInfo.gameData.status.abstractGameState !== 'Preview' && awayTeamSkaters
+                ? render_team_stats(gameInfo.liveData.boxscore.teams.away, false)
                 : null}
             </TabPanel>
             {contract ? (
               <TabPanel>
-                <div>
-                  {
-                    <GamePrediction
-                      gameID={gameID}
-                      gameInfo={gameInfo}
-                      user={user}
-                      contract={contract}
-                    />
-                  }
-                </div>
+                <div>{<GamePrediction gameID={gameID} gameInfo={gameInfo} user={user} contract={contract} />}</div>
               </TabPanel>
             ) : null}
           </Tabs>
           <div>
             {gameInfo.gameData.status.abstractGameState !== 'Preview' ? (
               <>
-                <PeriodRecap
-                  gameInfo={gameInfo}
-                  gameContent={gameContent}
-                  period={'1'}
-                ></PeriodRecap>
-                <PeriodRecap
-                  gameInfo={gameInfo}
-                  gameContent={gameContent}
-                  period={'2'}
-                ></PeriodRecap>
-                <PeriodRecap
-                  gameInfo={gameInfo}
-                  gameContent={gameContent}
-                  period={'3'}
-                ></PeriodRecap>
-                <PeriodRecap
-                  gameInfo={gameInfo}
-                  gameContent={gameContent}
-                  period={'4'}
-                ></PeriodRecap>
-                {gameInfo.liveData.linescore.hasShootout
-                  ? render_shootout(gameInfo.liveData)
-                  : null}
+                <PeriodRecap gameInfo={gameInfo} gameContent={gameContent} period={'1'}></PeriodRecap>
+                <PeriodRecap gameInfo={gameInfo} gameContent={gameContent} period={'2'}></PeriodRecap>
+                <PeriodRecap gameInfo={gameInfo} gameContent={gameContent} period={'3'}></PeriodRecap>
+                <PeriodRecap gameInfo={gameInfo} gameContent={gameContent} period={'4'}></PeriodRecap>
+                {gameInfo.liveData.linescore.hasShootout ? render_shootout(gameInfo.liveData) : null}
                 <OtherGameContent gameContent={gameContent}></OtherGameContent>
               </>
             ) : (

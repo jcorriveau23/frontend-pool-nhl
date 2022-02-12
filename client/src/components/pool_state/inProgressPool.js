@@ -57,16 +57,12 @@ function InProgressPool({ username, poolName, poolInfo }) {
       var j;
 
       for (j = 0; j < poolInfo.context[pooler].chosen_forward.length; j++) {
-        player = await players_stats.find(
-          p => p.name === poolInfo.context[pooler].chosen_forward[j].name
-        );
+        player = await players_stats.find(p => p.name === poolInfo.context[pooler].chosen_forward[j].name);
 
         player['pool_points'] =
-          poolInfo.forward_pts_goals * player.stats.goals +
-          poolInfo.forward_pts_assists * player.stats.assists; //+ hat trick
+          poolInfo.forward_pts_goals * player.stats.goals + poolInfo.forward_pts_assists * player.stats.assists; //+ hat trick
         stats[pooler]['forwards_total_pts'] +=
-          poolInfo.forward_pts_goals * player.stats.goals +
-          poolInfo.forward_pts_assists * player.stats.assists;
+          poolInfo.forward_pts_goals * player.stats.goals + poolInfo.forward_pts_assists * player.stats.assists;
 
         stats[pooler]['chosen_forward'].push(player);
       }
@@ -74,16 +70,12 @@ function InProgressPool({ username, poolName, poolInfo }) {
       stats[pooler]['chosen_defender'] = [];
 
       for (j = 0; j < poolInfo.context[pooler].chosen_defender.length; j++) {
-        player = await players_stats.find(
-          p => p.name === poolInfo.context[pooler].chosen_defender[j].name
-        );
+        player = await players_stats.find(p => p.name === poolInfo.context[pooler].chosen_defender[j].name);
 
         player['pool_points'] =
-          poolInfo.defender_pts_goals * player.stats.goals +
-          poolInfo.defender_pts_assits * player.stats.assists; //+ hat trick
+          poolInfo.defender_pts_goals * player.stats.goals + poolInfo.defender_pts_assits * player.stats.assists; //+ hat trick
         stats[pooler]['defenders_total_pts'] +=
-          poolInfo.defender_pts_goals * player.stats.goals +
-          poolInfo.defender_pts_assits * player.stats.assists; //+ hat trick
+          poolInfo.defender_pts_goals * player.stats.goals + poolInfo.defender_pts_assits * player.stats.assists; //+ hat trick
 
         stats[pooler]['chosen_defender'].push(player);
       }
@@ -91,16 +83,12 @@ function InProgressPool({ username, poolName, poolInfo }) {
       stats[pooler]['chosen_goalies'] = [];
 
       for (j = 0; j < poolInfo.context[pooler].chosen_goalies.length; j++) {
-        player = await players_stats.find(
-          p => p.name === poolInfo.context[pooler].chosen_goalies[j].name
-        );
+        player = await players_stats.find(p => p.name === poolInfo.context[pooler].chosen_goalies[j].name);
 
         player['pool_points'] =
-          poolInfo.goalies_pts_wins * player.stats.wins +
-          poolInfo.goalies_pts_shutouts * player.stats.shutouts;
+          poolInfo.goalies_pts_wins * player.stats.wins + poolInfo.goalies_pts_shutouts * player.stats.shutouts;
         stats[pooler]['goalies_total_pts'] +=
-          poolInfo.goalies_pts_wins * player.stats.wins +
-          poolInfo.goalies_pts_shutouts * player.stats.shutouts;
+          poolInfo.goalies_pts_wins * player.stats.wins + poolInfo.goalies_pts_shutouts * player.stats.shutouts;
 
         stats[pooler]['chosen_goalies'].push(player);
       }
@@ -108,31 +96,23 @@ function InProgressPool({ username, poolName, poolInfo }) {
       stats[pooler]['chosen_reservist'] = [];
 
       for (j = 0; j < poolInfo.context[pooler].chosen_reservist.length; j++) {
-        player = await players_stats.find(
-          p => p.name === poolInfo.context[pooler].chosen_reservist[j].name
-        );
+        player = await players_stats.find(p => p.name === poolInfo.context[pooler].chosen_reservist[j].name);
 
         if (player.position === 'G') {
           player['pool_points'] =
-            poolInfo.goalies_pts_wins * player.stats.wins +
-            poolInfo.goalies_pts_shutouts * player.stats.shutouts;
+            poolInfo.goalies_pts_wins * player.stats.wins + poolInfo.goalies_pts_shutouts * player.stats.shutouts;
           stats[pooler]['reservists_total_pts'] +=
-            poolInfo.goalies_pts_wins * player.stats.wins +
-            poolInfo.goalies_pts_shutouts * player.stats.shutouts;
+            poolInfo.goalies_pts_wins * player.stats.wins + poolInfo.goalies_pts_shutouts * player.stats.shutouts;
         } else if (player.position === 'F') {
           player['pool_points'] =
-            poolInfo.forward_pts_goals * player.stats.goals +
-            poolInfo.forward_pts_assists * player.stats.assists; //+ hat trick
+            poolInfo.forward_pts_goals * player.stats.goals + poolInfo.forward_pts_assists * player.stats.assists; //+ hat trick
           stats[pooler]['reservists_total_pts'] +=
-            poolInfo.forward_pts_goals * player.stats.goals +
-            poolInfo.forward_pts_assists * player.stats.assists; //+ hat trick
+            poolInfo.forward_pts_goals * player.stats.goals + poolInfo.forward_pts_assists * player.stats.assists; //+ hat trick
         } else {
           player['pool_points'] =
-            poolInfo.defender_pts_goals * player.stats.goals +
-            poolInfo.defender_pts_assits * player.stats.assists; //+ hat trick
+            poolInfo.defender_pts_goals * player.stats.goals + poolInfo.defender_pts_assits * player.stats.assists; //+ hat trick
           stats[pooler]['reservists_total_pts'] +=
-            poolInfo.defender_pts_goals * player.stats.goals +
-            poolInfo.defender_pts_assits * player.stats.assists; //+ hat trick
+            poolInfo.defender_pts_goals * player.stats.goals + poolInfo.defender_pts_assits * player.stats.assists; //+ hat trick
         }
         stats[pooler]['chosen_reservist'].push(player);
       }
@@ -191,10 +171,7 @@ function InProgressPool({ username, poolName, poolInfo }) {
       // forward
       csv += pooler + "'s forwards\n";
       for (j = 0; j < pool.context[pooler].chosen_forward.length; j++) {
-        csv +=
-          pool.context[pooler].chosen_forward[j].name +
-          ', ' +
-          pool.context[pooler].chosen_forward[j].team;
+        csv += pool.context[pooler].chosen_forward[j].name + ', ' + pool.context[pooler].chosen_forward[j].team;
         csv += '\n';
       }
       csv += '\n';
@@ -202,10 +179,7 @@ function InProgressPool({ username, poolName, poolInfo }) {
       // defenders
       csv += pooler + "'s defenders\n";
       for (j = 0; j < pool.context[pooler].chosen_defender.length; j++) {
-        csv +=
-          pool.context[pooler].chosen_defender[j].name +
-          ', ' +
-          pool.context[pooler].chosen_defender[j].team;
+        csv += pool.context[pooler].chosen_defender[j].name + ', ' + pool.context[pooler].chosen_defender[j].team;
         csv += '\n';
       }
       csv += '\n';
@@ -213,10 +187,7 @@ function InProgressPool({ username, poolName, poolInfo }) {
       // goalies
       csv += pooler + "'s goalies\n";
       for (j = 0; j < pool.context[pooler].chosen_goalies.length; j++) {
-        csv +=
-          pool.context[pooler].chosen_goalies[j].name +
-          ', ' +
-          pool.context[pooler].chosen_goalies[j].team;
+        csv += pool.context[pooler].chosen_goalies[j].name + ', ' + pool.context[pooler].chosen_goalies[j].team;
         csv += '\n';
       }
       csv += '\n';
@@ -224,10 +195,7 @@ function InProgressPool({ username, poolName, poolInfo }) {
       // reservist
       csv += pooler + "'s reservists\n";
       for (j = 0; j < pool.context[pooler].chosen_reservist.length; j++) {
-        csv +=
-          pool.context[pooler].chosen_reservist[j].name +
-          ', ' +
-          pool.context[pooler].chosen_reservist[j].team;
+        csv += pool.context[pooler].chosen_reservist[j].name + ', ' + pool.context[pooler].chosen_reservist[j].team;
         csv += '\n';
       }
       csv += '\n';
@@ -367,12 +335,7 @@ function InProgressPool({ username, poolName, poolInfo }) {
               <td>{i + 1}</td>
               <td>{player.name}</td>
               <td>
-                <img
-                  src={logos[player.team]}
-                  alt=""
-                  width="30"
-                  height="30"
-                ></img>
+                <img src={logos[player.team]} alt="" width="30" height="30"></img>
               </td>
               <td>{player.stats.goals}</td>
               <td>{player.stats.assists}</td>
@@ -405,12 +368,7 @@ function InProgressPool({ username, poolName, poolInfo }) {
               <td>{i + 1}</td>
               <td>{player.name}</td>
               <td>
-                <img
-                  src={logos[player.team]}
-                  alt=""
-                  width="30"
-                  height="30"
-                ></img>
+                <img src={logos[player.team]} alt="" width="30" height="30"></img>
               </td>
               <td>{player.stats.goals}</td>
               <td>{player.stats.assists}</td>
@@ -443,12 +401,7 @@ function InProgressPool({ username, poolName, poolInfo }) {
               <td>{i + 1}</td>
               <td>{player.name}</td>
               <td>
-                <img
-                  src={logos[player.team]}
-                  alt=""
-                  width="30"
-                  height="30"
-                ></img>
+                <img src={logos[player.team]} alt="" width="30" height="30"></img>
               </td>
               <td>{player.stats.goals}</td>
               <td>{player.stats.assists}</td>
@@ -481,12 +434,7 @@ function InProgressPool({ username, poolName, poolInfo }) {
               <td>{i + 1}</td>
               <td>{player.name}</td>
               <td>
-                <img
-                  src={logos[player.team]}
-                  alt=""
-                  width="30"
-                  height="30"
-                ></img>
+                <img src={logos[player.team]} alt="" width="30" height="30"></img>
               </td>
               <td>{player.stats.wins}</td>
               <td>{player.stats.losses}</td>

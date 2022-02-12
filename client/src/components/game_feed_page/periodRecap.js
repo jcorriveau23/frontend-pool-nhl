@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // component
 import { GoalItem } from './goalItem';
@@ -24,20 +24,14 @@ export const PeriodRecap = ({ gameInfo, gameContent, period }) => {
           <tbody>
             {gameInfo.liveData.plays.scoringPlays
               .filter(i => {
-                return (
-                  gameInfo.liveData.plays.allPlays[i].about.period ===
-                  parseInt(period)
-                );
+                return gameInfo.liveData.plays.allPlays[i].about.period === parseInt(period);
               })
               .map(i => {
                 if (isItem === false) setIsItem(true);
                 return (
                   <tr key={i}>
                     <td>
-                      <GoalItem
-                        goalData={gameInfo.liveData.plays.allPlays[i]}
-                        gameContent={gameContent}
-                      ></GoalItem>
+                      <GoalItem goalData={gameInfo.liveData.plays.allPlays[i]} gameContent={gameContent}></GoalItem>
                     </td>
                   </tr>
                 );

@@ -62,26 +62,19 @@ function BetItem({ user, contract, gameID }) {
             <th>Your part (%)</th>
             <td>
               {gameData.accumulatedWeisHome !== 0
-                ? (gameData.predictByMeWeisHome /
-                    gameData.accumulatedWeisHome) *
-                  100
+                ? (gameData.predictByMeWeisHome / gameData.accumulatedWeisHome) * 100
                 : '-'}
             </td>
             <td>
               {gameData.accumulatedWeisAway !== 0
-                ? (gameData.predictByMeWeisAway /
-                    gameData.accumulatedWeisAway) *
-                  100
+                ? (gameData.predictByMeWeisAway / gameData.accumulatedWeisAway) * 100
                 : '-'}
             </td>
           </tr>
         </tbody>
       </table>
     );
-  } else
-    return (
-      <ClipLoader color="#fff" loading={true} /*css={override}*/ size={75} />
-    );
+  } else return <ClipLoader color="#fff" loading={true} /*css={override}*/ size={75} />;
 }
 
 export default BetItem;

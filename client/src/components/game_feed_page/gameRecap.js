@@ -12,11 +12,7 @@ export const GameRecap = ({ gameContent, isEditorial }) => {
     }
   }, [gameContent]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (
-    isEditorial &&
-    gameContent.editorial &&
-    gameContent.media.epg[3].items?.length > 0
-  ) {
+  if (isEditorial && gameContent.editorial && gameContent.media.epg[3].items?.length > 0) {
     // console.log(gameContent)
     return (
       <div>
@@ -33,16 +29,11 @@ export const GameRecap = ({ gameContent, isEditorial }) => {
                 <video
                   width="700"
                   height="394"
-                  poster={
-                    gameContent.media.epg[3].items[0].image.cuts['640x360']?.src
-                  }
+                  poster={gameContent.media.epg[3].items[0].image.cuts['640x360']?.src}
                   controls
                   ref={videoRef}
                 >
-                  <source
-                    src={gameContent.media.epg[3].items[0].playbacks[3].url}
-                    type="video/mp4"
-                  />
+                  <source src={gameContent.media.epg[3].items[0].playbacks[3].url} type="video/mp4" />
                 </video>
               </td>
             </tr>
@@ -50,11 +41,7 @@ export const GameRecap = ({ gameContent, isEditorial }) => {
         </table>
       </div>
     );
-  } else if (
-    !isEditorial &&
-    gameContent.media &&
-    gameContent.media.epg[2].items?.length > 0
-  ) {
+  } else if (!isEditorial && gameContent.media && gameContent.media.epg[2].items?.length > 0) {
     return (
       <div>
         <table>
@@ -70,15 +57,10 @@ export const GameRecap = ({ gameContent, isEditorial }) => {
                 width="700"
                 height="394"
                 controls
-                poster={
-                  gameContent.media.epg[2].items[0].image.cuts['640x360']?.src
-                }
+                poster={gameContent.media.epg[2].items[0].image.cuts['640x360']?.src}
                 ref={videoRef}
               >
-                <source
-                  src={gameContent.media.epg[2].items[0].playbacks[3].url}
-                  type="video/mp4"
-                />
+                <source src={gameContent.media.epg[2].items[0].playbacks[3].url} type="video/mp4" />
               </video>
             </tr>
           </tbody>

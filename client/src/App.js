@@ -85,12 +85,7 @@ function App() {
                     </Link>
                   </li>
                 ) : null}
-                <WalletCard
-                  user={user}
-                  setUser={setUser}
-                  contract={contract}
-                  setContract={setContract}
-                />
+                <WalletCard user={user} setUser={setUser} contract={contract} setContract={setContract} />
               </div>
             </ul>
           </div>
@@ -107,25 +102,13 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/MyPools" element={<MyPoolsPage user={user} />}></Route>
-          <Route
-            path="/MyGameBets"
-            element={<MyGameBetsPage user={user} contract={contract} />}
-          ></Route>
-          <Route
-            path="/MyPools/:name"
-            element={<PoolPage user={user} />}
-          ></Route>
+          <Route path="/MyGameBets" element={<MyGameBetsPage user={user} contract={contract} />}></Route>
+          <Route path="/MyPools/:name" element={<PoolPage user={user} />}></Route>
           <Route path="/standing" element={<StandingPage />}></Route>
-          <Route
-            path="/gameFeed/:id"
-            element={<GameFeedPage user={user} contract={contract} />}
-          ></Route>
+          <Route path="/gameFeed/:id" element={<GameFeedPage user={user} contract={contract} />}></Route>
           <Route path="/playerInfo" element={<PlayerPage />}></Route>
           <Route path="/playerInfo/:id" element={<PlayerPage />}></Route>
-          <Route
-            path="/teamRosterBySeason/:teamID/:season"
-            element={<TeamRosterBySeasonPage />}
-          ></Route>
+          <Route path="/teamRosterBySeason/:teamID/:season" element={<TeamRosterBySeasonPage />}></Route>
           <Route path="/draft" element={<DraftPage />}></Route>
           <Route path="/draft/:year" element={<DraftPage />}></Route>
           <Route path="/leaders" element={<LeagueLeadersPage />}></Route>

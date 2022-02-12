@@ -113,19 +113,13 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
   };
 
   const chose_player = player => {
-    socket.emit(
-      'pickPlayer',
-      Cookies.get('token-' + username),
-      poolInfo.name,
-      player,
-      ack => {
-        if (ack.success === 'False') {
-          setMessage(ack.message);
-        } else {
-          setMessage('');
-        }
+    socket.emit('pickPlayer', Cookies.get('token-' + username), poolInfo.name, player, ack => {
+      if (ack.success === 'False') {
+        setMessage(ack.message);
+      } else {
+        setMessage('');
       }
-    );
+    });
   };
 
   const search_players = val => {
@@ -213,17 +207,15 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
 
   const render_reservist = pooler => {
     if (poolInfo['context'][pooler]) {
-      return poolInfo['context'][pooler]['chosen_reservist'].map(
-        (player, i) => (
-          <tr key={i}>
-            <td>{i + 1}</td>
-            <td>{player.name}</td>
-            <td>
-              <img src={logos[player.team]} alt="" width="30" height="30"></img>
-            </td>
-          </tr>
-        )
-      );
+      return poolInfo['context'][pooler]['chosen_reservist'].map((player, i) => (
+        <tr key={i}>
+          <td>{i + 1}</td>
+          <td>{player.name}</td>
+          <td>
+            <img src={logos[player.team]} alt="" width="30" height="30"></img>
+          </td>
+        </tr>
+      ));
     } else {
       return;
     }
@@ -345,11 +337,7 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
         <div className="container">
           <h1>Stats last season</h1>
           <div className="floatLeft">
-            <input
-              type="text"
-              placeholder="Search..."
-              onChange={event => search_players(event.target.value)}
-            />
+            <input type="text" placeholder="Search..." onChange={event => search_players(event.target.value)} />
             <Tabs>
               <TabList>
                 <Tab>Forwards</Tab>
@@ -362,13 +350,9 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                     <tr>
                       <th onClick={() => sort_players('name', 'F')}>name</th>
                       <th onClick={() => sort_players('team', 'F')}>team</th>
-                      <th onClick={() => sort_players('games', 'F')}>
-                        Games played
-                      </th>
+                      <th onClick={() => sort_players('games', 'F')}>Games played</th>
                       <th onClick={() => sort_players('goals', 'F')}>Goals</th>
-                      <th onClick={() => sort_players('assists', 'F')}>
-                        Assists
-                      </th>
+                      <th onClick={() => sort_players('assists', 'F')}>Assists</th>
                       <th onClick={() => sort_players('pts', 'F')}>pts</th>
                     </tr>
                     {forw_l
@@ -379,20 +363,10 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                         return null;
                       })
                       .map((player, i) => (
-                        <tr
-                          onClick={() =>
-                            player_selection(player.name, player.team, 'F')
-                          }
-                          key={i}
-                        >
+                        <tr onClick={() => player_selection(player.name, player.team, 'F')} key={i}>
                           <td>{player.name}</td>
                           <td>
-                            <img
-                              src={logos[player.team]}
-                              alt=""
-                              width="30"
-                              height="30"
-                            ></img>
+                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
                           </td>
                           <td>{player.stats.games}</td>
                           <td>{player.stats.goals}</td>
@@ -409,13 +383,9 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                     <tr>
                       <th onClick={() => sort_players('name', 'D')}>name</th>
                       <th onClick={() => sort_players('team', 'D')}>team</th>
-                      <th onClick={() => sort_players('games', 'D')}>
-                        Games played
-                      </th>
+                      <th onClick={() => sort_players('games', 'D')}>Games played</th>
                       <th onClick={() => sort_players('goals', 'D')}>Goals</th>
-                      <th onClick={() => sort_players('assists', 'D')}>
-                        Assists
-                      </th>
+                      <th onClick={() => sort_players('assists', 'D')}>Assists</th>
                       <th onClick={() => sort_players('pts', 'D')}>pts</th>
                     </tr>
                     {def_l
@@ -426,20 +396,10 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                         return null;
                       })
                       .map((player, i) => (
-                        <tr
-                          onClick={() =>
-                            player_selection(player.name, player.team, 'D')
-                          }
-                          key={i}
-                        >
+                        <tr onClick={() => player_selection(player.name, player.team, 'D')} key={i}>
                           <td>{player.name}</td>
                           <td>
-                            <img
-                              src={logos[player.team]}
-                              alt=""
-                              width="30"
-                              height="30"
-                            ></img>
+                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
                           </td>
                           <td>{player.stats.games}</td>
                           <td>{player.stats.goals}</td>
@@ -456,16 +416,10 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                     <tr>
                       <th onClick={() => sort_players('name', 'G')}>name</th>
                       <th onClick={() => sort_players('team', 'G')}>team</th>
-                      <th onClick={() => sort_players('games', 'G')}>
-                        Games played
-                      </th>
+                      <th onClick={() => sort_players('games', 'G')}>Games played</th>
                       <th onClick={() => sort_players('wins', 'G')}>Win</th>
-                      <th onClick={() => sort_players('losses', 'G')}>
-                        losses
-                      </th>
-                      <th onClick={() => sort_players('savePercentage', 'G')}>
-                        save percentage
-                      </th>
+                      <th onClick={() => sort_players('losses', 'G')}>losses</th>
+                      <th onClick={() => sort_players('savePercentage', 'G')}>save percentage</th>
                     </tr>
                     {goal_l
                       .filter(player => {
@@ -475,20 +429,10 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                         return null;
                       })
                       .map((player, i) => (
-                        <tr
-                          onClick={() =>
-                            player_selection(player.name, player.team, 'G')
-                          }
-                          key={i}
-                        >
+                        <tr onClick={() => player_selection(player.name, player.team, 'G')} key={i}>
                           <td>{player.name}</td>
                           <td>
-                            <img
-                              src={logos[player.team]}
-                              alt=""
-                              width="30"
-                              height="30"
-                            ></img>
+                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
                           </td>
                           <td>{player.stats.games}</td>
                           <td>{player.stats.wins}</td>
@@ -506,10 +450,7 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
               {render_color_user_turn()}
               <h1>{selectedPlayer.name}</h1>
               <h3 className="red-text">{message}</h3>
-              <button
-                onClick={() => chose_player(selectedPlayer)}
-                disabled={false}
-              >
+              <button onClick={() => chose_player(selectedPlayer)} disabled={false}>
                 choose
               </button>
             </div>

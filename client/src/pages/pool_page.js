@@ -67,13 +67,7 @@ function PoolPage({ user }) {
         ></DraftPool>
       );
     } else if (poolInfo.status === 'in Progress') {
-      return (
-        <InProgressPool
-          username={user.addr}
-          poolName={poolName}
-          poolInfo={poolInfo}
-        ></InProgressPool>
-      );
+      return <InProgressPool username={user.addr} poolName={poolName} poolInfo={poolInfo}></InProgressPool>;
     } else if (poolInfo.status === 'dynastie') {
       return (
         <DynastiePool

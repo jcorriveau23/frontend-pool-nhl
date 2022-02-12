@@ -1,13 +1,7 @@
 import React from 'react';
 import Cookies from 'js-cookie';
 
-export const PoolItem = ({
-  name,
-  owner,
-  username,
-  poolDeleted,
-  setPoolDeleted,
-}) => {
+export const PoolItem = ({ name, owner, username, poolDeleted, setPoolDeleted }) => {
   const delete_pool = () => {
     const requestOptions = {
       method: 'POST',
@@ -25,9 +19,7 @@ export const PoolItem = ({
     <div>
       <p>Pool: {name}</p>
       <p>Owner: {owner}</p>
-      {username === owner ? (
-        <button onClick={delete_pool}>Delete</button>
-      ) : null}
+      {username === owner ? <button onClick={delete_pool}>Delete</button> : null}
     </div>
   );
 };

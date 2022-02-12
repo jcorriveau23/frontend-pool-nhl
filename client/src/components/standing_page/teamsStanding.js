@@ -26,8 +26,7 @@ function TeamsStanding({ data }) {
       for (var j = 0; j < data.records[i].teamRecords.length; j++) {
         teams.push(data.records[i].teamRecords[j]);
 
-        if (data.records[i].conference.name === 'Eastern')
-          easternTeams.push(data.records[i].teamRecords[j]);
+        if (data.records[i].conference.name === 'Eastern') easternTeams.push(data.records[i].teamRecords[j]);
         else westernTeams.push(data.records[i].teamRecords[j]);
       }
     }
@@ -35,7 +34,7 @@ function TeamsStanding({ data }) {
     setLeagueTeams([...teams]);
     setEasternTeams([...easternTeams]);
     setWesternTeams([...westernTeams]);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderTeamRow = (team, i) => {
     return (
@@ -44,22 +43,12 @@ function TeamsStanding({ data }) {
         <td>
           <img src={logos[team.team.name]} alt="" width="30" height="30"></img>
         </td>
-        <td>
-          {team.leagueRecord.wins +
-            team.leagueRecord.losses +
-            team.leagueRecord.ot}
-        </td>
+        <td>{team.leagueRecord.wins + team.leagueRecord.losses + team.leagueRecord.ot}</td>
         <td>{team.leagueRecord.wins}</td>
         <td>{team.leagueRecord.losses}</td>
         <td>{team.leagueRecord.ot}</td>
         <td>
-          <b
-            style={
-              team.streak.streakType === 'wins'
-                ? { color: '#080' }
-                : { color: '#b00' }
-            }
-          >
+          <b style={team.streak.streakType === 'wins' ? { color: '#080' } : { color: '#b00' }}>
             {team.streak.streakCode}
           </b>
         </td>

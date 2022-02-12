@@ -23,14 +23,10 @@ export const GoalItem = ({ goalData, gameContent }) => {
 
     if (gameContent.media.milestones.items) {
       for (var i = 0; i < gameContent.media.milestones.items.length; i++) {
-        if (
-          parseInt(gameContent.media.milestones.items[i].statsEventId) ===
-          goalData.about.eventId
-        )
+        if (parseInt(gameContent.media.milestones.items[i].statsEventId) === goalData.about.eventId)
           if (
             gameContent.media.milestones.items[i].highlight &&
-            gameContent.media.milestones.items[i].highlight.playbacks?.length >
-              3
+            gameContent.media.milestones.items[i].highlight.playbacks?.length > 3
           ) {
             console.log('found the video');
             setGoalContent({
@@ -68,24 +64,13 @@ export const GoalItem = ({ goalData, gameContent }) => {
         <tbody>
           <tr>
             <td rowSpan={rowSpan} width="30">
-              <img
-                src={logos[goalData.team.name]}
-                alt=""
-                width="30"
-                height="30"
-              />
+              <img src={logos[goalData.team.name]} alt="" width="30" height="30" />
             </td>
             <th width="125">Time:</th>
             <td width="250">{goalData.about.periodTime}</td>
             <td rowSpan={rowSpan} width="225">
               {goalContent ? (
-                <video
-                  width="224"
-                  height="126"
-                  poster={goalContent.image.cuts['248x140']?.src}
-                  controls
-                  ref={videoRef}
-                >
+                <video width="224" height="126" poster={goalContent.image.cuts['248x140']?.src} controls ref={videoRef}>
                   <source src={goalContent.playbacks[3].url} type="video/mp4" />
                 </video>
               ) : (
@@ -97,10 +82,7 @@ export const GoalItem = ({ goalData, gameContent }) => {
             <tr>
               <th>Scorer:</th>
               <td>
-                <Link
-                  to={'/playerInfo/' + scorer.player.id}
-                  style={{ textDecoration: 'none', color: '#000099' }}
-                >
+                <Link to={'/playerInfo/' + scorer.player.id} style={{ textDecoration: 'none', color: '#000099' }}>
                   {scorer.player.fullName + ' (' + scorer.seasonTotal + ')'}
                 </Link>
               </td>
@@ -110,14 +92,8 @@ export const GoalItem = ({ goalData, gameContent }) => {
             <tr>
               <th>1st Assists:</th>
               <td>
-                <Link
-                  to={'/playerInfo/' + firstAssist.player.id}
-                  style={{ textDecoration: 'none', color: '#000099' }}
-                >
-                  {firstAssist.player.fullName +
-                    ' (' +
-                    firstAssist.seasonTotal +
-                    ')'}
+                <Link to={'/playerInfo/' + firstAssist.player.id} style={{ textDecoration: 'none', color: '#000099' }}>
+                  {firstAssist.player.fullName + ' (' + firstAssist.seasonTotal + ')'}
                 </Link>
               </td>
             </tr>
@@ -126,14 +102,8 @@ export const GoalItem = ({ goalData, gameContent }) => {
             <tr>
               <th>2nd Assists:</th>
               <td>
-                <Link
-                  to={'/playerInfo/' + secondAssist.player.id}
-                  style={{ textDecoration: 'none', color: '#000099' }}
-                >
-                  {secondAssist.player.fullName +
-                    ' (' +
-                    secondAssist.seasonTotal +
-                    ')'}
+                <Link to={'/playerInfo/' + secondAssist.player.id} style={{ textDecoration: 'none', color: '#000099' }}>
+                  {secondAssist.player.fullName + ' (' + secondAssist.seasonTotal + ')'}
                 </Link>
               </td>
             </tr>
