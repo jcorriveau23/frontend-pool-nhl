@@ -96,6 +96,45 @@ function PlayerPage() {
     return null;
   };
 
+  const get_league_row_color = leagueName => {
+    switch (leagueName) {
+      case 'National Hockey League':
+        return '#ffd68c';
+      case 'AHL':
+      case 'Can-Am':
+        return '#f5abab';
+      case 'Swiss':
+      case 'Russia':
+      case 'Finland':
+      case 'Czechia':
+      case 'Rus-KHL':
+        return '#a3cf97';
+      case 'ECAC':
+      case 'NCAA':
+      case 'ECAC':
+      case 'CCHA':
+        return '#bfb8e7';
+      case 'CJHL':
+      case 'OPJHL':
+      case 'QJHL':
+        return '#cce2ff';
+      case 'WHL':
+      case 'QMJHL':
+      case 'OHL':
+        return '#b2d4ff';
+      case 'ECHL':
+        return '#ffbfbf';
+      case 'Czechia2':
+      case 'Czech':
+        return '#c7e2c0';
+      case 'QSHL':
+      case 'QMHL':
+        return '#e9e3ba';
+      default:
+        return null;
+    }
+  };
+
   const render_skater_stats = stats => {
     var totGames = 0;
     var totGoals = 0;
@@ -157,6 +196,7 @@ function PlayerPage() {
             var playoffStats = get_playoff_stats(season);
 
             if (season.league.id === 133) {
+              // ID 133 means the league is NHL. We than addition all of the stats.
               totGames += season.stat.games;
               totGoals += season.stat.goals;
               totAssists += season.stat.assists;
@@ -184,7 +224,12 @@ function PlayerPage() {
             }
 
             return (
-              <tr key={i}>
+              <tr
+                key={i}
+                style={{
+                  backgroundColor: get_league_row_color(season.league.name),
+                }}
+              >
                 <td>{season.team.name}</td>
                 {season.league.id === 133 ? ( // nhl league
                   <>
@@ -196,7 +241,7 @@ function PlayerPage() {
                           '/' +
                           season.season
                         }
-                        style={{ textDecoration: 'none', color: '#000099' }}
+                        style={{ textDecoration: 'none', color: '#0000ff' }}
                       >
                         {season.season.slice(0, 4) +
                           '-' +
@@ -304,6 +349,7 @@ function PlayerPage() {
         <tbody>
           {stats.map((season, i) => {
             if (season.league.id === 133) {
+              // ID 133 means the league is NHL. We than addition all of the stats.
               totGames += season.stat.games;
               totGameStarted += season.stat.gamesStarted;
               totGoalAgainst += season.stat.goalsAgainst;
@@ -317,28 +363,41 @@ function PlayerPage() {
               totShutout += season.stat.shutouts;
             }
             return (
-              <tr key={i}>
+              <tr
+                key={i}
+                style={{
+                  backgroundColor: get_league_row_color(season.league.name),
+                }}
+              >
                 <td>{season.team.name}</td>
                 {season.league.id === 133 ? ( // nhl league
-                  <td>
-                    <Link
-                      to={
-                        '/teamRosterBySeason/' +
-                        season.team.id +
-                        '/' +
-                        season.season
-                      }
-                      style={{ textDecoration: 'none', color: '#000099' }}
-                    >
-                      {season.season.slice(0, 4) + '-' + season.season.slice(4)}
-                    </Link>
-                  </td>
+                  <>
+                    <td>
+                      <Link
+                        to={
+                          '/teamRosterBySeason/' +
+                          season.team.id +
+                          '/' +
+                          season.season
+                        }
+                        style={{ textDecoration: 'none', color: '#000099' }}
+                      >
+                        {season.season.slice(0, 4) +
+                          '-' +
+                          season.season.slice(4)}
+                      </Link>
+                    </td>
+                    <td>NHL</td>
+                  </>
                 ) : (
-                  <td>
-                    {season.season.slice(0, 4) + '-' + season.season.slice(4)}
-                  </td>
+                  <>
+                    <td>
+                      {season.season.slice(0, 4) + '-' + season.season.slice(4)}
+                    </td>
+                    <td>{season.league.name}</td>
+                  </>
                 )}
-                <td>{season.league.name}</td>
+
                 <td>{season.stat.games}</td>
                 <td>{season.stat.gamesStarted}</td>
                 <td>

@@ -67,14 +67,14 @@ export const GoalItem = ({ goalData, gameContent }) => {
       <table className="goalItem">
         <tbody>
           <tr>
-            <th rowSpan={rowSpan} width="30">
+            <td rowSpan={rowSpan} width="30">
               <img
                 src={logos[goalData.team.name]}
                 alt=""
                 width="30"
                 height="30"
               />
-            </th>
+            </td>
             <th width="125">Time:</th>
             <td width="250">{goalData.about.periodTime}</td>
             <td rowSpan={rowSpan} width="225">

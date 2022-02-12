@@ -151,10 +151,7 @@ function LeagueLeadersPage() {
           <tr>
             <th>Stats Type</th>
             <td>
-              <select
-                onChange={handleChangeStatsType}
-                // value={poolInfo.number_poolers}
-              >
+              <select onChange={handleChangeStatsType}>
                 {leagueLeadersTypeOptions(leagueLeaderTypes)}
               </select>
             </td>
