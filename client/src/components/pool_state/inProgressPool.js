@@ -3,515 +3,555 @@ import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import '../react-tabs.css';
 
-import logos from "../img/images"
+import logos from '../img/images';
 
 // Loader
-import ClipLoader from "react-spinners/ClipLoader"
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function InProgressPool({ username, poolName, poolInfo }) {
+  const [playersStats, setPlayersStats] = useState({});
+  const [ranking, setRanking] = useState([]);
 
-    const [playersStats, setPlayersStats] = useState({});
-    const [ranking, setRanking] = useState([]);
-
-    useEffect(() => {
-        if ( poolName ) {
-            const requestOptions3 = {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json', 'token': Cookies.get('token-' + username), 'poolname': poolName}
-            };
-            fetch('../pool/get_pool_stats', requestOptions3)
-            .then(response => response.json())
-            .then(data => {
-                if(data.success === "False")
-                {
-                    // this.props.history.push('/pool_list');
-                }
-                else
-                {
-                    //TODO: Store the pool stats into state
-                    calculate_pool_stats(data.players)
-                }
-            })
-        }
-        return () => {
-        }
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-    const calculate_pool_stats = async (players_stats) => {
-        var stats = {}
-        var pooler
-        var player
-  
-        var rank = []
-  
-        for(var i = 0; i < poolInfo.participants.length; i++){
-            pooler = poolInfo.participants[i]
-    
-            stats[pooler] = {}
-            stats[pooler]["chosen_forward"] = []
-    
-            stats[pooler]["forwards_total_pts"] = 0 
-            stats[pooler]["defenders_total_pts"] = 0
-            stats[pooler]["goalies_total_pts"] = 0
-            stats[pooler]["reservists_total_pts"] = 0
-    
-            var j
-
-            for(j = 0; j < poolInfo.context[pooler].chosen_forward.length; j++){
-                player = await players_stats.find(p => p.name === poolInfo.context[pooler].chosen_forward[j].name)
-
-                player["pool_points"] = poolInfo.forward_pts_goals*player.stats.goals + poolInfo.forward_pts_assists*player.stats.assists //+ hat trick
-                stats[pooler]["forwards_total_pts"] += poolInfo.forward_pts_goals*player.stats.goals + poolInfo.forward_pts_assists*player.stats.assists
-    
-                stats[pooler]["chosen_forward"].push(player)
-            }
-    
-            stats[pooler]["chosen_defender"] = []
-    
-            for(j = 0; j < poolInfo.context[pooler].chosen_defender.length; j++){
-                player = await players_stats.find(p => p.name === poolInfo.context[pooler].chosen_defender[j].name)
-
-                player["pool_points"] = poolInfo.defender_pts_goals*player.stats.goals + poolInfo.defender_pts_assits*player.stats.assists //+ hat trick 
-                stats[pooler]["defenders_total_pts"] += poolInfo.defender_pts_goals*player.stats.goals + poolInfo.defender_pts_assits*player.stats.assists //+ hat trick  
-                
-                stats[pooler]["chosen_defender"].push(player)
-            }
-    
-            stats[pooler]["chosen_goalies"] = []
-    
-            for(j = 0; j < poolInfo.context[pooler].chosen_goalies.length; j++){
-                player = await players_stats.find(p => p.name === poolInfo.context[pooler].chosen_goalies[j].name)
-
-                player["pool_points"] = poolInfo.goalies_pts_wins*player.stats.wins + poolInfo.goalies_pts_shutouts*player.stats.shutouts
-                stats[pooler]["goalies_total_pts"] += poolInfo.goalies_pts_wins*player.stats.wins + poolInfo.goalies_pts_shutouts*player.stats.shutouts
-    
-                stats[pooler]["chosen_goalies"].push(player)
-            }
-    
-            stats[pooler]["chosen_reservist"] = []
-    
-            for(j = 0; j < poolInfo.context[pooler].chosen_reservist.length; j++){
-                player = await players_stats.find(p => p.name === poolInfo.context[pooler].chosen_reservist[j].name)
-
-                if(player.position === "G")
-                {
-                    player["pool_points"] = poolInfo.goalies_pts_wins*player.stats.wins + poolInfo.goalies_pts_shutouts*player.stats.shutouts
-                    stats[pooler]["reservists_total_pts"] += poolInfo.goalies_pts_wins*player.stats.wins + poolInfo.goalies_pts_shutouts*player.stats.shutouts
-                }
-                else if(player.position === "F")
-                {
-                    player["pool_points"] = poolInfo.forward_pts_goals*player.stats.goals + poolInfo.forward_pts_assists*player.stats.assists //+ hat trick 
-                    stats[pooler]["reservists_total_pts"] += poolInfo.forward_pts_goals*player.stats.goals + poolInfo.forward_pts_assists*player.stats.assists //+ hat trick 
-                }
-                else
-                {
-                    player["pool_points"] = poolInfo.defender_pts_goals*player.stats.goals + poolInfo.defender_pts_assits*player.stats.assists //+ hat trick
-                    stats[pooler]["reservists_total_pts"] +=  poolInfo.defender_pts_goals*player.stats.goals + poolInfo.defender_pts_assits*player.stats.assists //+ hat trick
-                }
-                stats[pooler]["chosen_reservist"].push(player)
-            }
-    
-            stats[pooler]["total_pts"] = stats[pooler]["forwards_total_pts"] + stats[pooler]["defenders_total_pts"] + stats[pooler]["goalies_total_pts"] + stats[pooler]["reservists_total_pts"]
-    
-            var pooler_global_stats = {
-                name: pooler, 
-                defenders_total_pts: stats[pooler]["defenders_total_pts"],
-                forwards_total_pts: stats[pooler]["forwards_total_pts"],
-                goalies_total_pts: stats[pooler]["goalies_total_pts"],
-                reservists_total_pts: stats[pooler]["reservists_total_pts"],
-                total_pts: stats[pooler]["total_pts"]
-            }
-    
-            rank.push(pooler_global_stats)
-        }
-
-        rank = await sort_by_player_member("total_pts", rank)
-        
-        setRanking( [...rank] )
-        setPlayersStats({...stats })
-    }
-
-    const sort_by_player_member = async (playerMember, array) =>{
-        // TODO: try to simplified this into no if at all
-        if(playerMember !== "name" && playerMember !== "team")
-            array.sort(function(a, b) {
-                return b[playerMember] - a[playerMember] ;
-            });
-
-        else{
-            array.sort(function(a, b) {
-                if(a[playerMember] < b[playerMember]) {return -1;}
-                if(a[playerMember] > b[playerMember]) {return 1;}
-                return 0;
-            });
-        }
-
-        return array
-    }
-
-    const download_csv = (pool) => {
-        var csv = 'Player Name,Team\n';
-  
-        for(var i = 0; i < pool.number_poolers; i++){
-          var pooler = pool.participants[i]
-          var j = 0
-          // forward
-          csv += pooler + "'s forwards\n"
-          for(j = 0; j < pool.context[pooler].chosen_forward.length; j++){
-            csv += pool.context[pooler].chosen_forward[j].name + ', ' + pool.context[pooler].chosen_forward[j].team
-            csv += "\n";
+  useEffect(() => {
+    if (poolName) {
+      const requestOptions3 = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          token: Cookies.get('token-' + username),
+          poolname: poolName,
+        },
+      };
+      fetch('../pool/get_pool_stats', requestOptions3)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success === 'False') {
+            // this.props.history.push('/pool_list');
+          } else {
+            //TODO: Store the pool stats into state
+            calculate_pool_stats(data.players);
           }
-          csv += "\n";
-  
-          // defenders
-          csv += pooler + "'s defenders\n"
-          for(j = 0; j < pool.context[pooler].chosen_defender.length; j++){
-            csv += pool.context[pooler].chosen_defender[j].name + ', ' + pool.context[pooler].chosen_defender[j].team
-            csv += "\n";
-          }
-          csv += "\n";
-  
-          // goalies
-          csv += pooler + "'s goalies\n"
-          for(j = 0; j < pool.context[pooler].chosen_goalies.length; j++){
-            csv += pool.context[pooler].chosen_goalies[j].name + ', ' + pool.context[pooler].chosen_goalies[j].team
-            csv += "\n";
-          }
-          csv += "\n";
-  
-          // reservist
-          csv += pooler + "'s reservists\n"
-          for(j = 0; j < pool.context[pooler].chosen_reservist.length; j++){
-            csv += pool.context[pooler].chosen_reservist[j].name + ', ' + pool.context[pooler].chosen_reservist[j].team
-            csv += "\n";
-          }
-          csv += "\n";
-          csv += "\n-------, -------, -------, -------\n";
-          csv += "\n";
-        }
-  
-        var hiddenElement = document.createElement('a');
-        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-        hiddenElement.target = '_blank';
-        hiddenElement.download = poolInfo.name + '.csv';
-        hiddenElement.click();
-  
+        });
     }
+    return () => {};
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const render_tabs_choice_stats = () => {
-        if(poolInfo['participants']){
-          var poolers = poolInfo['participants']
+  const calculate_pool_stats = async players_stats => {
+    var stats = {};
+    var pooler;
+    var player;
 
-          // replace pooler user name to be first
-          var i = poolers.findIndex(isUser)
-          poolers.splice(i, 1)
-          poolers.splice(0, 0, username)
+    var rank = [];
 
-            return( 
-                <Tabs>
-                    <TabList>
-                        {poolers.map((pooler, i)  => <Tab key={i}>{pooler}</Tab>)}
-                    </TabList>
-                    {poolers.map((pooler, i)  => {
-                        return (
-                            <TabPanel key={i}>
-                                <Tabs>
-                                    <TabList>
-                                        <Tab>Forwards</Tab>
-                                        <Tab>Defenders</Tab>
-                                        <Tab>Goalies</Tab>
-                                        <Tab>Reservists</Tab>
-                                    </TabList>
-                                    <TabPanel>
-                                        <table className="content-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>name</th>
-                                                    <th>team</th>
-                                                    <th>Goal</th>
-                                                    <th>Assist</th>
-                                                    <th>Pts</th>
-                                                    <th>Pts (pool)</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {render_forward_stats(pooler)}
-                                            </tbody>
-                                        </table>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <table className="content-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>name</th>
-                                                    <th>team</th>
-                                                    <th>Goal</th>
-                                                    <th>Assist</th>
-                                                    <th>Pts</th>
-                                                    <th>Pts (pool)</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {render_defender_stats(pooler)}
-                                            </tbody>
-                                        </table>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <table className="content-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>name</th>
-                                                    <th>team</th>
-                                                    <th>Win</th>
-                                                    <th>Loss</th>
-                                                    <th>Shutout</th>
-                                                    <th>Save %</th>
-                                                    <th>Pts (pool)</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {render_goalies_stats(pooler)}
-                                            </tbody>
-                                        </table>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <table className="content-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>name</th>
-                                                    <th>team</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {render_reservist_stats(pooler)}
-                                            </tbody>
-                                        </table>
-                                    </TabPanel>
-                                </Tabs>
-                            </TabPanel>
-                        )
-                    })}
-                </Tabs>
-            )
-        }
-        else{
-          return
-        }
-    }
+    for (var i = 0; i < poolInfo.participants.length; i++) {
+      pooler = poolInfo.participants[i];
 
-    const render_tabs_pool_rank = () => {
-        if(ranking){
-            return(
-                ranking.map((pooler_stats, i) =>
-                    <tr key={i}>
-                        <td>{i + 1}</td>
-                        <td>{pooler_stats.name}</td>
-                        <td>{pooler_stats.forwards_total_pts}</td>
-                        <td>{pooler_stats.defenders_total_pts}</td>
-                        <td>{pooler_stats.goalies_total_pts}</td>
-                        <td>{pooler_stats.reservists_total_pts}</td>
-                        <td>{pooler_stats.total_pts}</td>
-                    </tr>
-                )
-            )
-        }
-        else{
-          return
-        }
-    }
+      stats[pooler] = {};
+      stats[pooler]['chosen_forward'] = [];
 
-    const render_defender_stats = (pooler) => {
-        if(playersStats[pooler]){
-            return (
-            <>
-                {playersStats[pooler]['chosen_defender'].map((player, i) =>
-                    <tr key={i}>
-                        <td>{i + 1}</td>
-                        <td>{player.name}</td>
-                        <td>
-                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-                        </td>
-                        <td>{player.stats.goals}</td>
-                        <td>{player.stats.assists}</td>
-                        <td>{player.stats.pts}</td>
-                        <td>{player.pool_points}</td>
-                    </tr> 
-                )}
-                <tr>
-                    <th>total</th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th>{playersStats[pooler]['defenders_total_pts']}</th>
-                </tr>
-            </>
-            )
-        
+      stats[pooler]['forwards_total_pts'] = 0;
+      stats[pooler]['defenders_total_pts'] = 0;
+      stats[pooler]['goalies_total_pts'] = 0;
+      stats[pooler]['reservists_total_pts'] = 0;
 
-        }
-        else{
-          return
-        }
+      var j;
+
+      for (j = 0; j < poolInfo.context[pooler].chosen_forward.length; j++) {
+        player = await players_stats.find(
+          p => p.name === poolInfo.context[pooler].chosen_forward[j].name
+        );
+
+        player['pool_points'] =
+          poolInfo.forward_pts_goals * player.stats.goals +
+          poolInfo.forward_pts_assists * player.stats.assists; //+ hat trick
+        stats[pooler]['forwards_total_pts'] +=
+          poolInfo.forward_pts_goals * player.stats.goals +
+          poolInfo.forward_pts_assists * player.stats.assists;
+
+        stats[pooler]['chosen_forward'].push(player);
       }
 
-    const render_forward_stats = (pooler) => {
-        if(playersStats[pooler]){
-            return( 
-            <>
-                {playersStats[pooler]['chosen_forward'].map((player, i) =>
-                    <tr className="content-table" key={i}>
-                        <td>{i + 1}</td>
-                        <td>{player.name}</td>
-                        <td>
-                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-                        </td>
-                        <td>{player.stats.goals}</td>
-                        <td>{player.stats.assists}</td>
-                        <td>{player.stats.pts}</td>
-                        <td>{player.pool_points}</td>
-                    </tr>
-                )}
-                <tr>
-                    <th>total</th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th>{playersStats[pooler]['forwards_total_pts']}</th>
-                </tr>
-            </>
-        )
+      stats[pooler]['chosen_defender'] = [];
+
+      for (j = 0; j < poolInfo.context[pooler].chosen_defender.length; j++) {
+        player = await players_stats.find(
+          p => p.name === poolInfo.context[pooler].chosen_defender[j].name
+        );
+
+        player['pool_points'] =
+          poolInfo.defender_pts_goals * player.stats.goals +
+          poolInfo.defender_pts_assits * player.stats.assists; //+ hat trick
+        stats[pooler]['defenders_total_pts'] +=
+          poolInfo.defender_pts_goals * player.stats.goals +
+          poolInfo.defender_pts_assits * player.stats.assists; //+ hat trick
+
+        stats[pooler]['chosen_defender'].push(player);
+      }
+
+      stats[pooler]['chosen_goalies'] = [];
+
+      for (j = 0; j < poolInfo.context[pooler].chosen_goalies.length; j++) {
+        player = await players_stats.find(
+          p => p.name === poolInfo.context[pooler].chosen_goalies[j].name
+        );
+
+        player['pool_points'] =
+          poolInfo.goalies_pts_wins * player.stats.wins +
+          poolInfo.goalies_pts_shutouts * player.stats.shutouts;
+        stats[pooler]['goalies_total_pts'] +=
+          poolInfo.goalies_pts_wins * player.stats.wins +
+          poolInfo.goalies_pts_shutouts * player.stats.shutouts;
+
+        stats[pooler]['chosen_goalies'].push(player);
+      }
+
+      stats[pooler]['chosen_reservist'] = [];
+
+      for (j = 0; j < poolInfo.context[pooler].chosen_reservist.length; j++) {
+        player = await players_stats.find(
+          p => p.name === poolInfo.context[pooler].chosen_reservist[j].name
+        );
+
+        if (player.position === 'G') {
+          player['pool_points'] =
+            poolInfo.goalies_pts_wins * player.stats.wins +
+            poolInfo.goalies_pts_shutouts * player.stats.shutouts;
+          stats[pooler]['reservists_total_pts'] +=
+            poolInfo.goalies_pts_wins * player.stats.wins +
+            poolInfo.goalies_pts_shutouts * player.stats.shutouts;
+        } else if (player.position === 'F') {
+          player['pool_points'] =
+            poolInfo.forward_pts_goals * player.stats.goals +
+            poolInfo.forward_pts_assists * player.stats.assists; //+ hat trick
+          stats[pooler]['reservists_total_pts'] +=
+            poolInfo.forward_pts_goals * player.stats.goals +
+            poolInfo.forward_pts_assists * player.stats.assists; //+ hat trick
+        } else {
+          player['pool_points'] =
+            poolInfo.defender_pts_goals * player.stats.goals +
+            poolInfo.defender_pts_assits * player.stats.assists; //+ hat trick
+          stats[pooler]['reservists_total_pts'] +=
+            poolInfo.defender_pts_goals * player.stats.goals +
+            poolInfo.defender_pts_assits * player.stats.assists; //+ hat trick
         }
-        else{
-            return
-        }
+        stats[pooler]['chosen_reservist'].push(player);
+      }
+
+      stats[pooler]['total_pts'] =
+        stats[pooler]['forwards_total_pts'] +
+        stats[pooler]['defenders_total_pts'] +
+        stats[pooler]['goalies_total_pts'] +
+        stats[pooler]['reservists_total_pts'];
+
+      var pooler_global_stats = {
+        name: pooler,
+        defenders_total_pts: stats[pooler]['defenders_total_pts'],
+        forwards_total_pts: stats[pooler]['forwards_total_pts'],
+        goalies_total_pts: stats[pooler]['goalies_total_pts'],
+        reservists_total_pts: stats[pooler]['reservists_total_pts'],
+        total_pts: stats[pooler]['total_pts'],
+      };
+
+      rank.push(pooler_global_stats);
     }
 
-    const render_reservist_stats = (pooler) => {
-        if(playersStats[pooler]){
+    rank = await sort_by_player_member('total_pts', rank);
+
+    setRanking([...rank]);
+    setPlayersStats({ ...stats });
+  };
+
+  const sort_by_player_member = async (playerMember, array) => {
+    // TODO: try to simplified this into no if at all
+    if (playerMember !== 'name' && playerMember !== 'team')
+      array.sort(function (a, b) {
+        return b[playerMember] - a[playerMember];
+      });
+    else {
+      array.sort(function (a, b) {
+        if (a[playerMember] < b[playerMember]) {
+          return -1;
+        }
+        if (a[playerMember] > b[playerMember]) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+
+    return array;
+  };
+
+  const download_csv = pool => {
+    var csv = 'Player Name,Team\n';
+
+    for (var i = 0; i < pool.number_poolers; i++) {
+      var pooler = pool.participants[i];
+      var j = 0;
+      // forward
+      csv += pooler + "'s forwards\n";
+      for (j = 0; j < pool.context[pooler].chosen_forward.length; j++) {
+        csv +=
+          pool.context[pooler].chosen_forward[j].name +
+          ', ' +
+          pool.context[pooler].chosen_forward[j].team;
+        csv += '\n';
+      }
+      csv += '\n';
+
+      // defenders
+      csv += pooler + "'s defenders\n";
+      for (j = 0; j < pool.context[pooler].chosen_defender.length; j++) {
+        csv +=
+          pool.context[pooler].chosen_defender[j].name +
+          ', ' +
+          pool.context[pooler].chosen_defender[j].team;
+        csv += '\n';
+      }
+      csv += '\n';
+
+      // goalies
+      csv += pooler + "'s goalies\n";
+      for (j = 0; j < pool.context[pooler].chosen_goalies.length; j++) {
+        csv +=
+          pool.context[pooler].chosen_goalies[j].name +
+          ', ' +
+          pool.context[pooler].chosen_goalies[j].team;
+        csv += '\n';
+      }
+      csv += '\n';
+
+      // reservist
+      csv += pooler + "'s reservists\n";
+      for (j = 0; j < pool.context[pooler].chosen_reservist.length; j++) {
+        csv +=
+          pool.context[pooler].chosen_reservist[j].name +
+          ', ' +
+          pool.context[pooler].chosen_reservist[j].team;
+        csv += '\n';
+      }
+      csv += '\n';
+      csv += '\n-------, -------, -------, -------\n';
+      csv += '\n';
+    }
+
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = poolInfo.name + '.csv';
+    hiddenElement.click();
+  };
+
+  const render_tabs_choice_stats = () => {
+    if (poolInfo['participants']) {
+      var poolers = poolInfo['participants'];
+
+      // replace pooler user name to be first
+      var i = poolers.findIndex(isUser);
+      poolers.splice(i, 1);
+      poolers.splice(0, 0, username);
+
+      return (
+        <Tabs>
+          <TabList>
+            {poolers.map((pooler, i) => (
+              <Tab key={i}>{pooler}</Tab>
+            ))}
+          </TabList>
+          {poolers.map((pooler, i) => {
             return (
-                <>
-                    {playersStats[pooler]['chosen_reservist'].map((player, i) =>
-                        <tr key={i}>
-                            <td >{i + 1}</td>
-                            <td>{player.name}</td>
-                            <td>
-                                <img src={logos[player.team]} alt="" width="30" height="30"></img>
-                            </td>
-                            <td>{player.stats.goals}</td>
-                            <td>{player.stats.assists}</td>
-                            <td>{player.stats.pts}</td>
-                            <td>{player.pool_points}</td>
-                        </tr>
-                    )}
-                    <tr>
-                        <th>total</th>
-                        <th> - </th>
-                        <th> - </th>
-                        <th> - </th>
-                        <th> - </th>
-                        <th> - </th>
-                        <th>{playersStats[pooler]['reservists_total_pts']}</th>
-                    </tr>
-                </>
-            )
-        }
-        else{
-            return
-        }
-    }
-
-    const render_goalies_stats = (pooler) => {
-        if(playersStats[pooler]){
-            return (
-                <>
-                    {playersStats[pooler]['chosen_goalies'].map((player, i) =>
-                        <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{player.name}</td>
-                            <td>
-                                <img src={logos[player.team]} alt="" width="30" height="30"></img>
-                            </td>
-                            <td>{player.stats.wins}</td>
-                            <td>{player.stats.losses}</td>
-                            <td>{player.stats.shutouts}</td>
-                            <td>{player.stats.savePercentage}</td>
-                            <td>{player.pool_points}</td>
-                        </tr>
-                    )}
-                <tr>
-                    <th>total</th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th> - </th>
-                    <th>{playersStats[pooler]['goalies_total_pts']}</th>
-                </tr>
-                </>
-            )
-
-        }
-
-        else{
-            return
-        }
-    }
-
-    const isUser = (participant) => {
-        return participant === username
-    }
-
-
-    if(poolInfo){
-        return(
-            <div className="back-site">
-                <h1>Pool in progress...</h1>
-                <div className="floatLeft">
-                <div>
-                        {render_tabs_choice_stats()}
-                </div>
-                </div>
-                <div className="floatRight">
-                    <h1>Today's ranking</h1>
+              <TabPanel key={i}>
+                <Tabs>
+                  <TabList>
+                    <Tab>Forwards</Tab>
+                    <Tab>Defenders</Tab>
+                    <Tab>Goalies</Tab>
+                    <Tab>Reservists</Tab>
+                  </TabList>
+                  <TabPanel>
                     <table className="content-table">
-                        <thead>
-                            <tr>
-                                <th>rank</th>
-                                <th>pooler name</th>
-                                <th>forwards (pts)</th>
-                                <th>defenders (pts)</th>
-                                <th>goalies (pts)</th>
-                                <th>reservists (pts)</th>
-                                <th>total (pts)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {render_tabs_pool_rank()}
-                        </tbody>
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>name</th>
+                          <th>team</th>
+                          <th>Goal</th>
+                          <th>Assist</th>
+                          <th>Pts</th>
+                          <th>Pts (pool)</th>
+                        </tr>
+                      </thead>
+                      <tbody>{render_forward_stats(pooler)}</tbody>
                     </table>
-                </div>
-                <button onClick={() => download_csv(poolInfo)} disabled={false}>Download CSV</button>
-            </div>
-        )
+                  </TabPanel>
+                  <TabPanel>
+                    <table className="content-table">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>name</th>
+                          <th>team</th>
+                          <th>Goal</th>
+                          <th>Assist</th>
+                          <th>Pts</th>
+                          <th>Pts (pool)</th>
+                        </tr>
+                      </thead>
+                      <tbody>{render_defender_stats(pooler)}</tbody>
+                    </table>
+                  </TabPanel>
+                  <TabPanel>
+                    <table className="content-table">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>name</th>
+                          <th>team</th>
+                          <th>Win</th>
+                          <th>Loss</th>
+                          <th>Shutout</th>
+                          <th>Save %</th>
+                          <th>Pts (pool)</th>
+                        </tr>
+                      </thead>
+                      <tbody>{render_goalies_stats(pooler)}</tbody>
+                    </table>
+                  </TabPanel>
+                  <TabPanel>
+                    <table className="content-table">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>name</th>
+                          <th>team</th>
+                        </tr>
+                      </thead>
+                      <tbody>{render_reservist_stats(pooler)}</tbody>
+                    </table>
+                  </TabPanel>
+                </Tabs>
+              </TabPanel>
+            );
+          })}
+        </Tabs>
+      );
+    } else {
+      return;
     }
-    else{
-        return(
-            <div>
-                <h1>trying to fetch pool data info...</h1>
-                <ClipLoader color="#fff" loading={true} size={75} />
-            </div>
-        )
+  };
+
+  const render_tabs_pool_rank = () => {
+    if (ranking) {
+      return ranking.map((pooler_stats, i) => (
+        <tr key={i}>
+          <td>{i + 1}</td>
+          <td>{pooler_stats.name}</td>
+          <td>{pooler_stats.forwards_total_pts}</td>
+          <td>{pooler_stats.defenders_total_pts}</td>
+          <td>{pooler_stats.goalies_total_pts}</td>
+          <td>{pooler_stats.reservists_total_pts}</td>
+          <td>{pooler_stats.total_pts}</td>
+        </tr>
+      ));
+    } else {
+      return;
     }
-    
-  
+  };
+
+  const render_defender_stats = pooler => {
+    if (playersStats[pooler]) {
+      return (
+        <>
+          {playersStats[pooler]['chosen_defender'].map((player, i) => (
+            <tr key={i}>
+              <td>{i + 1}</td>
+              <td>{player.name}</td>
+              <td>
+                <img
+                  src={logos[player.team]}
+                  alt=""
+                  width="30"
+                  height="30"
+                ></img>
+              </td>
+              <td>{player.stats.goals}</td>
+              <td>{player.stats.assists}</td>
+              <td>{player.stats.pts}</td>
+              <td>{player.pool_points}</td>
+            </tr>
+          ))}
+          <tr>
+            <th>total</th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th>{playersStats[pooler]['defenders_total_pts']}</th>
+          </tr>
+        </>
+      );
+    } else {
+      return;
+    }
+  };
+
+  const render_forward_stats = pooler => {
+    if (playersStats[pooler]) {
+      return (
+        <>
+          {playersStats[pooler]['chosen_forward'].map((player, i) => (
+            <tr className="content-table" key={i}>
+              <td>{i + 1}</td>
+              <td>{player.name}</td>
+              <td>
+                <img
+                  src={logos[player.team]}
+                  alt=""
+                  width="30"
+                  height="30"
+                ></img>
+              </td>
+              <td>{player.stats.goals}</td>
+              <td>{player.stats.assists}</td>
+              <td>{player.stats.pts}</td>
+              <td>{player.pool_points}</td>
+            </tr>
+          ))}
+          <tr>
+            <th>total</th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th>{playersStats[pooler]['forwards_total_pts']}</th>
+          </tr>
+        </>
+      );
+    } else {
+      return;
+    }
+  };
+
+  const render_reservist_stats = pooler => {
+    if (playersStats[pooler]) {
+      return (
+        <>
+          {playersStats[pooler]['chosen_reservist'].map((player, i) => (
+            <tr key={i}>
+              <td>{i + 1}</td>
+              <td>{player.name}</td>
+              <td>
+                <img
+                  src={logos[player.team]}
+                  alt=""
+                  width="30"
+                  height="30"
+                ></img>
+              </td>
+              <td>{player.stats.goals}</td>
+              <td>{player.stats.assists}</td>
+              <td>{player.stats.pts}</td>
+              <td>{player.pool_points}</td>
+            </tr>
+          ))}
+          <tr>
+            <th>total</th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th>{playersStats[pooler]['reservists_total_pts']}</th>
+          </tr>
+        </>
+      );
+    } else {
+      return;
+    }
+  };
+
+  const render_goalies_stats = pooler => {
+    if (playersStats[pooler]) {
+      return (
+        <>
+          {playersStats[pooler]['chosen_goalies'].map((player, i) => (
+            <tr key={i}>
+              <td>{i + 1}</td>
+              <td>{player.name}</td>
+              <td>
+                <img
+                  src={logos[player.team]}
+                  alt=""
+                  width="30"
+                  height="30"
+                ></img>
+              </td>
+              <td>{player.stats.wins}</td>
+              <td>{player.stats.losses}</td>
+              <td>{player.stats.shutouts}</td>
+              <td>{player.stats.savePercentage}</td>
+              <td>{player.pool_points}</td>
+            </tr>
+          ))}
+          <tr>
+            <th>total</th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th> - </th>
+            <th>{playersStats[pooler]['goalies_total_pts']}</th>
+          </tr>
+        </>
+      );
+    } else {
+      return;
+    }
+  };
+
+  const isUser = participant => {
+    return participant === username;
+  };
+
+  if (poolInfo) {
+    return (
+      <div className="back-site">
+        <h1>Pool in progress...</h1>
+        <div className="floatLeft">
+          <div>{render_tabs_choice_stats()}</div>
+        </div>
+        <div className="floatRight">
+          <h1>Today's ranking</h1>
+          <table className="content-table">
+            <thead>
+              <tr>
+                <th>rank</th>
+                <th>pooler name</th>
+                <th>forwards (pts)</th>
+                <th>defenders (pts)</th>
+                <th>goalies (pts)</th>
+                <th>reservists (pts)</th>
+                <th>total (pts)</th>
+              </tr>
+            </thead>
+            <tbody>{render_tabs_pool_rank()}</tbody>
+          </table>
+        </div>
+        <button onClick={() => download_csv(poolInfo)} disabled={false}>
+          Download CSV
+        </button>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <h1>trying to fetch pool data info...</h1>
+        <ClipLoader color="#fff" loading={true} size={75} />
+      </div>
+    );
   }
-  export default InProgressPool;
+}
+export default InProgressPool;

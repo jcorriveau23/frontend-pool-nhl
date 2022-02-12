@@ -4,28 +4,28 @@
 } */
 
 .goalItem {
-    margin: 0;
-    padding: 100, 100;
-    min-width: 700px;
-    max-width: 700px;
-    border: 2px solid black; 
-  }
-  
-  .goalItem th {
-    background-color: #222222;
-    color: #eeeeee;
-    text-align: center;
-    font-weight: bold;
-    padding: 3px 2.5px;
-  }
-  
-  .goalItem td {
-    padding: 1px 1px;
-    text-align: center;
-    color: #000000;
-    background-color: #aaaaaa;
-  }
+  margin: 0;
+  padding: 100, 100;
+  min-width: 700px;
+  max-width: 700px;
+  border: 2px solid black;
+}
 
-  .min-width {
-    min-width: 700px;
-  }
+.goalItem th {
+  background-color: #222222;
+  color: #eeeeee;
+  text-align: center;
+  font-weight: bold;
+  padding: 3px 2.5px;
+}
+
+.goalItem td {
+  padding: 1px 1px;
+  text-align: center;
+  color: #000000;
+  background-color: #aaaaaa;
+}
+
+.min-width {
+  min-width: 700px;
+}

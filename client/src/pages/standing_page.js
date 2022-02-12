@@ -1,45 +1,35 @@
 import React, { useState, useEffect } from 'react';
 
-import TeamsStanding from "../components/standing_page/teamsStanding";
+import TeamsStanding from '../components/standing_page/teamsStanding';
 
 // Loader
-import ClipLoader from "react-spinners/ClipLoader"
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function StandingPage() {
-    
-    const [teamsStats, setTeamsStats] = useState(null)
+  const [teamsStats, setTeamsStats] = useState(null);
 
-    useEffect(() => {
-        fetch('https://statsapi.web.nhl.com/api/v1/standings')
-        .then(response => response.json())
-        .then(data => {
-            //console.log(data)
-            setTeamsStats(data)
-        })
+  useEffect(() => {
+    fetch('https://statsapi.web.nhl.com/api/v1/standings')
+      .then(response => response.json())
+      .then(data => {
+        //console.log(data)
+        setTeamsStats(data);
+      });
+  }, []); // fetch team standing stats from nhl api.
 
-
-    }, []); // fetch team standing stats from nhl api.
-
-
-    if(teamsStats != null)
-    {
-        return(
-            <div>
-                <TeamsStanding data={teamsStats}></TeamsStanding>
-            </div>
-        );
-    }
-    else
-    {
-        return(
-            <div>
-                <h1>Trying to fetch teams data from nhl api...</h1>
-                <ClipLoader color="#fff" loading={true} size={75}/>
-            </div>
-        )
-    }
-
-    
-  
+  if (teamsStats != null) {
+    return (
+      <div>
+        <TeamsStanding data={teamsStats}></TeamsStanding>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <h1>Trying to fetch teams data from nhl api...</h1>
+        <ClipLoader color="#fff" loading={true} size={75} />
+      </div>
+    );
   }
-  export default StandingPage;
+}
+export default StandingPage;

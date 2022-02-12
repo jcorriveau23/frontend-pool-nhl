@@ -1,9 +1,23 @@
-.floatLeft { width: 50%; float: left; background-color: #888888; }
-.floatRight {width: 50%; float: right; background-color: #888888; }
-.container { overflow: hidden; }
+.floatLeft {
+  width: 50%;
+  float: left;
+  background-color: #888888;
+}
+.floatRight {
+  width: 50%;
+  float: right;
+  background-color: #888888;
+}
+.container {
+  overflow: hidden;
+}
 
-.red-text {color: red;}
-.green-text {color: green;}
+.red-text {
+  color: red;
+}
+.green-text {
+  color: green;
+}
 
 .tab-background {
   background-color: #888888;
@@ -12,10 +26,6 @@
 .back-site {
   background-color: #888888;
 }
-
-
-
-
 
 .content-table {
   margin: 10px 0;
@@ -38,20 +48,20 @@
   background-color: #aaaaaa;
 }
 
-table.content-table tr:hover td{
+table.content-table tr:hover td {
   background-color: #757575;
 }
 
-table.content-table tr th:hover{
+table.content-table tr th:hover {
   background-color: #757575;
 }
 
 .background-app {
-  background-color: #32443B;
+  background-color: #32443b;
 }
 
 button {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   border: none;
   color: white;
   padding: 5px 10px;
@@ -63,29 +73,16 @@ button {
 }
 
 body {
-  background-color:#888888;
+  background-color: #888888;
 }
 
 button:hover:enabled {
   background-color: #007500;
 }
 
-button:disabled{
+button:disabled {
   opacity: 0.25;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 li {
   display: inline;
@@ -100,7 +97,7 @@ li {
   position: relative;
 }
 
-nav{
+nav {
   float: left;
 }
 
@@ -125,12 +122,12 @@ nav a {
   font-size: 14px;
 }
 
-nav a:hover{
+nav a:hover {
   color: #ffffff;
 }
 
 nav a::before {
-  content: "";
+  content: '';
   display: block;
   height: 5px;
   width: 0%;
@@ -141,62 +138,43 @@ nav a::before {
   transition: all ease-in-out 250ms;
 }
 
-nav a:hover::before{
-  width:100%
+nav a:hover::before {
+  width: 100%;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .modal_content {
-  text-align:center;
+  text-align: center;
 }
 
 .modal_content form {
-  text-align:center;
+  text-align: center;
   padding: 10px 20px;
-  }
+}
 
 .modal_content input {
   width: 51%;
   padding: 8px 20px;
   margin: 8px 0;
   box-sizing: border-box;
-  text-align:center;
+  text-align: center;
   border: 2px solid #444;
   border-radius: 10px;
 }
 
-
-
-
-
-
-.pool_item ul li:hover{
+.pool_item ul li:hover {
   border-color: #fff;
   border-width: 2px;
 }
 
 .pool_item ul {
-  margin: 0; padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
-.pool_item ul li{
+.pool_item ul li {
   border-color: #000;
   display: block;
-  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  font-family: 'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif;
   font-size: 12px;
   font-weight: bold;
   line-height: 16px;
@@ -206,16 +184,16 @@ nav a:hover::before{
   margin: 10px 5px;
   padding: 0 16px 0px 16px;
   max-width: 468px;
-} 
-
-.pool_item ul td{
- text-decoration-color: #fff; 
 }
 
-.pool_item ul a{
+.pool_item ul td {
+  text-decoration-color: #fff;
+}
+
+.pool_item ul a {
   color: #000;
 }
 
-.pool_item ul button{
+.pool_item ul button {
   background-color: #a00;
 }

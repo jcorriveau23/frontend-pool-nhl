@@ -1,68 +1,69 @@
 .dayGamesFeed {
-    min-width: 700px;
+  min-width: 700px;
 }
 
-.dayGamesFeed ul li:hover{
-    border-color: #fff;
-    border-width: 2px;
+.dayGamesFeed ul li:hover {
+  border-color: #fff;
+  border-width: 2px;
 }
 .dayGamesFeed ul {
-    margin: 0; padding: 0;
-    overflow: auto;
-    white-space: nowrap; /*next list item wont go next line*/
-    -webkit-overflow-scrolling: touch; /* to scroll on mobile*/
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  white-space: nowrap; /*next list item wont go next line*/
+  -webkit-overflow-scrolling: touch; /* to scroll on mobile*/
 }
 
-.dayGamesFeed ul li{
-    border-color: #000;
-    display: inline-block;
-    font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
-    font-size: 12px;
-    font-weight: bold;
-    line-height: 16px;
-    border-radius: 5px;
-    border-style: solid;
-    border-width: 2px;
-    margin: 10px 5px;
-    padding: 0 16px 0px 16px;
-    max-width: 468px;
+.dayGamesFeed ul li {
+  border-color: #000;
+  display: inline-block;
+  font-family: 'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 16px;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 2px;
+  margin: 10px 5px;
+  padding: 0 16px 0px 16px;
+  max-width: 468px;
 }
 
-.dayGamesFeed ul td{
-   text-decoration-color: #fff; 
+.dayGamesFeed ul td {
+  text-decoration-color: #fff;
 }
 
-.dayGamesFeed ul a{
-    color: #000;
+.dayGamesFeed ul a {
+  color: #000;
 }
-
 
 .dateSelector ul li {
-    display: inline-block;
+  display: inline-block;
 }
 
 .dateSelector ul {
-    margin: 0; padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
-.dateSelector input{
-    text-align: center;
-    border-radius: 5px;
-    border-width: 3px;
-    border-color: #000;
-    margin: 0px; 
-    padding: 4px;
-    background: url(../img/icons/calendar.png) no-repeat scroll 7px 3px;
-    cursor: pointer;
+.dateSelector input {
+  text-align: center;
+  border-radius: 5px;
+  border-width: 3px;
+  border-color: #000;
+  margin: 0px;
+  padding: 4px;
+  background: url(../img/icons/calendar.png) no-repeat scroll 7px 3px;
+  cursor: pointer;
 }
 
-.dateSelector input:hover{
-    border-color: #fff;
-    border-width: 3px;
+.dateSelector input:hover {
+  border-color: #fff;
+  border-width: 3px;
 }
 
-.dateSelector img{
-    margin: 0px 0px 0px 0px; 
-    padding: 0px 0px 0px 0px;
-    cursor: pointer;
+.dateSelector img {
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  cursor: pointer;
 }
