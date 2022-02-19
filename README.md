@@ -5,7 +5,7 @@ https://hockeypool.live
 
 # pool-nhl-ethereum
 
-nhl hockey pool that automatically distribute fund to the winner without 3rd party with the use of smart contract.
+nhl hockey prediction market that allowed any Ethereum wallet to bets some Ethers on hockey games for the team they think will win. 
 
 ## Run the app in development configuration
 ### Start server command
