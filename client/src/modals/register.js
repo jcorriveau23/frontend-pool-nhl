@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 
 import { styleModal } from './styleModal';
-export const RegisterModal = ({ showRegisterModal, setShowRegisterModal }) => {
+
+function RegisterModal({ showRegisterModal, setShowRegisterModal }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
@@ -17,7 +18,7 @@ export const RegisterModal = ({ showRegisterModal, setShowRegisterModal }) => {
           name: username,
           email: 'TODO',
           phone: 'TODO',
-          password: password,
+          password,
         }),
       };
       fetch('auth/register', requestOptions)
@@ -59,12 +60,13 @@ export const RegisterModal = ({ showRegisterModal, setShowRegisterModal }) => {
             required
           />
         </form>
-        <button onClick={() => register()} disabled={false}>
+        <button onClick={() => register()} disabled={false} type="button">
           Register
         </button>
         <p style={{ color: 'red' }}>{msg}</p>
       </div>
-      <div></div>
     </Modal>
   );
-};
+}
+
+export default RegisterModal;

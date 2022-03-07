@@ -1,12 +1,28 @@
 import React from 'react';
 
 // teams logo
-import logos from '../img/images';
+import logos from '../img/logos';
 
 import liveGame from '../img/icons/live-game.png';
 
-export const GameItem = ({ gameData }) => {
-  //console.log(gameData)
+function GameItem({ gameData }) {
+  // console.log(gameData)
+
+  const render_game_state = state => {
+    if (state === 'Live') {
+      return (
+        <td>
+          <img src={liveGame} alt="" />
+        </td>
+      );
+    }
+    if (state === 'Postponed') {
+      return <td>PPD</td>;
+    }
+
+    return null;
+  };
+
   return (
     <table>
       <thead>
@@ -17,30 +33,26 @@ export const GameItem = ({ gameData }) => {
               minute: '2-digit',
             })}
           </td>
-          <td></td>
-          {gameData.status.abstractGameState === 'Live' ? (
-            <td>
-              <img src={liveGame} alt=""></img>
-            </td>
-          ) : gameData.status.detailedState === 'Postponed' ? (
-            <td>PPD</td>
-          ) : null}
+          <td />
+          {render_game_state(gameData.status.abstractGameState)}
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>
-            <img src={logos[gameData.teams.away.team.name]} alt="" width="30" height="30"></img>
+            <img src={logos[gameData.teams.away.team.name]} alt="" width="30" height="30" />
           </td>
           <td>{gameData.teams.away.score}</td>
         </tr>
         <tr>
           <td>
-            <img src={logos[gameData.teams.home.team.name]} alt="" width="30" height="30"></img>
+            <img src={logos[gameData.teams.home.team.name]} alt="" width="30" height="30" />
           </td>
           <td>{gameData.teams.home.score}</td>
         </tr>
       </tbody>
     </table>
   );
-};
+}
+
+export default GameItem;

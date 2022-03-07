@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 // css
 import './goalItem.css';
 
-export const OtherGameContent = ({ gameContent }) => {
+function OtherGameContent({ gameContent }) {
   const videoRef = useRef();
   const [isItem, setIsItem] = useState(false);
 
@@ -26,18 +26,16 @@ export const OtherGameContent = ({ gameContent }) => {
             ) : null}
           </thead>
           {gameContent.media.milestones.items
-            .filter(highlight => {
-              return highlight.type !== 'GOAL' && highlight.highlight && highlight.highlight.playbacks;
-            })
-            .map((highlight, i) => {
+            .filter(highlight => highlight.type !== 'GOAL' && highlight.highlight && highlight.highlight.playbacks)
+            .map(highlight => {
               if (isItem === false) setIsItem(true);
-              //console.log(highlight)
+              // console.log(highlight)
               return (
-                <tbody key={i}>
+                <tbody key={highlight.playerId}>
                   <tr>
                     <td colSpan={3}>
                       <Link
-                        to={'/playerInfo/' + highlight.playerId}
+                        to={`/playerInfo/${highlight.playerId}`}
                         style={{ textDecoration: 'none', color: '#000099' }}
                       >
                         {highlight.highlight.description}
@@ -63,5 +61,9 @@ export const OtherGameContent = ({ gameContent }) => {
         </table>
       </div>
     );
-  } else return <h1> </h1>;
-};
+  }
+
+  return <h1> </h1>;
+}
+
+export default OtherGameContent;

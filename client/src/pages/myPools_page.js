@@ -5,9 +5,11 @@ import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import '../components/react-tabs.css';
 
-import { PoolItem } from '../components/poolItem';
+// components
+import PoolItem from '../components/poolItem';
 
-import { CreatePoolModal } from '../modals/createPool';
+// modal
+import CreatePoolModal from '../modals/createPool';
 
 function MyPoolsPage({ user }) {
   const [showCreatePoolModal, setShowCreatePoolModal] = useState(false);
@@ -23,7 +25,7 @@ function MyPoolsPage({ user }) {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          token: Cookies.get('token-' + user.addr),
+          token: Cookies.get(`token-${user.addr}`),
         },
       };
       fetch('pool/pool_list', requestOptions)
@@ -33,32 +35,38 @@ function MyPoolsPage({ user }) {
             // [TODO] display a page or notification to tell the user that the pool list could not be fetch.
             console.log(data.message);
           } else {
-            var poolDraft = [];
-            var poolInProfress = [];
-            var poolDynastie = [];
+            const pDraft = [];
+            const pInProgress = [];
+            const pDynastie = [];
 
-            for (var i = 0; i < data.user_pools_info.length; i++) {
-              if (data.user_pools_info[i]['status'] === 'draft') {
-                poolDraft.push({
-                  name: data.user_pools_info[i]['name'],
-                  owner: data.user_pools_info[i]['owner'],
-                });
-              } else if (data.user_pools_info[i]['status'] === 'in Progress') {
-                poolInProfress.push({
-                  name: data.user_pools_info[i]['name'],
-                  owner: data.user_pools_info[i]['owner'],
-                });
-              } else if (data.user_pools_info[i]['status'] === 'dynastie') {
-                poolDynastie.push({
-                  name: data.user_pools_info[i]['name'],
-                  owner: data.user_pools_info[i]['owner'],
-                });
+            for (let i = 0; i < data.user_pools_info.length; i += 1) {
+              switch (data.user_pools_info[i].status) {
+                case 'draft':
+                  pDraft.push({
+                    name: data.user_pools_info[i].name,
+                    owner: data.user_pools_info[i].owner,
+                  });
+                  break;
+                case 'in Progress':
+                  pInProgress.push({
+                    name: data.user_pools_info[i].name,
+                    owner: data.user_pools_info[i].owner,
+                  });
+                  break;
+                case 'dynastie':
+                  pDynastie.push({
+                    name: data.user_pools_info[i].name,
+                    owner: data.user_pools_info[i].owner,
+                  });
+                  break;
+                default:
+                  break;
               }
             }
             setPoolCreated(data.pool_created);
-            setPoolDraft(poolDraft);
-            setPoolInProgress(poolInProfress);
-            setPoolDynastie(poolDynastie);
+            setPoolDraft(pDraft);
+            setPoolInProgress(pInProgress);
+            setPoolDynastie(pDynastie);
           }
           setPoolDeleted(false);
         });
@@ -74,7 +82,7 @@ function MyPoolsPage({ user }) {
       <div>
         <div>
           <h1>Pool list</h1>
-          <button onClick={openCreatePoolModal} disabled={false}>
+          <button type="button" onClick={openCreatePoolModal} disabled={false}>
             Create a new Pool.
           </button>
         </div>
@@ -89,8 +97,8 @@ function MyPoolsPage({ user }) {
             <TabPanel>
               <div className="pool_item">
                 <ul>
-                  {poolCreated.map((pool, i) => (
-                    <Link to={'/MyPools/' + pool.name} key={i}>
+                  {poolCreated.map(pool => (
+                    <Link to={`/MyPools/${pool.name}`} key={pool.name}>
                       <li>
                         <PoolItem
                           name={pool.name}
@@ -98,7 +106,7 @@ function MyPoolsPage({ user }) {
                           username={user.addr}
                           poolDeleted={poolDeleted}
                           setPoolDeleted={setPoolDeleted}
-                        ></PoolItem>
+                        />
                       </li>
                     </Link>
                   ))}
@@ -109,10 +117,10 @@ function MyPoolsPage({ user }) {
               <TabPanel>
                 <div className="pool_item">
                   <ul>
-                    {poolDraft.map((pool, i) => (
-                      <Link to={'/MyPools/' + pool.name} key={i}>
+                    {poolDraft.map(pool => (
+                      <Link to={`/MyPools/${pool.name}`} key={pool.name}>
                         <li>
-                          <PoolItem name={pool.name} owner={pool.owner}></PoolItem>
+                          <PoolItem name={pool.name} owner={pool.owner} />
                         </li>
                       </Link>
                     ))}
@@ -124,10 +132,10 @@ function MyPoolsPage({ user }) {
               <TabPanel>
                 <div className="pool_item">
                   <ul>
-                    {poolDynastie.map((pool, i) => (
-                      <Link to={'/MyPools/' + pool.name} key={i}>
+                    {poolDynastie.map(pool => (
+                      <Link to={`/MyPools/${pool.name}`} key={pool.name}>
                         <li>
-                          <PoolItem name={pool.name} owner={pool.owner}></PoolItem>
+                          <PoolItem name={pool.name} owner={pool.owner} />
                         </li>
                       </Link>
                     ))}
@@ -139,10 +147,10 @@ function MyPoolsPage({ user }) {
               <TabPanel>
                 <div className="pool_item">
                   <ul>
-                    {poolInProgress.map((pool, i) => (
-                      <Link to={'/MyPools/' + pool.name} key={i}>
+                    {poolInProgress.map(pool => (
+                      <Link to={`/MyPools/${pool.name}`} key={pool.name}>
                         <li>
-                          <PoolItem name={pool.name} owner={pool.owner} key={i}></PoolItem>
+                          <PoolItem name={pool.name} owner={pool.owner} />
                         </li>
                       </Link>
                     ))}
@@ -155,10 +163,12 @@ function MyPoolsPage({ user }) {
             showCreatePoolModal={showCreatePoolModal}
             setShowCreatePoolModal={setShowCreatePoolModal}
             username={user.addr}
-          ></CreatePoolModal>
+          />
         </div>
       </div>
     );
-  } else return <h1>You are not connected.</h1>;
+  }
+
+  return <h1>You are not connected.</h1>;
 }
 export default MyPoolsPage;

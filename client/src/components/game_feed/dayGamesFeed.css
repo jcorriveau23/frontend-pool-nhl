@@ -37,15 +37,6 @@
   color: #000;
 }
 
-.dateSelector ul li {
-  display: inline-block;
-}
-
-.dateSelector ul {
-  margin: 0;
-  padding: 0;
-}
-
 .dateSelector input {
   text-align: center;
   border-radius: 5px;

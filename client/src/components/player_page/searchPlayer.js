@@ -7,7 +7,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 // images
 import search from '../img/icons/search.png';
 
-export const SearchPlayer = () => {
+function SearchPlayer() {
   const [searchResult, setSearchResult] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
 
@@ -15,18 +15,16 @@ export const SearchPlayer = () => {
     if (searchValue.length > 0 && !isSearching) {
       setIsSearching(true);
       fetch(
-        'https://nhl-pool-ethereum.herokuapp.com/https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/' +
-          searchValue +
-          '/10'
+        `https://nhl-pool-ethereum.herokuapp.com/https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/${searchValue}/10`
       ) // https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/Crosby/10
         .then(response => response.json())
-        .then(searchResult => {
-          setSearchResult({ ...searchResult });
+        .then(result => {
+          setSearchResult({ ...result });
           setIsSearching(false);
-        })
-        .catch(error => {
-          console.log(error);
         });
+      // .catch(error => {
+      //   console.log(error);
+      // });
     } else setSearchResult(null);
   };
 
@@ -36,7 +34,7 @@ export const SearchPlayer = () => {
         <tbody>
           <tr>
             <td>
-              <img src={search} alt=""></img>
+              <img src={search} alt="" />
             </td>
             <td>
               <input
@@ -54,16 +52,16 @@ export const SearchPlayer = () => {
             {isSearching ? (
               <tr>
                 <td>
-                  <ClipLoader color="#fff" loading={true} /*css={override}*/ size={25} />
+                  <ClipLoader color="#fff" loading size={25} />
                 </td>
               </tr>
             ) : null}
-            {searchResult?.suggestions?.map((player, i) => {
-              var p = player.split('|');
+            {searchResult?.suggestions?.map(player => {
+              const p = player.split('|');
               return (
                 <tr>
                   <td>
-                    <Link to={'/playerInfo/' + p[0]}> {p[2] + ' ' + p[1]}</Link>
+                    <Link to={`/playerInfo/'${p[0]}`}> {`${p[2]} ${p[1]}`}</Link>
                   </td>
                 </tr>
               );
@@ -73,4 +71,6 @@ export const SearchPlayer = () => {
       </div>
     </div>
   );
-};
+}
+
+export default SearchPlayer;

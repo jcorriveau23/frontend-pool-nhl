@@ -68,7 +68,7 @@ export const logos = {
   'Toronto St. Patricks': 'https://assets.nhle.com/logos/nhl/svg/TSP_19221923-19241925_light.svg',
 };
 
-export const team_name_from_id = {
+export const teamNameFromId = {
   1: 'New Jersey Devils',
   2: 'New York Islanders',
   3: 'New York Rangers',

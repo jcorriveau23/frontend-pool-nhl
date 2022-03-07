@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
 
 // component
-import { GameItem } from './gameItem';
-import DatePicker from 'react-datepicker';
+import GameItem from './gameItem';
 
 // css
 import './dayGamesFeed.css';
@@ -19,9 +19,9 @@ function TodayGamesFeed() {
 
   useEffect(() => {
     const newDate = new Date(date.setHours(0));
-    var formatDate = newDate.toISOString().slice(0, 10);
+    const formatDate = newDate.toISOString().slice(0, 10);
 
-    fetch('https://statsapi.web.nhl.com/api/v1/schedule?startDate=' + formatDate + '&endDate=' + formatDate)
+    fetch(`https://statsapi.web.nhl.com/api/v1/schedule?startDate=${formatDate}&endDate=${formatDate}`)
       .then(response => response.json())
       .then(todayGamesData => {
         if (todayGamesData.dates[0]) {
@@ -53,30 +53,30 @@ function TodayGamesFeed() {
           <tbody>
             <tr>
               <td>
-                <img src={goPrev} onClick={prevDate} alt=""></img>
+                <img src={goPrev} onClick={prevDate} alt="" />
               </td>
               <td>
-                <DatePicker selected={date} onChange={date => setDate(date)} dateFormat="P"></DatePicker>
+                <DatePicker selected={date} onChange={d => setDate(d)} dateFormat="P" />
               </td>
               <td>
-                <img src={goNext} onClick={nextDate} alt=""></img>
+                <img src={goNext} onClick={nextDate} alt="" />
               </td>
             </tr>
           </tbody>
         </table>
       </div>
       <div className="dayGamesFeed">
-        <ul>
-          {gamesStats.map((game, i) => {
-            return (
-              <Link to={'/gameFeed/' + game.gamePk} key={i}>
+        <div>
+          <ul>
+            {gamesStats.map(game => (
+              <Link to={`/gameFeed/${game.gamePk}`} key={game.gamePk}>
                 <li>
-                  <GameItem gameData={game}></GameItem>
+                  <GameItem gameData={game} />
                 </li>
               </Link>
-            );
-          })}
-        </ul>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

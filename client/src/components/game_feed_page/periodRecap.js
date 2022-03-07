@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
 // component
-import { GoalItem } from './goalItem';
+import GoalItem from './goalItem';
 
 // css
 import './goalItem.css';
 
-export const PeriodRecap = ({ gameInfo, gameContent, period }) => {
+function PeriodRecap({ gameInfo, gameContent, period }) {
   const [isItem, setIsItem] = useState(false);
   // const previousUrl = useRef(recapVideo.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
 
@@ -17,21 +17,19 @@ export const PeriodRecap = ({ gameInfo, gameContent, period }) => {
           <thead>
             {isItem ? (
               <tr>
-                <th>{period === '4' ? 'OT' : 'Period: ' + period}</th>
+                <th>{period === '4' ? 'OT' : `Period: ${period}`}</th>
               </tr>
             ) : null}
           </thead>
           <tbody>
             {gameInfo.liveData.plays.scoringPlays
-              .filter(i => {
-                return gameInfo.liveData.plays.allPlays[i].about.period === parseInt(period);
-              })
+              .filter(i => gameInfo.liveData.plays.allPlays[i].about.period === parseInt(period, 10))
               .map(i => {
                 if (isItem === false) setIsItem(true);
                 return (
                   <tr key={i}>
                     <td>
-                      <GoalItem goalData={gameInfo.liveData.plays.allPlays[i]} gameContent={gameContent}></GoalItem>
+                      <GoalItem goalData={gameInfo.liveData.plays.allPlays[i]} gameContent={gameContent} />
                     </td>
                   </tr>
                 );
@@ -40,5 +38,9 @@ export const PeriodRecap = ({ gameInfo, gameContent, period }) => {
         </table>
       </div>
     );
-  } else return <h1> </h1>;
-};
+  }
+
+  return <h1> </h1>;
+}
+
+export default PeriodRecap;

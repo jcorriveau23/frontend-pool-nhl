@@ -74,7 +74,7 @@ function BetItem({ user, contract, gameID }) {
         </tbody>
       </table>
     );
-  } else return <ClipLoader color="#fff" loading={true} /*css={override}*/ size={75} />;
+  } else return <ClipLoader color="#fff" loading /*css={override}*/ size={75} />;
 }
 
 export default BetItem;

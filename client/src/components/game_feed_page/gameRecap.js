@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-export const GameRecap = ({ gameContent, isEditorial }) => {
+function GameRecap({ gameContent, isEditorial }) {
   const videoRef = useRef();
   const [prevGameContent, setPrevGameContent] = useState(null);
   // const previousUrl = useRef(recapVideo.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
@@ -10,7 +10,7 @@ export const GameRecap = ({ gameContent, isEditorial }) => {
       videoRef?.current?.load();
       setPrevGameContent(gameContent);
     }
-  }, [gameContent]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [gameContent]);
 
   if (isEditorial && gameContent.editorial && gameContent.media.epg[3].items?.length > 0) {
     // console.log(gameContent)
@@ -41,7 +41,9 @@ export const GameRecap = ({ gameContent, isEditorial }) => {
         </table>
       </div>
     );
-  } else if (!isEditorial && gameContent.media && gameContent.media.epg[2].items?.length > 0) {
+  }
+
+  if (!isEditorial && gameContent.media && gameContent.media.epg[2].items?.length > 0) {
     return (
       <div>
         <table>
@@ -67,5 +69,9 @@ export const GameRecap = ({ gameContent, isEditorial }) => {
         </table>
       </div>
     );
-  } else return <h1>No Recap videos available yet</h1>;
-};
+  }
+
+  return <h1>No Recap videos available yet</h1>;
+}
+
+export default GameRecap;

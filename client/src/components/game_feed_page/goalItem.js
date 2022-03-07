@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 import './goalItem.css';
 
 // images
-import logos from '../img/images';
+import logos from '../img/logos';
 
-export const GoalItem = ({ goalData, gameContent }) => {
+function GoalItem({ goalData, gameContent }) {
   const videoRef = useRef();
   const [goalContent, setGoalContent] = useState(null);
   const [scorer, setScorer] = useState('');
@@ -18,17 +18,17 @@ export const GoalItem = ({ goalData, gameContent }) => {
   // const previousUrl = useRef(goalContent.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
 
   useEffect(() => {
-    //console.log(goalData)
-    //console.log(gameContent)
+    // console.log(goalData)
+    // console.log(gameContent)
 
     if (gameContent.media.milestones.items) {
-      for (var i = 0; i < gameContent.media.milestones.items.length; i++) {
-        if (parseInt(gameContent.media.milestones.items[i].statsEventId) === goalData.about.eventId)
+      for (let i = 0; i < gameContent.media.milestones.items.length; i += 1) {
+        if (parseInt(gameContent.media.milestones.items[i].statsEventId, 10) === goalData.about.eventId)
           if (
             gameContent.media.milestones.items[i].highlight &&
             gameContent.media.milestones.items[i].highlight.playbacks?.length > 3
           ) {
-            console.log('found the video');
+            // console.log('found the video');
             setGoalContent({
               ...gameContent.media.milestones.items[i].highlight,
             });
@@ -36,7 +36,7 @@ export const GoalItem = ({ goalData, gameContent }) => {
       }
     }
 
-    var bFirstAssist = false;
+    let bFirstAssist = false;
 
     goalData.players.map(player => {
       if (player.playerType === 'Scorer') setScorer(player);
@@ -52,11 +52,11 @@ export const GoalItem = ({ goalData, gameContent }) => {
         }
       }
     });
-  }, [goalData, gameContent]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [goalData, gameContent]);
 
   useEffect(() => {
     videoRef?.current?.load();
-  }, [goalContent]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [goalContent]);
 
   return (
     <div>
@@ -82,8 +82,8 @@ export const GoalItem = ({ goalData, gameContent }) => {
             <tr>
               <th>Scorer:</th>
               <td>
-                <Link to={'/playerInfo/' + scorer.player.id} style={{ textDecoration: 'none', color: '#000099' }}>
-                  {scorer.player.fullName + ' (' + scorer.seasonTotal + ')'}
+                <Link to={`/playerInfo/${scorer.player.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                  {`${scorer.player.fullName} (${scorer.seasonTotal})`}
                 </Link>
               </td>
             </tr>
@@ -92,8 +92,8 @@ export const GoalItem = ({ goalData, gameContent }) => {
             <tr>
               <th>1st Assists:</th>
               <td>
-                <Link to={'/playerInfo/' + firstAssist.player.id} style={{ textDecoration: 'none', color: '#000099' }}>
-                  {firstAssist.player.fullName + ' (' + firstAssist.seasonTotal + ')'}
+                <Link to={`/playerInfo/${firstAssist.player.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                  {`${firstAssist.player.fullName} (${firstAssist.seasonTotal})`}
                 </Link>
               </td>
             </tr>
@@ -102,8 +102,8 @@ export const GoalItem = ({ goalData, gameContent }) => {
             <tr>
               <th>2nd Assists:</th>
               <td>
-                <Link to={'/playerInfo/' + secondAssist.player.id} style={{ textDecoration: 'none', color: '#000099' }}>
-                  {secondAssist.player.fullName + ' (' + secondAssist.seasonTotal + ')'}
+                <Link to={`/playerInfo/${secondAssist.player.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                  {`${secondAssist.player.fullName} (${secondAssist.seasonTotal})`}
                 </Link>
               </td>
             </tr>
@@ -112,4 +112,6 @@ export const GoalItem = ({ goalData, gameContent }) => {
       </table>
     </div>
   );
-};
+}
+
+export default GoalItem;

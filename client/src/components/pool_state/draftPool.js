@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import ClipLoader from 'react-spinners/ClipLoader';
+
+// css
 import '../react-tabs.css';
-import logos from '../img/images';
+
+// logos
+import logos from '../img/logos';
 
 // Loader
-import ClipLoader from 'react-spinners/ClipLoader';
 
 function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
   const [inRoom, setInRoom] = useState(false);
@@ -16,85 +20,12 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
   const [searchText, setSearchText] = useState('');
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    if (socket && poolName && username) {
-      socket.emit('joinRoom', Cookies.get('token-' + username), poolName);
-      fetchPlayerDraft();
-      setInRoom(true);
-    }
-    return () => {
-      if (socket && poolName) {
-        socket.emit('leaveRoom', Cookies.get('token-' + username), poolName);
-        socket.off('roomData');
-        setInRoom(false);
-      }
-    };
-  }, [username]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('poolInfo', data => {
-        setPoolInfo(data);
-      });
-    }
-  }, [socket]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Draft methods
-  const fetchPlayerDraft = async () => {
-    var cookie = Cookies.get('token-' + username);
-
-    // get all players stats from past season
-    const requestOptions = {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json', token: cookie },
-    };
-    fetch('../pool/get_all_players', requestOptions)
-      .then(response => response.json())
-      .then(data => {
-        if (data.success === 'False') {
-          //props.history.push('/pool_list');
-        } else {
-          var sortedForwards = [];
-          var sortedDefender = [];
-          var sortedGoalies = [];
-
-          sortedForwards = sort_by_player_member('pts', data.message['F']);
-          sortedDefender = sort_by_player_member('pts', data.message['D']);
-          sortedGoalies = sort_by_player_member('wins', data.message['G']);
-
-          setForw_l([...sortedForwards]);
-          setDef_l([...sortedDefender]);
-          setGoal_l([...sortedGoalies]);
-        }
-      });
-  };
-
-  const sort_players = async (stats, position) => {
-    var players = [];
-
-    if (position === 'D') {
-      players = def_l;
-      players = await sort_by_player_member(stats, def_l);
-      setDef_l([...players]);
-    } else if (position === 'F') {
-      players = forw_l;
-      players = await sort_by_player_member(stats, players);
-      setForw_l([...players]);
-    } else if (position === 'G') {
-      players = goal_l;
-      players = await sort_by_player_member(stats, players);
-      setGoal_l([...players]);
-    }
-  };
-
   const sort_by_player_member = (playerMember, array) => {
     // TODO: try to simplified this into no if at all
     if (playerMember !== 'name' && playerMember !== 'team')
-      array.sort(function (a, b) {
-        return b.stats[playerMember] - a.stats[playerMember];
-      });
+      array.sort((a, b) => b.stats[playerMember] - a.stats[playerMember]);
     else {
-      array.sort(function (a, b) {
+      array.sort((a, b) => {
         if (a[playerMember] < b[playerMember]) {
           return -1;
         }
@@ -108,12 +39,76 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
     return array;
   };
 
+  const fetchPlayerDraft = async () => {
+    const cookie = Cookies.get(`token-${username}`);
+
+    // get all players stats from past season
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', token: cookie },
+    };
+    fetch('../pool/get_all_players', requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        if (data.success === 'False') {
+          // props.history.push('/pool_list');
+        } else {
+          const sortedForwards = sort_by_player_member('pts', data.message.F);
+          const sortedDefender = sort_by_player_member('pts', data.message.D);
+          const sortedGoalies = sort_by_player_member('wins', data.message.G);
+
+          setForw_l([...sortedForwards]);
+          setDef_l([...sortedDefender]);
+          setGoal_l([...sortedGoalies]);
+        }
+      });
+  };
+
+  useEffect(() => {
+    if (socket && poolName && username) {
+      socket.emit('joinRoom', Cookies.get(`token-${username}`), poolName);
+      fetchPlayerDraft();
+      setInRoom(true);
+    }
+    return () => {
+      if (socket && poolName) {
+        socket.emit('leaveRoom', Cookies.get(`token-${username}`), poolName);
+        socket.off('roomData');
+        setInRoom(false);
+      }
+    };
+  }, [username]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('poolInfo', data => {
+        setPoolInfo(data);
+      });
+    }
+  }, [socket]);
+
+  const sort_players = async (stats, position) => {
+    if (position === 'D') {
+      let players = def_l;
+      players = await sort_by_player_member(stats, def_l);
+      setDef_l([...players]);
+    } else if (position === 'F') {
+      let players = forw_l;
+      players = await sort_by_player_member(stats, players);
+      setForw_l([...players]);
+    } else if (position === 'G') {
+      let players = goal_l;
+      players = await sort_by_player_member(stats, players);
+      setGoal_l([...players]);
+    }
+  };
+
   const player_selection = (name, team, role) => {
-    setSelectedPlayer({ name: name, team: team, role: role });
+    setSelectedPlayer({ name, team, role });
   };
 
   const chose_player = player => {
-    socket.emit('pickPlayer', Cookies.get('token-' + username), poolInfo.name, player, ack => {
+    socket.emit('pickPlayer', Cookies.get(`token-${username}`), poolInfo.name, player, ack => {
       if (ack.success === 'False') {
         setMessage(ack.message);
       } else {
@@ -127,14 +122,12 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
   };
 
   const filter_players = player => {
-    var participant;
-
     if (!player.name.toLowerCase().includes(searchText.toLowerCase())) {
       return true; // not part of the search text
     }
 
-    for (var i = 0; i < poolInfo.participants.length; i++) {
-      participant = poolInfo.participants[i];
+    for (let i = 0; i < poolInfo.participants.length; i += 1) {
+      const participant = poolInfo.participants[i];
 
       if (
         poolInfo.context[participant].chosen_reservist.findIndex(
@@ -160,174 +153,122 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
         ) {
           return true; // already picked
         }
-      } else {
-        if (
-          poolInfo.context[participant].chosen_goalies.findIndex(
-            p => p.name === player.name && p.team === player.team
-          ) > -1
-        ) {
-          return true; // already picked
-        }
+      } else if (
+        poolInfo.context[participant].chosen_goalies.findIndex(p => p.name === player.name && p.team === player.team) >
+        -1
+      ) {
+        return true; // already picked
       }
     }
-    return false; // part of the search text and available
+
+    return false;
   };
 
-  const render_defender = pooler => {
-    if (poolInfo['context'][pooler]) {
-      return poolInfo['context'][pooler]['chosen_defender'].map((player, i) => (
-        <tr key={i}>
+  const render_players = (pooler, chosen_player_key) => {
+    if (poolInfo.context[pooler]) {
+      return poolInfo.context[pooler][chosen_player_key].map((player, i) => (
+        <tr key={player.name}>
           <td>{i + 1}</td>
           <td>{player.name}</td>
           <td>
-            <img src={logos[player.team]} alt="" width="30" height="30"></img>
+            <img src={logos[player.team]} alt="" width="30" height="30" />
           </td>
         </tr>
       ));
-    } else {
-      return;
     }
+
+    return null;
   };
 
-  const render_forward = pooler => {
-    if (poolInfo['context'][pooler]) {
-      return poolInfo['context'][pooler]['chosen_forward'].map((player, i) => (
-        <tr key={i}>
-          <td>{i + 1}</td>
-          <td>{player.name}</td>
-          <td>
-            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-          </td>
-        </tr>
-      ));
-    } else {
-      return;
-    }
-  };
-
-  const render_reservist = pooler => {
-    if (poolInfo['context'][pooler]) {
-      return poolInfo['context'][pooler]['chosen_reservist'].map((player, i) => (
-        <tr key={i}>
-          <td>{i + 1}</td>
-          <td>{player.name}</td>
-          <td>
-            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-          </td>
-        </tr>
-      ));
-    } else {
-      return;
-    }
-  };
-
-  const render_goalies = pooler => {
-    if (poolInfo['context'][pooler]) {
-      return poolInfo['context'][pooler]['chosen_goalies'].map((player, i) => (
-        <tr key={i}>
-          <td>{i + 1}</td>
-          <td>{player.name}</td>
-          <td>
-            <img src={logos[player.team]} alt="" width="30" height="30"></img>
-          </td>
-        </tr>
-      ));
-    } else {
-      return;
-    }
-  };
-
-  const isUser = participant => {
-    return participant === username;
-  };
+  const isUser = participant => participant === username;
 
   const render_tabs_choice = () => {
-    if (poolInfo['participants']) {
-      var poolers = poolInfo['participants'];
+    if (poolInfo.participants) {
+      const poolers = poolInfo.participants;
 
       // replace pooler user name to be first
-      var i = poolers.findIndex(isUser);
+      const i = poolers.findIndex(isUser);
       poolers.splice(i, 1);
       poolers.splice(0, 0, username);
 
       return (
         <Tabs>
           <TabList>
-            {poolers.map((pooler, i) => (
-              <Tab key={i}>{pooler}</Tab>
+            {poolers.map(pooler => (
+              <Tab key={pooler}>{pooler}</Tab>
             ))}
           </TabList>
-          {poolers.map((pooler, i) => {
-            return (
-              <TabPanel>
-                <table className="content-table">
-                  <thead>
-                    <tr>
-                      <th colSpan={3}>Forwards</th>
-                    </tr>
-                    <tr>
-                      <th>#</th>
-                      <th>name</th>
-                      <th>team</th>
-                    </tr>
-                  </thead>
-                  <tbody>{render_forward(pooler)}</tbody>
-                </table>
-                <table className="content-table">
-                  <thead>
-                    <tr>
-                      <th colSpan={3}>Defenders</th>
-                    </tr>
-                    <tr>
-                      <th>#</th>
-                      <th>name</th>
-                      <th>team</th>
-                    </tr>
-                  </thead>
-                  <tbody>{render_defender(pooler)}</tbody>
-                </table>
-                <table className="content-table">
-                  <thead>
-                    <tr>
-                      <th colSpan={3}>Goalies</th>
-                    </tr>
-                    <tr>
-                      <th>#</th>
-                      <th>name</th>
-                      <th>team</th>
-                    </tr>
-                  </thead>
-                  <tbody>{render_goalies(pooler)}</tbody>
-                </table>
-                <table className="content-table">
-                  <thead>
-                    <tr>
-                      <th colSpan={3}>Reservists</th>
-                    </tr>
-                    <tr>
-                      <th>#</th>
-                      <th>name</th>
-                      <th>team</th>
-                    </tr>
-                  </thead>
-                  <tbody>{render_reservist(pooler)}</tbody>
-                </table>
-              </TabPanel>
-            );
-          })}
+          {poolers.map(pooler => (
+            <TabPanel>
+              <table className="content-table">
+                <thead>
+                  <tr>
+                    <th colSpan={3}>Forwards</th>
+                  </tr>
+                  <tr>
+                    <th>#</th>
+                    <th>name</th>
+                    <th>team</th>
+                  </tr>
+                </thead>
+                <tbody>{render_players(pooler, 'chosen_forward')}</tbody>
+              </table>
+              <table className="content-table">
+                <thead>
+                  <tr>
+                    <th colSpan={3}>Defenders</th>
+                  </tr>
+                  <tr>
+                    <th>#</th>
+                    <th>name</th>
+                    <th>team</th>
+                  </tr>
+                </thead>
+                <tbody>{render_players(pooler, 'chosen_defender')}</tbody>
+              </table>
+              <table className="content-table">
+                <thead>
+                  <tr>
+                    <th colSpan={3}>Goalies</th>
+                  </tr>
+                  <tr>
+                    <th>#</th>
+                    <th>name</th>
+                    <th>team</th>
+                  </tr>
+                </thead>
+                <tbody>{render_players(pooler, 'chosen_goalies')}</tbody>
+              </table>
+              <table className="content-table">
+                <thead>
+                  <tr>
+                    <th colSpan={3}>Reservists</th>
+                  </tr>
+                  <tr>
+                    <th>#</th>
+                    <th>name</th>
+                    <th>team</th>
+                  </tr>
+                </thead>
+                <tbody>{render_players(pooler, 'chosen_reservist')}</tbody>
+              </table>
+            </TabPanel>
+          ))}
         </Tabs>
       );
-    } else {
-      return;
     }
+
+    return null;
   };
 
   const render_color_user_turn = () => {
+    let textColor = 'red-text';
+
     if (poolInfo.next_drafter === username) {
-      return <h2 className="green-text">{poolInfo.next_drafter}'s turn</h2>;
-    } else {
-      return <h2 className="red-text">{poolInfo.next_drafter}'s turn</h2>;
+      textColor = 'green-text';
     }
+
+    return <h2 className={textColor}>{poolInfo.next_drafter}&#39s turn</h2>;
   };
 
   if (poolInfo && inRoom) {
@@ -362,11 +303,11 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                         }
                         return null;
                       })
-                      .map((player, i) => (
-                        <tr onClick={() => player_selection(player.name, player.team, 'F')} key={i}>
+                      .map(player => (
+                        <tr onClick={() => player_selection(player.name, player.team, 'F')} key={player.name}>
                           <td>{player.name}</td>
                           <td>
-                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
+                            <img src={logos[player.team]} alt="" width="30" height="30" />
                           </td>
                           <td>{player.stats.games}</td>
                           <td>{player.stats.goals}</td>
@@ -395,11 +336,11 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                         }
                         return null;
                       })
-                      .map((player, i) => (
-                        <tr onClick={() => player_selection(player.name, player.team, 'D')} key={i}>
+                      .map(player => (
+                        <tr onClick={() => player_selection(player.name, player.team, 'D')} key={player.name}>
                           <td>{player.name}</td>
                           <td>
-                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
+                            <img src={logos[player.team]} alt="" width="30" height="30" />
                           </td>
                           <td>{player.stats.games}</td>
                           <td>{player.stats.goals}</td>
@@ -428,11 +369,11 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
                         }
                         return null;
                       })
-                      .map((player, i) => (
-                        <tr onClick={() => player_selection(player.name, player.team, 'G')} key={i}>
+                      .map(player => (
+                        <tr onClick={() => player_selection(player.name, player.team, 'G')} key={player.name}>
                           <td>{player.name}</td>
                           <td>
-                            <img src={logos[player.team]} alt="" width="30" height="30"></img>
+                            <img src={logos[player.team]} alt="" width="30" height="30" />
                           </td>
                           <td>{player.stats.games}</td>
                           <td>{player.stats.wins}</td>
@@ -450,7 +391,7 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
               {render_color_user_turn()}
               <h1>{selectedPlayer.name}</h1>
               <h3 className="red-text">{message}</h3>
-              <button onClick={() => chose_player(selectedPlayer)} disabled={false}>
+              <button onClick={() => chose_player(selectedPlayer)} disabled={false} type="button">
                 choose
               </button>
             </div>
@@ -459,13 +400,13 @@ function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
         </div>
       </div>
     );
-  } else {
-    return (
-      <div>
-        <h1>trying to join the pool draft...</h1>
-        <ClipLoader color="#fff" loading={true} /*css={override}*/ size={75} />
-      </div>
-    );
   }
+
+  return (
+    <div>
+      <h1>trying to join the pool draft...</h1>
+      <ClipLoader color="#fff" loading size={75} />
+    </div>
+  );
 }
 export default DraftPool;

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
+import Cookies from 'js-cookie';
 
 import { styleModal } from './styleModal';
 
-import Cookies from 'js-cookie';
-
-export const CreatePoolModal = ({ showCreatePoolModal, setShowCreatePoolModal, username }) => {
+function CreatePoolModal({ showCreatePoolModal, setShowCreatePoolModal, username }) {
   const [msg, setMsg] = useState('');
   const [poolNameInput, setPoolNameInput] = useState('');
   const [numberPoolerInput, setNumberPoolerInput] = useState(4);
@@ -15,7 +14,7 @@ export const CreatePoolModal = ({ showCreatePoolModal, setShowCreatePoolModal, u
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        token: Cookies.get('token-' + username),
+        token: Cookies.get(`token-${username}`),
       },
       body: JSON.stringify({
         name: poolNameInput,
@@ -67,20 +66,20 @@ export const CreatePoolModal = ({ showCreatePoolModal, setShowCreatePoolModal, u
               </select>
             </div>
           </form>
-          <button onClick={() => createPool()} disabled={false}>
+          <button onClick={() => createPool()} disabled={false} type="button">
             Create
           </button>
           <p style={{ color: 'red' }}>{msg}</p>
         </div>
       );
-    } else {
-      return (
-        <div className="modal_content">
-          <h1>{username}</h1>
-          <p>You need to be logged in to create a pool.</p>
-        </div>
-      );
     }
+
+    return (
+      <div className="modal_content">
+        <h1>{username}</h1>
+        <p>You need to be logged in to create a pool.</p>
+      </div>
+    );
   };
 
   return (
@@ -88,4 +87,6 @@ export const CreatePoolModal = ({ showCreatePoolModal, setShowCreatePoolModal, u
       {isLoggedRender()}
     </Modal>
   );
-};
+}
+
+export default CreatePoolModal;

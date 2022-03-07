@@ -3,7 +3,7 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["react-app", "airbnb", "prettier"],
+  "extends": ["airbnb", "prettier"],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -12,5 +12,8 @@
     "sourceType": "module"
   },
   "plugins": ["react", "prettier"],
-  "rules": {}
+  "rules": {
+    "camelcase": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }] // TODO: remove this when migrating all files to jsx
+  }
 }

@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import './WalletCard.css';
-import NHLGamePredictionsABI from '../../NHLGamePredictionsABI.json';
-// icons
-import LOCKED from '../img/web3/Locked_icon_red.svg';
-import UNLOCKED from '../img/web3/Green_dot.svg';
-
 import Cookies from 'js-cookie';
 
-const WalletCard = ({ user, setUser, contract, setContract }) => {
+// ABI
+import NHLGamePredictionsABI from '../../NHLGamePredictionsABI.json';
+
+// css
+import './WalletCard.css';
+
+// icons
+import LOCKED from '../img/web3/Locked_icon_red.svg';
+import UNLOCKED from '../img/web3/Locked_icon_red.svg';
+
+function WalletCard({ user, setUser, contract, setContract }) {
   const [networkName, setNetworkName] = useState('');
   const [isWrongNetwork, setIsWrongNetwork] = useState(false);
   const [isWalletUnlocked, setIsWalletUnlocked] = useState(false);
@@ -17,19 +21,23 @@ const WalletCard = ({ user, setUser, contract, setContract }) => {
 
   useEffect(() => {
     if (window.ethereum) {
-      console.log('trying to connect to read wallet');
+      // console.log('trying to connect to read wallet');
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
 
       signer
         .getAddress()
         .then(address => {
-          console.log('wallet is unlocked: ' + address);
+          console.log(`wallet is unlocked: ${address}`);
           provider.getNetwork().then(network => {
-            console.log(network);
+            // console.log(network);
             network.chainId === 1 ? setNetworkName('Ethereum') : setNetworkName(network.name);
             if (network.name === 'kovan') {
-              let c = new ethers.Contract('0x4e5e10C3Ef12663ba231d16b915372E0E69D1ffe', NHLGamePredictionsABI, signer);
+              const c = new ethers.Contract(
+                '0x4e5e10C3Ef12663ba231d16b915372E0E69D1ffe',
+                NHLGamePredictionsABI,
+                signer
+              );
               setContract(c);
             } else {
               setIsWrongNetwork(true);
@@ -37,7 +45,7 @@ const WalletCard = ({ user, setUser, contract, setContract }) => {
             }
           });
         })
-        .catch(err => alert('Your metamask account is not unlocked!'));
+        .catch(alert('Your metamask account is not unlocked!'));
     }
 
     const user = JSON.parse(localStorage.getItem('persist-account'));
@@ -48,8 +56,8 @@ const WalletCard = ({ user, setUser, contract, setContract }) => {
     }
 
     if (window.ethereum && user) {
-      console.log(user.addr);
-      const token = Cookies.get('token-' + user.addr);
+      // console.log(user.addr);
+      const token = Cookies.get(`token-${user.addr}`);
 
       if (token) {
         // TODO: also validate that the token is not expired
@@ -57,7 +65,7 @@ const WalletCard = ({ user, setUser, contract, setContract }) => {
         setIsWalletConnected(true);
       }
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const connectWalletHandler = () => {
     // const provider = new ethers.providers.Web3Provider(window.ethereum) // TODO: use const provider = new ethers.providers.Web3Provider(window.ethereum) instead
@@ -70,7 +78,7 @@ const WalletCard = ({ user, setUser, contract, setContract }) => {
           setCurrentAddr(result[0]);
           setIsWalletConnected(true);
 
-          const token = Cookies.get('token-' + result[0]);
+          const token = Cookies.get(`token-${result[0]}`);
 
           if (token) {
             // TODO: also validate that the token is not expired
@@ -97,7 +105,7 @@ const WalletCard = ({ user, setUser, contract, setContract }) => {
             const requestOptions = {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ addr: addr, sig: sig }),
+              body: JSON.stringify({ addr, sig }),
             };
             fetch('/auth/login', requestOptions)
               .then(response => response.json())
@@ -106,7 +114,7 @@ const WalletCard = ({ user, setUser, contract, setContract }) => {
                   // console.log(result[0])
                   // console.log(addr)
 
-                  Cookies.set('token-' + addr, data.token);
+                  Cookies.set(`token-${addr}`, data.token);
                   localStorage.setItem('persist-account', JSON.stringify(data.user));
                   setUser(data.user);
 
@@ -126,9 +134,8 @@ const WalletCard = ({ user, setUser, contract, setContract }) => {
     window.location.reload();
   };
 
-  const isCurrentWalletUnlocked = () => {
-    return user ? isWalletUnlocked && user.addr.toLowerCase() === currentAddr.toLowerCase() : false;
-  };
+  const isCurrentWalletUnlocked = () =>
+    user ? isWalletUnlocked && user.addr.toLowerCase() === currentAddr.toLowerCase() : false;
 
   if (window.ethereum) {
     window.ethereum.on('accountsChanged', connectWalletHandler);
@@ -137,23 +144,25 @@ const WalletCard = ({ user, setUser, contract, setContract }) => {
 
   const switchChain = () => {
     // reload the page to avoid any errors with chain change mid use of application
-    console.log('try to switch chain!');
+
     window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2A' }] }).catch(error => {
-      console.log(error);
+      // console.log(error);
     });
   };
 
   return (
     <li className="walletCard">
-      <button onClick={!isWalletConnected ? connectWalletHandler : !isCurrentWalletUnlocked() ? unlockWallet : null}>
+      <button
+        onClick={!isWalletConnected ? connectWalletHandler : !isCurrentWalletUnlocked() ? unlockWallet : null}
+        type="button"
+      >
         <div className="accountDisplay">
-          <img src={isCurrentWalletUnlocked() ? UNLOCKED : LOCKED} alt="" width="15" height="15"></img>
-          <b>{currentAddr ? currentAddr.substring(0, 6) + '...' + currentAddr.slice(-4) : 'Connect Wallet'}</b>
-          {/*user? <h3>session addr: {user.addr}</h3> : null*/}
+          <img src={isCurrentWalletUnlocked() ? UNLOCKED : LOCKED} alt="" width="15" height="15" />
+          <b>{currentAddr ? `${currentAddr.substring(0, 6)}...${currentAddr.slice(-4)}` : 'Connect Wallet'}</b>
         </div>
       </button>
       {isWalletConnected ? (
-        <button onClick={isWrongNetwork ? switchChain : null} disabled={!isWrongNetwork}>
+        <button onClick={isWrongNetwork ? switchChain : null} disabled={!isWrongNetwork} type="button">
           <b style={isWrongNetwork ? { color: '#b00' } : { color: '#00a' }}>{networkName}</b>
         </button>
       ) : null}
@@ -162,6 +171,6 @@ const WalletCard = ({ user, setUser, contract, setContract }) => {
 			</div> */}
     </li>
   );
-};
+}
 
 export default WalletCard;

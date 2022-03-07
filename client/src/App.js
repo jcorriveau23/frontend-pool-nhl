@@ -13,9 +13,9 @@ import Logo from './components/img/logo/logo.svg';
 import TodayGamesFeed from './components/game_feed/dayGamesFeed';
 
 // modals
-import { RegisterModal } from './modals/register';
+import RegisterModal from './modals/register';
 
-//pages
+// pages
 import HomePage from './pages/home_page';
 import MyPoolsPage from './pages/myPools_page';
 import PoolPage from './pages/pool_page';
@@ -38,7 +38,7 @@ function App() {
   useEffect(() => {}, []);
 
   const Disconnect = () => {
-    Cookies.remove('token-' + user.addr);
+    Cookies.remove(`token-${user.addr}`);
     localStorage.clear('persist-account');
     window.location.reload(true);
   };
@@ -50,7 +50,7 @@ function App() {
           <div>
             <ul>
               <div>
-                <img src={Logo} alt="" width="100" height="75"></img>
+                <img src={Logo} alt="" width="100" height="75" />
               </div>
               <div className="inline-left-right">
                 <li>
@@ -92,26 +92,23 @@ function App() {
         </nav>
       </div>
       <div>
-        <TodayGamesFeed></TodayGamesFeed>
+        <TodayGamesFeed />
       </div>
       <div>
-        <RegisterModal
-          showRegisterModal={showRegisterModal}
-          setShowRegisterModal={setShowRegisterModal}
-        ></RegisterModal>
+        <RegisterModal showRegisterModal={showRegisterModal} setShowRegisterModal={setShowRegisterModal} />
         <Routes>
-          <Route path="/" element={<HomePage />}></Route>
-          <Route path="/MyPools" element={<MyPoolsPage user={user} />}></Route>
-          <Route path="/MyGameBets" element={<MyGameBetsPage user={user} contract={contract} />}></Route>
-          <Route path="/MyPools/:name" element={<PoolPage user={user} />}></Route>
-          <Route path="/standing" element={<StandingPage />}></Route>
-          <Route path="/gameFeed/:id" element={<GameFeedPage user={user} contract={contract} />}></Route>
-          <Route path="/playerInfo" element={<PlayerPage />}></Route>
-          <Route path="/playerInfo/:id" element={<PlayerPage />}></Route>
-          <Route path="/teamRosterBySeason/:teamID/:season" element={<TeamRosterBySeasonPage />}></Route>
-          <Route path="/draft" element={<DraftPage />}></Route>
-          <Route path="/draft/:year" element={<DraftPage />}></Route>
-          <Route path="/leaders" element={<LeagueLeadersPage />}></Route>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/MyPools" element={<MyPoolsPage user={user} />} />
+          <Route path="/MyGameBets" element={<MyGameBetsPage user={user} contract={contract} />} />
+          <Route path="/MyPools/:name" element={<PoolPage user={user} />} />
+          <Route path="/standing" element={<StandingPage />} />
+          <Route path="/gameFeed/:id" element={<GameFeedPage user={user} contract={contract} />} />
+          <Route path="/playerInfo" element={<PlayerPage />} />
+          <Route path="/playerInfo/:id" element={<PlayerPage />} />
+          <Route path="/teamRosterBySeason/:teamID/:season" element={<TeamRosterBySeasonPage />} />
+          <Route path="/draft" element={<DraftPage />} />
+          <Route path="/draft/:year" element={<DraftPage />} />
+          <Route path="/leaders" element={<LeagueLeadersPage />} />
         </Routes>
       </div>
     </Router>

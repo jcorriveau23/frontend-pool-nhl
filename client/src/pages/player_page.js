@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 // components
-import { SearchPlayer } from '../components/player_page/searchPlayer';
+import SearchPlayer from '../components/player_page/searchPlayer';
 
 // css
 import '../components/player_page/player_page.css';
@@ -23,36 +23,38 @@ function PlayerPage() {
   const playerID = window.location.pathname.split('/').pop();
 
   useEffect(() => {
-    if (prevPlayerID !== playerID && !isNaN(playerID)) {
-      if (parseInt(playerID) > 8000000) {
-        //console.log("fetching NHL player")
-        fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYear') // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
+    const ID = parseInt(playerID, 10);
+
+    if (prevPlayerID !== playerID && !Number.isNaN(ID)) {
+      if (ID > 8000000) {
+        // console.log("fetching NHL player")
+        fetch(`https://statsapi.web.nhl.com/api/v1/people/${playerID}/stats?stats=yearByYear`) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
           .then(response => response.json())
-          .then(playerStats => {
-            // console.log(playerStats)
-            setPlayerStats({ ...playerStats });
+          .then(p => {
+            // console.log(p)
+            setPlayerStats({ ...p });
           });
-        fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID + '/stats?stats=yearByYearPlayoffs') // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYearPlayoffs
+        fetch(`https://statsapi.web.nhl.com/api/v1/people/${playerID}/stats?stats=yearByYearPlayoffs`) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYearPlayoffs
           .then(response => response.json())
-          .then(playerPlayoffStats => {
-            // console.log(playerPlayoffStats)
-            setPlayerPlayoffStats({ ...playerPlayoffStats });
+          .then(p => {
+            // console.log(p)
+            setPlayerPlayoffStats({ ...p });
           });
-        fetch('https://statsapi.web.nhl.com/api/v1/people/' + playerID) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
+        fetch(`https://statsapi.web.nhl.com/api/v1/people/${playerID}`) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
           .then(response => response.json())
-          .then(playerInfo => {
-            setPlayerInfo({ ...playerInfo });
+          .then(p => {
+            setPlayerInfo({ ...p });
           });
       } else {
-        //console.log("fetching prospect")
-        fetch('https://statsapi.web.nhl.com/api/v1/draft/prospects/' + playerID) // https://statsapi.web.nhl.com/api/v1/draft/prospects/76849
+        // console.log("fetching prospect")
+        fetch(`https://statsapi.web.nhl.com/api/v1/draft/prospects/${playerID}`) // https://statsapi.web.nhl.com/api/v1/draft/prospects/76849
           .then(response => response.json())
-          .then(prospect => {
-            setProspectInfo({ ...prospect.prospects[0] });
-            //console.log(prospect.prospects[0])
-            if (prospect.prospects[0].nhlPlayerId > 8000000 && !hasNavigated) {
+          .then(p => {
+            setProspectInfo({ ...p.prospects[0] });
+            // console.log(p.prospects[0])
+            if (p.prospects[0].nhlPlayerId > 8000000 && !hasNavigated) {
               setHaseNavigated(true);
-              navigate('/playerInfo/' + prospect.prospects[0].nhlPlayerId);
+              navigate(`/playerInfo/${p.prospects[0].nhlPlayerId}`);
             }
           });
       }
@@ -63,28 +65,7 @@ function PlayerPage() {
       setProspectInfo(null);
       setPrevPlayerID('');
     }
-  }, [location]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const render_player_info_stats = (stats, info) => {
-    return (
-      <div>
-        {render_player_info(info)}
-        {info.primaryPosition.abbreviation !== 'G' ? render_skater_stats(stats) : render_goalie_stats(stats)}
-      </div>
-    );
-  };
-
-  const get_playoff_stats = season => {
-    for (var i = 0; i < playerPlayoffStats.stats[0].splits.length; i++) {
-      if (
-        playerPlayoffStats.stats[0].splits[i].season === season.season &&
-        playerPlayoffStats.stats[0].splits[i].league.name === season.league.name
-      ) {
-        return playerPlayoffStats.stats[0].splits[i];
-      }
-    }
-    return null;
-  };
+  }, [location]);
 
   const get_league_row_color = leagueName => {
     switch (leagueName) {
@@ -98,6 +79,7 @@ function PlayerPage() {
       case 'Finland':
       case 'Czechia':
       case 'Rus-KHL':
+      case 'KHL':
         return '#a3cf97';
       case 'ECAC':
       case 'NCAA':
@@ -124,23 +106,35 @@ function PlayerPage() {
     }
   };
 
+  const get_playoff_stats = season => {
+    for (let i = 0; i < playerPlayoffStats.stats[0].splits.length; i += 1) {
+      if (
+        playerPlayoffStats.stats[0].splits[i].season === season.season &&
+        playerPlayoffStats.stats[0].splits[i].league.name === season.league.name
+      ) {
+        return playerPlayoffStats.stats[0].splits[i];
+      }
+    }
+    return null;
+  };
+
   const render_skater_stats = stats => {
-    var totGames = 0;
-    var totGoals = 0;
-    var totAssists = 0;
-    var totPoints = 0;
-    var totPlusMinus = 0;
-    var totPenaltyMinutes = 0;
-    // var totShots = 0
-    // var totHits = 0
-    // var totBlocks = 0
-    // var totPPG = 0
-    var playoffTotGames = 0;
-    var playoffTotGoals = 0;
-    var playoffTotAssists = 0;
-    var playoffTotPoints = 0;
-    var playoffTotPlusMinus = 0;
-    var playoffTotPenaltyMinutes = 0;
+    let totGames = 0;
+    let totGoals = 0;
+    let totAssists = 0;
+    let totPoints = 0;
+    let totPlusMinus = 0;
+    let totPenaltyMinutes = 0;
+    // let totShots = 0
+    // let totHits = 0
+    // let totBlocks = 0
+    // let totPPG = 0
+    let playoffTotGames = 0;
+    let playoffTotGoals = 0;
+    let playoffTotAssists = 0;
+    let playoffTotPoints = 0;
+    let playoffTotPlusMinus = 0;
+    let playoffTotPenaltyMinutes = 0;
 
     return (
       <table className="content-table">
@@ -149,7 +143,7 @@ function PlayerPage() {
             <th colSpan="15">Career Stats</th>
           </tr>
           <tr>
-            <th colSpan="3"></th>
+            <th colSpan="3">{null}</th>
             <th colSpan="6">Regular Season</th>
             <th colSpan="6">Playoffs</th>
           </tr>
@@ -164,14 +158,14 @@ function PlayerPage() {
             <th>+/-</th>
             <th>PIM</th>
             {/* <th>S</th>
-                        <th>S%</th>
-                        <th>HITS</th>
-                        <th>BLKS</th>
-                        <th>PPG</th>
-                        <th>FO%</th>
-                        <th>TOI</th>
-                        <th>PP TOI</th>
-                        <th>SH TOI</th> */}
+                <th>S%</th>
+                <th>HITS</th>
+                <th>BLKS</th>
+                <th>PPG</th>
+                <th>FO%</th>
+                <th>TOI</th>
+                <th>PP TOI</th>
+                <th>SH TOI</th> */}
             <th>Games</th>
             <th>G</th>
             <th>A</th>
@@ -181,8 +175,8 @@ function PlayerPage() {
           </tr>
         </thead>
         <tbody>
-          {stats.map((season, i) => {
-            var playoffStats = get_playoff_stats(season);
+          {stats.map(season => {
+            const playoffStats = get_playoff_stats(season);
 
             if (season.league.id === 133) {
               // ID 133 means the league is NHL. We than addition all of the stats.
@@ -190,40 +184,42 @@ function PlayerPage() {
               totGoals += season.stat.goals;
               totAssists += season.stat.assists;
               totPoints += season.stat.points;
-              totPlusMinus += isNaN(season.stat.plusMinus) ? 0 : season.stat.plusMinus;
-              totPenaltyMinutes += parseInt(season.stat.penaltyMinutes);
+              totPlusMinus += Number.isNaN(Number(season.stat.plusMinus)) ? 0 : season.stat.plusMinus;
+              totPenaltyMinutes += parseInt(season.stat.penaltyMinutes, 10);
               if (playoffStats) {
                 playoffTotGames += playoffStats.stat.games;
                 playoffTotGoals += playoffStats.stat.goals;
                 playoffTotAssists += playoffStats.stat.assists;
                 playoffTotPoints += playoffStats.stat.points;
-                playoffTotPlusMinus += isNaN(playoffStats.stat.plusMinus) ? 0 : playoffStats.stat.plusMinus;
-                playoffTotPenaltyMinutes += parseInt(playoffStats.stat.penaltyMinutes);
+                playoffTotPlusMinus += Number.isNaN(Number(playoffStats.stat.plusMinus))
+                  ? 0
+                  : playoffStats.stat.plusMinus;
+                playoffTotPenaltyMinutes += parseInt(playoffStats.stat.penaltyMinutes, 10);
               }
-              // totShots += isNaN(season.stat.shots)? 0 : season.stat.shots
-              // totHits += isNaN(season.stat.hits)? 0 : season.stat.hits
-              // totBlocks += isNaN(season.stat.blocked)? 0 : season.stat.blocked
-              // totPPG += isNaN(season.stat.powerPlayGoals)? 0 : season.stat.powerPlayGoals
+              // totShots += Number.isNaN(season.stat.shots)? 0 : season.stat.shots
+              // totHits += Number.isNaN(season.stat.hits)? 0 : season.stat.hits
+              // totBlocks += Number.isNaN(season.stat.blocked)? 0 : season.stat.blocked
+              // totPPG += Number.isNaN(season.stat.powerPlayGoals)? 0 : season.stat.powerPlayGoals
             }
 
             return (
-              <tr key={i} style={{ backgroundColor: get_league_row_color(season.league.name) }}>
+              <tr key={season.season} style={{ backgroundColor: get_league_row_color(season.league.name) }}>
                 <td>{season.team.name}</td>
                 {season.league.id === 133 ? ( // nhl league
                   <>
                     <td>
                       <Link
-                        to={'/teamRosterBySeason/' + season.team.id + '/' + season.season}
+                        to={`/teamRosterBySeason/${season.team.id}/${season.season}`}
                         style={{ textDecoration: 'none', color: '#0000ff' }}
                       >
-                        {season.season.slice(0, 4) + '-' + season.season.slice(4)}
+                        {`${season.season.slice(0, 4)}-${season.season.slice(4)}`}
                       </Link>
                     </td>
                     <td>NHL</td>
                   </>
                 ) : (
                   <>
-                    <td>{season.season.slice(0, 4) + '-' + season.season.slice(4)}</td>
+                    <td>{`${season.season.slice(0, 4)}-${season.season.slice(4)}`}</td>
                     <td>{season.league.name}</td>
                   </>
                 )}
@@ -240,14 +236,14 @@ function PlayerPage() {
                 <td>{playoffStats ? playoffStats.stat.plusMinus : '-'}</td>
                 <td>{playoffStats ? playoffStats.stat.penaltyMinutes : '-'}</td>
                 {/* <td>{season.stat.shots}</td>
-                                <td>{season.stat.shotPct}</td>
-                                <td>{season.stat.hits}</td>
-                                <td>{season.stat.blocked}</td>
-                                <td>{season.stat.powerPlayGoals}</td>
-                                <td>{season.stat.faceOffPct}</td>
-                                <td>{season.stat.timeOnIce}</td>
-                                <td>{season.stat.powerPlayTimeOnIce}</td>
-                                <td>{season.stat.shortHandedTimeOnIce}</td> */}
+                    <td>{season.stat.shotPct}</td>
+                    <td>{season.stat.hits}</td>
+                    <td>{season.stat.blocked}</td>
+                    <td>{season.stat.powerPlayGoals}</td>
+                    <td>{season.stat.faceOffPct}</td>
+                    <td>{season.stat.timeOnIce}</td>
+                    <td>{season.stat.powerPlayTimeOnIce}</td>
+                    <td>{season.stat.shortHandedTimeOnIce}</td> */}
               </tr>
             );
           })}
@@ -262,14 +258,14 @@ function PlayerPage() {
             <th>{totPlusMinus}</th>
             <th>{totPenaltyMinutes}</th>
             {/* <th>{totShots}</th>
-                        <th>-</th>
-                        <th>{totHits}</th>
-                        <th>{totBlocks}</th>
-                        <th>{totPPG}</th>
-                        <th>-</th>
-                        <th>-</th>
-                        <th>-</th>
-                        <th>-</th> */}
+                <th>-</th>
+                <th>{totHits}</th>
+                <th>{totBlocks}</th>
+                <th>{totPPG}</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th> */}
             <th>{playoffTotGames}</th>
             <th>{playoffTotGoals}</th>
             <th>{playoffTotAssists}</th>
@@ -283,15 +279,15 @@ function PlayerPage() {
   };
 
   const render_goalie_stats = stats => {
-    var totGames = 0;
-    var totGameStarted = 0;
-    var totGoalAgainst = 0;
-    var totWins = 0;
-    var totLosses = 0;
-    var totOT = 0;
-    var totSaves = 0;
-    var totShotAgainst = 0;
-    var totShutout = 0;
+    let totGames = 0;
+    let totGameStarted = 0;
+    let totGoalAgainst = 0;
+    let totWins = 0;
+    let totLosses = 0;
+    let totOT = 0;
+    let totSaves = 0;
+    let totShotAgainst = 0;
+    let totShutout = 0;
     return (
       <table className="content-table">
         <thead>
@@ -316,7 +312,7 @@ function PlayerPage() {
           </tr>
         </thead>
         <tbody>
-          {stats.map((season, i) => {
+          {stats.map(season => {
             if (season.league.id === 133) {
               // ID 133 means the league is NHL. We than addition all of the stats.
               totGames += season.stat.games;
@@ -324,14 +320,14 @@ function PlayerPage() {
               totGoalAgainst += season.stat.goalsAgainst;
               totWins += season.stat.wins;
               totLosses += season.stat.losses;
-              totOT += isNaN(season.stat.ot) ? 0 : season.stat.ot;
-              totSaves += isNaN(season.stat.saves) ? 0 : season.stat.saves;
-              totShotAgainst += isNaN(season.stat.shotsAgainst) ? 0 : season.stat.shotsAgainst;
+              totOT += Number.isNaN(Number(season.stat.ot)) ? 0 : season.stat.ot;
+              totSaves += Number.isNaN(Number(season.stat.saves)) ? 0 : season.stat.saves;
+              totShotAgainst += Number.isNaN(Number(season.stat.shotsAgainst)) ? 0 : season.stat.shotsAgainst;
               totShutout += season.stat.shutouts;
             }
             return (
               <tr
-                key={i}
+                key={season.season}
                 style={{
                   backgroundColor: get_league_row_color(season.league.name),
                 }}
@@ -341,17 +337,17 @@ function PlayerPage() {
                   <>
                     <td>
                       <Link
-                        to={'/teamRosterBySeason/' + season.team.id + '/' + season.season}
+                        to={`/teamRosterBySeason/${season.team.id}/${season.season}`}
                         style={{ textDecoration: 'none', color: '#000099' }}
                       >
-                        {season.season.slice(0, 4) + '-' + season.season.slice(4)}
+                        {`${season.season.slice(0, 4)}-${season.season.slice(4)}`}
                       </Link>
                     </td>
                     <td>NHL</td>
                   </>
                 ) : (
                   <>
-                    <td>{season.season.slice(0, 4) + '-' + season.season.slice(4)}</td>
+                    <td>{`${season.season.slice(0, 4)}-${season.season.slice(4)}`}</td>
                     <td>{season.league.name}</td>
                   </>
                 )}
@@ -400,11 +396,11 @@ function PlayerPage() {
   };
 
   const render_player_info = p => {
-    var today = new Date();
-    var birthDate = new Date(p.birthDate);
-    var age_time = today - birthDate;
+    const today = new Date();
+    const birthDate = new Date(p.birthDate);
+    const ageTime = today - birthDate;
 
-    var age = new Date(age_time).getFullYear() - 1970;
+    const age = new Date(ageTime).getFullYear() - 1970;
     return (
       <table className="content-table">
         <thead>
@@ -452,6 +448,13 @@ function PlayerPage() {
     );
   };
 
+  const render_player_info_stats = (stats, info) => (
+    <div>
+      {render_player_info(info)}
+      {info.primaryPosition.abbreviation !== 'G' ? render_skater_stats(stats) : render_goalie_stats(stats)}
+    </div>
+  );
+
   if (playerStats && playerPlayoffStats && playerInfo) {
     return (
       <div>
@@ -459,30 +462,36 @@ function PlayerPage() {
         {render_player_info_stats(playerStats.stats[0].splits, playerInfo.people[0])}
       </div>
     );
-  } else if (!isNaN(playerID) && playerID !== '' && !prospectInfo) {
+  }
+
+  if (!Number.isNaN(Number(playerID)) && playerID !== '' && !prospectInfo) {
     return (
       <div>
         <h1>Trying to fetch player data from nhl api...</h1>
-        <ClipLoader color="#fff" loading={true} size={75} />
+        <ClipLoader color="#fff" loading size={75} />
       </div>
     );
-  } else if (prospectInfo) {
+  }
+
+  if (prospectInfo) {
     return (
       <div>
         <SearchPlayer />
         {render_player_info(prospectInfo)}
       </div>
     );
-  } else if (isNaN(playerID) || playerID === '') {
-    return <SearchPlayer />;
-  } else {
-    return (
-      <div>
-        <SearchPlayer />
-        <h1>Player does not exist</h1>
-      </div>
-    );
   }
+
+  if (Number.isNaN(Number(playerID)) || playerID === '') {
+    return <SearchPlayer />;
+  }
+
+  return (
+    <div>
+      <SearchPlayer />
+      <h1>Player does not exist</h1>
+    </div>
+  );
 }
 
 export default PlayerPage;
