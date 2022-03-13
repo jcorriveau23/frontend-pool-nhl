@@ -1,1 +1,1 @@
-export const PRIVATE_KEY_DB = 'verySecretValue'
+export const PRIVATE_KEY_DB = "verySecretValue";
