@@ -27,6 +27,7 @@ export default function BetItem({ contract, gameID }) {
           setGameData(gData);
         })
         .catch(e => {
+          console.log(e);
           setGameData(gData);
         });
     });

@@ -13,7 +13,6 @@
   },
   "plugins": ["react", "prettier"],
   "rules": {
-    "camelcase": "off",
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }] // TODO: remove this when migrating all files to jsx
+    "camelcase": "off"
   }
 }

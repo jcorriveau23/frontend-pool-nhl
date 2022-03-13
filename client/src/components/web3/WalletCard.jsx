@@ -11,7 +11,7 @@ import './WalletCard.css';
 
 // icons
 import LOCKED from '../img/web3/Locked_icon_red.svg';
-import UNLOCKED from '../img/web3/Locked_icon_red.svg';
+import UNLOCKED from '../img/web3/Unlocked_icon.png';
 
 export default function WalletCard({ user, setUser, setContract }) {
   const [networkName, setNetworkName] = useState('');
@@ -103,6 +103,7 @@ export default function WalletCard({ user, setUser, setContract }) {
       if (!window.ethereum) throw new Error('Please install MetaMask browser extension to interact');
 
       window.ethereum.request({ method: 'eth_requestAccounts' }).then(result => {
+        console.log(result);
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 
@@ -152,7 +153,7 @@ export default function WalletCard({ user, setUser, setContract }) {
     // reload the page to avoid any errors with chain change mid use of application
 
     window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2A' }] }).catch(error => {
-      // console.log(error);
+      console.log(error);
     });
   };
 
@@ -163,7 +164,7 @@ export default function WalletCard({ user, setUser, setContract }) {
         type="button"
       >
         <div className="accountDisplay">
-          <img src={isCurrentWalletUnlocked() ? UNLOCKED : LOCKED} alt="" width="15" height="15" />
+          <img src={isCurrentWalletUnlocked() ? UNLOCKED : LOCKED} alt="" width="20" height="20" />
           <b>{currentAddr ? `${currentAddr.substring(0, 6)}...${currentAddr.slice(-4)}` : 'Connect Wallet'}</b>
         </div>
       </button>
