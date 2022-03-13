@@ -40,7 +40,7 @@ export default function GameFeedPage({ user, contract }) {
       fetch(`https://statsapi.web.nhl.com/api/v1/game/${gameID}/feed/live`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
         .then(response => response.json())
         .then(gInfo => {
-          // console.log(gInfo)
+          console.log(gInfo);
           setGameInfo(gInfo);
 
           if (gInfo.gameData.status.abstractGameState === 'Preview') {
@@ -362,14 +362,14 @@ export default function GameFeedPage({ user, contract }) {
   };
 
   const render_Shootout_result = shot => {
-    if (shot.result.event === 'Shot') {
+    if (shot.result.eventTypeId === 'SHOT' || shot.result.eventTypeId === 'MISSED_SHOT') {
       return (
         <td>
           <b style={{ color: '#ee0000' }}>Missed</b>
         </td>
       );
     }
-    if (shot.result.event === 'Goal') {
+    if (shot.result.eventTypeId === 'GOAL') {
       return (
         <td>
           <b style={{ color: '#008800' }}>Goal</b>
@@ -395,8 +395,9 @@ export default function GameFeedPage({ user, contract }) {
       <tbody>
         {liveData.plays.playsByPeriod[4].plays.map(i => {
           if (
-            liveData.plays.allPlays[i].result.event === 'Shot' ||
-            liveData.plays.allPlays[i].result.event === 'Goal'
+            liveData.plays.allPlays[i].result.eventTypeId === 'SHOT' ||
+            liveData.plays.allPlays[i].result.eventTypeId === 'MISSED_SHOT' ||
+            liveData.plays.allPlays[i].result.eventTypeId === 'GOAL'
           ) {
             return (
               <tr key={i}>
