@@ -48,7 +48,7 @@ export default function DraftPool({ username, poolName, poolInfo, setPoolInfo, s
       method: 'GET',
       headers: { 'Content-Type': 'application/json', token: cookie },
     };
-    fetch('../pool/get_all_players', requestOptions)
+    fetch('https://hockeypool.live/api/pool/get_all_players', requestOptions)
       .then(response => response.json())
       .then(data => {
         if (data.success === 'False') {
@@ -269,7 +269,12 @@ export default function DraftPool({ username, poolName, poolInfo, setPoolInfo, s
       textColor = 'green-text';
     }
 
-    return <h2 className={textColor}>{poolInfo.next_drafter}&#39s turn</h2>;
+    return (
+      <h2 className={textColor}>
+        {poolInfo.next_drafter}
+        &apos;s turn
+      </h2>
+    );
   };
 
   if (poolInfo && inRoom) {

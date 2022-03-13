@@ -39,20 +39,22 @@ export default function GoalItem({ goalData, gameContent }) {
 
     let bFirstAssist = false;
 
-    goalData.players.map(player => {
-      if (player.playerType === 'Scorer') setScorer(player);
+    for (let i = 0; i < goalData.players.length; i += 1) {
+      if (goalData.players[i].playerType === 'Scorer') {
+        setScorer(goalData.players[i]);
+      }
 
-      if (player.playerType === 'Assist') {
+      if (goalData.players[i].playerType === 'Assist') {
         if (bFirstAssist === false) {
           bFirstAssist = true;
-          setFirstAssist(player);
+          setFirstAssist(goalData.players[i]);
           setRowSpan(3);
         } else {
-          setSecondAssist(player);
+          setSecondAssist(goalData.players[i]);
           setRowSpan(4);
         }
       }
-    });
+    }
   }, [goalData, gameContent]);
 
   useEffect(() => {
@@ -121,7 +123,7 @@ GoalItem.propTypes = {
     team: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
     about: PropTypes.shape({ periodTime: PropTypes.string.isRequired, eventId: PropTypes.number.isRequired })
       .isRequired,
-    players: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
+    players: PropTypes.arrayOf(PropTypes.shape({ playerType: PropTypes.string.isRequired }).isRequired).isRequired,
   }).isRequired,
   gameContent: PropTypes.shape({
     media: PropTypes.shape({
@@ -129,7 +131,9 @@ GoalItem.propTypes = {
         items: PropTypes.arrayOf(
           PropTypes.shape({
             statsEventId: PropTypes.string.isRequired,
-            highlight: PropTypes.shape({ playbacks: PropTypes.arrayOf(PropTypes.shape({}).isRequired) }),
+            highlight: PropTypes.shape({
+              playbacks: PropTypes.arrayOf(PropTypes.shape({}).isRequired),
+            }),
           }).isRequired
         ).isRequired,
       }).isRequired,

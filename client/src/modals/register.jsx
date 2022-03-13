@@ -22,7 +22,7 @@ export default function RegisterModal({ showRegisterModal, setShowRegisterModal 
           password,
         }),
       };
-      fetch('auth/register', requestOptions)
+      fetch('https://hockeypool.live/api/auth/register', requestOptions)
         .then(response => response.json())
         .then(data => {
           if (data.success === 'True') {

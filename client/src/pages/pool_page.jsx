@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useParams } from 'react-router-dom';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import PropTypes from 'prop-types';
 
 // Loader
@@ -13,7 +13,7 @@ import DraftPool from '../components/pool_state/draftPool';
 import InProgressPool from '../components/pool_state/inProgressPool';
 import DynastiePool from '../components/pool_state/dynastiePool';
 
-const socket = io.connect();
+const socket = io('http://localhost:8080');
 
 export default function PoolPage({ user }) {
   const [poolInfo, setPoolInfo] = useState({});
@@ -32,7 +32,7 @@ export default function PoolPage({ user }) {
           poolname: poolName,
         },
       };
-      fetch('../pool/get_pool_info', requestOptions2)
+      fetch('https://hockeypool.live/api/pool/get_pool_info', requestOptions2)
         .then(response => response.json())
         .then(data => {
           if (data.success === 'False') {

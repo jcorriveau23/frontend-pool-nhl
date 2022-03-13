@@ -147,7 +147,7 @@ export default function DynastiePool({ username, poolName, poolInfo, setPoolInfo
           reserv_protected: reservProtected,
         }),
       };
-      fetch('../pool/protect_players', requestOptions)
+      fetch('https://hockeypool.live/api/pool/protect_players', requestOptions)
         .then(response => response.json())
         .then(data => {
           if (data.success === 'False') {

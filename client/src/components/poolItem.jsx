@@ -12,7 +12,7 @@ export default function PoolItem({ name, owner, username, setPoolDeleted }) {
       },
       body: JSON.stringify({ name }),
     };
-    fetch('pool/delete_pool', requestOptions);
+    fetch('https://hockeypool.live/api/pool/delete_pool', requestOptions);
     setPoolDeleted(true);
   };
 

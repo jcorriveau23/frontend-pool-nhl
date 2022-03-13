@@ -23,7 +23,7 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
         number_pooler: numberPoolerInput,
       }),
     };
-    fetch('pool/pool_creation', requestOptions)
+    fetch('https://hockeypool.live/api/pool/pool_creation', requestOptions)
       .then(response => response.json())
       .then(data => {
         if (data.success === 'True') {

@@ -142,7 +142,7 @@ export default function InProgressPool({ username, poolName, poolInfo }) {
           poolname: poolName,
         },
       };
-      fetch('../pool/get_pool_stats', requestOptions)
+      fetch('https://hockeypool.live/api/pool/get_pool_stats', requestOptions)
         .then(response => response.json())
         .then(data => {
           if (data.success === 'False') {
@@ -387,7 +387,7 @@ export default function InProgressPool({ username, poolName, poolInfo }) {
           <div>{render_tabs_choice_stats()}</div>
         </div>
         <div className="floatRight">
-          <h1>Today&#39s ranking</h1>
+          <h1>Today&apos;s ranking</h1>
           <table className="content-table">
             <thead>
               <tr>

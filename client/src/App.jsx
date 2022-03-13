@@ -30,6 +30,11 @@ import LeagueLeadersPage from './pages/leagueLeaders_page';
 // components
 import WalletCard from './components/web3/WalletCard';
 
+// always force https as protocol
+if (window.location.protocol !== 'https:') {
+  window.location.replace(`https:${window.location.href.substring(window.location.protocol.length)}`);
+}
+
 function App() {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [user, setUser] = useState(null);

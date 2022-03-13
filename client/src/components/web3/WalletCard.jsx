@@ -114,7 +114,7 @@ export default function WalletCard({ user, setUser, setContract }) {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ addr, sig }),
             };
-            fetch('/auth/login', requestOptions)
+            fetch('https://hockeypool.live/api/auth/login', requestOptions)
               .then(response => response.json())
               .then(data => {
                 if (data.success === 'True') {
@@ -157,12 +157,19 @@ export default function WalletCard({ user, setUser, setContract }) {
     });
   };
 
+  const walletClickHandler = () => {
+    if (isWalletConnected) {
+      if (!isCurrentWalletUnlocked()) {
+        unlockWallet();
+      }
+    } else {
+      connectWalletHandler();
+    }
+  };
+
   return (
     <li className="walletCard">
-      <button
-        onClick={!isWalletConnected ? connectWalletHandler : !isCurrentWalletUnlocked() ? unlockWallet : null}
-        type="button"
-      >
+      <button onClick={walletClickHandler} type="button">
         <div className="accountDisplay">
           <img src={isCurrentWalletUnlocked() ? UNLOCKED : LOCKED} alt="" width="20" height="20" />
           <b>{currentAddr ? `${currentAddr.substring(0, 6)}...${currentAddr.slice(-4)}` : 'Connect Wallet'}</b>

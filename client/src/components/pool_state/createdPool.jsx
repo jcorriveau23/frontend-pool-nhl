@@ -30,10 +30,12 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
   useEffect(() => {
     if (socket) {
       socket.on('roomData', data => {
+        // console.log(data);
         setUserList(data);
       });
 
       socket.on('poolInfo', data => {
+        // console.log(data);
         setPoolInfo(data);
       });
     }
@@ -66,13 +68,13 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
     for (let i = 0; i < poolInfo.number_poolers; i += 1) {
       if (i < userList.length) {
         participants.push(
-          <li>
+          <li key={userList[i].name}>
             <ParticipantItem name={userList[i].name} ready={userList[i].ready} />
           </li>
         ); // TODO: add a modal pop up to add that friend
       } else {
         participants.push(
-          <li>
+          <li key={`user not found: ${i}`}>
             <ParticipantItem name="user not found" ready={false} />
           </li>
         );
@@ -394,9 +396,8 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
           </table>
         </div>
         <div className="floatRight">
-          <label>
-            <input type="checkbox" onChange={handleChange} /> Ready?
-          </label>
+          <input type="checkbox" onChange={handleChange} />
+          <b>Ready?</b>
           {render_start_draft_button()}
           <h2>Participants: </h2>
           <div className="pool_item">

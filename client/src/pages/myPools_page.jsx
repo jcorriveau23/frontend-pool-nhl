@@ -30,7 +30,7 @@ export default function MyPoolsPage({ user }) {
           token: Cookies.get(`token-${user.addr}`),
         },
       };
-      fetch('pool/pool_list', requestOptions)
+      fetch('https://hockeypool.live/api/pool/pool_list', requestOptions)
         .then(response => response.json())
         .then(data => {
           if (data.success === 'False') {
