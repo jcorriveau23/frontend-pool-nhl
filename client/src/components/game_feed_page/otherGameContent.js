@@ -1,10 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 // css
 import './goalItem.css';
 
-function OtherGameContent({ gameContent }) {
+export default function OtherGameContent({ gameContent }) {
   const videoRef = useRef();
   const [isItem, setIsItem] = useState(false);
 
@@ -48,6 +49,7 @@ function OtherGameContent({ gameContent }) {
                     <td rowSpan={2}>
                       <video width="224" height="126" controls ref={videoRef}>
                         <source src={highlight.highlight.playbacks[3].url} type="video/mp4" />
+                        <track kind="captions" />
                       </video>
                     </td>
                   </tr>
@@ -66,4 +68,10 @@ function OtherGameContent({ gameContent }) {
   return <h1> </h1>;
 }
 
-export default OtherGameContent;
+OtherGameContent.propTypes = {
+  gameContent: PropTypes.shape({
+    media: PropTypes.shape({
+      milestones: PropTypes.shape({ items: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired }).isRequired,
+    }).isRequired,
+  }).isRequired,
+};

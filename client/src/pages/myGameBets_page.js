@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
+// components
 import BetItem from '../components/GameBet/betItem';
 
 // css
 import '../components/GameBet/betItem.css';
 
-function MyGameBetsPage({ user, contract }) {
+export default function MyGameBetsPage({ user, contract }) {
   const [userBets, setUserBets] = useState(null);
 
   useEffect(() => {
@@ -19,7 +21,7 @@ function MyGameBetsPage({ user, contract }) {
         setUserBets([...b]);
       });
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   if (user && userBets) {
     return (
@@ -40,4 +42,13 @@ function MyGameBetsPage({ user, contract }) {
 
   return <h1>You are not connected.</h1>;
 }
-export default MyGameBetsPage;
+
+MyGameBetsPage.propTypes = {
+  user: PropTypes.shape({ addr: PropTypes.string.isRequired }),
+  contract: PropTypes.shape({ get_all_user_bets: PropTypes.func.isRequired }),
+};
+
+MyGameBetsPage.defaultProps = {
+  user: null,
+  contract: null,
+};

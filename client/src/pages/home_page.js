@@ -1,6 +1,6 @@
 import React from 'react';
 
-function HomePage({ user, contract }) {
+export default function HomePage() {
   return (
     <div>
       <h1>Welcome to hockeypool.live.</h1>
@@ -9,4 +9,3 @@ function HomePage({ user, contract }) {
     </div>
   );
 }
-export default HomePage;

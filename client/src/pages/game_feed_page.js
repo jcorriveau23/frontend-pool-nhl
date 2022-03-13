@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Link, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
 
-// teams logo
-import logos from '../components/img/logos';
-import GamePrediction from '../components/GameBet/gamePrediction';
+// images
+import { logos } from '../components/img/logos';
 
 // component
+import GamePrediction from '../components/GameBet/gamePrediction';
 import GameRecap from '../components/game_feed_page/gameRecap';
 import PeriodRecap from '../components/game_feed_page/periodRecap';
 import OtherGameContent from '../components/game_feed_page/otherGameContent';
@@ -18,7 +19,7 @@ import OtherGameContent from '../components/game_feed_page/otherGameContent';
 import '../components/react-tabs.css';
 import '../components/game_feed_page/goalItem.css';
 
-function GameFeedPage({ user, contract }) {
+export default function GameFeedPage({ user, contract }) {
   const [gameInfo, setGameInfo] = useState(null);
   const [gameContent, setGameContent] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
@@ -398,7 +399,7 @@ function GameFeedPage({ user, contract }) {
             liveData.plays.allPlays[i].result.event === 'Goal'
           ) {
             return (
-              <tr>
+              <tr key={i}>
                 <td>
                   <img src={logos[liveData.plays.allPlays[i].team.name]} alt="" width="30" height="30" />
                 </td>
@@ -512,4 +513,12 @@ function GameFeedPage({ user, contract }) {
   );
 }
 
-export default GameFeedPage;
+GameFeedPage.propTypes = {
+  user: PropTypes.shape({ addr: PropTypes.string.isRequired }),
+  contract: PropTypes.shape({}),
+};
+
+GameFeedPage.defaultProps = {
+  contract: null,
+  user: null,
+};

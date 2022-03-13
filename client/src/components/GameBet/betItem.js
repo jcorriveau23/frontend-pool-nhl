@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
 
-function BetItem({ user, contract, gameID }) {
+export default function BetItem({ contract, gameID }) {
   const [gameData, setGameData] = useState(null);
 
   useEffect(() => {
-    contract.predictionGames(parseInt(gameID)).then(g => {
-      let gData = {
-        accumulatedWeisHome: parseInt(g.accumulatedWeisHome),
-        accumulatedWeisAway: parseInt(g.accumulatedWeisAway),
+    contract.predictionGames(parseInt(gameID, 10)).then(g => {
+      const gData = {
+        accumulatedWeisHome: parseInt(g.accumulatedWeisHome, 10),
+        accumulatedWeisAway: parseInt(g.accumulatedWeisAway, 10),
         isDone: g.isDone,
         isCreated: g.isCreated,
         isHomeWin: g.isHomeWin,
@@ -19,17 +20,17 @@ function BetItem({ user, contract, gameID }) {
       };
 
       contract
-        .get_user_bet_amount(parseInt(gameID))
+        .get_user_bet_amount(parseInt(gameID, 10))
         .then(values => {
-          gData.predictByMeWeisHome = parseInt(values[0]);
-          gData.predictByMeWeisAway = parseInt(values[1]);
+          gData.predictByMeWeisHome = parseInt(values[0], 10);
+          gData.predictByMeWeisAway = parseInt(values[1], 10);
           setGameData(gData);
         })
         .catch(e => {
           setGameData(gData);
         });
     });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   if (gameData) {
     return (
@@ -44,7 +45,7 @@ function BetItem({ user, contract, gameID }) {
         </thead>
         <tbody>
           <tr>
-            <th></th>
+            <th> </th>
             <th>Home</th>
             <th>Away</th>
           </tr>
@@ -74,7 +75,15 @@ function BetItem({ user, contract, gameID }) {
         </tbody>
       </table>
     );
-  } else return <ClipLoader color="#fff" loading /*css={override}*/ size={75} />;
+  }
+
+  return <ClipLoader color="#fff" loading size={75} />;
 }
 
-export default BetItem;
+BetItem.propTypes = {
+  contract: PropTypes.shape({
+    predictionGames: PropTypes.func.isRequired,
+    get_user_bet_amount: PropTypes.func.isRequired,
+  }).isRequired,
+  gameID: PropTypes.string.isRequired,
+};

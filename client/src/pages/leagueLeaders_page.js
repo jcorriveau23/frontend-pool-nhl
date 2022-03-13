@@ -10,7 +10,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 // images
 import { logos } from '../components/img/logos';
 
-function LeagueLeadersPage() {
+export default function LeagueLeadersPage() {
   const [leagueLeaders, setLeagueLeaders] = useState(null);
   const [statsType, setStatsType] = useState('points');
   const [season, setSeason] = useState('20212022');
@@ -172,5 +172,3 @@ function LeagueLeadersPage() {
     </div>
   );
 }
-
-export default LeagueLeadersPage;

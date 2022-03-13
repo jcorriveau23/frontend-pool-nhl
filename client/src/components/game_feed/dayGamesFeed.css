@@ -37,6 +37,14 @@
   color: #000;
 }
 
+.dateSelector button {
+  background-color: transparent;
+}
+
+.dateSelector button:hover {
+  background-color: transparent;
+}
+
 .dateSelector input {
   text-align: center;
   border-radius: 5px;

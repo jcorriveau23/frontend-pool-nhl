@@ -6,7 +6,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 // components
 import TeamsStanding from '../components/standing_page/teamsStanding';
 
-function StandingPage() {
+export default function StandingPage() {
   const [teamsStats, setTeamsStats] = useState(null);
 
   useEffect(() => {
@@ -32,4 +32,3 @@ function StandingPage() {
     </div>
   );
 }
-export default StandingPage;

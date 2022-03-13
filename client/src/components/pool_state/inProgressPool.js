@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClipLoader from 'react-spinners/ClipLoader';
+import PropTypes from 'prop-types';
 
-// team logos
-import logos from '../img/logos';
+// images
+import { logos } from '../img/logos';
 
 // css
 import '../react-tabs.css';
 
-function InProgressPool({ username, poolName, poolInfo }) {
+export default function InProgressPool({ username, poolName, poolInfo }) {
   const [playersStats, setPlayersStats] = useState({});
   const [ranking, setRanking] = useState([]);
 
@@ -63,9 +64,9 @@ function InProgressPool({ username, poolName, poolInfo }) {
         const player = players_stats.find(p => p.name === poolInfo.context[pooler].chosen_defender[j].name);
 
         player.pool_points =
-          poolInfo.defender_pts_goals * player.stats.goals + poolInfo.defender_pts_assits * player.stats.assists; // + hat trick
+          poolInfo.defender_pts_goals * player.stats.goals + poolInfo.defender_pts_assists * player.stats.assists; // + hat trick
         stats[pooler].defenders_total_pts +=
-          poolInfo.defender_pts_goals * player.stats.goals + poolInfo.defender_pts_assits * player.stats.assists; // + hat trick
+          poolInfo.defender_pts_goals * player.stats.goals + poolInfo.defender_pts_assists * player.stats.assists; // + hat trick
 
         stats[pooler].chosen_defender.push(player);
       }
@@ -100,9 +101,9 @@ function InProgressPool({ username, poolName, poolInfo }) {
             poolInfo.forward_pts_goals * player.stats.goals + poolInfo.forward_pts_assists * player.stats.assists; // + hat trick
         } else {
           player.pool_points =
-            poolInfo.defender_pts_goals * player.stats.goals + poolInfo.defender_pts_assits * player.stats.assists; // + hat trick
+            poolInfo.defender_pts_goals * player.stats.goals + poolInfo.defender_pts_assists * player.stats.assists; // + hat trick
           stats[pooler].reservists_total_pts +=
-            poolInfo.defender_pts_goals * player.stats.goals + poolInfo.defender_pts_assits * player.stats.assists; // + hat trick
+            poolInfo.defender_pts_goals * player.stats.goals + poolInfo.defender_pts_assists * player.stats.assists; // + hat trick
         }
         stats[pooler].chosen_reservist.push(player);
       }
@@ -415,4 +416,34 @@ function InProgressPool({ username, poolName, poolInfo }) {
     </div>
   );
 }
-export default InProgressPool;
+
+InProgressPool.propTypes = {
+  username: PropTypes.string.isRequired,
+  poolName: PropTypes.string.isRequired,
+  poolInfo: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    participants: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    context: PropTypes.arrayOf(
+      PropTypes.shape({
+        chosen_forward: PropTypes.arrayOf(
+          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
+        ).isRequired,
+        chosen_defender: PropTypes.arrayOf(
+          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
+        ).isRequired,
+        chosen_goalies: PropTypes.arrayOf(
+          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
+        ).isRequired,
+        chosen_reservist: PropTypes.arrayOf(
+          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
+        ).isRequired,
+      }).isRequired
+    ).isRequired,
+    forward_pts_goals: PropTypes.number.isRequired,
+    forward_pts_assists: PropTypes.number.isRequired,
+    defender_pts_goals: PropTypes.number.isRequired,
+    defender_pts_assists: PropTypes.number.isRequired,
+    goalies_pts_wins: PropTypes.number.isRequired,
+    goalies_pts_shutouts: PropTypes.number.isRequired,
+  }).isRequired,
+};

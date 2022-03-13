@@ -7,9 +7,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 // images
-import logos from '../components/img/logos';
+import { logos } from '../components/img/logos';
 
-function DraftPage() {
+export default function DraftPage() {
   const [draftInfo, setDraftInfo] = useState(null);
   const [prevYear, setPrevYear] = useState('');
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ function DraftPage() {
     for (let i = 2021; i > 1979; i -= 1) seasonArray.push(i);
     // TODO: use this call https://api.nhle.com/stats/rest/en/draft?sort=draftYear instead of hard coded date ?
     return seasonArray.map(s => (
-      <option key={s} value={s.toString()} selected={s.toString() === year ? 'selected' : null}>
+      <option key={s} value={s.toString()}>
         {s.toString()}
       </option>
     ));
@@ -97,7 +97,9 @@ function DraftPage() {
         <tr>
           <th>Season</th>
           <td>
-            <select onChange={handleChangeSeason}>{SeasonOptions()}</select>
+            <select onChange={handleChangeSeason} defaultValue={year}>
+              {SeasonOptions()}
+            </select>
           </td>
         </tr>
       </tbody>
@@ -124,5 +126,3 @@ function DraftPage() {
   }
   return <div>{seasonDropDown()}</div>;
 }
-
-export default DraftPage;

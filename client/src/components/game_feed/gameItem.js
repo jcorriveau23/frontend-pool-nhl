@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-// teams logo
-import logos from '../img/logos';
+// images
+import { logos } from '../img/logos';
 
 import liveGame from '../img/icons/live-game.png';
 
-function GameItem({ gameData }) {
+export default function GameItem({ gameData }) {
   // console.log(gameData)
 
   const render_game_state = state => {
@@ -55,4 +56,19 @@ function GameItem({ gameData }) {
   );
 }
 
-export default GameItem;
+GameItem.propTypes = {
+  gameData: PropTypes.shape({
+    gameDate: PropTypes.string.isRequired,
+    status: PropTypes.shape({ abstractGameState: PropTypes.string.isRequired }).isRequired,
+    teams: PropTypes.shape({
+      away: PropTypes.shape({
+        score: PropTypes.number.isRequired,
+        team: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
+      }).isRequired,
+      home: PropTypes.shape({
+        score: PropTypes.number.isRequired,
+        team: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
+      }).isRequired,
+    }).isRequired,
+  }).isRequired,
+};

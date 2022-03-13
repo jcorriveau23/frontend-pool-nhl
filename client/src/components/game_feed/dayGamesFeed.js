@@ -13,7 +13,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import goPrev from '../img/icons/Actions-go-previous-icon.png';
 import goNext from '../img/icons/Actions-go-next-icon.png';
 
-function TodayGamesFeed() {
+export default function TodayGamesFeed() {
   const [gamesStats, setGamesStats] = useState([]);
   const [date, setDate] = useState(new Date());
 
@@ -53,13 +53,17 @@ function TodayGamesFeed() {
           <tbody>
             <tr>
               <td>
-                <img src={goPrev} onClick={prevDate} alt="" />
+                <button onClick={prevDate} type="button">
+                  <img src={goPrev} alt="" />
+                </button>
               </td>
               <td>
                 <DatePicker selected={date} onChange={d => setDate(d)} dateFormat="P" />
               </td>
               <td>
-                <img src={goNext} onClick={nextDate} alt="" />
+                <button onClick={nextDate} type="button">
+                  <img src={goNext} alt="" />
+                </button>
               </td>
             </tr>
           </tbody>
@@ -81,5 +85,3 @@ function TodayGamesFeed() {
     </div>
   );
 }
-
-export default TodayGamesFeed;

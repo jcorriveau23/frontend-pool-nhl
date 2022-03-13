@@ -1,7 +1,8 @@
 import React from 'react';
 import Cookies from 'js-cookie';
+import PropTypes from 'prop-types';
 
-function PoolItem({ name, owner, username, setPoolDeleted }) {
+export default function PoolItem({ name, owner, username, setPoolDeleted }) {
   const delete_pool = () => {
     const requestOptions = {
       method: 'POST',
@@ -28,4 +29,9 @@ function PoolItem({ name, owner, username, setPoolDeleted }) {
   );
 }
 
-export default PoolItem;
+PoolItem.propTypes = {
+  name: PropTypes.string.isRequired,
+  owner: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  setPoolDeleted: PropTypes.func.isRequired,
+};

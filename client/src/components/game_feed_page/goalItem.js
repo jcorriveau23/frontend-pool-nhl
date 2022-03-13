@@ -1,13 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 // css
 import './goalItem.css';
 
 // images
-import logos from '../img/logos';
+import { logos } from '../img/logos';
 
-function GoalItem({ goalData, gameContent }) {
+export default function GoalItem({ goalData, gameContent }) {
   const videoRef = useRef();
   const [goalContent, setGoalContent] = useState(null);
   const [scorer, setScorer] = useState('');
@@ -72,6 +73,7 @@ function GoalItem({ goalData, gameContent }) {
               {goalContent ? (
                 <video width="224" height="126" poster={goalContent.image.cuts['248x140']?.src} controls ref={videoRef}>
                   <source src={goalContent.playbacks[3].url} type="video/mp4" />
+                  <track kind="captions" />
                 </video>
               ) : (
                 <p>No video yet</p>
@@ -114,4 +116,23 @@ function GoalItem({ goalData, gameContent }) {
   );
 }
 
-export default GoalItem;
+GoalItem.propTypes = {
+  goalData: PropTypes.shape({
+    team: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
+    about: PropTypes.shape({ periodTime: PropTypes.string.isRequired, eventId: PropTypes.number.isRequired })
+      .isRequired,
+    players: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
+  }).isRequired,
+  gameContent: PropTypes.shape({
+    media: PropTypes.shape({
+      milestones: PropTypes.shape({
+        items: PropTypes.arrayOf(
+          PropTypes.shape({
+            statsEventId: PropTypes.string.isRequired,
+            highlight: PropTypes.shape({ playbacks: PropTypes.arrayOf(PropTypes.shape({}).isRequired) }),
+          }).isRequired
+        ).isRequired,
+      }).isRequired,
+    }).isRequired,
+  }).isRequired,
+};

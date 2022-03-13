@@ -2,35 +2,40 @@
 
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import PropTypes from 'prop-types';
 
-import logos from '../img/logos';
+// images
+import { logos } from '../img/logos';
 
 // css
 import './teamStanding.css';
 import '../react-tabs.css';
 
-function TeamsStanding({ data }) {
+export default function TeamsStanding({ data }) {
   const [easternTeams, setEasternTeams] = useState(null);
   const [westernTeams, setWesternTeams] = useState(null);
   const [leagueTeams, setLeagueTeams] = useState(null);
 
   useEffect(() => {
     const teams = [];
-    const easternTeams_temp = [];
-    const westernTeams_temp = [];
+    const easternTeamsTmp = [];
+    const westernTeamsTmp = [];
 
     for (let i = 0; i < data.records.length; i += 1) {
       for (let j = 0; j < data.records[i].teamRecords.length; j += 1) {
         teams.push(data.records[i].teamRecords[j]);
 
-        if (data.records[i].conference.name === 'Eastern') easternTeams_temp.push(data.records[i].teamRecords[j]);
-        else westernTeams_temp.push(data.records[i].teamRecords[j]);
+        if (data.records[i].conference.name === 'Eastern') {
+          easternTeamsTmp.push(data.records[i].teamRecords[j]);
+        } else {
+          westernTeamsTmp.push(data.records[i].teamRecords[j]);
+        }
       }
     }
 
     setLeagueTeams([...teams]);
-    setEasternTeams([...easternTeams_temp]);
-    setWesternTeams([...westernTeams_temp]);
+    setEasternTeams([...easternTeamsTmp]);
+    setWesternTeams([...westernTeamsTmp]);
   }, []);
 
   const renderTeamRow = (team, i) => (
@@ -88,30 +93,32 @@ function TeamsStanding({ data }) {
     return (
       <table className="content-table">
         {renderHeader(conference)}
-        {data.records
-          .filter(div => div.conference.name === conference)
-          .map(div => (
-            <>
-              <tr key={div.division.name}>
-                <th colSpan={11}>{div.division.name}</th>
-              </tr>
-              {div.teamRecords.filter(team => team.wildCardRank === '0').map((team, i) => renderTeamRow(team, i + 1))}
-            </>
-          ))}
-        <tr>
-          <th colSpan={11}>Wild Card</th>
-        </tr>
-        {wildCardTeams
-          .filter(team => team.wildCardRank !== '0')
-          .sort((team1, team2) => team1.wildCardRank - team2.wildCardRank)
-          .map(team => renderTeamRow(team, team.wildCardRank))}
+        <tbody>
+          {data.records
+            .filter(div => div.conference.name === conference)
+            .map(div => (
+              <>
+                <tr key={div.division.name}>
+                  <th colSpan={11}>{div.division.name}</th>
+                </tr>
+                {div.teamRecords.filter(team => team.wildCardRank === '0').map((team, i) => renderTeamRow(team, i + 1))}
+              </>
+            ))}
+          <tr>
+            <th colSpan={11}>Wild Card</th>
+          </tr>
+          {wildCardTeams
+            .filter(team => team.wildCardRank !== '0')
+            .sort((team1, team2) => team1.wildCardRank - team2.wildCardRank)
+            .map(team => renderTeamRow(team, team.wildCardRank))}
+        </tbody>
       </table>
     );
   };
 
   const renderDivisionStanding = () =>
     data.records.map(div => (
-      <table className="content-table">
+      <table className="content-table" key={div.division.name}>
         {renderHeader(div.division.name)}
         <tbody>{renderDivisionTeams(div)}</tbody>
       </table>
@@ -125,9 +132,11 @@ function TeamsStanding({ data }) {
     return (
       <table className="content-table">
         {renderHeader(conference)}
-        {conferenceTeams
-          .sort((team1, team2) => team1.conferenceRank - team2.conferenceRank)
-          .map(team => renderTeamRow(team, team.conferenceRank))}
+        <tbody>
+          {conferenceTeams
+            .sort((team1, team2) => team1.conferenceRank - team2.conferenceRank)
+            .map(team => renderTeamRow(team, team.conferenceRank))}
+        </tbody>
       </table>
     );
   };
@@ -135,9 +144,11 @@ function TeamsStanding({ data }) {
   const renderLeagueStanding = () => (
     <table className="content-table">
       {renderHeader('League')}
-      {leagueTeams
-        .sort((team1, team2) => team1.leagueRank - team2.leagueRank)
-        .map(team => renderTeamRow(team, team.leagueRank))}
+      <tbody>
+        {leagueTeams
+          .sort((team1, team2) => team1.leagueRank - team2.leagueRank)
+          .map(team => renderTeamRow(team, team.leagueRank))}
+      </tbody>
     </table>
   );
 
@@ -167,4 +178,14 @@ function TeamsStanding({ data }) {
   }
   return <h1>Preparing Standings...</h1>;
 }
-export default TeamsStanding;
+
+TeamsStanding.propTypes = {
+  data: PropTypes.shape({
+    records: PropTypes.arrayOf(
+      PropTypes.shape({
+        teamRecords: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
+        conference: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
+      })
+    ).isRequired,
+  }).isRequired,
+};

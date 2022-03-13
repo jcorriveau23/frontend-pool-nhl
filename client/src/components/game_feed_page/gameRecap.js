@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
-function GameRecap({ gameContent, isEditorial }) {
+export default function GameRecap({ gameContent, isEditorial }) {
   const videoRef = useRef();
   const [prevGameContent, setPrevGameContent] = useState(null);
   // const previousUrl = useRef(recapVideo.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
@@ -13,7 +14,7 @@ function GameRecap({ gameContent, isEditorial }) {
   }, [gameContent]);
 
   if (isEditorial && gameContent.editorial && gameContent.media.epg[3].items?.length > 0) {
-    // console.log(gameContent)
+    console.log(gameContent);
     return (
       <div>
         <table>
@@ -34,6 +35,7 @@ function GameRecap({ gameContent, isEditorial }) {
                   ref={videoRef}
                 >
                   <source src={gameContent.media.epg[3].items[0].playbacks[3].url} type="video/mp4" />
+                  <track kind="captions" />
                 </video>
               </td>
             </tr>
@@ -63,6 +65,7 @@ function GameRecap({ gameContent, isEditorial }) {
                 ref={videoRef}
               >
                 <source src={gameContent.media.epg[2].items[0].playbacks[3].url} type="video/mp4" />
+                <track kind="captions" />
               </video>
             </tr>
           </tbody>
@@ -74,4 +77,25 @@ function GameRecap({ gameContent, isEditorial }) {
   return <h1>No Recap videos available yet</h1>;
 }
 
-export default GameRecap;
+GameRecap.propTypes = {
+  gameContent: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    editorial: PropTypes.shape({}).isRequired,
+    media: PropTypes.shape({
+      epg: PropTypes.arrayOf(
+        PropTypes.shape({
+          items: PropTypes.arrayOf(
+            PropTypes.shape({
+              image: PropTypes.shape({
+                cuts: PropTypes.arrayOf(PropTypes.shape({ src: PropTypes.string.isRequired })),
+              }),
+              playbacks: PropTypes.arrayOf(PropTypes.shape({ url: PropTypes.string.isRequired }).isRequired),
+            }).isRequired
+          ).isRequired,
+        }).isRequired
+      ).isRequired,
+    }).isRequired,
+  }).isRequired,
+  isEditorial: PropTypes.bool.isRequired,
+};

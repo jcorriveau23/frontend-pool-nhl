@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import Cookies from 'js-cookie';
+import PropTypes from 'prop-types';
 
 import { styleModal } from './styleModal';
 
-function CreatePoolModal({ showCreatePoolModal, setShowCreatePoolModal, username }) {
+export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePoolModal, username }) {
   const [msg, setMsg] = useState('');
   const [poolNameInput, setPoolNameInput] = useState('');
   const [numberPoolerInput, setNumberPoolerInput] = useState(4);
@@ -89,4 +90,8 @@ function CreatePoolModal({ showCreatePoolModal, setShowCreatePoolModal, username
   );
 }
 
-export default CreatePoolModal;
+CreatePoolModal.propTypes = {
+  showCreatePoolModal: PropTypes.bool.isRequired,
+  setShowCreatePoolModal: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+};

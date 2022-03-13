@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
+import PropTypes from 'prop-types';
 
 import { styleModal } from './styleModal';
 
-function RegisterModal({ showRegisterModal, setShowRegisterModal }) {
+export default function RegisterModal({ showRegisterModal, setShowRegisterModal }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
@@ -69,4 +70,7 @@ function RegisterModal({ showRegisterModal, setShowRegisterModal }) {
   );
 }
 
-export default RegisterModal;
+RegisterModal.propTypes = {
+  showRegisterModal: PropTypes.bool.isRequired,
+  setShowRegisterModal: PropTypes.func.isRequired,
+};

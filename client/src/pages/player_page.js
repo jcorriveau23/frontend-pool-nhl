@@ -10,7 +10,7 @@ import SearchPlayer from '../components/player_page/searchPlayer';
 // css
 import '../components/player_page/player_page.css';
 
-function PlayerPage() {
+export default function PlayerPage() {
   const [playerStats, setPlayerStats] = useState(null);
   const [playerPlayoffStats, setPlayerPlayoffStats] = useState(null);
   const [playerInfo, setPlayerInfo] = useState(null);
@@ -493,5 +493,3 @@ function PlayerPage() {
     </div>
   );
 }
-
-export default PlayerPage;

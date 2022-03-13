@@ -22,3 +22,5 @@ export const styleModal = {
     padding: '4%',
   },
 };
+
+export default styleModal;

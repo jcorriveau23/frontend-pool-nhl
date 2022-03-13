@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import PropTypes from 'prop-types';
+
+// css
 import '../components/react-tabs.css';
 
 // components
@@ -11,7 +13,7 @@ import PoolItem from '../components/poolItem';
 // modal
 import CreatePoolModal from '../modals/createPool';
 
-function MyPoolsPage({ user }) {
+export default function MyPoolsPage({ user }) {
   const [showCreatePoolModal, setShowCreatePoolModal] = useState(false);
   const [poolDeleted, setPoolDeleted] = useState(false);
   const [poolCreated, setPoolCreated] = useState([]);
@@ -33,7 +35,7 @@ function MyPoolsPage({ user }) {
         .then(data => {
           if (data.success === 'False') {
             // [TODO] display a page or notification to tell the user that the pool list could not be fetch.
-            console.log(data.message);
+            // console.log(data.message);
           } else {
             const pDraft = [];
             const pInProgress = [];
@@ -171,4 +173,11 @@ function MyPoolsPage({ user }) {
 
   return <h1>You are not connected.</h1>;
 }
-export default MyPoolsPage;
+
+MyPoolsPage.propTypes = {
+  user: PropTypes.shape({ addr: PropTypes.string.isRequired }),
+};
+
+MyPoolsPage.defaultProps = {
+  user: null,
+};

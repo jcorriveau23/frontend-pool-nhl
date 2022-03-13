@@ -8,9 +8,9 @@ import { Link } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 // images
-import logos, { teamNameFromId } from '../components/img/logos';
+import { logos, teamNameFromId } from '../components/img/logos';
 
-function TeamRosterBySeasonPage() {
+export default function TeamRosterBySeasonPage() {
   const [skatersStats, setSkatersStats] = useState(null);
   const [goaliesStats, setGoaliesStats] = useState(null);
 
@@ -40,10 +40,10 @@ function TeamRosterBySeasonPage() {
       .then(playersStats => {
         // console.log(playersStats)
         setSkatersStats([...playersStats.data]);
-      })
-      .catch(error => {
-        alert(`Error 1! ${error}`);
       });
+    // .catch(error => {
+    //   alert(`Error 1! ${error}`);
+    // });
 
     fetch(urlgoalies, {
       method: 'GET',
@@ -51,11 +51,11 @@ function TeamRosterBySeasonPage() {
       .then(response => response.json())
       .then(playersStats => {
         setGoaliesStats([...playersStats.data]);
-      })
-      .catch(error => {
-        alert(`Error 2! ${error}`);
       });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // .catch(error => {
+    //   alert(`Error 2! ${error}`);
+    // });
+  }, []);
 
   const sort_by_int = (isSkater, stat) => {
     let array;
@@ -210,5 +210,3 @@ function TeamRosterBySeasonPage() {
     </div>
   );
 }
-
-export default TeamRosterBySeasonPage;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
+import PropTypes from 'prop-types';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -14,7 +15,7 @@ import DynastiePool from '../components/pool_state/dynastiePool';
 
 const socket = io.connect();
 
-function PoolPage({ user }) {
+export default function PoolPage({ user }) {
   const [poolInfo, setPoolInfo] = useState({});
   const [poolName] = useState(useParams().name); // get the name of the pool using the param url
 
@@ -42,7 +43,7 @@ function PoolPage({ user }) {
           }
         });
     }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user]);
 
   if (user) {
     switch (poolInfo.status) {
@@ -89,4 +90,11 @@ function PoolPage({ user }) {
   }
   return <h1>You are not connected.</h1>;
 }
-export default PoolPage;
+
+PoolPage.propTypes = {
+  user: PropTypes.shape({ addr: PropTypes.string.isRequired }),
+};
+
+PoolPage.defaultProps = {
+  user: null,
+};

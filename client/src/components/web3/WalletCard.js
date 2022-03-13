@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import Cookies from 'js-cookie';
+import PropTypes from 'prop-types';
 
 // ABI
 import NHLGamePredictionsABI from '../../NHLGamePredictionsABI.json';
@@ -12,7 +13,7 @@ import './WalletCard.css';
 import LOCKED from '../img/web3/Locked_icon_red.svg';
 import UNLOCKED from '../img/web3/Locked_icon_red.svg';
 
-function WalletCard({ user, setUser, contract, setContract }) {
+export default function WalletCard({ user, setUser, setContract }) {
   const [networkName, setNetworkName] = useState('');
   const [isWrongNetwork, setIsWrongNetwork] = useState(false);
   const [isWalletUnlocked, setIsWalletUnlocked] = useState(false);
@@ -31,7 +32,12 @@ function WalletCard({ user, setUser, contract, setContract }) {
           console.log(`wallet is unlocked: ${address}`);
           provider.getNetwork().then(network => {
             // console.log(network);
-            network.chainId === 1 ? setNetworkName('Ethereum') : setNetworkName(network.name);
+            if (network.chainId === 1) {
+              setNetworkName('Ethereum');
+            } else {
+              setNetworkName(network.name);
+            }
+
             if (network.name === 'kovan') {
               const c = new ethers.Contract(
                 '0x4e5e10C3Ef12663ba231d16b915372E0E69D1ffe',
@@ -45,19 +51,19 @@ function WalletCard({ user, setUser, contract, setContract }) {
             }
           });
         })
-        .catch(alert('Your metamask account is not unlocked!'));
+        .catch(e => alert(`Your metamask account is not unlocked! ${e}`));
     }
 
-    const user = JSON.parse(localStorage.getItem('persist-account'));
+    const userTmp = JSON.parse(localStorage.getItem('persist-account'));
 
-    if (user) {
-      setUser(user);
-      setCurrentAddr(user.addr);
+    if (userTmp) {
+      setUser(userTmp);
+      setCurrentAddr(userTmp.addr);
     }
 
-    if (window.ethereum && user) {
+    if (window.ethereum && userTmp) {
       // console.log(user.addr);
-      const token = Cookies.get(`token-${user.addr}`);
+      const token = Cookies.get(`token-${userTmp.addr}`);
 
       if (token) {
         // TODO: also validate that the token is not expired
@@ -173,4 +179,12 @@ function WalletCard({ user, setUser, contract, setContract }) {
   );
 }
 
-export default WalletCard;
+WalletCard.propTypes = {
+  user: PropTypes.shape({ addr: PropTypes.string.isRequired }),
+  setUser: PropTypes.func.isRequired,
+  setContract: PropTypes.func.isRequired,
+};
+
+WalletCard.defaultProps = {
+  user: null,
+};

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 // component
 import GoalItem from './goalItem';
@@ -6,7 +7,7 @@ import GoalItem from './goalItem';
 // css
 import './goalItem.css';
 
-function PeriodRecap({ gameInfo, gameContent, period }) {
+export default function PeriodRecap({ gameInfo, gameContent, period }) {
   const [isItem, setIsItem] = useState(false);
   // const previousUrl = useRef(recapVideo.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
 
@@ -43,4 +44,17 @@ function PeriodRecap({ gameInfo, gameContent, period }) {
   return <h1> </h1>;
 }
 
-export default PeriodRecap;
+PeriodRecap.propTypes = {
+  gameInfo: PropTypes.shape({
+    liveData: PropTypes.shape({
+      plays: PropTypes.shape({
+        scoringPlays: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+        allPlays: PropTypes.arrayOf(
+          PropTypes.shape({ about: PropTypes.shape({ period: PropTypes.number.isRequired }).isRequired }).isRequired
+        ),
+      }).isRequired,
+    }).isRequired,
+  }).isRequired,
+  gameContent: PropTypes.shape({}).isRequired,
+  period: PropTypes.string.isRequired,
+};
