@@ -14,6 +14,7 @@ import TodayGamesFeed from './components/game_feed/dayGamesFeed';
 
 // modals
 import RegisterModal from './modals/register';
+import WrongNetworkModal from './modals/wrongNetwork';
 
 // pages
 import HomePage from './pages/home_page';
@@ -40,6 +41,8 @@ function App() {
   const [user, setUser] = useState(null);
   const [contract, setContract] = useState(null);
   const [formatDate, setFormatDate] = useState(null);
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const [isWrongNetwork, setIsWrongNetwork] = useState(false);
 
   useEffect(() => {
     fetch('https://nhl-pool-ethereum.herokuapp.com/');
@@ -93,7 +96,16 @@ function App() {
                     </Link>
                   </li>
                 ) : null}
-                <WalletCard user={user} setUser={setUser} contract={contract} setContract={setContract} />
+                <WalletCard
+                  user={user}
+                  setUser={setUser}
+                  contract={contract}
+                  setContract={setContract}
+                  isWalletConnected={isWalletConnected}
+                  setIsWalletConnected={setIsWalletConnected}
+                  isWrongNetwork={isWrongNetwork}
+                  setIsWrongNetwork={setIsWrongNetwork}
+                />
               </div>
             </ul>
           </div>
@@ -104,8 +116,9 @@ function App() {
       </div>
       <div>
         <RegisterModal showRegisterModal={showRegisterModal} setShowRegisterModal={setShowRegisterModal} />
+        <WrongNetworkModal isWalletConnected={isWalletConnected} isWrongNetwork={isWrongNetwork} />
         <Routes>
-          <Route path="/" element={<HomePage user={user} formatDate={formatDate} />} />
+          <Route path="/" element={<HomePage formatDate={formatDate} />} />
           <Route path="/MyPools" element={<MyPoolsPage user={user} />} />
           <Route path="/MyGameBets" element={<MyGameBetsPage user={user} contract={contract} />} />
           <Route path="/MyPools/:name" element={<PoolPage user={user} />} />

@@ -13,11 +13,15 @@ import './WalletCard.css';
 import LOCKED from '../img/web3/Locked_icon_red.svg';
 import UNLOCKED from '../img/web3/Unlocked_icon.png';
 
-export default function WalletCard({ user, setUser, setContract }) {
-  const [networkName, setNetworkName] = useState('');
-  const [isWrongNetwork, setIsWrongNetwork] = useState(false);
+export default function WalletCard({
+  user,
+  setUser,
+  setContract,
+  isWalletConnected,
+  setIsWalletConnected,
+  setIsWrongNetwork,
+}) {
   const [isWalletUnlocked, setIsWalletUnlocked] = useState(false);
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [currentAddr, setCurrentAddr] = useState('');
 
   useEffect(() => {
@@ -31,13 +35,6 @@ export default function WalletCard({ user, setUser, setContract }) {
         .then(address => {
           console.log(`wallet is unlocked: ${address}`);
           provider.getNetwork().then(network => {
-            // console.log(network);
-            if (network.chainId === 1) {
-              setNetworkName('Ethereum');
-            } else {
-              setNetworkName(network.name);
-            }
-
             if (network.name === 'kovan') {
               const c = new ethers.Contract(
                 '0x4e5e10C3Ef12663ba231d16b915372E0E69D1ffe',
@@ -47,7 +44,6 @@ export default function WalletCard({ user, setUser, setContract }) {
               setContract(c);
             } else {
               setIsWrongNetwork(true);
-              alert('You need to select Kovan Network in metamask plugin.');
             }
           });
         })
@@ -149,14 +145,6 @@ export default function WalletCard({ user, setUser, setContract }) {
     window.ethereum.on('chainChanged', chainChangedHandler);
   }
 
-  const switchChain = () => {
-    // reload the page to avoid any errors with chain change mid use of application
-
-    window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2A' }] }).catch(error => {
-      console.log(error);
-    });
-  };
-
   const walletClickHandler = () => {
     if (isWalletConnected) {
       if (!isCurrentWalletUnlocked()) {
@@ -175,14 +163,6 @@ export default function WalletCard({ user, setUser, setContract }) {
           <b>{currentAddr ? `${currentAddr.substring(0, 6)}...${currentAddr.slice(-4)}` : 'Connect Wallet'}</b>
         </div>
       </button>
-      {isWalletConnected ? (
-        <button onClick={isWrongNetwork ? switchChain : null} disabled={!isWrongNetwork} type="button">
-          <b style={isWrongNetwork ? { color: '#b00' } : { color: '#00a' }}>{networkName}</b>
-        </button>
-      ) : null}
-      {/* <div>
-				<b style={{ color: '#b00' }}>{errorMessage}</b>
-			</div> */}
     </li>
   );
 }
@@ -191,6 +171,9 @@ WalletCard.propTypes = {
   user: PropTypes.shape({ addr: PropTypes.string.isRequired }),
   setUser: PropTypes.func.isRequired,
   setContract: PropTypes.func.isRequired,
+  isWalletConnected: PropTypes.bool.isRequired,
+  setIsWalletConnected: PropTypes.func.isRequired,
+  setIsWrongNetwork: PropTypes.func.isRequired,
 };
 
 WalletCard.defaultProps = {
