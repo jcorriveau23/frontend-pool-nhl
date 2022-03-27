@@ -61,7 +61,7 @@ function SearchPlayer() {
               return (
                 <tr>
                   <td>
-                    <Link to={`/playerInfo/'${p[0]}`}> {`${p[2]} ${p[1]}`}</Link>
+                    <Link to={`/playerInfo/${p[0]}`}> {`${p[2]} ${p[1]}`}</Link>
                   </td>
                 </tr>
               );

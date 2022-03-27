@@ -40,7 +40,7 @@ export default function DraftPool({ username, poolName, poolInfo, setPoolInfo, s
     return array;
   };
 
-  const fetchPlayerDraft = async () => {
+  const fetchPlayerDraft = () => {
     const cookie = Cookies.get(`token-${username}`);
 
     // get all players stats from past season

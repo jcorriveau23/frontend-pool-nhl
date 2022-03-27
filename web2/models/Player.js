@@ -5,6 +5,7 @@ const playerSchema = new Schema(
   {
     name: { type: String },
     team: { type: String },
+    id: { type: Number },
     stats: { type: Object },
     url: { type: String },
     position: { type: String },

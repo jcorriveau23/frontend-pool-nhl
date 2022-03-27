@@ -1,3 +1,5 @@
+# This script fetch the same of every teams that exist in the nhl api database and prints the result in a file.
+
 import requests
 import json
 

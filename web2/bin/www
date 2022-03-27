@@ -31,7 +31,6 @@ const io = require("socket.io")(server, {
  * Create HTTP server.
  */
 
-let interval;
 var pools = {};
 
 const userSocketIdMap = new Map();

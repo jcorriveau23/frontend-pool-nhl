@@ -1,6 +1,7 @@
 const Pool = require("../models/Pool");
 const User = require("../models/User");
 const Players = require("../models/Player");
+const DayLeaders = require("../models/DayLeaders");
 
 //import { PRIVATE_KEY_DB } from 'constants'
 PRIVATE_KEY_DB = "verySecretValue";
@@ -834,7 +835,26 @@ const get_pool_stats = (req, res, next) => {
 };
 
 const get_all_players = (req, res, next) => {
-  ValidateUser(req.headers.token);
+  if (encrypt_token !== "undefined") {
+    let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
+
+    // TODO: use token.iat and token.exp to use token expiration and force user to re-login
+    User.findOne({ addr: token.addr }).then((user) => {
+      if (!user) {
+        res.json({
+          success: "False",
+          message: "User is not registered!",
+        });
+        return;
+      }
+    });
+  } else {
+    res.json({
+      success: "False",
+      message: "no token, you need to login",
+    });
+    return;
+  }
 
   response = { F: [], D: [], G: [] };
 
@@ -870,6 +890,32 @@ const get_all_players = (req, res, next) => {
           });
           return;
         });
+    })
+    .catch((error) => {
+      res.json({
+        success: "False",
+        message: error,
+      });
+      return;
+    });
+};
+
+const get_day_leaders = (req, res, next) => {
+  var d = req.headers.d;
+  DayLeaders.findOne({ date: d })
+    .then((day_leaders) => {
+      if (!day_leaders) {
+        res.json({
+          success: "False",
+          message: "No day leaders for this day",
+        });
+        return;
+      }
+      res.json({
+        success: "True",
+        message: day_leaders,
+      });
+      return;
     })
     .catch((error) => {
       res.json({
@@ -917,4 +963,5 @@ module.exports = {
   get_pool_stats,
   delete_pool,
   get_all_players,
+  get_day_leaders,
 };

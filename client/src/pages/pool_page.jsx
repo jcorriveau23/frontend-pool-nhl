@@ -24,7 +24,7 @@ export default function PoolPage({ user }) {
       const cookie = Cookies.get(`token-${user.addr}`);
 
       // get pool info at start
-      const requestOptions2 = {
+      const requestOptions = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export default function PoolPage({ user }) {
           poolname: poolName,
         },
       };
-      fetch('https://hockeypool.live/api/pool/get_pool_info', requestOptions2)
+      fetch('https://hockeypool.live/api/pool/get_pool_info', requestOptions)
         .then(response => response.json())
         .then(data => {
           if (data.success === 'False') {

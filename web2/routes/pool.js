@@ -10,6 +10,7 @@ router.get("/pool_list", PoolController.pool_list);
 router.get("/get_pool_info", PoolController.get_pool_info);
 router.get("/get_pool_stats", PoolController.get_pool_stats);
 router.get("/get_all_players", PoolController.get_all_players);
+router.get("/get_day_leaders", PoolController.get_day_leaders);
 
 router.put("/start_draft", PoolController.start_draft);
 router.put("/chose_player", PoolController.chose_player);

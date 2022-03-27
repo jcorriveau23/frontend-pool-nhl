@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
+import PropTypes from 'prop-types';
 
 // component
 import GameItem from './gameItem';
@@ -13,15 +14,16 @@ import 'react-datepicker/dist/react-datepicker.css';
 import goPrev from '../img/icons/Actions-go-previous-icon.png';
 import goNext from '../img/icons/Actions-go-next-icon.png';
 
-export default function TodayGamesFeed() {
+export default function TodayGamesFeed({ setFormatDate }) {
   const [gamesStats, setGamesStats] = useState([]);
   const [date, setDate] = useState(new Date());
 
   useEffect(() => {
     const newDate = new Date(date.setHours(0));
-    const formatDate = newDate.toISOString().slice(0, 10);
+    const fDate = newDate.toISOString().slice(0, 10);
 
-    fetch(`https://statsapi.web.nhl.com/api/v1/schedule?startDate=${formatDate}&endDate=${formatDate}`)
+    setFormatDate(fDate);
+    fetch(`https://statsapi.web.nhl.com/api/v1/schedule?startDate=${fDate}&endDate=${fDate}`)
       .then(response => response.json())
       .then(todayGamesData => {
         if (todayGamesData.dates[0]) {
@@ -85,3 +87,5 @@ export default function TodayGamesFeed() {
     </div>
   );
 }
+
+TodayGamesFeed.propTypes = { setFormatDate: PropTypes.func.isRequired };

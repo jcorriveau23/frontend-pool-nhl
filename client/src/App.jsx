@@ -39,8 +39,11 @@ function App() {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [user, setUser] = useState(null);
   const [contract, setContract] = useState(null);
+  const [formatDate, setFormatDate] = useState(null);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    fetch('https://nhl-pool-ethereum.herokuapp.com/');
+  }, []);
 
   const Disconnect = () => {
     Cookies.remove(`token-${user.addr}`);
@@ -97,12 +100,12 @@ function App() {
         </nav>
       </div>
       <div>
-        <TodayGamesFeed />
+        <TodayGamesFeed formatDate={formatDate} setFormatDate={setFormatDate} />
       </div>
       <div>
         <RegisterModal showRegisterModal={showRegisterModal} setShowRegisterModal={setShowRegisterModal} />
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage user={user} formatDate={formatDate} />} />
           <Route path="/MyPools" element={<MyPoolsPage user={user} />} />
           <Route path="/MyGameBets" element={<MyGameBetsPage user={user} contract={contract} />} />
           <Route path="/MyPools/:name" element={<PoolPage user={user} />} />

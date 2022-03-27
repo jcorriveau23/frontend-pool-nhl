@@ -82,58 +82,51 @@ export default function GameFeedPage({ user, contract }) {
 
   const sort_by_int = (isHome, stat) => {
     let array = [];
+    let side = 'away';
+    let teamSkaters = awayTeamSkaters;
+    let setTeamSkaters = setAwayTeamSkaters;
 
     if (isHome) {
-      array = homeTeamSkaters.sort((first, second) => {
-        if (stat === 'points')
-          return (
-            gameInfo.liveData.boxscore.teams.home.players[`ID${second}`].stats.skaterStats.goals +
-            gameInfo.liveData.boxscore.teams.home.players[`ID${second}`].stats.skaterStats.assists -
-            (gameInfo.liveData.boxscore.teams.home.players[`ID${first}`].stats.skaterStats.goals +
-              gameInfo.liveData.boxscore.teams.home.players[`ID${first}`].stats.skaterStats.assists)
-          );
-        return (
-          gameInfo.liveData.boxscore.teams.home.players[`ID${second}`].stats.skaterStats[stat] -
-          gameInfo.liveData.boxscore.teams.home.players[`ID${first}`].stats.skaterStats[stat]
-        );
-      });
-      setHomeTeamSkaters([...array]);
-    } else {
-      array = awayTeamSkaters.sort((first, second) => {
-        if (stat === 'points')
-          return (
-            gameInfo.liveData.boxscore.teams.away.players[`ID${second}`].stats.skaterStats.goals +
-            gameInfo.liveData.boxscore.teams.away.players[`ID${second}`].stats.skaterStats.assists -
-            (gameInfo.liveData.boxscore.teams.away.players[`ID${first}`].stats.skaterStats.goals +
-              gameInfo.liveData.boxscore.teams.away.players[`ID${first}`].stats.skaterStats.assists)
-          );
-        return (
-          gameInfo.liveData.boxscore.teams.away.players[`ID${second}`].stats.skaterStats[stat] -
-          gameInfo.liveData.boxscore.teams.away.players[`ID${first}`].stats.skaterStats[stat]
-        );
-      });
-      setAwayTeamSkaters([...array]);
+      side = 'home';
+      teamSkaters = homeTeamSkaters;
+      setTeamSkaters = setHomeTeamSkaters;
     }
+
+    array = teamSkaters.sort((first, second) => {
+      if (stat === 'points')
+        return (
+          gameInfo.liveData.boxscore.teams[side].players[`ID${second}`].stats.skaterStats.goals +
+          gameInfo.liveData.boxscore.teams[side].players[`ID${second}`].stats.skaterStats.assists -
+          (gameInfo.liveData.boxscore.teams[side].players[`ID${first}`].stats.skaterStats.goals +
+            gameInfo.liveData.boxscore.teams[side].players[`ID${first}`].stats.skaterStats.assists)
+        );
+      return (
+        gameInfo.liveData.boxscore.teams[side].players[`ID${second}`].stats.skaterStats[stat] -
+        gameInfo.liveData.boxscore.teams[side].players[`ID${first}`].stats.skaterStats[stat]
+      );
+    });
+
+    setTeamSkaters([...array]);
   };
 
   const sort_by_float = (isHome, stat) => {
     let array = [];
+    let side = 'away';
+    let teamSkaters = awayTeamSkaters;
+    let setTeamSkaters = setAwayTeamSkaters;
 
     if (isHome) {
-      array = homeTeamSkaters.sort(
-        (first, second) =>
-          parseFloat(gameInfo.liveData.boxscore.teams.home.players[`ID${second}`].stats.skaterStats[stat]) -
-          parseFloat(gameInfo.liveData.boxscore.teams.home.players[`ID${first}`].stats.skaterStats[stat])
-      );
-      setHomeTeamSkaters([...array]);
-    } else {
-      array = awayTeamSkaters.sort(
-        (first, second) =>
-          parseFloat(gameInfo.liveData.boxscore.teams.away.players[`ID${second}`].stats.skaterStats[stat]) -
-          parseFloat(gameInfo.liveData.boxscore.teams.away.players[`ID${first}`].stats.skaterStats[stat])
-      );
-      setAwayTeamSkaters([...array]);
+      side = 'home';
+      teamSkaters = homeTeamSkaters;
+      setTeamSkaters = setHomeTeamSkaters;
     }
+
+    array = teamSkaters.sort(
+      (first, second) =>
+        parseFloat(gameInfo.liveData.boxscore.teams[side].players[`ID${second}`].stats.skaterStats[stat]) -
+        parseFloat(gameInfo.liveData.boxscore.teams[side].players[`ID${first}`].stats.skaterStats[stat])
+    );
+    setTeamSkaters([...array]);
   };
 
   const render_team_stats = (team, isHome) => {

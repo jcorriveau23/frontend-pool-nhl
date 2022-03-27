@@ -223,16 +223,24 @@ export default function PlayerPage() {
                     <td>{season.league.name}</td>
                   </>
                 )}
-                <td>{season.stat.games}</td>
+                <td>
+                  <b>{season.stat.games}</b>
+                </td>
                 <td>{season.stat.goals}</td>
                 <td>{season.stat.assists}</td>
-                <td>{season.stat.points}</td>
+                <td>
+                  <b>{season.stat.points}</b>
+                </td>
                 <td>{season.stat.plusMinus}</td>
                 <td>{season.stat.penaltyMinutes}</td>
-                <td>{playoffStats ? playoffStats.stat.games : '-'}</td>
+                <td>
+                  <b>{playoffStats ? playoffStats.stat.games : '-'}</b>
+                </td>
                 <td>{playoffStats ? playoffStats.stat.goals : '-'}</td>
                 <td>{playoffStats ? playoffStats.stat.assists : '-'}</td>
-                <td>{playoffStats ? playoffStats.stat.points : '-'}</td>
+                <td>
+                  <b>{playoffStats ? playoffStats.stat.points : '-'}</b>
+                </td>
                 <td>{playoffStats ? playoffStats.stat.plusMinus : '-'}</td>
                 <td>{playoffStats ? playoffStats.stat.penaltyMinutes : '-'}</td>
                 {/* <td>{season.stat.shots}</td>

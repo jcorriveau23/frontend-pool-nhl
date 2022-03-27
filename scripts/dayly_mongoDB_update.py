@@ -1,20 +1,22 @@
+# This script is made to be fetch dayly. We go into all active players to update their stats in the database.
+# TODO should only go into the day_points_leader stored in the yesterday database to limit the numbers of call made to the nhl api.
+
 from pymongo import MongoClient
 import requests
 import json
 
-# create an client instance of the
-# MongoDB class
+# create an client instance of the MongoDB class
 mo_c = MongoClient()
-
-# create an instance of 'some_database'
 db = mo_c.pooljdope
-# players = db.players
 
-draft_forwards = db.draft_forwards
-draft_defenders = db.draft_defenders
-draft_goalies = db.draft_goalies
+# TODO use a parameters input for that script for draft mode fetching. Fetch fullRoster and create 3 database for each role.
 
-SEASON = '20202021'
+# draft_forwards = db.draft_forwards
+# draft_defenders = db.draft_defenders
+# draft_goalies = db.draft_goalies
+players = db.players
+
+SEASON = '20212022'
 API_URL = 'https://statsapi.web.nhl.com'
 
 TEAM_LIST_URL = API_URL + '/api/v1/teams'
@@ -30,7 +32,8 @@ for team in team_list_response_json["teams"]:
     team_name = team["name"]
     team_roaster_url = team["link"]
 
-    roaster_list_url = API_URL + team_roaster_url + '/roster?rosterType=fullRoster' # fetch the ful roaster, but some players might not be important
+    roaster_list_url = API_URL + team_roaster_url + '/roster' # fetch the roaster
+    # roaster_list_url = API_URL + team_roaster_url + '/roster?rosterType=fullRoster' # fetch the ful roaster, for draft mode
 
     response = requests.request('GET', roaster_list_url)
     roaster_list_response_json = json.loads(response.text)
@@ -45,6 +48,7 @@ for team in team_list_response_json["teams"]:
             player_url = API_URL + player["person"]["link"] + '/stats?stats=statsSingleSeason&season=' + SEASON
             response = requests.request('GET', player_url)
             player_stats_json = json.loads(response.text)
+            #print(player)
 
             if player["position"]["code"] == "R" or player["position"]["code"] == "L" or player["position"]["code"] == "C":
                 position = "F"
@@ -56,6 +60,7 @@ for team in team_list_response_json["teams"]:
             try:
                 p = {"name": player["person"]["fullName"],
                      "team": team_name,
+                     "id": player["person"]["id"],
                      "stats": player_stats_json["stats"][0]["splits"][0]["stat"],
                      "url": player["person"]["link"],
                      "position": position
@@ -84,6 +89,7 @@ for team in team_list_response_json["teams"]:
                 if position == "F" or position == "D":
                     p = {"name": player["person"]["fullName"],
                          "team": team_name,
+                         "id": player["person"]["id"],
                          "stats": {"games": 0, "goals": 0, "assists": 0, 'pts': 0},
                          "url": player["person"]["link"],
                          "position": position
@@ -91,6 +97,7 @@ for team in team_list_response_json["teams"]:
                 else:
                     p = {"name": player["person"]["fullName"],
                          "team": team_name,
+                         "id": player["person"]["id"],
                          "stats": { "games": 0,
                                     "goals": 0,
                                     "assists": 0,
@@ -103,13 +110,13 @@ for team in team_list_response_json["teams"]:
                          "position": position
                          }
 
-            # TODO, fetch data from mongo and store the difference to note how much points this player did yesterday
-            # Create the summary day from last night games (10 best scorer, 10 best points maker, etc...)
-            if position == "F":
-                draft_forwards.update_one({"url": player["person"]["link"]}, {"$set": p}, upsert=True) # upsert = True, to create a new document if not found
-            elif position == "D":
-                draft_defenders.update_one({"url": player["person"]["link"]}, {"$set": p}, upsert=True) # upsert = True, to create a new document if not found
-            elif position == "G":
-                draft_goalies.update_one({"url": player["person"]["link"]}, {"$set": p}, upsert=True) # upsert = True, to create a new document if not found
-            else:
-                print("not added to data base {}".format(player["person"]["fullName"]))
+            players.update_one({"id": player["person"]["id"]}, {"$set": p}, upsert=True) # upsert = True, to create a new document if not found
+
+            # if position == "F":
+            #     draft_forwards.update_one({"id": player["person"]["id"]}, {"$set": p}, upsert=True) # upsert = True, to create a new document if not found
+            # elif position == "D":
+            #     draft_defenders.update_one({"id": player["person"]["id"]}, {"$set": p}, upsert=True) # upsert = True, to create a new document if not found
+            # elif position == "G":
+            #     draft_goalies.update_one({"id": player["person"]["id"]}, {"$set": p}, upsert=True) # upsert = True, to create a new document if not found
+            # else:
+            #     print("not added to data base {}".format(player["person"]["fullName"]))
