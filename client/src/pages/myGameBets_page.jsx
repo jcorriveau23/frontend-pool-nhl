@@ -29,7 +29,7 @@ export default function MyGameBetsPage({ user, contract }) {
         <h1>My Bets Page</h1>
         <ul>
           {userBets.map(id => (
-            <Link to={`/gameFeed/${id}`} key={id}>
+            <Link to={`/game/${id}`} key={id}>
               <li>
                 <BetItem user={user} contract={contract} gameID={id} />
               </li>

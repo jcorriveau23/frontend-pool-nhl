@@ -18,6 +18,8 @@ import WrongNetworkModal from './modals/wrongNetwork';
 
 // pages
 import HomePage from './pages/home_page';
+import LoginPage from './pages/login_page';
+import ProfilePage from './pages/profile_page';
 import MyPoolsPage from './pages/myPools_page';
 import PoolPage from './pages/pool_page';
 import StandingPage from './pages/standing_page';
@@ -69,12 +71,12 @@ function App() {
                 </li>
                 {user ? (
                   <li>
-                    <Link to="/MyPools">My Pools</Link>
+                    <Link to="/my-pools">My Pools</Link>
                   </li>
                 ) : null}
                 {user ? (
                   <li>
-                    <Link to="/MyGameBets">My Game Bets</Link>
+                    <Link to="/my-bets">My Game Bets</Link>
                   </li>
                 ) : null}
                 <li>
@@ -84,7 +86,7 @@ function App() {
                   <Link to="/leaders">League leaders</Link>
                 </li>
                 <li>
-                  <Link to="/playerInfo">Search Players</Link>
+                  <Link to="/player-info">Search Players</Link>
                 </li>
                 <li>
                   <Link to="/draft">Draft</Link>
@@ -119,14 +121,16 @@ function App() {
         <WrongNetworkModal isWalletConnected={isWalletConnected} isWrongNetwork={isWrongNetwork} />
         <Routes>
           <Route path="/" element={<HomePage formatDate={formatDate} />} />
-          <Route path="/MyPools" element={<MyPoolsPage user={user} />} />
-          <Route path="/MyGameBets" element={<MyGameBetsPage user={user} contract={contract} />} />
-          <Route path="/MyPools/:name" element={<PoolPage user={user} />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/my-pools" element={<MyPoolsPage user={user} />} />
+          <Route path="/my-bets" element={<MyGameBetsPage user={user} contract={contract} />} />
+          <Route path="/my-pools/:name" element={<PoolPage user={user} />} />
           <Route path="/standing" element={<StandingPage />} />
-          <Route path="/gameFeed/:id" element={<GameFeedPage user={user} contract={contract} />} />
-          <Route path="/playerInfo" element={<PlayerPage />} />
-          <Route path="/playerInfo/:id" element={<PlayerPage />} />
-          <Route path="/teamRosterBySeason/:teamID/:season" element={<TeamRosterBySeasonPage />} />
+          <Route path="/game/:id" element={<GameFeedPage user={user} contract={contract} />} />
+          <Route path="/player-info" element={<PlayerPage />} />
+          <Route path="/player-info/:id" element={<PlayerPage />} />
+          <Route path="/team-roster/:teamID/:season" element={<TeamRosterBySeasonPage />} />
           <Route path="/draft" element={<DraftPage />} />
           <Route path="/draft/:year" element={<DraftPage />} />
           <Route path="/leaders" element={<LeagueLeadersPage />} />

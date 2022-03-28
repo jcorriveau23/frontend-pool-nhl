@@ -74,7 +74,7 @@ export default function LeagueLeadersPage() {
           <tr key={player.person.id}>
             <td>{player.rank}</td>
             <td>
-              <Link to={`/playerInfo/${player.person.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+              <Link to={`/player-info/${player.person.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
                 {player.person.fullName}
               </Link>
             </td>

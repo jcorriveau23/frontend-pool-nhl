@@ -100,7 +100,7 @@ export default function MyPoolsPage({ user }) {
               <div className="pool_item">
                 <ul>
                   {poolCreated.map(pool => (
-                    <Link to={`/MyPools/${pool.name}`} key={pool.name}>
+                    <Link to={`/my-pools/${pool.name}`} key={pool.name}>
                       <li>
                         <PoolItem
                           name={pool.name}
@@ -120,7 +120,7 @@ export default function MyPoolsPage({ user }) {
                 <div className="pool_item">
                   <ul>
                     {poolDraft.map(pool => (
-                      <Link to={`/MyPools/${pool.name}`} key={pool.name}>
+                      <Link to={`/my-pools/${pool.name}`} key={pool.name}>
                         <li>
                           <PoolItem name={pool.name} owner={pool.owner} />
                         </li>
@@ -135,7 +135,7 @@ export default function MyPoolsPage({ user }) {
                 <div className="pool_item">
                   <ul>
                     {poolDynastie.map(pool => (
-                      <Link to={`/MyPools/${pool.name}`} key={pool.name}>
+                      <Link to={`/my-pools/${pool.name}`} key={pool.name}>
                         <li>
                           <PoolItem name={pool.name} owner={pool.owner} />
                         </li>
@@ -150,7 +150,7 @@ export default function MyPoolsPage({ user }) {
                 <div className="pool_item">
                   <ul>
                     {poolInProgress.map(pool => (
-                      <Link to={`/MyPools/${pool.name}`} key={pool.name}>
+                      <Link to={`/my-pools/${pool.name}`} key={pool.name}>
                         <li>
                           <PoolItem name={pool.name} owner={pool.owner} />
                         </li>

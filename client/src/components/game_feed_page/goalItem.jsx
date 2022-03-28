@@ -86,7 +86,7 @@ export default function GoalItem({ goalData, gameContent }) {
             <tr>
               <th>Scorer:</th>
               <td>
-                <Link to={`/playerInfo/${scorer.player.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                <Link to={`/player-info/${scorer.player.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
                   {`${scorer.player.fullName} (${scorer.seasonTotal})`}
                 </Link>
               </td>
@@ -96,7 +96,7 @@ export default function GoalItem({ goalData, gameContent }) {
             <tr>
               <th>1st Assists:</th>
               <td>
-                <Link to={`/playerInfo/${firstAssist.player.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                <Link to={`/player-info/${firstAssist.player.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
                   {`${firstAssist.player.fullName} (${firstAssist.seasonTotal})`}
                 </Link>
               </td>
@@ -106,7 +106,10 @@ export default function GoalItem({ goalData, gameContent }) {
             <tr>
               <th>2nd Assists:</th>
               <td>
-                <Link to={`/playerInfo/${secondAssist.player.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                <Link
+                  to={`/player-info/${secondAssist.player.id}`}
+                  style={{ textDecoration: 'none', color: '#000099' }}
+                >
                   {`${secondAssist.player.fullName} (${secondAssist.seasonTotal})`}
                 </Link>
               </td>

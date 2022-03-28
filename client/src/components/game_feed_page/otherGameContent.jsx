@@ -36,7 +36,7 @@ export default function OtherGameContent({ gameContent }) {
                   <tr>
                     <td colSpan={3}>
                       <Link
-                        to={`/playerInfo/${highlight.playerId}`}
+                        to={`/player-info/${highlight.playerId}`}
                         style={{ textDecoration: 'none', color: '#000099' }}
                       >
                         {highlight.highlight.description}

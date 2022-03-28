@@ -75,7 +75,7 @@ export default function TodayGamesFeed({ setFormatDate }) {
         <div>
           <ul>
             {gamesStats.map(game => (
-              <Link to={`/gameFeed/${game.gamePk}`} key={game.gamePk}>
+              <Link to={`/game/${game.gamePk}`} key={game.gamePk}>
                 <li>
                   <GameItem gameData={game} />
                 </li>

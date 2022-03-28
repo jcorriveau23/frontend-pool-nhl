@@ -41,7 +41,7 @@ export default function DayLeaders({ dayLeaders, formatDate }) {
                         <img src={logos[skater.team]} alt="" width="30" height="30" />
                       </td>
                       <td>
-                        <Link to={`/playerInfo/${skater.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                        <Link to={`/player-info/${skater.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
                           {skater.name}
                         </Link>
                       </td>
@@ -87,7 +87,7 @@ export default function DayLeaders({ dayLeaders, formatDate }) {
                         <img src={logos[goalie.team]} alt="" width="30" height="30" />
                       </td>
                       <td>
-                        <Link to={`/playerInfo/${goalie.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                        <Link to={`/player-info/${goalie.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
                           {goalie.name}
                         </Link>
                       </td>

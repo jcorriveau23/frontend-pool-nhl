@@ -110,7 +110,7 @@ export default function TeamRosterBySeasonPage() {
             <tr key={player.playerId}>
               <td>-</td>
               <td>
-                <Link to={`/playerInfo/${player.playerId}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                <Link to={`/player-info/${player.playerId}`} style={{ textDecoration: 'none', color: '#000099' }}>
                   {player.skaterFullName}
                 </Link>
               </td>
@@ -169,7 +169,7 @@ export default function TeamRosterBySeasonPage() {
             <tr key={goalie.playerId}>
               <td>-</td>
               <td>
-                <Link to={`/playerInfo/${goalie.playerId}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                <Link to={`/player-info/${goalie.playerId}`} style={{ textDecoration: 'none', color: '#000099' }}>
                   {goalie.goalieFullName}
                 </Link>
               </td>

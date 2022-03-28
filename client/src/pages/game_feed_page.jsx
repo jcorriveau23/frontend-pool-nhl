@@ -169,7 +169,7 @@ export default function GameFeedPage({ user, contract }) {
                   <td>{team.players[keyFormat].jerseyNumber}</td>
                   <td>
                     <Link
-                      to={`/playerInfo/${team.players[keyFormat].person.id}`}
+                      to={`/player-info/${team.players[keyFormat].person.id}`}
                       style={{ textDecoration: 'none', color: '#000099' }}
                     >
                       {team.players[keyFormat].person.fullName}
@@ -223,7 +223,7 @@ export default function GameFeedPage({ user, contract }) {
                   <td>{team.players[keyFormat].jerseyNumber}</td>
                   <td>
                     <Link
-                      to={`/playerInfo/${team.players[keyFormat].person.id}`}
+                      to={`/player-info/${team.players[keyFormat].person.id}`}
                       style={{ textDecoration: 'none', color: '#000099' }}
                     >
                       {team.players[keyFormat].person.fullName}
@@ -266,7 +266,7 @@ export default function GameFeedPage({ user, contract }) {
             <tr key={player.person.id}>
               <td>{player.jerseyNumber}</td>
               <td>
-                <Link to={`/playerInfo/${player.person.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                <Link to={`/player-info/${player.person.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
                   {player.person.fullName}
                 </Link>
               </td>
@@ -399,7 +399,7 @@ export default function GameFeedPage({ user, contract }) {
                 </td>
                 <td>
                   <Link
-                    to={`/playerInfo/${liveData.plays.allPlays[i].players[0].player.id}`}
+                    to={`/player-info/${liveData.plays.allPlays[i].players[0].player.id}`}
                     style={{ textDecoration: 'none', color: '#000099' }}
                   >
                     {liveData.plays.allPlays[i].players[0].player.fullName}

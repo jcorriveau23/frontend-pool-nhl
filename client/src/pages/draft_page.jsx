@@ -60,7 +60,7 @@ export default function DraftPage() {
               </td>
               {pick.prospect.id > 0 ? (
                 <td>
-                  <Link to={`/playerInfo/${pick.prospect.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                  <Link to={`/player-info/${pick.prospect.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
                     {pick.prospect.fullName}
                   </Link>
                 </td>

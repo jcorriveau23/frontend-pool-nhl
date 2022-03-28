@@ -54,7 +54,7 @@ export default function PlayerPage() {
             // console.log(p.prospects[0])
             if (p.prospects[0].nhlPlayerId > 8000000 && !hasNavigated) {
               setHaseNavigated(true);
-              navigate(`/playerInfo/${p.prospects[0].nhlPlayerId}`);
+              navigate(`/player-info/${p.prospects[0].nhlPlayerId}`);
             }
           });
       }
@@ -209,7 +209,7 @@ export default function PlayerPage() {
                   <>
                     <td>
                       <Link
-                        to={`/teamRosterBySeason/${season.team.id}/${season.season}`}
+                        to={`/team-roster/${season.team.id}/${season.season}`}
                         style={{ textDecoration: 'none', color: '#0000ff' }}
                       >
                         {`${season.season.slice(0, 4)}-${season.season.slice(4)}`}
@@ -345,7 +345,7 @@ export default function PlayerPage() {
                   <>
                     <td>
                       <Link
-                        to={`/teamRosterBySeason/${season.team.id}/${season.season}`}
+                        to={`/team-roster/${season.team.id}/${season.season}`}
                         style={{ textDecoration: 'none', color: '#000099' }}
                       >
                         {`${season.season.slice(0, 4)}-${season.season.slice(4)}`}
