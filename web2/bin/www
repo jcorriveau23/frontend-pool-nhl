@@ -8,7 +8,7 @@ var app = require("../app");
 var debug = require("debug")("pool-jdope:server");
 var http = require("http");
 const jwt = require("jsonwebtoken");
-const fetch = require("node-fetch");
+const axios = require("axios");
 
 // import { PRIVATE_KEY_DB } from '../controllers/constants'
 PRIVATE_KEY_DB = "verySecretValue";
@@ -42,39 +42,39 @@ io.on("connection", function (socket) {
     let token = jwt.decode(data, PRIVATE_KEY_DB);
 
     if (token !== null) {
-      //TODO: valide token.addr is a registered client in db
+      //TODO: valide token.name is a registered client in db
 
       if (pools[room] == undefined) {
         pools[room] = {};
         pools[room]["numClients"] = 1;
-        pools[room]["listClient"] = [{ name: token.addr, ready: false }];
+        pools[room]["listClient"] = [{ name: token.name, ready: false }];
 
         socket.join(room);
-        addClientToMap(token.addr, socket.id);
+        addClientToMap(token.name, socket.id);
 
         io.in(room).emit("roomData", pools[room]["listClient"]);
       } else {
         if (
-          pools[room]["listClient"].findIndex((e) => e.name === token.addr) !==
+          pools[room]["listClient"].findIndex((e) => e.name === token.name) !==
           -1
         ) {
           // already in the room
           socket.join(room); // still add the duplicate socket
-          addClientToMap(token.addr, socket.id);
+          addClientToMap(token.name, socket.id);
 
           io.in(room).emit("roomData", pools[room]["listClient"]);
         } else if (pools[room]["numClients"] > 5) {
           // dont add it
         } else {
           pools[room]["numClients"]++;
-          pools[room]["listClient"].push({ name: token.addr, ready: false });
+          pools[room]["listClient"].push({ name: token.name, ready: false });
           socket.join(room); // still add the duplicate socket
-          addClientToMap(token.addr, socket.id);
+          addClientToMap(token.name, socket.id);
 
           io.in(room).emit("roomData", pools[room]["listClient"]);
         }
       }
-      //console.log(token.addr + " join room: " + room);
+      //console.log(token.name + " join room: " + room);
       //console.log("in Room now: " + pools[room]["listClient"])
     }
   });
@@ -86,9 +86,9 @@ io.on("connection", function (socket) {
       socket.leave(room);
       //console.log(socket.id + " leave room: " + room);
 
-      if (removeClientFromMap(token.addr, socket.id)) {
+      if (removeClientFromMap(token.name, socket.id)) {
         var index = pools[room]["listClient"].findIndex(
-          (e) => e.name === token.addr
+          (e) => e.name === token.name
         );
         if (index > -1) {
           pools[room]["listClient"].splice(index, 1);
@@ -96,7 +96,7 @@ io.on("connection", function (socket) {
 
           io.in(room).emit("roomData", pools[room]["listClient"]);
 
-          //console.log(token.addr + " leave room: " + room);
+          //console.log(token.name + " leave room: " + room);
           if (pools[room]["numClients"] === 0) {
             pools[room] = undefined;
             //console.log("room: " + room + "closed" )
@@ -112,11 +112,11 @@ io.on("connection", function (socket) {
     let token = jwt.decode(data, PRIVATE_KEY_DB);
 
     var index = pools[room]["listClient"].findIndex(
-      (e) => e.name === token.addr
+      (e) => e.name === token.name
     );
 
     if (index > -1) {
-      console.log("im ready: " + token.addr);
+      console.log("im ready: " + token.name);
       pools[room]["listClient"][index].ready = true;
 
       io.in(room).emit("roomData", pools[room]["listClient"]);
@@ -127,7 +127,7 @@ io.on("connection", function (socket) {
     let token = jwt.decode(data, PRIVATE_KEY_DB);
 
     var index = pools[room]["listClient"].findIndex(
-      (e) => e.name === token.addr
+      (e) => e.name === token.name
     );
 
     if (index > -1) {
@@ -141,10 +141,10 @@ io.on("connection", function (socket) {
     let token = jwt.decode(data, PRIVATE_KEY_DB);
 
     var index = pools[pool_info.name]["listClient"].findIndex(
-      (e) => e.name === token.addr
+      (e) => e.name === token.name
     );
 
-    if (index > -1 && pool_info.owner === token.addr) {
+    if (index > -1 && pool_info.owner === token.name) {
       io.in(pool_info.name).emit("poolInfo", pool_info);
     }
   });
@@ -157,32 +157,28 @@ io.on("connection", function (socket) {
       }
     }
 
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", token: data },
-      body: JSON.stringify({
+    axios
+      .put("https://hockeypool.live/api/pool/start_draft", {
+        token: data,
         pool_name: room,
         participants: pools[room]["listClient"],
-      }),
-    };
-    fetch("https://hockeypool.live/api/pool/start_draft", requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success === "True") {
-          io.in(room).emit("poolInfo", data.message);
+      })
+      .then((res) => {
+        if (res.data.success === "True") {
+          io.in(room).emit("poolInfo", res.data.message);
         } else {
-          console.log(data.message);
+          console.error(res.data.message);
         }
       });
   });
 
   socket.on("pickPlayer", function (data, room, player, callback) {
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", token: data },
-      body: JSON.stringify({ pool_name: room, player: player }),
-    };
-    fetch("https://hockeypool.live/api/pool/chose_player", requestOptions)
+    axios
+      .put("https://hockeypool.live/api/pool/chose_player", {
+        token: data,
+        pool_name: room,
+        player,
+      })
       .then((response) => response.json())
       .then((data) => {
         if (data.success === "True") {

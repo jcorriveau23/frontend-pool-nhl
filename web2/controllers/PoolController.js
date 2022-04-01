@@ -9,11 +9,12 @@ PRIVATE_KEY_DB = "verySecretValue";
 const jwt = require("jsonwebtoken");
 
 const pool_creation = (req, res, next) => {
-  var encrypt_token = req.headers.token;
+  var encrypt_token = req.body.token;
+  console.log(req.body);
 
   let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
   // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-  User.findOne({ addr: token.addr }).then((user) => {
+  User.findOne({ name: token.name }).then((user) => {
     if (!user) {
       res.json({
         success: "False",
@@ -31,7 +32,7 @@ const pool_creation = (req, res, next) => {
     } else {
       let pool = new Pool({
         name: req.body.name,
-        owner: token.addr,
+        owner: token.name,
         number_poolers: req.body.number_pooler,
         number_forward: 9,
         number_defenders: 4,
@@ -73,11 +74,11 @@ const pool_creation = (req, res, next) => {
 };
 
 const delete_pool = (req, res, next) => {
-  var encrypt_token = req.headers.token;
+  var encrypt_token = req.body.token;
 
   let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
   // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-  User.findOne({ addr: token.addr }).then((user) => {
+  User.findOne({ name: token.name }).then((user) => {
     if (!user) {
       res.json({
         success: "False",
@@ -87,7 +88,7 @@ const delete_pool = (req, res, next) => {
   });
 
   Pool.findOne({ $or: [{ name: req.body.name }] }).then((pool) => {
-    if (pool.owner === token.addr) {
+    if (pool.owner === token.name) {
       Pool.deleteOne({ name: pool.name }).then((pool) => {
         res.json({
           success: "True",
@@ -110,7 +111,7 @@ const pool_list = (req, res, next) => {
     var encrypt_token = req.headers.token;
     let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
     // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-    User.findOne({ addr: token.addr }).then((user) => {
+    User.findOne({ name: token.name }).then((user) => {
       if (!user) {
         res.json({
           success: "False",
@@ -120,7 +121,7 @@ const pool_list = (req, res, next) => {
 
       user_pools = user.pool_list;
 
-      Pool.find({ status: "created", owner: user.addr })
+      Pool.find({ status: "created", owner: user.name })
         .then((pools_created) => {
           Pool.find({ name: user.pool_list }, { name: 1, status: 1, owner: 1 })
             .then((pools) => {
@@ -157,7 +158,7 @@ const get_pool_info = (req, res, next) => {
     var encrypt_token = req.headers.token;
     let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
     // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-    User.findOne({ addr: token.addr }).then((user) => {
+    User.findOne({ name: token.name }).then((user) => {
       if (!user) {
         res.json({
           success: "False",
@@ -185,39 +186,12 @@ const get_pool_info = (req, res, next) => {
         });
         return;
       } else {
-        pool_info = {
-          name: pool.name,
-          owner: pool.owner,
-          number_poolers: pool.number_poolers,
-          number_forward: pool.number_forward,
-          number_defenders: pool.number_defenders,
-          number_goalies: pool.number_goalies,
-          number_reservist: pool.number_reservist,
-          forward_pts_goals: pool.forward_pts_goals,
-          forward_pts_assists: pool.forward_pts_assists,
-          forward_pts_hattricks: pool.forward_pts_hattricks,
-          defender_pts_goals: pool.defender_pts_goals,
-          defender_pts_assists: pool.defender_pts_assists,
-          defender_pts_hattricks: pool.defender_pts_hattricks,
-          goalies_pts_wins: pool.goalies_pts_wins,
-          goalies_pts_shutouts: pool.goalies_pts_shutouts,
-          goalies_pts_goals: pool.goalies_pts_goals,
-          goalies_pts_assists: pool.goalies_pts_assists,
-          next_drafter: pool.next_drafter,
-          context: pool.context,
-          status: pool.status,
-          participants: pool.participants,
-          next_season_number_players_protected:
-            pool.next_season_number_players_protected,
-          tradable_picks: pool.tradable_picks,
-        };
+        res.json({
+          success: "True",
+          message: pool,
+        });
+        return;
       }
-
-      res.json({
-        success: "True",
-        message: pool_info,
-      });
-      return;
     })
     .catch((error) => {
       res.json({
@@ -229,12 +203,12 @@ const get_pool_info = (req, res, next) => {
 };
 
 const start_draft = (req, res, next) => {
-  if (req.headers.token !== "undefined") {
+  if (req.body.token !== "undefined") {
     var encrypt_token = req.headers.token;
     let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
-    user_addr = token.addr;
+    user_name = token.name;
     // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-    User.findOne({ addr: token.addr }).then((user) => {
+    User.findOne({ name: token.name }).then((user) => {
       if (!user) {
         res.json({
           success: "False",
@@ -264,7 +238,7 @@ const start_draft = (req, res, next) => {
         return;
       } else {
         if (pool.number_poolers === participants.length) {
-          if (pool.owner === user_addr) {
+          if (pool.owner === user_name) {
             // modify pool object
             pool.context = {};
             for (i = 0; i < participants.length; i++) {
@@ -391,14 +365,14 @@ const start_draft = (req, res, next) => {
 };
 
 const chose_player = (req, res, next) => {
-  var user_addr;
+  var user_name;
 
-  if (req.headers.token !== "undefined") {
+  if (req.body.token !== "undefined") {
     var encrypt_token = req.headers.token;
     let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
-    user_addr = token.addr;
+    user_name = token.name;
     // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-    User.findOne({ addr: token.addr }).then((user) => {
+    User.findOne({ name: token.name }).then((user) => {
       if (!user) {
         res.json({
           success: "False",
@@ -443,7 +417,7 @@ const chose_player = (req, res, next) => {
         max_number = pool.number_goalies;
       }
 
-      if (user_addr === pool.next_drafter) {
+      if (user_name === pool.next_drafter) {
         for (i = 0; i < pool.number_poolers; i++) {
           pooler = pool.participants[i];
 
@@ -472,20 +446,20 @@ const chose_player = (req, res, next) => {
         }
         var index;
         // player go in his role
-        if (pool.context[user_addr][key_nb_role] < max_number) {
-          index = pool.context[user_addr][key_nb_role];
+        if (pool.context[user_name][key_nb_role] < max_number) {
+          index = pool.context[user_name][key_nb_role];
 
-          pool.context[user_addr][key_role][index] = player;
-          pool.context[user_addr][key_nb_role] += 1;
+          pool.context[user_name][key_role][index] = player;
+          pool.context[user_name][key_nb_role] += 1;
         }
         //player go in reservist
         else if (
-          pool.context[user_addr]["nb_reservist"] < pool.number_reservist
+          pool.context[user_name]["nb_reservist"] < pool.number_reservist
         ) {
-          index = pool.context[user_addr]["nb_reservist"];
+          index = pool.context[user_name]["nb_reservist"];
 
-          pool.context[user_addr]["chosen_reservist"][index] = player;
-          pool.context[user_addr]["nb_reservist"] += 1;
+          pool.context[user_name]["chosen_reservist"][index] = player;
+          pool.context[user_name]["nb_reservist"] += 1;
         }
         // cant pick this player
         else {
@@ -540,14 +514,14 @@ const chose_player = (req, res, next) => {
 };
 
 const protected_players = (req, res, next) => {
-  var user_addr;
+  var user_name;
 
-  if (req.headers.token !== "undefined") {
+  if (req.body.token !== "undefined") {
     var encrypt_token = req.headers.token;
     let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
-    user_addr = token.addr;
+    user_name = token.name;
     // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-    User.findOne({ addr: token.addr }).then((user) => {
+    User.findOne({ name: token.name }).then((user) => {
       if (!user) {
         res.json({
           success: "False",
@@ -579,8 +553,8 @@ const protected_players = (req, res, next) => {
       return;
     } else {
       if (def_protected.length <= pool.number_defenders) {
-        pool.context[user_addr].chosen_defender = def_protected;
-        pool.context[user_addr].nb_defender = def_protected.length;
+        pool.context[user_name].chosen_defender = def_protected;
+        pool.context[user_name].nb_defender = def_protected.length;
       } else {
         res.json({
           success: "False",
@@ -589,8 +563,8 @@ const protected_players = (req, res, next) => {
         return;
       }
       if (forw_protected.length <= pool.number_forward) {
-        pool.context[user_addr].chosen_forward = forw_protected;
-        pool.context[user_addr].nb_forward = forw_protected.length;
+        pool.context[user_name].chosen_forward = forw_protected;
+        pool.context[user_name].nb_forward = forw_protected.length;
       } else {
         res.json({
           success: "False",
@@ -600,8 +574,8 @@ const protected_players = (req, res, next) => {
       }
 
       if (goal_protected.length <= pool.number_goalies) {
-        pool.context[user_addr].chosen_goalies = goal_protected;
-        pool.context[user_addr].nb_goalies = goal_protected.length;
+        pool.context[user_name].chosen_goalies = goal_protected;
+        pool.context[user_name].nb_goalies = goal_protected.length;
       } else {
         res.json({
           success: "False",
@@ -610,8 +584,8 @@ const protected_players = (req, res, next) => {
         return;
       }
       if (reserv_protected.length <= pool.number_reservist) {
-        pool.context[user_addr].chosen_reservist = reserv_protected;
-        pool.context[user_addr].nb_reservist = reserv_protected.length;
+        pool.context[user_name].chosen_reservist = reserv_protected;
+        pool.context[user_name].nb_reservist = reserv_protected.length;
       } else {
         res.json({
           success: "False",
@@ -726,14 +700,14 @@ const protected_players = (req, res, next) => {
 };
 
 const get_pool_stats = (req, res, next) => {
-  var user_addr;
+  var user_name;
 
   if (req.headers.token !== "undefined") {
     var encrypt_token = req.headers.token;
     let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
-    user_addr = token.addr;
+    user_name = token.name;
     // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-    User.findOne({ addr: token.addr }).then((user) => {
+    User.findOne({ name: token.name }).then((user) => {
       if (!user) {
         res.json({
           success: "False",
@@ -839,7 +813,7 @@ const get_all_players = (req, res, next) => {
     let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
 
     // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-    User.findOne({ addr: token.addr }).then((user) => {
+    User.findOne({ name: token.name }).then((user) => {
       if (!user) {
         res.json({
           success: "False",
@@ -935,7 +909,7 @@ function ValidateUser(encrypt_token) {
     let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
 
     // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-    User.findOne({ addr: token.addr }).then((user) => {
+    User.findOne({ name: token.name }).then((user) => {
       if (!user) {
         res.json({
           success: "False",

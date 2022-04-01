@@ -21,7 +21,7 @@ while True:
     skaters = []
     goalies = []
     
-    today = date.today()# - timedelta(days=4)
+    today = date.today()# - timedelta(days=1)
     TODAY_GAME_END_POINT = f'/api/v1/schedule?startDate={today}&endDate={today}'
 
     response = requests.request('GET', API_URL + TODAY_GAME_END_POINT)  # fetch all todays games
@@ -70,9 +70,8 @@ while True:
                     elif 'goalieStats' in player['stats']:
                         if player['stats']['goalieStats']['timeOnIce'] != '0:00':
                             player_name = player['person']['fullName']
-                            player_avg = player['stats']['goalieStats']['savePercentage'] 
 
-                            print(f'{player_name} | {player_avg} AVG')
+                            print(f'{player_name} | goalies')
 
                             goalies.append({
                                 'name': player['person']['fullName'], 

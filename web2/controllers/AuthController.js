@@ -17,9 +17,9 @@ const verifyMessage = async (message, address, signature) => {
 };
 
 const register = (req, res, next) => {
-  var username = req.body.name;
+  var username = req.body.username;
 
-  User.findOne({ $or: [{ name: username }] }).then((user) => {
+  User.findOne({ name: username }).then((user) => {
     if (user) {
       res.json({
         success: "False",
@@ -36,6 +36,7 @@ const register = (req, res, next) => {
 
         let user = new User({
           name: req.body.name,
+          addr: "", // no address when register with password and username
           email: req.body.email,
           phone: req.body.phone,
           password: hashedPass,
@@ -62,6 +63,39 @@ const register = (req, res, next) => {
 };
 
 const login = (req, res, next) => {
+  var username = req.body.username;
+
+  User.findOne({ name: username }).then((user) => {
+    if (user) {
+      bcrypt.hash(req.body.password, 10, function (err, hashedPass) {
+        if (err) {
+          res.json({
+            success: "False",
+            error: err,
+          });
+        }
+
+        let token = jwt.sign({ name: user.name }, PRIVATE_KEY_DB, {
+          expiresIn: "1h",
+        });
+
+        res.json({
+          success: "True",
+          message: "login with username and password successfull",
+          token,
+          user,
+        });
+      });
+    } else {
+      res.json({
+        success: "False",
+        error: "user does not exist",
+      });
+    }
+  });
+};
+
+const wallet_login = (req, res, next) => {
   var addr = req.body.addr;
   var sig = req.body.sig;
 
@@ -75,13 +109,13 @@ const login = (req, res, next) => {
         sig
       ).then((isVerified) => {
         if (isVerified) {
-          let token = jwt.sign({ addr: user.addr }, PRIVATE_KEY_DB, {
+          let token = jwt.sign({ name: user.name }, PRIVATE_KEY_DB, {
             expiresIn: "1h",
           });
 
           res.json({
             success: "True",
-            message: "unlock Successful!",
+            message: "login with wallet Successful!l",
             token,
             user,
           });
@@ -110,7 +144,7 @@ const login = (req, res, next) => {
             sig
           ).then((isVerified) => {
             if (isVerified) {
-              let token = jwt.sign({ addr: user.addr }, PRIVATE_KEY_DB, {
+              let token = jwt.sign({ name: user.name }, PRIVATE_KEY_DB, {
                 expiresIn: "1h",
               });
               res.json({
@@ -138,30 +172,63 @@ const login = (req, res, next) => {
 };
 
 const set_username = (req, res, next) => {
-  var encrypt_token = req.headers.addr;
+  const encrypt_token = req.body.token;
+  const newUsername = req.body.newUsername;
 
-  let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
-  // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-  User.findOne({ $or: [{ name: token.name }] }).then((user) => {
-    if (user) {
-      res.json({
-        success: "True",
-        username: token.name,
-        message: "legit User!",
-      });
-      return;
-    } else {
-      res.json({
-        success: "False",
-        message: "User is not registered!",
-      });
-      return;
-    }
-  });
+  const token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
+
+  if (token) {
+    // TODO: use token.iat and token.exp to use token expiration and force user to re-login
+    User.findOne({ name: token.name }).then((user) => {
+      if (user) {
+        user.name = newUsername;
+        User.findOne({ name: newUsername }).then((newUser) => {
+          if (newUser) {
+            res.json({
+              success: "False",
+              message: "username already exist!",
+            });
+          } else {
+            user
+              .save()
+              .then((user) => {
+                let token = jwt.sign({ name: user.name }, PRIVATE_KEY_DB, {
+                  expiresIn: "1h",
+                });
+
+                res.json({
+                  success: "True",
+                  message: "changed username successfull!",
+                  token,
+                  user,
+                });
+              })
+              .catch((error) => {
+                res.json({
+                  success: "False",
+                  message: error,
+                });
+              });
+          }
+        });
+      } else {
+        res.json({
+          success: "False",
+          message: "User is not registered.",
+        });
+      }
+    });
+  } else {
+    res.json({
+      success: "False",
+      message: "The token is not valid.",
+    });
+  }
 };
 
 module.exports = {
   register,
   login,
+  wallet_login,
   set_username,
 };
