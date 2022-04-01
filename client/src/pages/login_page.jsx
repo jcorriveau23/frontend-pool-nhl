@@ -46,7 +46,7 @@ export default function LoginPage({ user, setUser }) {
           signer.getAddress().then(addr => {
             axios.post('https://hockeypool.live/api/auth/wallet_login', { addr, sig }).then(res => {
               if (res.data.success === 'True') {
-                Cookies.set(`token-${res.data.user.name}`, res.data.token);
+                Cookies.set(`token-${res.data.user._id}`, res.data.token);
                 localStorage.setItem('persist-account', JSON.stringify(res.data.user));
                 setUser(res.data.user);
                 navigate('/');
@@ -65,7 +65,7 @@ export default function LoginPage({ user, setUser }) {
   const login = () => {
     axios.post('https://hockeypool.live/api/auth/login', { username, password }).then(res => {
       if (res.data.success === 'True') {
-        Cookies.set(`token-${res.data.user.name}`, res.data.token);
+        Cookies.set(`token-${res.data.user._id}`, res.data.token);
         localStorage.setItem('persist-account', JSON.stringify(res.data.user));
         setUser(res.data.user);
         navigate('/');

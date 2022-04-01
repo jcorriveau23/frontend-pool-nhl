@@ -24,17 +24,17 @@ export default function ProfilePage({ user, setUser }) {
   }, []);
 
   const logout = () => {
-    Cookies.remove(`token-${user.name}`);
+    Cookies.remove(`token-${user._id}`);
     localStorage.clear('persist-account');
     window.location.reload(true);
   };
 
   const set_username = () => {
     axios
-      .post('https://hockeypool.live/api/auth/set_username', { token: Cookies.get(`token-${user.name}`), newUsername })
+      .post('https://hockeypool.live/api/auth/set_username', { token: Cookies.get(`token-${user._id}`), newUsername })
       .then(res => {
         if (res.data.success === 'True') {
-          Cookies.set(`token-${res.data.user.name}`, res.data.token);
+          Cookies.set(`token-${res.data.user._id}`, res.data.token);
           localStorage.setItem('persist-account', JSON.stringify(res.data.user));
           setUser(res.data.user);
         } else {
@@ -79,6 +79,7 @@ export default function ProfilePage({ user, setUser }) {
 
 ProfilePage.propTypes = {
   user: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
     phone: PropTypes.string.isRequired,

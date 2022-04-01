@@ -27,7 +27,7 @@ export default function MyPoolsPage({ user }) {
       axios
         .get('https://hockeypool.live/api/pool/pool_list', {
           headers: {
-            token: Cookies.get(`token-${user.name}`),
+            token: Cookies.get(`token-${user._id}`),
           },
         })
         .then(res => {
@@ -103,7 +103,7 @@ export default function MyPoolsPage({ user }) {
                         <PoolItem
                           name={pool.name}
                           owner={pool.owner}
-                          username={user.name}
+                          user={user}
                           poolDeleted={poolDeleted}
                           setPoolDeleted={setPoolDeleted}
                         />
@@ -162,7 +162,7 @@ export default function MyPoolsPage({ user }) {
           <CreatePoolModal
             showCreatePoolModal={showCreatePoolModal}
             setShowCreatePoolModal={setShowCreatePoolModal}
-            username={user.name}
+            user={user}
           />
         </div>
       </div>
@@ -173,7 +173,7 @@ export default function MyPoolsPage({ user }) {
 }
 
 MyPoolsPage.propTypes = {
-  user: PropTypes.shape({ name: PropTypes.string.isRequired }),
+  user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }),
 };
 
 MyPoolsPage.defaultProps = {

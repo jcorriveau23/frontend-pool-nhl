@@ -25,7 +25,7 @@ export default function PoolPage({ user }) {
       axios
         .get('https://hockeypool.live/api/pool/get_pool_info', {
           headers: {
-            token: Cookies.get(`token-${user.name}`),
+            token: Cookies.get(`token-${user._id}`),
             poolname: poolName,
           },
         })
@@ -42,35 +42,17 @@ export default function PoolPage({ user }) {
     switch (poolInfo.status) {
       case 'created':
         return (
-          <CreatedPool
-            username={user.name}
-            poolName={poolName}
-            poolInfo={poolInfo}
-            setPoolInfo={setPoolInfo}
-            socket={socket}
-          />
+          <CreatedPool user={user} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket} />
         );
       case 'draft':
         return (
-          <DraftPool
-            username={user.name}
-            poolName={poolName}
-            poolInfo={poolInfo}
-            setPoolInfo={setPoolInfo}
-            socket={socket}
-          />
+          <DraftPool user={user} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket} />
         );
       case 'in Progress':
-        return <InProgressPool username={user.name} poolName={poolName} poolInfo={poolInfo} />;
+        return <InProgressPool user={user} poolName={poolName} poolInfo={poolInfo} />;
       case 'dynastie':
         return (
-          <DynastiePool
-            username={user.name}
-            poolName={poolName}
-            poolInfo={poolInfo}
-            setPoolInfo={setPoolInfo}
-            socket={socket}
-          />
+          <DynastiePool user={user} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket} />
         );
       default:
         return (
@@ -85,7 +67,7 @@ export default function PoolPage({ user }) {
 }
 
 PoolPage.propTypes = {
-  user: PropTypes.shape({ name: PropTypes.string.isRequired }),
+  user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }),
 };
 
 PoolPage.defaultProps = {

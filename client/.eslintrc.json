@@ -13,6 +13,7 @@
   },
   "plugins": ["react", "prettier"],
   "rules": {
-    "camelcase": "off"
+    "camelcase": "off",
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }]
   }
 }

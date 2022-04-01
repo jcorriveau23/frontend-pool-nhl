@@ -13,7 +13,7 @@ import { logos } from '../img/logos';
 
 // Loader
 
-export default function DraftPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
+export default function DraftPool({ user, poolName, poolInfo, setPoolInfo, socket }) {
   const [inRoom, setInRoom] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState('select a player');
   const [def_l, setDef_l] = useState([]);
@@ -42,14 +42,11 @@ export default function DraftPool({ username, poolName, poolInfo, setPoolInfo, s
   };
 
   const fetchPlayerDraft = () => {
-    const cookie = Cookies.get(`token-${username}`);
+    const cookie = Cookies.get(`token-${user._id}`);
 
     // get all players stats from past season
-    const requestOptions = {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json', token: cookie },
-    };
-    axios.get('https://hockeypool.live/api/pool/get_all_players', requestOptions).then(res => {
+
+    axios.get('https://hockeypool.live/api/pool/get_all_players', { headers: { token: cookie } }).then(res => {
       if (res.data.success === 'False') {
         // props.history.push('/pool_list');
       } else {
@@ -65,19 +62,19 @@ export default function DraftPool({ username, poolName, poolInfo, setPoolInfo, s
   };
 
   useEffect(() => {
-    if (socket && poolName && username) {
-      socket.emit('joinRoom', Cookies.get(`token-${username}`), poolName);
+    if (socket && poolName && user._id) {
+      socket.emit('joinRoom', Cookies.get(`token-${user._id}`), poolName);
       fetchPlayerDraft();
       setInRoom(true);
     }
     return () => {
       if (socket && poolName) {
-        socket.emit('leaveRoom', Cookies.get(`token-${username}`), poolName);
+        socket.emit('leaveRoom', Cookies.get(`token-${user._id}`), poolName);
         socket.off('roomData');
         setInRoom(false);
       }
     };
-  }, [username]);
+  }, [user]);
 
   useEffect(() => {
     if (socket) {
@@ -108,7 +105,7 @@ export default function DraftPool({ username, poolName, poolInfo, setPoolInfo, s
   };
 
   const chose_player = player => {
-    socket.emit('pickPlayer', Cookies.get(`token-${username}`), poolInfo.name, player, ack => {
+    socket.emit('pickPlayer', Cookies.get(`token-${user._id}`), poolInfo.name, player, ack => {
       if (ack.success === 'False') {
         setMessage(ack.message);
       } else {
@@ -164,107 +161,98 @@ export default function DraftPool({ username, poolName, poolInfo, setPoolInfo, s
     return false;
   };
 
-  const render_players = (pooler, chosen_player_key) => {
-    if (poolInfo.context[pooler]) {
-      return poolInfo.context[pooler][chosen_player_key].map((player, i) => (
-        <tr key={player.name}>
-          <td>{i + 1}</td>
-          <td>{player.name}</td>
-          <td>
-            <img src={logos[player.team]} alt="" width="30" height="30" />
-          </td>
-        </tr>
-      ));
-    }
+  const render_players = (pooler, chosen_player_key) =>
+    poolInfo.context[pooler][chosen_player_key].map((player, i) => (
+      <tr key={player.name}>
+        <td>{i + 1}</td>
+        <td>{player.name}</td>
+        <td>
+          <img src={logos[player.team]} alt="" width="30" height="30" />
+        </td>
+      </tr>
+    ));
 
-    return null;
-  };
-
-  const isUser = participant => participant === username;
+  const isUser = participant => participant === user._id;
 
   const render_tabs_choice = () => {
-    if (poolInfo.participants) {
-      const poolers = poolInfo.participants;
+    const poolers = poolInfo.participants;
 
-      // replace pooler user name to be first
-      const i = poolers.findIndex(isUser);
-      poolers.splice(i, 1);
-      poolers.splice(0, 0, username);
+    // replace pooler user name to be first
+    const i = poolers.findIndex(isUser);
+    poolers.splice(i, 1);
+    poolers.splice(0, 0, user._id);
 
-      return (
-        <Tabs>
-          <TabList>
-            {poolers.map(pooler => (
-              <Tab key={pooler}>{pooler}</Tab>
-            ))}
-          </TabList>
+    return (
+      <Tabs>
+        <TabList>
           {poolers.map(pooler => (
-            <TabPanel>
-              <table className="content-table">
-                <thead>
-                  <tr>
-                    <th colSpan={3}>Forwards</th>
-                  </tr>
-                  <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                  </tr>
-                </thead>
-                <tbody>{render_players(pooler, 'chosen_forward')}</tbody>
-              </table>
-              <table className="content-table">
-                <thead>
-                  <tr>
-                    <th colSpan={3}>Defenders</th>
-                  </tr>
-                  <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                  </tr>
-                </thead>
-                <tbody>{render_players(pooler, 'chosen_defender')}</tbody>
-              </table>
-              <table className="content-table">
-                <thead>
-                  <tr>
-                    <th colSpan={3}>Goalies</th>
-                  </tr>
-                  <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                  </tr>
-                </thead>
-                <tbody>{render_players(pooler, 'chosen_goalies')}</tbody>
-              </table>
-              <table className="content-table">
-                <thead>
-                  <tr>
-                    <th colSpan={3}>Reservists</th>
-                  </tr>
-                  <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                  </tr>
-                </thead>
-                <tbody>{render_players(pooler, 'chosen_reservist')}</tbody>
-              </table>
-            </TabPanel>
+            <Tab key={pooler}>{pooler}</Tab>
           ))}
-        </Tabs>
-      );
-    }
-
-    return null;
+        </TabList>
+        {poolers.map(pooler => (
+          <TabPanel>
+            <table className="content-table">
+              <thead>
+                <tr>
+                  <th colSpan={3}>Forwards</th>
+                </tr>
+                <tr>
+                  <th>#</th>
+                  <th>name</th>
+                  <th>team</th>
+                </tr>
+              </thead>
+              <tbody>{render_players(pooler, 'chosen_forward')}</tbody>
+            </table>
+            <table className="content-table">
+              <thead>
+                <tr>
+                  <th colSpan={3}>Defenders</th>
+                </tr>
+                <tr>
+                  <th>#</th>
+                  <th>name</th>
+                  <th>team</th>
+                </tr>
+              </thead>
+              <tbody>{render_players(pooler, 'chosen_defender')}</tbody>
+            </table>
+            <table className="content-table">
+              <thead>
+                <tr>
+                  <th colSpan={3}>Goalies</th>
+                </tr>
+                <tr>
+                  <th>#</th>
+                  <th>name</th>
+                  <th>team</th>
+                </tr>
+              </thead>
+              <tbody>{render_players(pooler, 'chosen_goalies')}</tbody>
+            </table>
+            <table className="content-table">
+              <thead>
+                <tr>
+                  <th colSpan={3}>Reservists</th>
+                </tr>
+                <tr>
+                  <th>#</th>
+                  <th>name</th>
+                  <th>team</th>
+                </tr>
+              </thead>
+              <tbody>{render_players(pooler, 'chosen_reservist')}</tbody>
+            </table>
+          </TabPanel>
+        ))}
+      </Tabs>
+    );
   };
 
   const render_color_user_turn = () => {
     let textColor = 'red-text';
 
-    if (poolInfo.next_drafter === username) {
+    if (poolInfo.next_drafter === user._id) {
       textColor = 'green-text';
     }
 
@@ -283,7 +271,9 @@ export default function DraftPool({ username, poolName, poolInfo, setPoolInfo, s
         <div className="container">
           <h1>Stats last season</h1>
           <div className="floatLeft">
-            <input type="text" placeholder="Search..." onChange={event => search_players(event.target.value)} />
+            <div>
+              <input type="text" placeholder="Search..." onChange={event => search_players(event.target.value)} />
+            </div>
             <Tabs>
               <TabList>
                 <Tab>Forwards</Tab>
@@ -416,7 +406,7 @@ export default function DraftPool({ username, poolName, poolInfo, setPoolInfo, s
 }
 
 DraftPool.propTypes = {
-  username: PropTypes.string.isRequired,
+  user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
   poolName: PropTypes.string.isRequired,
   poolInfo: PropTypes.shape({
     name: PropTypes.string.isRequired,

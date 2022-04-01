@@ -75,7 +75,7 @@ const login = (req, res, next) => {
           });
         }
 
-        let token = jwt.sign({ name: user.name }, PRIVATE_KEY_DB, {
+        let token = jwt.sign({ _id: user._id }, PRIVATE_KEY_DB, {
           expiresIn: "1h",
         });
 
@@ -109,7 +109,7 @@ const wallet_login = (req, res, next) => {
         sig
       ).then((isVerified) => {
         if (isVerified) {
-          let token = jwt.sign({ name: user.name }, PRIVATE_KEY_DB, {
+          let token = jwt.sign({ _id: user._id }, PRIVATE_KEY_DB, {
             expiresIn: "1h",
           });
 
@@ -144,7 +144,7 @@ const wallet_login = (req, res, next) => {
             sig
           ).then((isVerified) => {
             if (isVerified) {
-              let token = jwt.sign({ name: user.name }, PRIVATE_KEY_DB, {
+              let token = jwt.sign({ _id: user._id }, PRIVATE_KEY_DB, {
                 expiresIn: "1h",
               });
               res.json({
@@ -179,7 +179,7 @@ const set_username = (req, res, next) => {
 
   if (token) {
     // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-    User.findOne({ name: token.name }).then((user) => {
+    User.findOne({ _id: token._id }).then((user) => {
       if (user) {
         user.name = newUsername;
         User.findOne({ name: newUsername }).then((newUser) => {
@@ -192,7 +192,7 @@ const set_username = (req, res, next) => {
             user
               .save()
               .then((user) => {
-                let token = jwt.sign({ name: user.name }, PRIVATE_KEY_DB, {
+                let token = jwt.sign({ _id: user._id }, PRIVATE_KEY_DB, {
                   expiresIn: "1h",
                 });
 

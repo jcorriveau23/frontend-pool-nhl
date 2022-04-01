@@ -3,9 +3,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 
-export default function PoolItem({ name, owner, username, setPoolDeleted }) {
+export default function PoolItem({ name, owner, user, setPoolDeleted }) {
   const delete_pool = () => {
-    axios.post('https://hockeypool.live/api/pool/delete_pool', { token: Cookies.get(`token-${username}`), name });
+    axios.post('https://hockeypool.live/api/pool/delete_pool', { token: Cookies.get(`token-${user._id}`), name });
     setPoolDeleted(true);
   };
 
@@ -13,7 +13,7 @@ export default function PoolItem({ name, owner, username, setPoolDeleted }) {
     <div>
       <p>Pool: {name}</p>
       <p>Owner: {owner}</p>
-      {username === owner ? (
+      {user._id === owner ? (
         <button onClick={delete_pool} type="button">
           Delete
         </button>
@@ -25,6 +25,6 @@ export default function PoolItem({ name, owner, username, setPoolDeleted }) {
 PoolItem.propTypes = {
   name: PropTypes.string.isRequired,
   owner: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
+  user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
   setPoolDeleted: PropTypes.func.isRequired,
 };

@@ -11,7 +11,7 @@ import { logos } from '../img/logos';
 // css
 import '../react-tabs.css';
 
-export default function InProgressPool({ username, poolName, poolInfo }) {
+export default function InProgressPool({ user, poolName, poolInfo }) {
   const [playersStats, setPlayersStats] = useState({});
   const [ranking, setRanking] = useState([]);
 
@@ -138,7 +138,7 @@ export default function InProgressPool({ username, poolName, poolInfo }) {
       axios
         .get('https://hockeypool.live/api/pool/get_pool_stats', {
           headers: {
-            token: Cookies.get(`token-${username}`),
+            token: Cookies.get(`token-${user._id}`),
             poolname: poolName,
           },
         })
@@ -191,7 +191,7 @@ export default function InProgressPool({ username, poolName, poolInfo }) {
     hiddenElement.click();
   };
 
-  const isUser = participant => participant === username;
+  const isUser = participant => participant === user._id;
 
   const render_skater_stats = (pooler, chosen_player_key, player_total_pts_key) => {
     if (playersStats[pooler]) {
@@ -268,7 +268,7 @@ export default function InProgressPool({ username, poolName, poolInfo }) {
       // replace pooler user name to be first
       const i = poolers.findIndex(isUser);
       poolers.splice(i, 1);
-      poolers.splice(0, 0, username);
+      poolers.splice(0, 0, user._id);
 
       return (
         <Tabs>
@@ -414,7 +414,7 @@ export default function InProgressPool({ username, poolName, poolInfo }) {
 }
 
 InProgressPool.propTypes = {
-  username: PropTypes.string.isRequired,
+  user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
   poolName: PropTypes.string.isRequired,
   poolInfo: PropTypes.shape({
     name: PropTypes.string.isRequired,

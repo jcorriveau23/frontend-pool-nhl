@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import { styleModal } from './styleModal';
 
-export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePoolModal, username }) {
+export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePoolModal, user }) {
   const [msg, setMsg] = useState('');
   const [poolNameInput, setPoolNameInput] = useState('');
   const [numberPoolerInput, setNumberPoolerInput] = useState(4);
@@ -14,9 +14,9 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
   const createPool = () => {
     axios
       .post('https://hockeypool.live/api/pool/pool_creation', {
-        token: Cookies.get(`token-${username}`),
+        token: Cookies.get(`token-${user._id}`),
         name: poolNameInput,
-        owner: username,
+        owner: user._id, // TODO change that to use the _id instead of name since the name can be edit by the user.
         number_pooler: numberPoolerInput,
       })
       .then(res => {
@@ -29,11 +29,11 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
   };
 
   const isLoggedRender = () => {
-    if (username) {
+    if (user) {
       return (
         <div className="modal_content">
           <h1>Create a pool</h1>
-          <p>What name do you give to your pool {username}?</p>
+          <p>What name do you give to your pool {user.name}?</p>
           <form>
             <div>
               <input
@@ -71,7 +71,6 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
 
     return (
       <div className="modal_content">
-        <h1>{username}</h1>
         <p>You need to be logged in to create a pool.</p>
       </div>
     );
@@ -87,5 +86,5 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
 CreatePoolModal.propTypes = {
   showCreatePoolModal: PropTypes.bool.isRequired,
   setShowCreatePoolModal: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
+  user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
 };

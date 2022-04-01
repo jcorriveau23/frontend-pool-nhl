@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // components
 import ParticipantItem from './participantItem';
 
-export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo, socket }) {
+export default function CreatedPool({ user, poolName, poolInfo, setPoolInfo, socket }) {
   const [inRoom, setInRoom] = useState(false);
   const [userList, setUserList] = useState([]);
   // const [msg, setMsg] = useState(""); // TODO: add some error msg to display on the app.
@@ -15,12 +15,12 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
     if (socket && poolName) {
       // TODO: add some validation server socket side to prevent someone joining the pool
       // when there is already the maximum poolers in the room
-      socket.emit('joinRoom', Cookies.get(`token-${username}`), poolName);
+      socket.emit('joinRoom', Cookies.get(`token-${user._id}`), poolName);
       setInRoom(true);
     }
     return () => {
       if (socket && poolName) {
-        socket.emit('leaveRoom', Cookies.get(`token-${username}`), poolName);
+        socket.emit('leaveRoom', Cookies.get(`token-${user._id}`), poolName);
         socket.off('roomData');
         setInRoom(false);
       }
@@ -45,20 +45,20 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
     if (event.target.type === 'checkbox') {
       // the host click on the start button
       if (event.target.checked) {
-        socket.emit('playerReady', Cookies.get(`token-${username}`), poolName);
+        socket.emit('playerReady', Cookies.get(`token-${user._id}`), poolName);
       } else {
-        socket.emit('playerNotReady', Cookies.get(`token-${username}`), poolName);
+        socket.emit('playerNotReady', Cookies.get(`token-${user._id}`), poolName);
       }
-    } else if (event.target.type === 'submit') {
+    } else if (event.target.type === 'button') {
       // the host click on the start button
-      socket.emit('startDraft', Cookies.get(`token-${username}`), poolName);
+      socket.emit('startDraft', Cookies.get(`token-${user._id}`), poolName);
     } else if (event.target.type === 'select-one') {
       // the host change a value of the pool configuration
       const poolInfoChanged = poolInfo;
 
       poolInfoChanged[event.target.name] = event.target.value;
       setPoolInfo(poolInfoChanged);
-      socket.emit('changeRule', Cookies.get(`token-${username}`), poolInfo);
+      socket.emit('changeRule', Cookies.get(`token-${user._id}`), poolInfo);
     }
   };
 
@@ -68,8 +68,8 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
     for (let i = 0; i < poolInfo.number_poolers; i += 1) {
       if (i < userList.length) {
         participants.push(
-          <li key={userList[i].name}>
-            <ParticipantItem name={userList[i].name} ready={userList[i].ready} />
+          <li key={userList[i]._id}>
+            <ParticipantItem name={userList[i]._id} ready={userList[i].ready} />
           </li>
         ); // TODO: add a modal pop up to add that friend
       } else {
@@ -92,7 +92,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
       }
     } else bDisable = true;
 
-    if (username === poolInfo.owner) {
+    if (user._id === poolInfo.owner) {
       return (
         <button onClick={handleChange} disabled={bDisable} type="button">
           Start draft
@@ -117,7 +117,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="number_poolers"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.number_poolers}
                   >
                     <option>2</option>
@@ -140,7 +140,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="number_forward"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.number_forward}
                   >
                     <option>2</option>
@@ -163,7 +163,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="number_defenders"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.number_defenders}
                   >
                     <option>2</option>
@@ -180,7 +180,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="number_goalies"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.number_goalies}
                   >
                     <option>1</option>
@@ -195,7 +195,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="number_reservist"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.number_reservist}
                   >
                     <option>1</option>
@@ -217,7 +217,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="forward_pts_goals"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.forward_pts_goals}
                   >
                     <option>1</option>
@@ -232,7 +232,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="forward_pts_assists"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.forward_pts_assists}
                   >
                     <option>1</option>
@@ -247,7 +247,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="forward_pts_hattricks"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.forward_pts_hattricks}
                   >
                     <option>1</option>
@@ -262,7 +262,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="defender_pts_goals"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.defender_pts_goals}
                   >
                     <option>1</option>
@@ -277,7 +277,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="defender_pts_assists"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.defender_pts_assists}
                   >
                     <option>1</option>
@@ -292,7 +292,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="defender_pts_hattricks"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.defender_pts_hattricks}
                   >
                     <option>1</option>
@@ -307,7 +307,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="goalies_pts_wins"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.goalies_pts_wins}
                   >
                     <option>1</option>
@@ -322,7 +322,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="goalies_pts_shutouts"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.goalies_pts_shutouts}
                   >
                     <option>1</option>
@@ -337,7 +337,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="goalies_pts_goals"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.goalies_pts_goals}
                   >
                     <option>1</option>
@@ -352,7 +352,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="goalies_pts_assists"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.goalies_pts_assists}
                   >
                     <option>1</option>
@@ -367,7 +367,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
                   <select
                     name="next_season_number_players_protected"
                     onChange={handleChange}
-                    disabled={poolInfo.owner !== username}
+                    disabled={poolInfo.owner !== user._id}
                     value={poolInfo.next_season_number_players_protected}
                   >
                     <option>6</option>
@@ -383,7 +383,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
               <tr>
                 <td>number tradable draft picks:</td>
                 <td>
-                  <select name="tradable_picks" onChange={handleChange} disabled={poolInfo.owner !== username}>
+                  <select name="tradable_picks" onChange={handleChange} disabled={poolInfo.owner !== user._id}>
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -417,7 +417,7 @@ export default function CreatedPool({ username, poolName, poolInfo, setPoolInfo,
 }
 
 CreatedPool.propTypes = {
-  username: PropTypes.string.isRequired,
+  user: PropTypes.shape({ _id: PropTypes.string.isRequired }).isRequired,
   poolName: PropTypes.string.isRequired,
   poolInfo: PropTypes.shape({
     name: PropTypes.string.isRequired,
