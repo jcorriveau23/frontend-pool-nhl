@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import { io } from 'socket.io-client';
 import PropTypes from 'prop-types';
 
@@ -21,25 +22,17 @@ export default function PoolPage({ user }) {
 
   useEffect(() => {
     if (user) {
-      const cookie = Cookies.get(`token-${user.addr}`);
-
-      // get pool info at start
-      const requestOptions = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          token: cookie,
-          poolname: poolName,
-        },
-      };
-      fetch('https://hockeypool.live/api/pool/get_pool_info', requestOptions)
-        .then(response => response.json())
-        .then(data => {
-          if (data.success === 'False') {
-            // console.log(data)
+      axios
+        .get('https://hockeypool.live/api/pool/get_pool_info', {
+          headers: {
+            token: Cookies.get(`token-${user.name}`),
+            poolname: poolName,
+          },
+        })
+        .then(res => {
+          if (res.data.success === 'True') {
             // [TODO] display a page or notification to show that the pool was not found
-          } else {
-            setPoolInfo(data.message);
+            setPoolInfo(res.data.message);
           }
         });
     }
@@ -50,7 +43,7 @@ export default function PoolPage({ user }) {
       case 'created':
         return (
           <CreatedPool
-            username={user.addr}
+            username={user.name}
             poolName={poolName}
             poolInfo={poolInfo}
             setPoolInfo={setPoolInfo}
@@ -60,7 +53,7 @@ export default function PoolPage({ user }) {
       case 'draft':
         return (
           <DraftPool
-            username={user.addr}
+            username={user.name}
             poolName={poolName}
             poolInfo={poolInfo}
             setPoolInfo={setPoolInfo}
@@ -68,11 +61,11 @@ export default function PoolPage({ user }) {
           />
         );
       case 'in Progress':
-        return <InProgressPool username={user.addr} poolName={poolName} poolInfo={poolInfo} />;
+        return <InProgressPool username={user.name} poolName={poolName} poolInfo={poolInfo} />;
       case 'dynastie':
         return (
           <DynastiePool
-            username={user.addr}
+            username={user.name}
             poolName={poolName}
             poolInfo={poolInfo}
             setPoolInfo={setPoolInfo}
@@ -92,7 +85,7 @@ export default function PoolPage({ user }) {
 }
 
 PoolPage.propTypes = {
-  user: PropTypes.shape({ addr: PropTypes.string.isRequired }),
+  user: PropTypes.shape({ name: PropTypes.string.isRequired }),
 };
 
 PoolPage.defaultProps = {

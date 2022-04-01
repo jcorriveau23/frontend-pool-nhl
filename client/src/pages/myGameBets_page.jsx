@@ -44,7 +44,7 @@ export default function MyGameBetsPage({ user, contract }) {
 }
 
 MyGameBetsPage.propTypes = {
-  user: PropTypes.shape({ addr: PropTypes.string.isRequired }),
+  user: PropTypes.shape({ name: PropTypes.string.isRequired }),
   contract: PropTypes.shape({ get_all_user_bets: PropTypes.func.isRequired }),
 };
 

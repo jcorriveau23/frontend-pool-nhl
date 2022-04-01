@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -37,23 +38,23 @@ export default function GameFeedPage({ user, contract }) {
       setHomeTeamSkaters(null);
       setAwayTeamSkaters(null);
 
-      fetch(`https://statsapi.web.nhl.com/api/v1/game/${gameID}/feed/live`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
-        .then(response => response.json())
-        .then(gInfo => {
-          console.log(gInfo);
+      axios
+        .get(`https://statsapi.web.nhl.com/api/v1/game/${gameID}/feed/live`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
+        .then(res => {
+          const gInfo = res.data;
           setGameInfo(gInfo);
 
           if (gInfo.gameData.status.abstractGameState === 'Preview') {
-            fetch(`https://statsapi.web.nhl.com/api/v1/teams/${gInfo.gameData.teams.away.id}/roster`) // https://statsapi.web.nhl.com/api/v1/teams/22/roster
-              .then(response => response.json())
-              .then(teamInfo => {
-                setAwayRosterPreview(teamInfo.roster);
+            axios
+              .get(`https://statsapi.web.nhl.com/api/v1/teams/${gInfo.gameData.teams.away.id}/roster`) // https://statsapi.web.nhl.com/api/v1/teams/22/roster
+              .then(res1 => {
+                setAwayRosterPreview(res1.data.roster);
               });
 
-            fetch(`https://statsapi.web.nhl.com/api/v1/teams/${gInfo.gameData.teams.home.id}/roster`) // https://statsapi.web.nhl.com/api/v1/teams/22/roster
-              .then(response => response.json())
-              .then(teamInfo => {
-                setHomeRosterPreview(teamInfo.roster);
+            axios
+              .get(`https://statsapi.web.nhl.com/api/v1/teams/${gInfo.gameData.teams.home.id}/roster`) // https://statsapi.web.nhl.com/api/v1/teams/22/roster
+              .then(res2 => {
+                setHomeRosterPreview(res2.data.roster);
               });
           } else {
             const homeSkaters = gInfo.liveData.boxscore.teams.home.skaters.filter(key => {
@@ -69,11 +70,10 @@ export default function GameFeedPage({ user, contract }) {
           }
         });
 
-      fetch(`https://statsapi.web.nhl.com/api/v1/game/${gameID}/content`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/content
-        .then(response => response.json())
-        .then(gContent => {
-          // console.log(gContent)
-          setGameContent(gContent);
+      axios
+        .get(`https://statsapi.web.nhl.com/api/v1/game/${gameID}/content`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/content
+        .then(res => {
+          setGameContent(res.data);
         });
     }
 

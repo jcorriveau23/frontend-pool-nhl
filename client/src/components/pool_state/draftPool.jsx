@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -48,21 +49,19 @@ export default function DraftPool({ username, poolName, poolInfo, setPoolInfo, s
       method: 'GET',
       headers: { 'Content-Type': 'application/json', token: cookie },
     };
-    fetch('https://hockeypool.live/api/pool/get_all_players', requestOptions)
-      .then(response => response.json())
-      .then(data => {
-        if (data.success === 'False') {
-          // props.history.push('/pool_list');
-        } else {
-          const sortedForwards = sort_by_player_member('pts', data.message.F);
-          const sortedDefender = sort_by_player_member('pts', data.message.D);
-          const sortedGoalies = sort_by_player_member('wins', data.message.G);
+    axios.get('https://hockeypool.live/api/pool/get_all_players', requestOptions).then(res => {
+      if (res.data.success === 'False') {
+        // props.history.push('/pool_list');
+      } else {
+        const sortedForwards = sort_by_player_member('pts', res.data.message.F);
+        const sortedDefender = sort_by_player_member('pts', res.data.message.D);
+        const sortedGoalies = sort_by_player_member('wins', res.data.message.G);
 
-          setForw_l([...sortedForwards]);
-          setDef_l([...sortedDefender]);
-          setGoal_l([...sortedGoalies]);
-        }
-      });
+        setForw_l([...sortedForwards]);
+        setDef_l([...sortedDefender]);
+        setGoal_l([...sortedGoalies]);
+      }
+    });
   };
 
   useEffect(() => {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -134,21 +135,16 @@ export default function InProgressPool({ username, poolName, poolInfo }) {
 
   useEffect(() => {
     if (poolName) {
-      const requestOptions = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          token: Cookies.get(`token-${username}`),
-          poolname: poolName,
-        },
-      };
-      fetch('https://hockeypool.live/api/pool/get_pool_stats', requestOptions)
-        .then(response => response.json())
-        .then(data => {
-          if (data.success === 'False') {
-            // this.props.history.push('/pool_list');
-          } else {
-            calculate_pool_stats(data.players);
+      axios
+        .get('https://hockeypool.live/api/pool/get_pool_stats', {
+          headers: {
+            token: Cookies.get(`token-${username}`),
+            poolname: poolName,
+          },
+        })
+        .then(res => {
+          if (res.data.success === 'True') {
+            calculate_pool_stats(res.data.players);
           }
         });
     }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 import ClipLoader from 'react-spinners/ClipLoader';
 import PropTypes from 'prop-types';
@@ -133,24 +134,17 @@ export default function DynastiePool({ username, poolName, poolInfo, setPoolInfo
       defProtected.length + forwProtected.length + goalProtected.length + reservProtected.length;
 
     if (number_protected_player === poolInfo.next_season_number_players_protected) {
-      const cookie = Cookies.get(`token-${username}`);
-
-      // validate login
-      const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', token: cookie },
-        body: JSON.stringify({
+      axios
+        .post('https://hockeypool.live/api/pool/protect_players', {
+          token: Cookies.get(`token-${username}`),
           pool_name: poolInfo.name,
           def_protected: defProtected,
           forw_protected: forwProtected,
           goal_protected: goalProtected,
           reserv_protected: reservProtected,
-        }),
-      };
-      fetch('https://hockeypool.live/api/pool/protect_players', requestOptions)
-        .then(response => response.json())
-        .then(data => {
-          if (data.success === 'False') {
+        })
+        .then(res => {
+          if (res.data.success === 'False') {
             // props.history.push('/login');
           }
         });

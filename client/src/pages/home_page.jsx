@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 
 // component
@@ -12,22 +13,15 @@ export default function HomePage({ formatDate }) {
     if (formatDate !== prevFormatDate && formatDate) {
       // get the day leaders data from database.
 
-      const requestOptions = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', d: formatDate },
-      };
-
-      fetch(`https://hockeypool.live/api/pool/get_day_leaders`, requestOptions)
-        .then(response => response.json())
-        .then(data => {
-          if (data.success === 'True') {
-            setDayLeaders({ ...data.message });
-            setPrevFormatDate(formatDate);
-          } else {
-            setDayLeaders(null);
-            setPrevFormatDate('');
-          }
-        });
+      axios.get(`https://hockeypool.live/api/pool/get_day_leaders`, { headers: { d: formatDate } }).then(res => {
+        if (res.data.success === 'True') {
+          setDayLeaders({ ...res.data.message });
+          setPrevFormatDate(formatDate);
+        } else {
+          setDayLeaders(null);
+          setPrevFormatDate('');
+        }
+      });
     }
   }, [formatDate]);
 

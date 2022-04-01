@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { ethers } from 'ethers';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
@@ -13,16 +15,10 @@ import './WalletCard.css';
 import LOCKED from '../img/web3/Locked_icon_red.svg';
 import UNLOCKED from '../img/web3/Unlocked_icon.png';
 
-export default function WalletCard({
-  user,
-  setUser,
-  setContract,
-  isWalletConnected,
-  setIsWalletConnected,
-  setIsWrongNetwork,
-}) {
+export default function WalletCard({ user, setUser, setContract, setIsWalletConnected, setIsWrongNetwork }) {
   const [isWalletUnlocked, setIsWalletUnlocked] = useState(false);
   const [currentAddr, setCurrentAddr] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (window.ethereum) {
@@ -59,7 +55,7 @@ export default function WalletCard({
 
     if (window.ethereum && userTmp) {
       // console.log(user.addr);
-      const token = Cookies.get(`token-${userTmp.addr}`);
+      const token = Cookies.get(`token-${userTmp.name}`);
 
       if (token) {
         // TODO: also validate that the token is not expired
@@ -69,68 +65,34 @@ export default function WalletCard({
     }
   }, []);
 
-  const connectWalletHandler = () => {
-    // const provider = new ethers.providers.Web3Provider(window.ethereum) // TODO: use const provider = new ethers.providers.Web3Provider(window.ethereum) instead
-    setIsWalletConnected(false);
+  // const connectWalletHandler = () => {
+  //   // const provider = new ethers.providers.Web3Provider(window.ethereum) // TODO: use const provider = new ethers.providers.Web3Provider(window.ethereum) instead
+  //   setIsWalletConnected(false);
+  //   setIsWalletUnlocked(false);
+  //   setUser(null);
 
-    if (window.ethereum && window.ethereum.isMetaMask) {
-      window.ethereum
-        .request({ method: 'eth_requestAccounts' })
-        .then(result => {
-          setCurrentAddr(result[0]);
-          setIsWalletConnected(true);
+  //   if (window.ethereum && window.ethereum.isMetaMask) {
+  //     window.ethereum
+  //       .request({ method: 'eth_requestAccounts' })
+  //       .then(result => {
+  //         setCurrentAddr(result[0]);
+  //         setIsWalletConnected(true);
 
-          const token = Cookies.get(`token-${result[0]}`);
+  //         const userTmp = JSON.parse(localStorage.getItem('persist-account'));
 
-          if (token) {
-            // TODO: also validate that the token is not expired
+  //         const token = Cookies.get(`token-${userTmp.name}`);
 
-            setIsWalletUnlocked(true);
-          }
-        })
-        .catch(error => {
-          alert(error.message);
-        });
-    } else alert('Please install MetaMask browser extension at: https://metamask.io/download.');
-  };
-
-  const unlockWallet = () => {
-    try {
-      if (!window.ethereum) throw new Error('Please install MetaMask browser extension to interact');
-
-      window.ethereum.request({ method: 'eth_requestAccounts' }).then(result => {
-        console.log(result);
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-
-        signer.signMessage('Unlock wallet to access nhl-pool-ethereum.').then(sig => {
-          signer.getAddress().then(addr => {
-            const requestOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ addr, sig }),
-            };
-            fetch('https://hockeypool.live/api/auth/login', requestOptions)
-              .then(response => response.json())
-              .then(data => {
-                if (data.success === 'True') {
-                  // console.log(result[0])
-                  // console.log(addr)
-
-                  Cookies.set(`token-${addr}`, data.token);
-                  localStorage.setItem('persist-account', JSON.stringify(data.user));
-                  setUser(data.user);
-
-                  setIsWalletUnlocked(true);
-                } else alert(data.message);
-              });
-          });
-        });
-      });
-    } catch (err) {
-      alert(err.message);
-    }
-  };
+  //         if (token) {
+  //           // TODO: also validate that the token is not expired
+  //           setUser(userTmp);
+  //           setIsWalletUnlocked(true);
+  //         }
+  //       })
+  //       .catch(error => {
+  //         alert(error.message);
+  //       });
+  //   } else alert('Please install MetaMask browser extension at: https://metamask.io/download.');
+  // };
 
   const chainChangedHandler = () => {
     // reload the page to avoid any errors with chain change mid use of application
@@ -141,26 +103,16 @@ export default function WalletCard({
     user ? isWalletUnlocked && user.addr.toLowerCase() === currentAddr.toLowerCase() : false;
 
   if (window.ethereum) {
-    window.ethereum.on('accountsChanged', connectWalletHandler);
+    // window.ethereum.on('accountsChanged', connectWalletHandler);
     window.ethereum.on('chainChanged', chainChangedHandler);
   }
 
-  const walletClickHandler = () => {
-    if (isWalletConnected) {
-      if (!isCurrentWalletUnlocked()) {
-        unlockWallet();
-      }
-    } else {
-      connectWalletHandler();
-    }
-  };
-
   return (
     <li className="walletCard">
-      <button onClick={walletClickHandler} type="button">
+      <button onClick={user ? () => navigate('/profile') : () => navigate('/login')} type="button">
         <div className="accountDisplay">
           <img src={isCurrentWalletUnlocked() ? UNLOCKED : LOCKED} alt="" width="20" height="20" />
-          <b>{currentAddr ? `${currentAddr.substring(0, 6)}...${currentAddr.slice(-4)}` : 'Connect Wallet'}</b>
+          <b>{currentAddr ? `${currentAddr.substring(0, 6)}...${currentAddr.slice(-4)}` : 'Connect'}</b>
         </div>
       </button>
     </li>
@@ -171,7 +123,6 @@ WalletCard.propTypes = {
   user: PropTypes.shape({ addr: PropTypes.string.isRequired }),
   setUser: PropTypes.func.isRequired,
   setContract: PropTypes.func.isRequired,
-  isWalletConnected: PropTypes.bool.isRequired,
   setIsWalletConnected: PropTypes.func.isRequired,
   setIsWrongNetwork: PropTypes.func.isRequired,
 };

@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -32,27 +33,19 @@ export default function LeagueLeadersPage() {
 
     const urlLeaders = `https://statsapi.web.nhl.com/api/v1/stats/leaders?leaderCategories=${statsType}&season=${season}&limit=100`; // https://statsapi.web.nhl.com/api/v1/stats/leaders?leaderCategories=gaa&season=20212022&limit=100
 
-    fetch(urlLeaders, {
-      method: 'GET',
-    })
-      .then(response => response.json())
-      .then(leaders => {
-        // console.log(leaders.leagueLeaders[0]);
-        if (leaders.leagueLeaders[0] === undefined) setNoDataFoThisYear(true);
+    axios.get(urlLeaders).then(res => {
+      // console.log(leaders.leagueLeaders[0]);
+      if (res.data.leagueLeaders[0] === undefined) setNoDataFoThisYear(true);
 
-        setLeagueLeaders({ ...leaders.leagueLeaders[0] });
-      });
+      setLeagueLeaders({ ...res.data.leagueLeaders[0] });
+    });
 
     const urlLeagueLeaderTypes = 'https://statsapi.web.nhl.com/api/v1/leagueLeaderTypes';
 
-    fetch(urlLeagueLeaderTypes, {
-      method: 'GET',
-    })
-      .then(response => response.json())
-      .then(leaderTypes => {
-        // console.log(leagueLeaderTypes)
-        setLeagueLeaderTypes([...leaderTypes]);
-      });
+    axios.get(urlLeagueLeaderTypes).then(res => {
+      // console.log(leagueLeaderTypes)
+      setLeagueLeaderTypes([...res.data]);
+    });
   }, [statsType, season]);
 
   const render_leaders = leaders => (

@@ -1,18 +1,11 @@
 import React from 'react';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 
 export default function PoolItem({ name, owner, username, setPoolDeleted }) {
   const delete_pool = () => {
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        token: Cookies.get(`token-${username}`),
-      },
-      body: JSON.stringify({ name }),
-    };
-    fetch('https://hockeypool.live/api/pool/delete_pool', requestOptions);
+    axios.post('https://hockeypool.live/api/pool/delete_pool', { token: Cookies.get(`token-${username}`), name });
     setPoolDeleted(true);
   };
 

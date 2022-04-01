@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 // component
 import GameItem from './gameItem';
@@ -23,15 +24,13 @@ export default function TodayGamesFeed({ setFormatDate }) {
     const fDate = newDate.toISOString().slice(0, 10);
 
     setFormatDate(fDate);
-    fetch(`https://statsapi.web.nhl.com/api/v1/schedule?startDate=${fDate}&endDate=${fDate}`)
-      .then(response => response.json())
-      .then(todayGamesData => {
-        if (todayGamesData.dates[0]) {
-          setGamesStats([...todayGamesData.dates[0].games]);
-        } else {
-          setGamesStats([]);
-        }
-      });
+    axios.get(`https://statsapi.web.nhl.com/api/v1/schedule?startDate=${fDate}&endDate=${fDate}`).then(res => {
+      if (res.data.dates[0]) {
+        setGamesStats([...res.data.dates[0].games]);
+      } else {
+        setGamesStats([]);
+      }
+    });
   }, [date]); // fetch all todays games info from nhl api on this component mount.
 
   const prevDate = () => {

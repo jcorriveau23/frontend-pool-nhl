@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Link, Routes, Route } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import axios from 'axios';
 
 // css
 import './components/components.css';
@@ -13,7 +13,6 @@ import Logo from './components/img/logo/logo.svg';
 import TodayGamesFeed from './components/game_feed/dayGamesFeed';
 
 // modals
-import RegisterModal from './modals/register';
 import WrongNetworkModal from './modals/wrongNetwork';
 
 // pages
@@ -39,7 +38,6 @@ if (window.location.protocol !== 'https:') {
 }
 
 function App() {
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [user, setUser] = useState(null);
   const [contract, setContract] = useState(null);
   const [formatDate, setFormatDate] = useState(null);
@@ -47,14 +45,8 @@ function App() {
   const [isWrongNetwork, setIsWrongNetwork] = useState(false);
 
   useEffect(() => {
-    fetch('https://nhl-pool-ethereum.herokuapp.com/');
+    axios.get('https://nhl-pool-ethereum.herokuapp.com/');
   }, []);
-
-  const Disconnect = () => {
-    Cookies.remove(`token-${user.addr}`);
-    localStorage.clear('persist-account');
-    window.location.reload(true);
-  };
 
   return (
     <Router>
@@ -91,13 +83,6 @@ function App() {
                 <li>
                   <Link to="/draft">Draft</Link>
                 </li>
-                {user ? (
-                  <li>
-                    <Link to="/" onClick={() => Disconnect()}>
-                      Disconnect
-                    </Link>
-                  </li>
-                ) : null}
                 <WalletCard
                   user={user}
                   setUser={setUser}
@@ -117,12 +102,11 @@ function App() {
         <TodayGamesFeed formatDate={formatDate} setFormatDate={setFormatDate} />
       </div>
       <div>
-        <RegisterModal showRegisterModal={showRegisterModal} setShowRegisterModal={setShowRegisterModal} />
         <WrongNetworkModal isWalletConnected={isWalletConnected} isWrongNetwork={isWrongNetwork} />
         <Routes>
           <Route path="/" element={<HomePage formatDate={formatDate} />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/login" element={<LoginPage user={user} setUser={setUser} />} />
+          <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
           <Route path="/my-pools" element={<MyPoolsPage user={user} />} />
           <Route path="/my-bets" element={<MyGameBetsPage user={user} contract={contract} />} />
           <Route path="/my-pools/:name" element={<PoolPage user={user} />} />

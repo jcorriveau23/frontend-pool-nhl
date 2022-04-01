@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -33,25 +34,17 @@ export default function TeamRosterBySeasonPage() {
       %20and%20seasonId%3E=
       ${season}`; // https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=8%20and%20gameTypeId=2%20and%20seasonId%3C=20172018%20and%20seasonId%3E=20172018
 
-    fetch(urlSkaters, {
-      method: 'GET',
-    })
-      .then(response => response.json())
-      .then(playersStats => {
-        // console.log(playersStats)
-        setSkatersStats([...playersStats.data]);
-      });
+    axios.get(urlSkaters).then(res => {
+      // console.log(playersStats)
+      setSkatersStats([...res.data.data]);
+    });
     // .catch(error => {
     //   alert(`Error 1! ${error}`);
     // });
 
-    fetch(urlgoalies, {
-      method: 'GET',
-    })
-      .then(response => response.json())
-      .then(playersStats => {
-        setGoaliesStats([...playersStats.data]);
-      });
+    axios.get(urlgoalies).then(res => {
+      setGoaliesStats([...res.data.data]);
+    });
     // .catch(error => {
     //   alert(`Error 2! ${error}`);
     // });

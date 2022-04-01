@@ -139,7 +139,7 @@ export default function GamePrediction({ gameID, gameInfo, user, contract }) {
     return (
       <div>
         <h1>No Prediction market open for that game yet.</h1>
-        {contract && user && user.addr === owner ? (
+        {contract && user && user.name === owner ? (
           <button onClick={create_prediction_market} type="button">
             Create
           </button>
@@ -169,7 +169,7 @@ GamePrediction.propTypes = {
       }),
     }).isRequired,
   }).isRequired,
-  user: PropTypes.shape({ addr: PropTypes.string.isRequired }).isRequired,
+  user: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
   contract: PropTypes.shape({
     predictionGames: PropTypes.func.isRequired,
     get_user_bet_amount: PropTypes.func.isRequired,

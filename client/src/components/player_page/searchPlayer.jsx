@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 // Loader
@@ -14,12 +15,12 @@ function SearchPlayer() {
   const search_players = searchValue => {
     if (searchValue.length > 0 && !isSearching) {
       setIsSearching(true);
-      fetch(
-        `https://nhl-pool-ethereum.herokuapp.com/https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/${searchValue}/10`
-      ) // https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/Crosby/10
-        .then(response => response.json())
-        .then(result => {
-          setSearchResult({ ...result });
+      axios
+        .get(
+          `https://nhl-pool-ethereum.herokuapp.com/https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/${searchValue}/10`
+        ) // https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/Crosby/10
+        .then(res => {
+          setSearchResult({ ...res.data });
           setIsSearching(false);
         });
       // .catch(error => {

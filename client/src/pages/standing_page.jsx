@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -10,12 +11,10 @@ export default function StandingPage() {
   const [teamsStats, setTeamsStats] = useState(null);
 
   useEffect(() => {
-    fetch('https://statsapi.web.nhl.com/api/v1/standings')
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data)
-        setTeamsStats(data);
-      });
+    axios.get('https://statsapi.web.nhl.com/api/v1/standings').then(res => {
+      // console.log(data)
+      setTeamsStats(res.data);
+    });
   }, []); // fetch team standing stats from nhl api.
 
   if (teamsStats != null) {

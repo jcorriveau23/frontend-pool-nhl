@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Modal from 'react-modal';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
@@ -11,25 +12,18 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
   const [numberPoolerInput, setNumberPoolerInput] = useState(4);
 
   const createPool = () => {
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    axios
+      .post('https://hockeypool.live/api/pool/pool_creation', {
         token: Cookies.get(`token-${username}`),
-      },
-      body: JSON.stringify({
         name: poolNameInput,
         owner: username,
         number_pooler: numberPoolerInput,
-      }),
-    };
-    fetch('https://hockeypool.live/api/pool/pool_creation', requestOptions)
-      .then(response => response.json())
-      .then(data => {
-        if (data.success === 'True') {
+      })
+      .then(res => {
+        if (res.data.success === 'True') {
           setShowCreatePoolModal(false);
         } else {
-          setMsg(data.message);
+          setMsg(res.data.message);
         }
       });
   };

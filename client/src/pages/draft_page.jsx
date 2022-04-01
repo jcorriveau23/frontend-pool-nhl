@@ -1,6 +1,5 @@
-// get the draft and display it on this page for a year
-
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 // Loader
@@ -19,18 +18,11 @@ export default function DraftPage() {
 
   useEffect(() => {
     if (prevYear !== year && !Number.isNaN(Number(year))) {
-      fetch(`https://statsapi.web.nhl.com/api/v1/draft/${year}`, {
-        // https://statsapi.web.nhl.com/api/v1/draft/2021
-        method: 'GET',
-      })
-        .then(response => response.json())
-        .then(dInfo => {
-          // console.log(draftInfo)
-          setDraftInfo(dInfo);
+      axios
+        .get(`https://statsapi.web.nhl.com/api/v1/draft/${year}`) // https://statsapi.web.nhl.com/api/v1/draft/2021
+        .then(res => {
+          setDraftInfo(res.data);
         });
-      // .catch(error => {
-      //   alert(`Error! ${error}`);
-      // });
 
       setPrevYear(year);
     } else {

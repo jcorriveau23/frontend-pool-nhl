@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -28,33 +29,33 @@ export default function PlayerPage() {
     if (prevPlayerID !== playerID && !Number.isNaN(ID)) {
       if (ID > 8000000) {
         // console.log("fetching NHL player")
-        fetch(`https://statsapi.web.nhl.com/api/v1/people/${playerID}/stats?stats=yearByYear`) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
-          .then(response => response.json())
-          .then(p => {
+        axios
+          .get(`https://statsapi.web.nhl.com/api/v1/people/${playerID}/stats?stats=yearByYear`) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
+          .then(res => {
             // console.log(p)
-            setPlayerStats({ ...p });
+            setPlayerStats({ ...res.data });
           });
-        fetch(`https://statsapi.web.nhl.com/api/v1/people/${playerID}/stats?stats=yearByYearPlayoffs`) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYearPlayoffs
-          .then(response => response.json())
-          .then(p => {
+        axios
+          .get(`https://statsapi.web.nhl.com/api/v1/people/${playerID}/stats?stats=yearByYearPlayoffs`) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYearPlayoffs
+          .then(res => {
             // console.log(p)
-            setPlayerPlayoffStats({ ...p });
+            setPlayerPlayoffStats({ ...res.data });
           });
-        fetch(`https://statsapi.web.nhl.com/api/v1/people/${playerID}`) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
-          .then(response => response.json())
-          .then(p => {
-            setPlayerInfo({ ...p });
+        axios
+          .get(`https://statsapi.web.nhl.com/api/v1/people/${playerID}`) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
+          .then(res => {
+            setPlayerInfo({ ...res.data });
           });
       } else {
         // console.log("fetching prospect")
-        fetch(`https://statsapi.web.nhl.com/api/v1/draft/prospects/${playerID}`) // https://statsapi.web.nhl.com/api/v1/draft/prospects/76849
-          .then(response => response.json())
-          .then(p => {
-            setProspectInfo({ ...p.prospects[0] });
+        axios
+          .get(`https://statsapi.web.nhl.com/api/v1/draft/prospects/${playerID}`) // https://statsapi.web.nhl.com/api/v1/draft/prospects/76849
+          .then(res => {
+            setProspectInfo({ ...res.data.prospects[0] });
             // console.log(p.prospects[0])
-            if (p.prospects[0].nhlPlayerId > 8000000 && !hasNavigated) {
+            if (res.data.prospects[0].nhlPlayerId > 8000000 && !hasNavigated) {
               setHaseNavigated(true);
-              navigate(`/player-info/${p.prospects[0].nhlPlayerId}`);
+              navigate(`/player-info/${res.data.prospects[0].nhlPlayerId}`);
             }
           });
       }

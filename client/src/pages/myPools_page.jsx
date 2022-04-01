@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import PropTypes from 'prop-types';
@@ -23,17 +24,14 @@ export default function MyPoolsPage({ user }) {
 
   useEffect(() => {
     if (user && showCreatePoolModal === false) {
-      const requestOptions = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          token: Cookies.get(`token-${user.addr}`),
-        },
-      };
-      fetch('https://hockeypool.live/api/pool/pool_list', requestOptions)
-        .then(response => response.json())
-        .then(data => {
-          if (data.success === 'False') {
+      axios
+        .get('https://hockeypool.live/api/pool/pool_list', {
+          headers: {
+            token: Cookies.get(`token-${user.name}`),
+          },
+        })
+        .then(res => {
+          if (res.data.success === 'False') {
             // [TODO] display a page or notification to tell the user that the pool list could not be fetch.
             // console.log(data.message);
           } else {
@@ -41,31 +39,31 @@ export default function MyPoolsPage({ user }) {
             const pInProgress = [];
             const pDynastie = [];
 
-            for (let i = 0; i < data.user_pools_info.length; i += 1) {
-              switch (data.user_pools_info[i].status) {
+            for (let i = 0; i < res.data.user_pools_info.length; i += 1) {
+              switch (res.data.user_pools_info[i].status) {
                 case 'draft':
                   pDraft.push({
-                    name: data.user_pools_info[i].name,
-                    owner: data.user_pools_info[i].owner,
+                    name: res.data.user_pools_info[i].name,
+                    owner: res.data.user_pools_info[i].owner,
                   });
                   break;
                 case 'in Progress':
                   pInProgress.push({
-                    name: data.user_pools_info[i].name,
-                    owner: data.user_pools_info[i].owner,
+                    name: res.data.user_pools_info[i].name,
+                    owner: res.data.user_pools_info[i].owner,
                   });
                   break;
                 case 'dynastie':
                   pDynastie.push({
-                    name: data.user_pools_info[i].name,
-                    owner: data.user_pools_info[i].owner,
+                    name: res.data.user_pools_info[i].name,
+                    owner: res.data.user_pools_info[i].owner,
                   });
                   break;
                 default:
                   break;
               }
             }
-            setPoolCreated(data.pool_created);
+            setPoolCreated(res.data.pool_created);
             setPoolDraft(pDraft);
             setPoolInProgress(pInProgress);
             setPoolDynastie(pDynastie);
@@ -105,7 +103,7 @@ export default function MyPoolsPage({ user }) {
                         <PoolItem
                           name={pool.name}
                           owner={pool.owner}
-                          username={user.addr}
+                          username={user.name}
                           poolDeleted={poolDeleted}
                           setPoolDeleted={setPoolDeleted}
                         />
@@ -164,7 +162,7 @@ export default function MyPoolsPage({ user }) {
           <CreatePoolModal
             showCreatePoolModal={showCreatePoolModal}
             setShowCreatePoolModal={setShowCreatePoolModal}
-            username={user.addr}
+            username={user.name}
           />
         </div>
       </div>
@@ -175,7 +173,7 @@ export default function MyPoolsPage({ user }) {
 }
 
 MyPoolsPage.propTypes = {
-  user: PropTypes.shape({ addr: PropTypes.string.isRequired }),
+  user: PropTypes.shape({ name: PropTypes.string.isRequired }),
 };
 
 MyPoolsPage.defaultProps = {
