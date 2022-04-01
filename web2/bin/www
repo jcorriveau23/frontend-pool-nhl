@@ -22,6 +22,7 @@ app.set("port", port);
 
 var server = http.createServer(app);
 const io = require("socket.io")(server, {
+  path: "/mysocket",
   cors: {
     origin: "https://hockeypool.live",
     methods: ["GET", "POST"],
@@ -159,7 +160,7 @@ io.on("connection", function (socket) {
         participants: pools[room]["listClient"],
       })
       .then((res) => {
-        if (res.data.success === "True") {
+        if (res.data.success === true) {
           io.in(room).emit("poolInfo", res.data.message);
         } else {
           console.error(res.data.message);
@@ -176,12 +177,12 @@ io.on("connection", function (socket) {
         player,
       })
       .then((res) => {
-        if (res.data.success === "True") {
+        if (res.data.success === true) {
           io.in(room).emit("poolInfo", res.data.message);
-          callback({ success: "True", message: res.data.message });
+          callback({ success: true, message: res.data.message });
         } else {
           //console.log('error with put request (chose_player)' + data.message)
-          callback({ success: "False", message: res.data.message });
+          callback({ success: false, message: res.data.message });
         }
       });
   });

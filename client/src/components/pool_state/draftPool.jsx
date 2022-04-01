@@ -44,7 +44,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
     // get all players stats from past season
 
     axios.get('/api/pool/get_all_players', { headers: { token: Cookies.get(`token-${user._id}`) } }).then(res => {
-      if (res.data.success === 'False') {
+      if (res.data.success === false) {
         // props.history.push('/pool_list');
       } else {
         const sortedForwards = sort_by_player_member('pts', res.data.message.F);
@@ -99,7 +99,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
 
   const chose_player = player => {
     socket.emit('pickPlayer', Cookies.get(`token-${user._id}`), poolInfo.name, player, ack => {
-      if (ack.success === 'False') {
+      if (ack.success === false) {
         alert(ack.message);
       }
     });

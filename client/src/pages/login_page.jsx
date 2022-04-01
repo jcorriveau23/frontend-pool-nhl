@@ -38,14 +38,13 @@ export default function LoginPage({ user, setUser }) {
       if (!window.ethereum) throw new Error('Please install MetaMask browser extension to interact');
 
       window.ethereum.request({ method: 'eth_requestAccounts' }).then(result => {
-        console.log(result);
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 
         signer.signMessage('Unlock wallet to access nhl-pool-ethereum.').then(sig => {
           signer.getAddress().then(addr => {
             axios.post('/api/auth/wallet_login', { addr, sig }).then(res => {
-              if (res.data.success === 'True') {
+              if (res.data.success === true) {
                 Cookies.set(`token-${res.data.user._id}`, res.data.token);
                 localStorage.setItem('persist-account', JSON.stringify(res.data.user));
                 setUser(res.data.user);
@@ -64,13 +63,14 @@ export default function LoginPage({ user, setUser }) {
 
   const login = () => {
     axios.post('/api/auth/login', { username, password }).then(res => {
-      if (res.data.success === 'True') {
+      if (res.data.success === true) {
         Cookies.set(`token-${res.data.user._id}`, res.data.token);
         localStorage.setItem('persist-account', JSON.stringify(res.data.user));
         setUser(res.data.user);
         navigate('/');
       } else {
         setUser(null);
+        alert(res.data.message);
       }
     });
   };
@@ -85,15 +85,15 @@ export default function LoginPage({ user, setUser }) {
           phone: 'TODO',
         })
         .then(res => {
-          if (res.data.success === 'True') {
+          if (res.data.success === true) {
             login(); // when the registration is success, login the user directly.
             navigate('/profile');
           } else {
-            setMsg(res.data.message);
+            alert(res.data.message);
           }
         });
     } else {
-      setMsg('Error, password and repeated password does not correspond!');
+      alert('password and repeated password does not correspond!');
     }
   };
 

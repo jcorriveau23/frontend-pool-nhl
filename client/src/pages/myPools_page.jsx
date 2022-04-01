@@ -31,7 +31,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
           },
         })
         .then(res => {
-          if (res.data.success === 'False') {
+          if (res.data.success === false) {
             // [TODO] display a page or notification to tell the user that the pool list could not be fetch.
             // console.log(data.message);
           } else {

@@ -19,47 +19,55 @@ const verifyMessage = async (message, address, signature) => {
 const register = (req, res, next) => {
   var username = req.body.username;
 
-  User.findOne({ name: username }).then((user) => {
-    if (user) {
-      res.json({
-        success: "False",
-        error: "user already registered",
-      });
-    } else {
-      bcrypt.hash(req.body.password, 10, function (err, hashedPass) {
-        if (err) {
-          res.json({
-            success: "False",
-            error: err,
-          });
-        }
-
-        let user = new User({
-          name: req.body.name,
-          addr: "", // no address when register with password and username
-          email: req.body.email,
-          phone: req.body.phone,
-          password: hashedPass,
-          pool_list: [],
+  if (username) {
+    User.findOne({ name: username }).then((user) => {
+      if (user) {
+        res.json({
+          success: false,
+          message: "username already registered",
         });
+      } else {
+        bcrypt.hash(req.body.password, 10, function (err, hashedPass) {
+          if (err) {
+            res.json({
+              success: false,
+              message: err,
+            });
+          }
 
-        user
-          .save()
-          .then((user) => {
-            res.json({
-              success: "True",
-              message: "User Added Successfully!",
-            });
-          })
-          .catch((error) => {
-            res.json({
-              success: "False",
-              message: error,
-            });
+          let user = new User({
+            name: req.body.username,
+            addr: "", // no address when register with password and username
+            email: req.body.email,
+            phone: req.body.phone,
+            password: hashedPass,
+            pool_list: [],
           });
-      });
-    }
-  });
+
+          console.log(user);
+          user
+            .save()
+            .then((user) => {
+              res.json({
+                success: true,
+                message: "User Added Successfully!",
+              });
+            })
+            .catch((error) => {
+              res.json({
+                success: false,
+                message: error,
+              });
+            });
+        });
+      }
+    });
+  } else {
+    res.json({
+      success: false,
+      message: "username not valid.",
+    });
+  }
 };
 
 const login = (req, res, next) => {
@@ -70,8 +78,8 @@ const login = (req, res, next) => {
       bcrypt.hash(req.body.password, 10, function (err, hashedPass) {
         if (err) {
           res.json({
-            success: "False",
-            error: err,
+            success: false,
+            message: err,
           });
         }
 
@@ -80,7 +88,7 @@ const login = (req, res, next) => {
         });
 
         res.json({
-          success: "True",
+          success: true,
           message: "login with username and password successfull",
           token,
           user,
@@ -88,8 +96,8 @@ const login = (req, res, next) => {
       });
     } else {
       res.json({
-        success: "False",
-        error: "user does not exist",
+        success: false,
+        message: "user does not exist",
       });
     }
   });
@@ -114,14 +122,14 @@ const wallet_login = (req, res, next) => {
           });
 
           res.json({
-            success: "True",
+            success: true,
             message: "login with wallet Successful!l",
             token,
             user,
           });
         } else {
           res.json({
-            success: "False",
+            success: false,
             message: "could not verified the signature.",
           });
         }
@@ -148,14 +156,14 @@ const wallet_login = (req, res, next) => {
                 expiresIn: "1h",
               });
               res.json({
-                success: "True",
+                success: true,
                 message: "unlock Successful!",
                 token,
                 user,
               });
             } else {
               res.json({
-                success: "False",
+                success: false,
                 message: "could not verified the signature.",
               });
             }
@@ -163,7 +171,7 @@ const wallet_login = (req, res, next) => {
         })
         .catch((error) => {
           res.json({
-            success: "False",
+            success: false,
             message: error,
           });
         });
@@ -214,7 +222,7 @@ const set_username = (req, res, next) => {
         User.findOne({ name: newUsername }).then((newUser) => {
           if (newUser) {
             res.json({
-              success: "False",
+              success: false,
               message: "username already exist!",
             });
           } else {
@@ -226,7 +234,7 @@ const set_username = (req, res, next) => {
                 });
 
                 res.json({
-                  success: "True",
+                  success: true,
                   message: "changed username successfull!",
                   token,
                   user,
@@ -234,7 +242,7 @@ const set_username = (req, res, next) => {
               })
               .catch((error) => {
                 res.json({
-                  success: "False",
+                  success: false,
                   message: error,
                 });
               });
@@ -242,14 +250,14 @@ const set_username = (req, res, next) => {
         });
       } else {
         res.json({
-          success: "False",
+          success: false,
           message: "User is not registered.",
         });
       }
     });
   } else {
     res.json({
-      success: "False",
+      success: false,
       message: "The token is not valid.",
     });
   }

@@ -144,7 +144,7 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
           reserv_protected: reservProtected,
         })
         .then(res => {
-          if (res.data.success === 'False') {
+          if (res.data.success === false) {
             // props.history.push('/login');
           }
         });

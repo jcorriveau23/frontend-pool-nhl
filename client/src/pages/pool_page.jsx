@@ -14,7 +14,9 @@ import DraftPool from '../components/pool_state/draftPool';
 import InProgressPool from '../components/pool_state/inProgressPool';
 import DynastiePool from '../components/pool_state/dynastiePool';
 
-const socket = io('http://localhost:8080');
+const socket = io.connect('https://hockeypool.live', {
+  path: '/mysocket',
+});
 
 export default function PoolPage({ user, DictUsers }) {
   const [poolInfo, setPoolInfo] = useState({});
@@ -30,7 +32,7 @@ export default function PoolPage({ user, DictUsers }) {
           },
         })
         .then(res => {
-          if (res.data.success === 'True') {
+          if (res.data.success === true) {
             // [TODO] display a page or notification to show that the pool was not found
             setPoolInfo(res.data.message);
           }

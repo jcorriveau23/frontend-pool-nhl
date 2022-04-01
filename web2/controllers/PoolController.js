@@ -17,7 +17,7 @@ const pool_creation = (req, res, next) => {
   User.findOne({ _id: token._id }).then((user) => {
     if (!user) {
       res.json({
-        success: "False",
+        success: false,
         message: "User is not registered!",
       });
     }
@@ -26,7 +26,7 @@ const pool_creation = (req, res, next) => {
   Pool.findOne({ name: req.body.name }).then((pool) => {
     if (pool) {
       res.json({
-        success: "False",
+        success: false,
         message: "pool name already taken!",
       });
     } else {
@@ -59,13 +59,13 @@ const pool_creation = (req, res, next) => {
         .save()
         .then((pool) => {
           res.json({
-            success: "True",
+            success: true,
             message: pool.name,
           });
         })
         .catch((error) => {
           res.json({
-            success: "False",
+            success: false,
             message: error,
           });
         });
@@ -81,7 +81,7 @@ const delete_pool = (req, res, next) => {
   User.findOne({ _id: token._id }).then((user) => {
     if (!user) {
       res.json({
-        success: "False",
+        success: false,
         message: "User is not registered!",
       });
     }
@@ -91,13 +91,13 @@ const delete_pool = (req, res, next) => {
     if (pool.owner === token._id) {
       Pool.deleteOne({ name: pool.name }).then((pool) => {
         res.json({
-          success: "True",
+          success: true,
           message: "pool as been deleted!",
         });
       });
     } else {
       res.json({
-        success: "False",
+        success: false,
         message: "you are not the owner of that pool!",
       });
     }
@@ -114,7 +114,7 @@ const pool_list = (req, res, next) => {
     User.findOne({ _id: token._id }).then((user) => {
       if (!user) {
         res.json({
-          success: "False",
+          success: false,
           message: "User is not registered!",
         });
         return;
@@ -127,28 +127,28 @@ const pool_list = (req, res, next) => {
           Pool.find({ name: user.pool_list }, { name: 1, status: 1, owner: 1 })
             .then((pools) => {
               res.json({
-                success: "True",
+                success: true,
                 pool_created: pools_created,
                 user_pools_info: pools,
               });
             })
             .catch((error) => {
               res.json({
-                success: "False",
+                success: false,
                 message: error,
               });
             });
         })
         .catch((error) => {
           res.json({
-            success: "False",
+            success: false,
             message: error,
           });
         });
     });
   } else {
     res.json({
-      success: "False",
+      success: false,
       message: "no token, you need to login",
     });
   }
@@ -162,7 +162,7 @@ const get_pool_info = (req, res, next) => {
     User.findOne({ _id: token._id }).then((user) => {
       if (!user) {
         res.json({
-          success: "False",
+          success: false,
           message: "User is not registered!",
         });
         return;
@@ -170,7 +170,7 @@ const get_pool_info = (req, res, next) => {
     });
   } else {
     res.json({
-      success: "False",
+      success: false,
       message: "no token, you need to login",
     });
     return;
@@ -182,13 +182,13 @@ const get_pool_info = (req, res, next) => {
     .then((pool) => {
       if (!pool) {
         res.json({
-          success: "False",
+          success: false,
           message: "Pool does not exist",
         });
         return;
       } else {
         res.json({
-          success: "True",
+          success: true,
           message: pool,
         });
         return;
@@ -196,7 +196,7 @@ const get_pool_info = (req, res, next) => {
     })
     .catch((error) => {
       res.json({
-        success: "False",
+        success: false,
         message: error,
       });
       return;
@@ -212,7 +212,7 @@ const start_draft = (req, res, next) => {
     User.findOne({ _id: token._id }).then((user) => {
       if (!user) {
         res.json({
-          success: "False",
+          success: false,
           message: "User is not registered!",
         });
         return;
@@ -220,7 +220,7 @@ const start_draft = (req, res, next) => {
     });
   } else {
     res.json({
-      success: "False",
+      success: false,
       message: "no token, you need to login",
     });
     return;
@@ -233,7 +233,7 @@ const start_draft = (req, res, next) => {
     .then((pool) => {
       if (!pool) {
         res.json({
-          success: "False",
+          success: false,
           message: "Pool does not exist",
         });
         return;
@@ -320,7 +320,7 @@ const start_draft = (req, res, next) => {
               function (err, result) {
                 if (err) {
                   res.json({
-                    success: "False",
+                    success: false,
                     message: "Problem with updating the pool information",
                   });
                   return;
@@ -336,7 +336,7 @@ const start_draft = (req, res, next) => {
                           function (err, result) {
                             if (err) {
                               res.json({
-                                success: "False",
+                                success: false,
                                 message:
                                   "Problem with updating one of user information",
                               });
@@ -351,14 +351,14 @@ const start_draft = (req, res, next) => {
                       })
                       .catch((error) => {
                         res.json({
-                          success: "False",
+                          success: false,
                           message: error,
                         });
                         return;
                       });
                   }
                   res.json({
-                    success: "True",
+                    success: true,
                     message: pool,
                   });
                   return;
@@ -367,14 +367,14 @@ const start_draft = (req, res, next) => {
             );
           } else {
             res.json({
-              success: "False",
+              success: false,
               message: "this request should be made by the owner of the pool",
             });
             return;
           }
         } else {
           res.json({
-            success: "False",
+            success: false,
             message: "Pool number of player does not correspond",
           });
           return;
@@ -383,7 +383,7 @@ const start_draft = (req, res, next) => {
     })
     .catch((error) => {
       res.json({
-        success: "False",
+        success: false,
         message: error,
       });
       return;
@@ -401,7 +401,7 @@ const chose_player = (req, res, next) => {
     User.findOne({ _id: token._id }).then((user) => {
       if (!user) {
         res.json({
-          success: "False",
+          success: false,
           message: "User is not registered!",
         });
         return;
@@ -409,7 +409,7 @@ const chose_player = (req, res, next) => {
     });
   } else {
     res.json({
-      success: "False",
+      success: false,
       message: "no token, you need to login",
     });
     return;
@@ -424,7 +424,7 @@ const chose_player = (req, res, next) => {
   Pool.findOne({ name: pool_name }).then((pool) => {
     if (!pool) {
       res.json({
-        success: "False",
+        success: false,
         message: "Pool does not exist",
       });
       return;
@@ -453,7 +453,7 @@ const chose_player = (req, res, next) => {
             ) !== -1
           ) {
             res.json({
-              success: "False",
+              success: false,
               message: "player already picked by " + pooler,
             });
             return;
@@ -464,7 +464,7 @@ const chose_player = (req, res, next) => {
             ) !== -1
           ) {
             res.json({
-              success: "False",
+              success: false,
               message: "player already picked by " + pooler,
             });
             return;
@@ -488,7 +488,7 @@ const chose_player = (req, res, next) => {
         // cant pick this player
         else {
           res.json({
-            success: "False",
+            success: false,
             message: "no space for this player",
           });
           return;
@@ -514,13 +514,13 @@ const chose_player = (req, res, next) => {
           function (err, result) {
             if (err) {
               res.json({
-                success: "False",
+                success: false,
                 message: "Problem with updating the pool information",
               });
               return;
             } else {
               res.json({
-                success: "True",
+                success: true,
                 message: pool,
               });
               return;
@@ -529,7 +529,7 @@ const chose_player = (req, res, next) => {
         );
       } else {
         res.json({
-          success: "False",
+          success: false,
           message: "not your turn",
         });
       }
@@ -548,7 +548,7 @@ const protected_players = (req, res, next) => {
     User.findOne({ _id: token._id }).then((user) => {
       if (!user) {
         res.json({
-          success: "False",
+          success: false,
           message: "User is not registered!",
         });
         return;
@@ -556,7 +556,7 @@ const protected_players = (req, res, next) => {
     });
   } else {
     res.json({
-      success: "False",
+      success: false,
       message: "no token, you need to login",
     });
     return;
@@ -571,7 +571,7 @@ const protected_players = (req, res, next) => {
   Pool.findOne({ name: pool_name }).then((pool) => {
     if (!pool) {
       res.json({
-        success: "False",
+        success: false,
         message: "Pool does not exist",
       });
       return;
@@ -581,7 +581,7 @@ const protected_players = (req, res, next) => {
         pool.context[user_id].nb_defender = def_protected.length;
       } else {
         res.json({
-          success: "False",
+          success: false,
           message: "too much defenders",
         });
         return;
@@ -591,7 +591,7 @@ const protected_players = (req, res, next) => {
         pool.context[user_id].nb_forward = forw_protected.length;
       } else {
         res.json({
-          success: "False",
+          success: false,
           message: "too much forward",
         });
         return;
@@ -602,7 +602,7 @@ const protected_players = (req, res, next) => {
         pool.context[user_id].nb_goalies = goal_protected.length;
       } else {
         res.json({
-          success: "False",
+          success: false,
           message: "too much goalies",
         });
         return;
@@ -612,7 +612,7 @@ const protected_players = (req, res, next) => {
         pool.context[user_id].nb_reservist = reserv_protected.length;
       } else {
         res.json({
-          success: "False",
+          success: false,
           message: "too much reservist",
         });
         return;
@@ -707,13 +707,13 @@ const protected_players = (req, res, next) => {
       Pool.updateOne({ _id: pool._id }, { $set: pool }, function (err, result) {
         if (err) {
           res.json({
-            success: "False",
+            success: false,
             message: "Problem with updating the pool information",
           });
           return;
         } else {
           res.json({
-            success: "True",
+            success: true,
             message: pool,
           });
           return;
@@ -731,7 +731,7 @@ const get_pool_stats = (req, res, next) => {
     User.findOne({ _id: token._id }).then((user) => {
       if (!user) {
         res.json({
-          success: "False",
+          success: false,
           message: "User is not registered!",
         });
         return;
@@ -739,7 +739,7 @@ const get_pool_stats = (req, res, next) => {
     });
   } else {
     res.json({
-      success: "False",
+      success: false,
       message: "no token, you need to login",
     });
     return;
@@ -751,7 +751,7 @@ const get_pool_stats = (req, res, next) => {
   Pool.findOne({ name: pool_name }).then((pool) => {
     if (!pool) {
       res.json({
-        success: "False",
+        success: false,
         message: "Pool does not exist",
       });
       return;
@@ -801,13 +801,13 @@ const get_pool_stats = (req, res, next) => {
       )
         .then((players) => {
           res.json({
-            success: "True",
+            success: true,
             players: players,
           });
         })
         .catch((error) => {
           res.json({
-            success: "False",
+            success: false,
             message: error,
           });
           return;
@@ -824,7 +824,7 @@ const get_all_players = (req, res, next) => {
     User.findOne({ _id: token._id }).then((user) => {
       if (!user) {
         res.json({
-          success: "False",
+          success: false,
           message: "User is not registered!",
         });
         return;
@@ -832,7 +832,7 @@ const get_all_players = (req, res, next) => {
     });
   } else {
     res.json({
-      success: "False",
+      success: false,
       message: "no token, you need to login",
     });
     return;
@@ -853,14 +853,14 @@ const get_all_players = (req, res, next) => {
               response["G"] = goalies;
 
               res.json({
-                success: "True",
+                success: true,
                 message: response,
               });
               return;
             })
             .catch((error) => {
               res.json({
-                success: "False",
+                success: false,
                 message: error,
               });
               return;
@@ -868,7 +868,7 @@ const get_all_players = (req, res, next) => {
         })
         .catch((error) => {
           res.json({
-            success: "False",
+            success: false,
             message: error,
           });
           return;
@@ -876,7 +876,7 @@ const get_all_players = (req, res, next) => {
     })
     .catch((error) => {
       res.json({
-        success: "False",
+        success: false,
         message: error,
       });
       return;
@@ -889,20 +889,20 @@ const get_day_leaders = (req, res, next) => {
     .then((day_leaders) => {
       if (!day_leaders) {
         res.json({
-          success: "False",
+          success: false,
           message: "No day leaders for this day",
         });
         return;
       }
       res.json({
-        success: "True",
+        success: true,
         message: day_leaders,
       });
       return;
     })
     .catch((error) => {
       res.json({
-        success: "False",
+        success: false,
         message: error,
       });
       return;
@@ -921,7 +921,7 @@ function ValidateUser(encrypt_token) {
     User.findOne({ _id: token._id }).then((user) => {
       if (!user) {
         res.json({
-          success: "False",
+          success: false,
           message: "User is not registered!",
         });
         return;
@@ -929,7 +929,7 @@ function ValidateUser(encrypt_token) {
     });
   } else {
     res.json({
-      success: "False",
+      success: false,
       message: "no token, you need to login",
     });
     return;
