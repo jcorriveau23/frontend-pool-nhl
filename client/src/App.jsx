@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Link, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 // css
 import './components/components.css';
@@ -43,10 +44,23 @@ function App() {
   const [formatDate, setFormatDate] = useState(null);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [isWrongNetwork, setIsWrongNetwork] = useState(false);
+  const [DictUsers, setDictUsers] = useState(null);
 
   useEffect(() => {
     axios.get('https://nhl-pool-ethereum.herokuapp.com/');
-  }, []);
+    if (user) {
+      axios.get('/api/auth/get_all_users', { headers: { token: Cookies.get(`token-${user._id}`) } }).then(res => {
+        if (res.data.success === true) {
+          const DictUsersTmp = {};
+          res.data.message.forEach(u => {
+            DictUsersTmp[u._id] = u.name;
+          });
+
+          setDictUsers(DictUsersTmp);
+        }
+      });
+    }
+  }, [user]);
 
   return (
     <Router>
@@ -107,9 +121,9 @@ function App() {
           <Route path="/" element={<HomePage formatDate={formatDate} />} />
           <Route path="/login" element={<LoginPage user={user} setUser={setUser} />} />
           <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
-          <Route path="/my-pools" element={<MyPoolsPage user={user} />} />
+          <Route path="/my-pools" element={<MyPoolsPage user={user} DictUsers={DictUsers} />} />
           <Route path="/my-bets" element={<MyGameBetsPage user={user} contract={contract} />} />
-          <Route path="/my-pools/:name" element={<PoolPage user={user} />} />
+          <Route path="/my-pools/:name" element={<PoolPage user={user} DictUsers={DictUsers} />} />
           <Route path="/standing" element={<StandingPage />} />
           <Route path="/game/:id" element={<GameFeedPage user={user} contract={contract} />} />
           <Route path="/player-info" element={<PlayerPage />} />

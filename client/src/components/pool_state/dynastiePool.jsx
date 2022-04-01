@@ -135,7 +135,7 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
 
     if (number_protected_player === poolInfo.next_season_number_players_protected) {
       axios
-        .post('https://hockeypool.live/api/pool/protect_players', {
+        .post('/api/pool/protect_players', {
           token: Cookies.get(`token-${user._id}`),
           pool_name: poolInfo.name,
           def_protected: defProtected,

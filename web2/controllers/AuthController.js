@@ -171,6 +171,35 @@ const wallet_login = (req, res, next) => {
   });
 };
 
+const get_all_users = (req, res, next) => {
+  if (req.headers.token !== "undefined") {
+    var encrypt_token = req.headers.token;
+    let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
+
+    User.find()
+      .then((users) => {
+        res.json({
+          success: true,
+          message: users,
+        });
+        return;
+      })
+      .catch((error) => {
+        res.json({
+          success: false,
+          message: error,
+        });
+        return;
+      });
+  } else {
+    res.json({
+      success: false,
+      message: "You need to be connected.",
+    });
+    return;
+  }
+};
+
 const set_username = (req, res, next) => {
   const encrypt_token = req.body.token;
   const newUsername = req.body.newUsername;
@@ -230,5 +259,6 @@ module.exports = {
   register,
   login,
   wallet_login,
+  get_all_users,
   set_username,
 };

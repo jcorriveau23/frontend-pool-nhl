@@ -13,7 +13,7 @@ export default function HomePage({ formatDate }) {
     if (formatDate !== prevFormatDate && formatDate) {
       // get the day leaders data from database.
 
-      axios.get(`https://hockeypool.live/api/pool/get_day_leaders`, { headers: { d: formatDate } }).then(res => {
+      axios.get(`/api/pool/get_day_leaders`, { headers: { d: formatDate } }).then(res => {
         if (res.data.success === 'True') {
           setDayLeaders({ ...res.data.message });
           setPrevFormatDate(formatDate);

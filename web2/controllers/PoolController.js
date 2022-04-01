@@ -23,7 +23,7 @@ const pool_creation = (req, res, next) => {
     }
   });
 
-  Pool.findOne({ $or: [{ name: req.body.name }] }).then((pool) => {
+  Pool.findOne({ name: req.body.name }).then((pool) => {
     if (pool) {
       res.json({
         success: "False",
@@ -245,34 +245,58 @@ const start_draft = (req, res, next) => {
             for (i = 0; i < participants.length; i++) {
               pool.participants.push(participants[i]._id);
               pool.context[participants[i]._id] = {};
-              (pool.context[participants[i]._id]["chosen_defender"] = Array(
+              (pool.context[participants[i]._id].chosen_defender = Array(
                 pool.number_defenders
-              ).fill({ name: " - ", team: " - ", role: "", api: "" })),
-                (pool.context[participants[i]._id]["chosen_forward"] = Array(
+              ).fill({
+                id: i,
+                name: " - ",
+                team: " - ",
+                position: "D",
+                url: "",
+              })),
+                (pool.context[participants[i]._id].chosen_forward = Array(
                   pool.number_forward
-                ).fill({ name: " - ", team: " - ", role: "", api: "" })),
-                (pool.context[participants[i]._id]["chosen_goalies"] = Array(
+                ).fill({
+                  id: i,
+                  name: " - ",
+                  team: " - ",
+                  position: "F",
+                  url: "",
+                })),
+                (pool.context[participants[i]._id].chosen_goalies = Array(
                   pool.number_goalies
-                ).fill({ name: " - ", team: " - ", role: "", api: "" })),
-                (pool.context[participants[i]._id]["chosen_reservist"] = Array(
+                ).fill({
+                  id: i,
+                  name: " - ",
+                  team: " - ",
+                  position: "G",
+                  url: "",
+                })),
+                (pool.context[participants[i]._id].chosen_reservist = Array(
                   pool.number_reservist
-                ).fill({ name: " - ", team: " - ", role: "", api: "" }));
+                ).fill({
+                  id: i,
+                  name: " - ",
+                  team: " - ",
+                  position: "R",
+                  url: "",
+                }));
 
-              pool.context[participants[i]._id]["tradable_picks"] = []; // array of tradable picks
+              pool.context[participants[i]._id].tradable_picks = []; // array of tradable picks
               for (j = 0; j < pool.tradable_picks; j++) {
-                pool.context[participants[i]._id]["tradable_picks"].push({
+                pool.context[participants[i]._id].tradable_picks.push({
                   rank: j + 1,
                   player: participants[i]._id,
                 });
               }
 
-              pool.context[participants[i]._id]["nb_defender"] = 0;
-              pool.context[participants[i]._id]["nb_forward"] = 0;
-              pool.context[participants[i]._id]["nb_goalies"] = 0;
-              pool.context[participants[i]._id]["nb_reservist"] = 0;
+              pool.context[participants[i]._id].nb_defender = 0;
+              pool.context[participants[i]._id].nb_forward = 0;
+              pool.context[participants[i]._id].nb_goalies = 0;
+              pool.context[participants[i]._id].nb_reservist = 0;
             }
             shuffleArray(pool.participants); // randomize a bit
-            pool.context["draft_order"] = [];
+            pool.context.draft_order = [];
             var number_picks =
               pool.number_poolers *
               (pool.number_defenders +
@@ -280,11 +304,12 @@ const start_draft = (req, res, next) => {
                 pool.number_goalies +
                 pool.number_reservist);
             for (i = 0; i < number_picks; i++) {
-              pool.context["draft_order"].push(
+              pool.context.draft_order.push(
                 pool.participants[i % pool.number_poolers]
               );
             }
-            pool.next_drafter = pool.context["draft_order"].shift(); // pop first next drafter of the draft
+
+            pool.next_drafter = pool.context.draft_order.shift(); // pop first next drafter of the draft
 
             pool.status = "draft";
             pool.nb_player_drafted = 0;
@@ -392,8 +417,8 @@ const chose_player = (req, res, next) => {
 
   var pool_name = req.body.pool_name;
   var player = req.body.player;
-  var key_role = "";
-  var key_nb_role = "";
+  var key_position = "";
+  var key_nb_position = "";
   var max_number = 0;
 
   Pool.findOne({ name: pool_name }).then((pool) => {
@@ -404,17 +429,17 @@ const chose_player = (req, res, next) => {
       });
       return;
     } else {
-      if (player.role === "D") {
-        key_role = "chosen_defender";
-        key_nb_role = "nb_defender";
+      if (player.position === "D") {
+        key_position = "chosen_defender";
+        key_nb_position = "nb_defender";
         max_number = pool.number_defenders;
-      } else if (player.role === "F") {
-        key_role = "chosen_forward";
-        key_nb_role = "nb_forward";
+      } else if (player.position === "F") {
+        key_position = "chosen_forward";
+        key_nb_position = "nb_forward";
         max_number = pool.number_forward;
-      } else if (player.role === "G") {
-        key_role = "chosen_goalies";
-        key_nb_role = "nb_goalies";
+      } else if (player.position === "G") {
+        key_position = "chosen_goalies";
+        key_nb_position = "nb_goalies";
         max_number = pool.number_goalies;
       }
 
@@ -423,8 +448,8 @@ const chose_player = (req, res, next) => {
           pooler = pool.participants[i];
 
           if (
-            pool.context[pooler][key_role].findIndex(
-              (e) => e.name === player.name
+            pool.context[pooler][key_position].findIndex(
+              (e) => e.id === player.id
             ) !== -1
           ) {
             res.json({
@@ -435,7 +460,7 @@ const chose_player = (req, res, next) => {
           }
           if (
             pool.context[pooler]["chosen_reservist"].findIndex(
-              (e) => e.name === player.name
+              (e) => e.id === player.id
             ) !== -1
           ) {
             res.json({
@@ -446,21 +471,19 @@ const chose_player = (req, res, next) => {
           }
         }
         var index;
-        // player go in his role
-        if (pool.context[user_id][key_nb_role] < max_number) {
-          index = pool.context[user_id][key_nb_role];
+        // player go in his position
+        if (pool.context[user_id][key_nb_position] < max_number) {
+          index = pool.context[user_id][key_nb_position];
 
-          pool.context[user_id][key_role][index] = player;
-          pool.context[user_id][key_nb_role] += 1;
+          pool.context[user_id][key_position][index] = player;
+          pool.context[user_id][key_nb_position] += 1;
         }
         //player go in reservist
-        else if (
-          pool.context[user_id]["nb_reservist"] < pool.number_reservist
-        ) {
-          index = pool.context[user_id]["nb_reservist"];
+        else if (pool.context[user_id].nb_reservist < pool.number_reservist) {
+          index = pool.context[user_id].nb_reservist;
 
-          pool.context[user_id]["chosen_reservist"][index] = player;
-          pool.context[user_id]["nb_reservist"] += 1;
+          pool.context[user_id].chosen_reservist[index] = player;
+          pool.context[user_id].nb_reservist += 1;
         }
         // cant pick this player
         else {
@@ -473,7 +496,7 @@ const chose_player = (req, res, next) => {
 
         // next pooler to draft
         pool.nb_player_drafted += 1;
-        pool.next_drafter = pool.context["draft_order"].shift();
+        pool.next_drafter = pool.context.draft_order.shift();
         if (
           pool.nb_player_drafted ===
           pool.number_poolers *
@@ -507,7 +530,7 @@ const chose_player = (req, res, next) => {
       } else {
         res.json({
           success: "False",
-          message: "not drafter s turn",
+          message: "not your turn",
         });
       }
     }
@@ -660,7 +683,7 @@ const protected_players = (req, res, next) => {
           i > -1;
           i--
         ) {
-          pool.context["draft_order"].push(
+          pool.context.draft_order.push(
             pool.participants[i % pool.number_poolers]
           );
         }
@@ -671,9 +694,9 @@ const protected_players = (req, res, next) => {
 
         // reset tradable picks
         for (i = 0; i < pool.number_poolers; i++) {
-          pool.context[pool.participants[i]]["tradable_picks"] = []; // reset array of tradable picks
+          pool.context[pool.participants[i]].tradable_picks = []; // reset array of tradable picks
           for (j = 0; j < pool.tradable_picks; j++) {
-            pool.context[pool.participants[i]]["tradable_picks"].push({
+            pool.context[pool.participants[i]].tradable_picks.push({
               rank: j + 1,
               player: pool.participants[i],
             });
@@ -723,8 +746,7 @@ const get_pool_stats = (req, res, next) => {
   }
 
   var pool_name = req.headers.poolname;
-  var players_name = [];
-  var players_team = [];
+  var players_id = [];
 
   Pool.findOne({ name: pool_name }).then((pool) => {
     if (!pool) {
@@ -740,11 +762,8 @@ const get_pool_stats = (req, res, next) => {
           j < pool.context[pool.participants[i]].chosen_defender.length;
           j++
         ) {
-          players_name.push(
-            pool.context[pool.participants[i]].chosen_defender[j].name
-          );
-          players_team.push(
-            pool.context[pool.participants[i]].chosen_defender[j].team
+          players_id.push(
+            pool.context[pool.participants[i]].chosen_defender[j].id
           );
         }
         for (
@@ -752,11 +771,8 @@ const get_pool_stats = (req, res, next) => {
           j < pool.context[pool.participants[i]].chosen_forward.length;
           j++
         ) {
-          players_name.push(
-            pool.context[pool.participants[i]].chosen_forward[j].name
-          );
-          players_team.push(
-            pool.context[pool.participants[i]].chosen_forward[j].team
+          players_id.push(
+            pool.context[pool.participants[i]].chosen_forward[j].id
           );
         }
         for (
@@ -764,11 +780,8 @@ const get_pool_stats = (req, res, next) => {
           j < pool.context[pool.participants[i]].chosen_goalies.length;
           j++
         ) {
-          players_name.push(
-            pool.context[pool.participants[i]].chosen_goalies[j].name
-          );
-          players_team.push(
-            pool.context[pool.participants[i]].chosen_goalies[j].team
+          players_id.push(
+            pool.context[pool.participants[i]].chosen_goalies[j].id
           );
         }
         for (
@@ -776,18 +789,15 @@ const get_pool_stats = (req, res, next) => {
           j < pool.context[pool.participants[i]].chosen_reservist.length;
           j++
         ) {
-          players_name.push(
-            pool.context[pool.participants[i]].chosen_reservist[j].name
-          );
-          players_team.push(
-            pool.context[pool.participants[i]].chosen_reservist[j].team
+          players_id.push(
+            pool.context[pool.participants[i]].chosen_reservist[j].id
           );
         }
       }
 
       Players.Players.find(
-        { name: players_name },
-        { name: 1, team: 1, stats: 1, position: 1, url: 1 }
+        { id: players_id },
+        { id: 1, name: 1, team: 1, stats: 1, position: 1, url: 1 }
       )
         .then((players) => {
           res.json({
@@ -858,6 +868,7 @@ const get_all_players = (req, res, next) => {
         })
         .catch((error) => {
           res.json({
+            success: "False",
             message: error,
           });
           return;

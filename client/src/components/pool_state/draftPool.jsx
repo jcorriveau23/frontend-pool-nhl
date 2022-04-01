@@ -13,14 +13,13 @@ import { logos } from '../img/logos';
 
 // Loader
 
-export default function DraftPool({ user, poolName, poolInfo, setPoolInfo, socket }) {
+export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPoolInfo, socket }) {
   const [inRoom, setInRoom] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState('select a player');
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [def_l, setDef_l] = useState([]);
   const [forw_l, setForw_l] = useState([]);
   const [goal_l, setGoal_l] = useState([]);
   const [searchText, setSearchText] = useState('');
-  const [message, setMessage] = useState('');
 
   const sort_by_player_member = (playerMember, array) => {
     // TODO: try to simplified this into no if at all
@@ -42,11 +41,9 @@ export default function DraftPool({ user, poolName, poolInfo, setPoolInfo, socke
   };
 
   const fetchPlayerDraft = () => {
-    const cookie = Cookies.get(`token-${user._id}`);
-
     // get all players stats from past season
 
-    axios.get('https://hockeypool.live/api/pool/get_all_players', { headers: { token: cookie } }).then(res => {
+    axios.get('/api/pool/get_all_players', { headers: { token: Cookies.get(`token-${user._id}`) } }).then(res => {
       if (res.data.success === 'False') {
         // props.history.push('/pool_list');
       } else {
@@ -54,7 +51,7 @@ export default function DraftPool({ user, poolName, poolInfo, setPoolInfo, socke
         const sortedDefender = sort_by_player_member('pts', res.data.message.D);
         const sortedGoalies = sort_by_player_member('wins', res.data.message.G);
 
-        setForw_l([...sortedForwards]);
+        setForw_l(sortedForwards);
         setDef_l([...sortedDefender]);
         setGoal_l([...sortedGoalies]);
       }
@@ -100,16 +97,10 @@ export default function DraftPool({ user, poolName, poolInfo, setPoolInfo, socke
     }
   };
 
-  const player_selection = (name, team, role) => {
-    setSelectedPlayer({ name, team, role });
-  };
-
   const chose_player = player => {
     socket.emit('pickPlayer', Cookies.get(`token-${user._id}`), poolInfo.name, player, ack => {
       if (ack.success === 'False') {
-        setMessage(ack.message);
-      } else {
-        setMessage('');
+        alert(ack.message);
       }
     });
   };
@@ -120,50 +111,35 @@ export default function DraftPool({ user, poolName, poolInfo, setPoolInfo, socke
 
   const filter_players = player => {
     if (!player.name.toLowerCase().includes(searchText.toLowerCase())) {
-      return true; // not part of the search text
+      return null; // not part of the search text
     }
 
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
       const participant = poolInfo.participants[i];
 
-      if (
-        poolInfo.context[participant].chosen_reservist.findIndex(
-          p => p.name === player.name && p.team === player.team
-        ) > -1
-      ) {
-        return true; // already picked
+      if (poolInfo.context[participant].chosen_reservist.findIndex(p => p.id === player.id) > -1) {
+        return null; // already picked
       }
 
       if (player.position === 'D') {
-        if (
-          poolInfo.context[participant].chosen_defender.findIndex(
-            p => p.name === player.name && p.team === player.team
-          ) > -1
-        ) {
-          return true; // already picked
+        if (poolInfo.context[participant].chosen_defender.findIndex(p => p.id === player.id) > -1) {
+          return null; // already picked
         }
       } else if (player.position === 'F') {
-        if (
-          poolInfo.context[participant].chosen_forward.findIndex(
-            p => p.name === player.name && p.team === player.team
-          ) > -1
-        ) {
-          return true; // already picked
+        if (poolInfo.context[participant].chosen_forward.findIndex(p => p.id === player.id) > -1) {
+          return null; // already picked
         }
-      } else if (
-        poolInfo.context[participant].chosen_goalies.findIndex(p => p.name === player.name && p.team === player.team) >
-        -1
-      ) {
-        return true; // already picked
+      } else if (poolInfo.context[participant].chosen_goalies.findIndex(p => p.id === player.id) > -1) {
+        return null; // already picked
       }
     }
 
-    return false;
+    return player;
   };
 
-  const render_players = (pooler, chosen_player_key) =>
-    poolInfo.context[pooler][chosen_player_key].map((player, i) => (
-      <tr key={player.name}>
+  const render_players = players =>
+    players.map((player, i) => (
+      <tr key={i}>
         <td>{i + 1}</td>
         <td>{player.name}</td>
         <td>
@@ -173,6 +149,19 @@ export default function DraftPool({ user, poolName, poolInfo, setPoolInfo, socke
     ));
 
   const isUser = participant => participant === user._id;
+
+  const render_tabs_choice_headers = position => (
+    <>
+      <tr>
+        <th colSpan={3}>{position}</th>
+      </tr>
+      <tr>
+        <th>#</th>
+        <th>name</th>
+        <th>team</th>
+      </tr>
+    </>
+  );
 
   const render_tabs_choice = () => {
     const poolers = poolInfo.participants;
@@ -186,62 +175,26 @@ export default function DraftPool({ user, poolName, poolInfo, setPoolInfo, socke
       <Tabs>
         <TabList>
           {poolers.map(pooler => (
-            <Tab key={pooler}>{pooler}</Tab>
+            <Tab key={pooler}>{DictUsers[pooler]}</Tab>
           ))}
         </TabList>
         {poolers.map(pooler => (
-          <TabPanel>
+          <TabPanel key={pooler}>
             <table className="content-table">
-              <thead>
-                <tr>
-                  <th colSpan={3}>Forwards</th>
-                </tr>
-                <tr>
-                  <th>#</th>
-                  <th>name</th>
-                  <th>team</th>
-                </tr>
-              </thead>
-              <tbody>{render_players(pooler, 'chosen_forward')}</tbody>
+              <thead>{render_tabs_choice_headers('Forwards')}</thead>
+              <tbody>{render_players(poolInfo.context[pooler].chosen_forward)}</tbody>
             </table>
             <table className="content-table">
-              <thead>
-                <tr>
-                  <th colSpan={3}>Defenders</th>
-                </tr>
-                <tr>
-                  <th>#</th>
-                  <th>name</th>
-                  <th>team</th>
-                </tr>
-              </thead>
-              <tbody>{render_players(pooler, 'chosen_defender')}</tbody>
+              <thead>{render_tabs_choice_headers('Defenders')}</thead>
+              <tbody>{render_players(poolInfo.context[pooler].chosen_defender)}</tbody>
             </table>
             <table className="content-table">
-              <thead>
-                <tr>
-                  <th colSpan={3}>Goalies</th>
-                </tr>
-                <tr>
-                  <th>#</th>
-                  <th>name</th>
-                  <th>team</th>
-                </tr>
-              </thead>
-              <tbody>{render_players(pooler, 'chosen_goalies')}</tbody>
+              <thead>{render_tabs_choice_headers('Goalies')}</thead>
+              <tbody>{render_players(poolInfo.context[pooler].chosen_goalies)}</tbody>
             </table>
             <table className="content-table">
-              <thead>
-                <tr>
-                  <th colSpan={3}>Reservists</th>
-                </tr>
-                <tr>
-                  <th>#</th>
-                  <th>name</th>
-                  <th>team</th>
-                </tr>
-              </thead>
-              <tbody>{render_players(pooler, 'chosen_reservist')}</tbody>
+              <thead>{render_tabs_choice_headers('Reservists')}</thead>
+              <tbody>{render_players(poolInfo.context[pooler].chosen_reservist)}</tbody>
             </table>
           </TabPanel>
         ))}
@@ -258,18 +211,89 @@ export default function DraftPool({ user, poolName, poolInfo, setPoolInfo, socke
 
     return (
       <h2 className={textColor}>
-        {poolInfo.next_drafter}
+        {DictUsers[poolInfo.next_drafter]}
         &apos;s turn
       </h2>
     );
   };
+
+  const render_last_season_stats = (position, players) => (
+    <table className="content-table">
+      <thead>
+        <tr>
+          <th colSpan={6}>Forward stats during last season</th>
+        </tr>
+        <tr>
+          <th onClick={() => sort_players('name', position)}>name</th>
+          <th onClick={() => sort_players('team', position)}>team</th>
+          <th onClick={() => sort_players('games', position)}>Games played</th>
+          {position === 'F' || position === 'D' ? (
+            <>
+              <th onClick={() => sort_players('goals', position)}>Goals</th>
+              <th onClick={() => sort_players('assists', position)}>Assists</th>
+              <th onClick={() => sort_players('pts', position)}>pts</th>
+            </>
+          ) : (
+            <>
+              <th onClick={() => sort_players('wins', position)}>Win</th>
+              <th onClick={() => sort_players('losses', position)}>losses</th>
+              <th onClick={() => sort_players('savePercentage', position)}>save percentage</th>
+            </>
+          )}
+        </tr>
+      </thead>
+      <tbody>
+        {players
+          .filter(player => filter_players(player))
+          .map(player => (
+            <tr
+              onClick={() =>
+                setSelectedPlayer({
+                  id: player.id,
+                  name: player.name,
+                  team: player.team,
+                  position: player.position,
+                })
+              }
+              key={player.id}
+            >
+              <td>
+                {selectedPlayer && selectedPlayer.id === player.id ? ( // Add a button to draft a player when we select a player.
+                  <button onClick={() => chose_player(selectedPlayer)} type="button">
+                    Draft
+                  </button>
+                ) : null}
+                {player.name}
+              </td>
+              <td>
+                <img src={logos[player.team]} alt="" width="30" height="30" />
+              </td>
+              <td>{player.stats.games}</td>
+              {position === 'F' || position === 'D' ? (
+                <>
+                  <td>{player.stats.goals}</td>
+                  <td>{player.stats.assists}</td>
+                  <td>{player.stats.pts}</td>
+                </>
+              ) : (
+                <>
+                  <td>{player.stats.wins}</td>
+                  <td>{player.stats.losses}</td>
+                  <td>{player.stats.savePercentage}</td>
+                </>
+              )}
+            </tr>
+          ))}
+      </tbody>
+    </table>
+  );
 
   if (poolInfo && inRoom) {
     return (
       <div>
         <h1>Draft for pool {poolInfo.name}</h1>
         <div className="container">
-          <h1>Stats last season</h1>
+          {render_color_user_turn()}
           <div className="floatLeft">
             <div>
               <input type="text" placeholder="Search..." onChange={event => search_players(event.target.value)} />
@@ -280,117 +304,13 @@ export default function DraftPool({ user, poolName, poolInfo, setPoolInfo, socke
                 <Tab>Defenders</Tab>
                 <Tab>Goalies</Tab>
               </TabList>
-              <TabPanel>
-                <table className="content-table">
-                  <tbody>
-                    <tr>
-                      <th onClick={() => sort_players('name', 'F')}>name</th>
-                      <th onClick={() => sort_players('team', 'F')}>team</th>
-                      <th onClick={() => sort_players('games', 'F')}>Games played</th>
-                      <th onClick={() => sort_players('goals', 'F')}>Goals</th>
-                      <th onClick={() => sort_players('assists', 'F')}>Assists</th>
-                      <th onClick={() => sort_players('pts', 'F')}>pts</th>
-                    </tr>
-                    {forw_l
-                      .filter(player => {
-                        if (filter_players(player) === false) {
-                          return player;
-                        }
-                        return null;
-                      })
-                      .map(player => (
-                        <tr onClick={() => player_selection(player.name, player.team, 'F')} key={player.name}>
-                          <td>{player.name}</td>
-                          <td>
-                            <img src={logos[player.team]} alt="" width="30" height="30" />
-                          </td>
-                          <td>{player.stats.games}</td>
-                          <td>{player.stats.goals}</td>
-                          <td>{player.stats.assists}</td>
-                          <td>{player.stats.pts}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </TabPanel>
-              <TabPanel>
-                <table className="content-table">
-                  <tbody>
-                    <tr>
-                      <th onClick={() => sort_players('name', 'D')}>name</th>
-                      <th onClick={() => sort_players('team', 'D')}>team</th>
-                      <th onClick={() => sort_players('games', 'D')}>Games played</th>
-                      <th onClick={() => sort_players('goals', 'D')}>Goals</th>
-                      <th onClick={() => sort_players('assists', 'D')}>Assists</th>
-                      <th onClick={() => sort_players('pts', 'D')}>pts</th>
-                    </tr>
-                    {def_l
-                      .filter(player => {
-                        if (filter_players(player) === false) {
-                          return player;
-                        }
-                        return null;
-                      })
-                      .map(player => (
-                        <tr onClick={() => player_selection(player.name, player.team, 'D')} key={player.name}>
-                          <td>{player.name}</td>
-                          <td>
-                            <img src={logos[player.team]} alt="" width="30" height="30" />
-                          </td>
-                          <td>{player.stats.games}</td>
-                          <td>{player.stats.goals}</td>
-                          <td>{player.stats.assists}</td>
-                          <td>{player.stats.pts}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </TabPanel>
-              <TabPanel>
-                <table className="content-table">
-                  <tbody>
-                    <tr>
-                      <th onClick={() => sort_players('name', 'G')}>name</th>
-                      <th onClick={() => sort_players('team', 'G')}>team</th>
-                      <th onClick={() => sort_players('games', 'G')}>Games played</th>
-                      <th onClick={() => sort_players('wins', 'G')}>Win</th>
-                      <th onClick={() => sort_players('losses', 'G')}>losses</th>
-                      <th onClick={() => sort_players('savePercentage', 'G')}>save percentage</th>
-                    </tr>
-                    {goal_l
-                      .filter(player => {
-                        if (filter_players(player) === false) {
-                          return player;
-                        }
-                        return null;
-                      })
-                      .map(player => (
-                        <tr onClick={() => player_selection(player.name, player.team, 'G')} key={player.name}>
-                          <td>{player.name}</td>
-                          <td>
-                            <img src={logos[player.team]} alt="" width="30" height="30" />
-                          </td>
-                          <td>{player.stats.games}</td>
-                          <td>{player.stats.wins}</td>
-                          <td>{player.stats.losses}</td>
-                          <td>{player.stats.savePercentage}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </TabPanel>
+              <TabPanel>{render_last_season_stats('F', forw_l)}</TabPanel>
+              <TabPanel>{render_last_season_stats('D', def_l)}</TabPanel>
+              <TabPanel>{render_last_season_stats('G', goal_l)}</TabPanel>
             </Tabs>
           </div>
           <div className="floatRight">
-            <div className="floatLeft">
-              {render_color_user_turn()}
-              <h1>{selectedPlayer.name}</h1>
-              <h3 className="red-text">{message}</h3>
-              <button onClick={() => chose_player(selectedPlayer)} disabled={false} type="button">
-                choose
-              </button>
-            </div>
-            <div className="floatRight">{render_tabs_choice()}</div>
+            <div>{render_tabs_choice()}</div>
           </div>
         </div>
       </div>

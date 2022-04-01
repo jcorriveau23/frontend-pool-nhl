@@ -13,7 +13,7 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
 
   const createPool = () => {
     axios
-      .post('https://hockeypool.live/api/pool/pool_creation', {
+      .post('/api/pool/pool_creation', {
         token: Cookies.get(`token-${user._id}`),
         name: poolNameInput,
         owner: user._id, // TODO change that to use the _id instead of name since the name can be edit by the user.

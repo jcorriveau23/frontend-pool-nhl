@@ -153,7 +153,7 @@ io.on("connection", function (socket) {
     }
 
     axios
-      .put("https://hockeypool.live/api/pool/start_draft", {
+      .put("/api/pool/start_draft", {
         token: data,
         pool_name: room,
         participants: pools[room]["listClient"],
@@ -170,7 +170,7 @@ io.on("connection", function (socket) {
 
   socket.on("pickPlayer", function (data, room, player, callback) {
     axios
-      .put("https://hockeypool.live/api/pool/chose_player", {
+      .put("/api/pool/chose_player", {
         token: data,
         pool_name: room,
         player,

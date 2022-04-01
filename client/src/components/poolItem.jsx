@@ -3,17 +3,20 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 
-export default function PoolItem({ name, owner, user, setPoolDeleted }) {
+export default function PoolItem({ name, owner, user, setPoolDeleted, DictUsers }) {
   const delete_pool = () => {
-    axios.post('https://hockeypool.live/api/pool/delete_pool', { token: Cookies.get(`token-${user._id}`), name });
-    setPoolDeleted(true);
+    if (user) {
+      // only pass the user if pool is in created status.
+      axios.post('/api/pool/delete_pool', { token: Cookies.get(`token-${user._id}`), name });
+      setPoolDeleted(true);
+    }
   };
 
   return (
     <div>
       <p>Pool: {name}</p>
-      <p>Owner: {owner}</p>
-      {user._id === owner ? (
+      <p>Owner: {DictUsers[owner]}</p>
+      {user && user._id === owner ? (
         <button onClick={delete_pool} type="button">
           Delete
         </button>

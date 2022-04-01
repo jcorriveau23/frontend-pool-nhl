@@ -14,7 +14,7 @@ import PoolItem from '../components/poolItem';
 // modal
 import CreatePoolModal from '../modals/createPool';
 
-export default function MyPoolsPage({ user }) {
+export default function MyPoolsPage({ user, DictUsers }) {
   const [showCreatePoolModal, setShowCreatePoolModal] = useState(false);
   const [poolDeleted, setPoolDeleted] = useState(false);
   const [poolCreated, setPoolCreated] = useState([]);
@@ -25,7 +25,7 @@ export default function MyPoolsPage({ user }) {
   useEffect(() => {
     if (user && showCreatePoolModal === false) {
       axios
-        .get('https://hockeypool.live/api/pool/pool_list', {
+        .get('/api/pool/pool_list', {
           headers: {
             token: Cookies.get(`token-${user._id}`),
           },
@@ -104,6 +104,7 @@ export default function MyPoolsPage({ user }) {
                           name={pool.name}
                           owner={pool.owner}
                           user={user}
+                          DictUsers={DictUsers}
                           poolDeleted={poolDeleted}
                           setPoolDeleted={setPoolDeleted}
                         />
@@ -120,7 +121,7 @@ export default function MyPoolsPage({ user }) {
                     {poolDraft.map(pool => (
                       <Link to={`/my-pools/${pool.name}`} key={pool.name}>
                         <li>
-                          <PoolItem name={pool.name} owner={pool.owner} />
+                          <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
                         </li>
                       </Link>
                     ))}
@@ -135,7 +136,7 @@ export default function MyPoolsPage({ user }) {
                     {poolDynastie.map(pool => (
                       <Link to={`/my-pools/${pool.name}`} key={pool.name}>
                         <li>
-                          <PoolItem name={pool.name} owner={pool.owner} />
+                          <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
                         </li>
                       </Link>
                     ))}
@@ -150,7 +151,7 @@ export default function MyPoolsPage({ user }) {
                     {poolInProgress.map(pool => (
                       <Link to={`/my-pools/${pool.name}`} key={pool.name}>
                         <li>
-                          <PoolItem name={pool.name} owner={pool.owner} />
+                          <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
                         </li>
                       </Link>
                     ))}

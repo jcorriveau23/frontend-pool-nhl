@@ -44,7 +44,7 @@ export default function LoginPage({ user, setUser }) {
 
         signer.signMessage('Unlock wallet to access nhl-pool-ethereum.').then(sig => {
           signer.getAddress().then(addr => {
-            axios.post('https://hockeypool.live/api/auth/wallet_login', { addr, sig }).then(res => {
+            axios.post('/api/auth/wallet_login', { addr, sig }).then(res => {
               if (res.data.success === 'True') {
                 Cookies.set(`token-${res.data.user._id}`, res.data.token);
                 localStorage.setItem('persist-account', JSON.stringify(res.data.user));
@@ -63,7 +63,7 @@ export default function LoginPage({ user, setUser }) {
   };
 
   const login = () => {
-    axios.post('https://hockeypool.live/api/auth/login', { username, password }).then(res => {
+    axios.post('/api/auth/login', { username, password }).then(res => {
       if (res.data.success === 'True') {
         Cookies.set(`token-${res.data.user._id}`, res.data.token);
         localStorage.setItem('persist-account', JSON.stringify(res.data.user));
@@ -78,7 +78,7 @@ export default function LoginPage({ user, setUser }) {
   const register = () => {
     if (password === repeatPassword) {
       axios
-        .post('https://hockeypool.live/api/auth/register', {
+        .post('/api/auth/register', {
           username,
           email,
           password,

@@ -30,17 +30,15 @@ export default function ProfilePage({ user, setUser }) {
   };
 
   const set_username = () => {
-    axios
-      .post('https://hockeypool.live/api/auth/set_username', { token: Cookies.get(`token-${user._id}`), newUsername })
-      .then(res => {
-        if (res.data.success === 'True') {
-          Cookies.set(`token-${res.data.user._id}`, res.data.token);
-          localStorage.setItem('persist-account', JSON.stringify(res.data.user));
-          setUser(res.data.user);
-        } else {
-          setMsg(res.data.message);
-        }
-      });
+    axios.post('/api/auth/set_username', { token: Cookies.get(`token-${user._id}`), newUsername }).then(res => {
+      if (res.data.success === 'True') {
+        Cookies.set(`token-${res.data.user._id}`, res.data.token);
+        localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+        setUser(res.data.user);
+      } else {
+        setMsg(res.data.message);
+      }
+    });
   };
 
   if (user) {

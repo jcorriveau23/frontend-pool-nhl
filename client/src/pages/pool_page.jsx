@@ -16,14 +16,14 @@ import DynastiePool from '../components/pool_state/dynastiePool';
 
 const socket = io('http://localhost:8080');
 
-export default function PoolPage({ user }) {
+export default function PoolPage({ user, DictUsers }) {
   const [poolInfo, setPoolInfo] = useState({});
   const [poolName] = useState(useParams().name); // get the name of the pool using the param url
 
   useEffect(() => {
     if (user) {
       axios
-        .get('https://hockeypool.live/api/pool/get_pool_info', {
+        .get('/api/pool/get_pool_info', {
           headers: {
             token: Cookies.get(`token-${user._id}`),
             poolname: poolName,
@@ -38,21 +38,42 @@ export default function PoolPage({ user }) {
     }
   }, [user]);
 
-  if (user) {
+  if (user && DictUsers) {
     switch (poolInfo.status) {
       case 'created':
         return (
-          <CreatedPool user={user} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket} />
+          <CreatedPool
+            user={user}
+            DictUsers={DictUsers}
+            poolName={poolName}
+            poolInfo={poolInfo}
+            setPoolInfo={setPoolInfo}
+            socket={socket}
+          />
         );
       case 'draft':
         return (
-          <DraftPool user={user} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket} />
+          <DraftPool
+            user={user}
+            DictUsers={DictUsers}
+            poolName={poolName}
+            poolInfo={poolInfo}
+            setPoolInfo={setPoolInfo}
+            socket={socket}
+          />
         );
       case 'in Progress':
-        return <InProgressPool user={user} poolName={poolName} poolInfo={poolInfo} />;
+        return <InProgressPool user={user} DictUsers={DictUsers} poolName={poolName} poolInfo={poolInfo} />;
       case 'dynastie':
         return (
-          <DynastiePool user={user} poolName={poolName} poolInfo={poolInfo} setPoolInfo={setPoolInfo} socket={socket} />
+          <DynastiePool
+            user={user}
+            DictUsers={DictUsers}
+            poolName={poolName}
+            poolInfo={poolInfo}
+            setPoolInfo={setPoolInfo}
+            socket={socket}
+          />
         );
       default:
         return (

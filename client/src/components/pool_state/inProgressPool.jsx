@@ -11,7 +11,7 @@ import { logos } from '../img/logos';
 // css
 import '../react-tabs.css';
 
-export default function InProgressPool({ user, poolName, poolInfo }) {
+export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) {
   const [playersStats, setPlayersStats] = useState({});
   const [ranking, setRanking] = useState([]);
 
@@ -136,7 +136,7 @@ export default function InProgressPool({ user, poolName, poolInfo }) {
   useEffect(() => {
     if (poolName) {
       axios
-        .get('https://hockeypool.live/api/pool/get_pool_stats', {
+        .get('/api/pool/get_pool_stats', {
           headers: {
             token: Cookies.get(`token-${user._id}`),
             poolname: poolName,
@@ -274,7 +274,7 @@ export default function InProgressPool({ user, poolName, poolInfo }) {
         <Tabs>
           <TabList>
             {poolers.map(pooler => (
-              <Tab key={pooler}>{pooler}</Tab>
+              <Tab key={pooler}>{DictUsers[pooler]}</Tab>
             ))}
           </TabList>
           {poolers.map(pooler => (
@@ -362,7 +362,7 @@ export default function InProgressPool({ user, poolName, poolInfo }) {
       return ranking.map((pooler_stats, i) => (
         <tr key={pooler_stats.name}>
           <td>{i + 1}</td>
-          <td>{pooler_stats.name}</td>
+          <td>{DictUsers[pooler_stats.name]}</td>
           <td>{pooler_stats.forwards_total_pts}</td>
           <td>{pooler_stats.defenders_total_pts}</td>
           <td>{pooler_stats.goalies_total_pts}</td>

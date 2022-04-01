@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // components
 import ParticipantItem from './participantItem';
 
-export default function CreatedPool({ user, poolName, poolInfo, setPoolInfo, socket }) {
+export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPoolInfo, socket }) {
   const [inRoom, setInRoom] = useState(false);
   const [userList, setUserList] = useState([]);
   // const [msg, setMsg] = useState(""); // TODO: add some error msg to display on the app.
@@ -69,7 +69,7 @@ export default function CreatedPool({ user, poolName, poolInfo, setPoolInfo, soc
       if (i < userList.length) {
         participants.push(
           <li key={userList[i]._id}>
-            <ParticipantItem name={userList[i]._id} ready={userList[i].ready} />
+            <ParticipantItem name={DictUsers[userList[i]._id]} ready={userList[i].ready} />
           </li>
         ); // TODO: add a modal pop up to add that friend
       } else {
