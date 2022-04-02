@@ -20,7 +20,7 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
         number_pooler: numberPoolerInput,
       })
       .then(res => {
-        if (res.data.success === 'True') {
+        if (res.data.success === true) {
           setShowCreatePoolModal(false);
         } else {
           setMsg(res.data.message);

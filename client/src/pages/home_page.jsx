@@ -14,7 +14,7 @@ export default function HomePage({ formatDate }) {
       // get the day leaders data from database.
 
       axios.get(`/api/pool/get_day_leaders`, { headers: { d: formatDate } }).then(res => {
-        if (res.data.success === 'True') {
+        if (res.data.success === true) {
           setDayLeaders({ ...res.data.message });
           setPrevFormatDate(formatDate);
         } else {

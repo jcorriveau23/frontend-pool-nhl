@@ -143,7 +143,7 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
           },
         })
         .then(res => {
-          if (res.data.success === 'True') {
+          if (res.data.success === true) {
             calculate_pool_stats(res.data.players);
           }
         });

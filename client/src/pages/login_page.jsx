@@ -22,16 +22,15 @@ export default function LoginPage({ user, setUser }) {
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState(''); // for Register
   const [email, setEmail] = useState(''); // for Register
-  const [msg, setMsg] = useState('');
   const navigate = useNavigate();
 
   const [isRegister, setIsRegister] = useState(false); // by default propose login parameter
 
   useEffect(() => {
     if (user) {
-      navigate('/profile');
+      navigate('/');
     }
-  }, []);
+  }, [user]);
 
   const wallet_login = () => {
     try {
@@ -130,7 +129,6 @@ export default function LoginPage({ user, setUser }) {
           <button onClick={() => setIsRegister(false)} type="button">
             Already Registered
           </button>
-          <p style={{ color: 'red' }}>{msg}</p>
         </div>
       ) : (
         <div className="modal_content">
