@@ -17,7 +17,10 @@ import PropTypes from 'prop-types';
 import { ethers } from 'ethers';
 import Cookies from 'js-cookie';
 
-export default function LoginPage({ user, setUser }) {
+// css
+import './page.css';
+
+export default function LoginPage({ user, setUser, setIsWalletConnected, setCurrentAddr }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState(''); // for Register
@@ -47,9 +50,13 @@ export default function LoginPage({ user, setUser }) {
                 Cookies.set(`token-${res.data.user._id}`, res.data.token);
                 localStorage.setItem('persist-account', JSON.stringify(res.data.user));
                 setUser(res.data.user);
+                setIsWalletConnected(true);
+                console.log(addr);
+                setCurrentAddr(addr);
                 navigate('/');
               } else {
                 setUser(null);
+                setIsWalletConnected(false);
               }
             });
           });
@@ -97,70 +104,83 @@ export default function LoginPage({ user, setUser }) {
   };
 
   return (
-    <div>
-      {isRegister ? (
-        <div className="modal_content">
-          <h2>Register an account</h2>
-          <form>
-            <p>Please fill in this form to create an account.</p>
-            <input
-              type="text"
-              placeholder="Enter Username"
-              onChange={event => setUsername(event.target.value)}
-              required
-            />
-            <input type="text" placeholder="Enter Email" onChange={event => setEmail(event.target.value)} required />
-            <input
-              type="password"
-              placeholder="Enter Password"
-              onChange={event => setPassword(event.target.value)}
-              required
-            />
-            <input
-              type="password"
-              placeholder="Repeat Password"
-              onChange={event => setRepeatPassword(event.target.value)}
-              required
-            />
-          </form>
-          <button onClick={() => register()} type="button">
-            Register
-          </button>
-          <button onClick={() => setIsRegister(false)} type="button">
-            Already Registered
+    <div className="min-width">
+      <div className="floatLeft">
+        {isRegister ? (
+          <div className="login_content">
+            <h2>Register an account</h2>
+            <form>
+              <p>Please fill in this form to create an account.</p>
+              <input
+                type="text"
+                placeholder="Enter Username"
+                onChange={event => setUsername(event.target.value)}
+                required
+              />
+              <input type="text" placeholder="Enter Email" onChange={event => setEmail(event.target.value)} required />
+              <input
+                type="password"
+                placeholder="Enter Password"
+                onChange={event => setPassword(event.target.value)}
+                required
+              />
+              <input
+                type="password"
+                placeholder="Repeat Password"
+                onChange={event => setRepeatPassword(event.target.value)}
+                required
+              />
+            </form>
+            <button className="login_register_button" onClick={() => register()} type="button">
+              Register
+            </button>
+            <button className="base_button_no_border" onClick={() => setIsRegister(false)} type="button">
+              Already Registered...
+            </button>
+          </div>
+        ) : (
+          <div className="login_content">
+            <h2>Login from a username and password</h2>
+            <form>
+              <p>Please fill in this form to login.</p>
+              <input
+                type="text"
+                placeholder="Enter Username"
+                onChange={event => setUsername(event.target.value)}
+                required
+              />
+              <input
+                type="password"
+                placeholder="Enter Password"
+                onChange={event => setPassword(event.target.value)}
+                required
+              />
+            </form>
+            <button className="login_register_button" onClick={() => login()} type="button">
+              Login
+            </button>
+            <button className="base_button_no_border" onClick={() => setIsRegister(true)} type="button">
+              Register an Account...
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="floatRight">
+        <div className="login_content">
+          <h2>Login using a wallet</h2>
+          <button className="connect_metamask_button" onClick={() => wallet_login()} type="button">
+            <table>
+              <tbody>
+                <tr>
+                  <td>
+                    <img src="https://static.loopring.io/assets/svg/meta-mask.svg" alt="" width={30} height={30} />
+                  </td>
+                  <td>Connect Wallet</td>
+                </tr>
+              </tbody>
+            </table>
           </button>
         </div>
-      ) : (
-        <div className="modal_content">
-          <h2>Login from a username and password</h2>
-          <form>
-            <p>Please fill in this form to login.</p>
-            <input
-              type="text"
-              placeholder="Enter Username"
-              onChange={event => setUsername(event.target.value)}
-              required
-            />
-            <input
-              type="password"
-              placeholder="Enter Password"
-              onChange={event => setPassword(event.target.value)}
-              required
-            />
-          </form>
-          <button onClick={() => login()} type="button">
-            Login
-          </button>
-          <button onClick={() => setIsRegister(true)} type="button">
-            Register an Account
-          </button>
-        </div>
-      )}
-      <div className="modal_content">
-        <h2>Login using a wallet</h2>
-        <button onClick={() => wallet_login()} type="button">
-          Connect Wallet
-        </button>
       </div>
     </div>
   );

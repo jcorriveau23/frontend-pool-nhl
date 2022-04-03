@@ -60,24 +60,8 @@ table.content-table tr th:hover {
   background-color: #32443b;
 }
 
-button {
-  background-color: #4caf50;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 10px;
-}
-
 body {
   background-color: #888888;
-}
-
-button:hover:enabled {
-  background-color: #007500;
 }
 
 button:disabled {
@@ -86,79 +70,6 @@ button:disabled {
 
 li {
   display: inline;
-}
-
-.header {
-  border-color: #444;
-  border-style: groove;
-  border-radius: 10px;
-  min-width: 700px;
-  display: flex;
-  position: relative;
-}
-
-nav {
-  float: left;
-}
-
-nav ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-nav li {
-  display: inline-block;
-  margin-left: 20px;
-  padding-top: 5px;
-
-  position: relative;
-}
-
-nav a {
-  color: #444;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 14px;
-}
-
-nav a:hover {
-  color: #ffffff;
-}
-
-nav a::before {
-  content: '';
-  display: block;
-  height: 5px;
-  width: 0%;
-  background-color: #444;
-
-  position: absolute;
-  top: 0;
-  transition: all ease-in-out 250ms;
-}
-
-nav a:hover::before {
-  width: 100%;
-}
-
-.modal_content {
-  text-align: center;
-}
-
-.modal_content form {
-  text-align: center;
-  padding: 10px 20px;
-}
-
-.modal_content input {
-  width: 51%;
-  padding: 8px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  text-align: center;
-  border: 2px solid #444;
-  border-radius: 10px;
 }
 
 .pool_item ul li:hover {

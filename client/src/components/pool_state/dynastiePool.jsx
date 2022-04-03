@@ -364,7 +364,7 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
                   ))}
                 </tbody>
               </table>
-              <button onClick={() => send_protected_player()} disabled={false} type="button">
+              <button className="base_button" onClick={() => send_protected_player()} disabled={false} type="button">
                 complete protecting player
               </button>
             </div>

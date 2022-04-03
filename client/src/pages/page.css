@@ -1,0 +1,82 @@
+.login_content {
+  text-align: center;
+}
+
+.login_content form {
+  text-align: center;
+  padding: 10px 20px;
+}
+
+.login_content input {
+  width: 51%;
+  padding: 8px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  text-align: center;
+  border: 2px solid #444;
+  border-radius: 10px;
+}
+
+.login_register_button {
+  background-color: #888;
+  border-color: #000;
+  border-radius: 3px;
+  border: 2px solid #000;
+  align-items: center;
+  color: #000;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 3px;
+  width: 200px;
+  height: 35px;
+}
+
+.login_register_button:hover:enabled {
+  border-color: #fff;
+  background-color: #888;
+  cursor: pointer;
+  color: #fff;
+}
+
+.toggle_login_register_button {
+  background-color: #888;
+  border-color: #000;
+  border-radius: 3px;
+  border: 2px solid #000;
+  align-items: center;
+  color: #000;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 3px;
+  width: 200px;
+  height: 35px;
+}
+
+.toggle_login_register_button:hover:enabled {
+  border-color: #fff;
+  background-color: #888;
+  cursor: pointer;
+  color: #fff;
+}
+
+.connect_metamask_button {
+  background-color: #888;
+  border-color: #000;
+  border-radius: 3px;
+  border: 2px solid #000;
+  color: #000;
+  text-align: right;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 3px;
+  width: 200px;
+}
+
+.connect_metamask_button:hover:enabled {
+  border-color: #fff;
+  background-color: #888;
+  cursor: pointer;
+  color: #fff;
+}

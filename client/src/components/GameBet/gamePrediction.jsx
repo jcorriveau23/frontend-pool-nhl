@@ -92,7 +92,12 @@ export default function GamePrediction({ gameID, gameInfo, user, contract }) {
             />
           </div>
           <div>
-            <button onClick={() => setShowSendPredictionModal(true)} disabled={gameData.isDone} type="button">
+            <button
+              className="base_button"
+              onClick={() => setShowSendPredictionModal(true)}
+              disabled={gameData.isDone}
+              type="button"
+            >
               {gameData.isDone ? 'Game is done' : 'Predict'}
             </button>
           </div>
@@ -140,7 +145,7 @@ export default function GamePrediction({ gameID, gameInfo, user, contract }) {
       <div>
         <h1>No Prediction market open for that game yet.</h1>
         {contract && user && user.addr === owner ? (
-          <button onClick={create_prediction_market} type="button">
+          <button className="base_button" onClick={create_prediction_market} type="button">
             Create
           </button>
         ) : null}

@@ -399,7 +399,7 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
             <tbody>{render_tabs_pool_rank()}</tbody>
           </table>
         </div>
-        <button onClick={() => download_csv(poolInfo)} disabled={false} type="button">
+        <button className="base_button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
           Download CSV
         </button>
       </div>

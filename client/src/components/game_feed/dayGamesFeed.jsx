@@ -15,12 +15,24 @@ import 'react-datepicker/dist/react-datepicker.css';
 import goPrev from '../img/icons/Actions-go-previous-icon.png';
 import goNext from '../img/icons/Actions-go-next-icon.png';
 
-export default function TodayGamesFeed({ setFormatDate }) {
+export default function TodayGamesFeed({ formatDate, setFormatDate }) {
   const [gamesStats, setGamesStats] = useState([]);
   const [date, setDate] = useState(new Date());
 
   useEffect(() => {
-    const newDate = new Date(date.setHours(0));
+    let newDate;
+
+    if (!formatDate && date.getHours() < 12) {
+      console.log('tests');
+      // this case is when we do a refresh on the site and it is not yet 12h pm,
+      // we will display stats and games of yesterday
+      newDate = new Date(date.setHours(0));
+      newDate.setDate(date.getDate() - 1);
+      setDate(newDate);
+    } else {
+      newDate = new Date(date.setHours(0));
+    }
+
     const fDate = newDate.toISOString().slice(0, 10);
 
     setFormatDate(fDate);
@@ -87,4 +99,4 @@ export default function TodayGamesFeed({ setFormatDate }) {
   );
 }
 
-TodayGamesFeed.propTypes = { setFormatDate: PropTypes.func.isRequired };
+TodayGamesFeed.propTypes = { formatDate: PropTypes.string.isRequired, setFormatDate: PropTypes.func.isRequired };

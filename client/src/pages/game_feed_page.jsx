@@ -458,7 +458,7 @@ export default function GameFeedPage({ user, contract }) {
                     </div>
                   </TabPanel>
                   <TabPanel>
-                    <div>
+                    <div className="min-width">
                       <GameRecap gameContent={gameContent} isEditorial={false} />
                     </div>
                   </TabPanel>

@@ -5,12 +5,6 @@ import axios from 'axios';
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
 
-// components
-import SearchPlayer from '../components/player_page/searchPlayer';
-
-// css
-import '../components/player_page/player_page.css';
-
 export default function PlayerPage() {
   const [playerStats, setPlayerStats] = useState(null);
   const [playerPlayoffStats, setPlayerPlayoffStats] = useState(null);
@@ -465,12 +459,7 @@ export default function PlayerPage() {
   );
 
   if (playerStats && playerPlayoffStats && playerInfo) {
-    return (
-      <div>
-        <SearchPlayer />
-        {render_player_info_stats(playerStats.stats[0].splits, playerInfo.people[0])}
-      </div>
-    );
+    return <div>{render_player_info_stats(playerStats.stats[0].splits, playerInfo.people[0])}</div>;
   }
 
   if (!Number.isNaN(Number(playerID)) && playerID !== '' && !prospectInfo) {
@@ -483,21 +472,11 @@ export default function PlayerPage() {
   }
 
   if (prospectInfo) {
-    return (
-      <div>
-        <SearchPlayer />
-        {render_player_info(prospectInfo)}
-      </div>
-    );
-  }
-
-  if (Number.isNaN(Number(playerID)) || playerID === '') {
-    return <SearchPlayer />;
+    return <div>{render_player_info(prospectInfo)}</div>;
   }
 
   return (
     <div>
-      <SearchPlayer />
       <h1>Player does not exist</h1>
     </div>
   );

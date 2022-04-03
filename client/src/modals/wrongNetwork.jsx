@@ -6,7 +6,8 @@ import React from 'react';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 
-import { styleModal } from './styleModal';
+// css
+import './modal.css';
 
 export default function WrongNetworkModal({ isWalletConnected, isWrongNetwork }) {
   const switchChain = () => {
@@ -18,12 +19,14 @@ export default function WrongNetworkModal({ isWalletConnected, isWrongNetwork })
   };
 
   return (
-    <Modal style={styleModal} isOpen={isWalletConnected && isWrongNetwork}>
-      <h1>Connect your wallet to Kovan Network to use our prediction market.</h1>
-      <h3>Our system indicates that your wallet is not connected to Ethereum&apos;s Kovan network.</h3>
-      <button type="button" onClick={switchChain}>
-        Switch Networks
-      </button>
+    <Modal className="baseModal" overlayClassName="baseOverlay" isOpen={isWalletConnected && isWrongNetwork}>
+      <div className="modal_content">
+        <h1>Connect your wallet to Kovan Network to use our prediction market.</h1>
+        <h3>Our system indicates that your wallet is not connected to Ethereum&apos;s Kovan network.</h3>
+        <button className="base_button" type="button" onClick={switchChain}>
+          Switch Networks
+        </button>
+      </div>
     </Modal>
   );
 }

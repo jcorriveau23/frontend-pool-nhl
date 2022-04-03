@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { BrowserRouter as Router, Link, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { CgMenuRound } from 'react-icons/cg';
 
 // css
 import './components/components.css';
@@ -15,6 +16,8 @@ import TodayGamesFeed from './components/game_feed/dayGamesFeed';
 
 // modals
 import WrongNetworkModal from './modals/wrongNetwork';
+import MenuModal from './modals/menu';
+import AccountModal from './modals/account';
 
 // pages
 import HomePage from './pages/home_page';
@@ -32,6 +35,7 @@ import LeagueLeadersPage from './pages/leagueLeaders_page';
 
 // components
 import WalletCard from './components/web3/WalletCard';
+import SearchPlayer from './components/app/searchPlayer';
 
 // always force https as protocol
 if (window.location.protocol !== 'https:') {
@@ -40,11 +44,16 @@ if (window.location.protocol !== 'https:') {
 
 function App() {
   const [user, setUser] = useState(null);
+  const [currentAddr, setCurrentAddr] = useState('');
   const [contract, setContract] = useState(null);
   const [formatDate, setFormatDate] = useState(null);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [isWrongNetwork, setIsWrongNetwork] = useState(false);
   const [DictUsers, setDictUsers] = useState(null);
+  const [showMenuModal, setShowMenuModal] = useState(false);
+  const [showAccountModal, setShowAccountModal] = useState(false);
+  const refMenu = useRef(null);
+  const refAccount = useRef(null);
 
   useEffect(() => {
     axios.get('https://nhl-pool-ethereum.herokuapp.com/');
@@ -69,44 +78,28 @@ function App() {
           <div>
             <ul>
               <div>
-                <img src={Logo} alt="" width="100" height="75" />
-              </div>
-              <div className="inline-left-right">
-                <li>
-                  <Link to="/">Home</Link>
+                <li className="menu" ref={refMenu}>
+                  <button onClick={() => setShowMenuModal(!showMenuModal)} type="button">
+                    <CgMenuRound size={55} />
+                  </button>
                 </li>
-                {user ? (
-                  <li>
-                    <Link to="/my-pools">My Pools</Link>
-                  </li>
-                ) : null}
-                {user ? (
-                  <li>
-                    <Link to="/my-bets">My Game Bets</Link>
-                  </li>
-                ) : null}
-                <li>
-                  <Link to="/standing">Standing</Link>
+                <li className="search_players">
+                  <SearchPlayer />
                 </li>
-                <li>
-                  <Link to="/leaders">League leaders</Link>
+                <li className="walletCard" ref={refAccount}>
+                  <WalletCard
+                    user={user}
+                    setUser={setUser}
+                    setContract={setContract}
+                    isWalletConnected={isWalletConnected}
+                    setIsWalletConnected={setIsWalletConnected}
+                    setIsWrongNetwork={setIsWrongNetwork}
+                    showAccountModal={showAccountModal}
+                    setShowAccountModal={setShowAccountModal}
+                    currentAddr={currentAddr}
+                    setCurrentAddr={setCurrentAddr}
+                  />
                 </li>
-                <li>
-                  <Link to="/player-info">Search Players</Link>
-                </li>
-                <li>
-                  <Link to="/draft">Draft</Link>
-                </li>
-                <WalletCard
-                  user={user}
-                  setUser={setUser}
-                  contract={contract}
-                  setContract={setContract}
-                  isWalletConnected={isWalletConnected}
-                  setIsWalletConnected={setIsWalletConnected}
-                  isWrongNetwork={isWrongNetwork}
-                  setIsWrongNetwork={setIsWrongNetwork}
-                />
               </div>
             </ul>
           </div>
@@ -116,10 +109,24 @@ function App() {
         <TodayGamesFeed formatDate={formatDate} setFormatDate={setFormatDate} />
       </div>
       <div>
+        <MenuModal
+          user={user}
+          isWalletConnected={isWalletConnected}
+          showMenuModal={showMenuModal}
+          setShowMenuModal={setShowMenuModal}
+          buttonMenuRef={refMenu}
+        />
+        <AccountModal
+          user={user}
+          isWalletConnected={isWalletConnected}
+          showAccountModal={showAccountModal}
+          setShowAccountModal={setShowAccountModal}
+          buttonAccountRef={refAccount}
+        />
         <WrongNetworkModal isWalletConnected={isWalletConnected} isWrongNetwork={isWrongNetwork} />
         <Routes>
           <Route path="/" element={<HomePage formatDate={formatDate} />} />
-          <Route path="/login" element={<LoginPage user={user} setUser={setUser} />} />
+          <Route path="/login" element={<LoginPage user={user} setUser={setUser} setCurrentAddr={setCurrentAddr} />} />
           <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
           <Route path="/my-pools" element={<MyPoolsPage user={user} DictUsers={DictUsers} />} />
           <Route path="/my-bets" element={<MyGameBetsPage user={user} contract={contract} />} />

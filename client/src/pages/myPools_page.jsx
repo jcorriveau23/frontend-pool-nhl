@@ -5,8 +5,14 @@ import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import PropTypes from 'prop-types';
 
+// icons
+import { IoMdAdd } from 'react-icons/io';
+import { FaRunning, FaTools, FaHockeyPuck } from 'react-icons/fa';
+import { BsFillPenFill } from 'react-icons/bs';
+
 // css
 import '../components/react-tabs.css';
+import './page.css';
 
 // components
 import PoolItem from '../components/poolItem';
@@ -82,17 +88,44 @@ export default function MyPoolsPage({ user, DictUsers }) {
       <div>
         <div>
           <h1>Pool list</h1>
-          <button type="button" onClick={openCreatePoolModal} disabled={false}>
-            Create a new Pool.
+          <button className="base_button" type="button" onClick={openCreatePoolModal} disabled={false}>
+            <table>
+              <tbody>
+                <tr>
+                  <td>
+                    <IoMdAdd size={30} />
+                  </td>
+                  <td>Create a new Pool</td>
+                </tr>
+              </tbody>
+            </table>
           </button>
         </div>
         <div>
           <Tabs>
             <TabList>
-              <Tab>Created</Tab>
-              {poolDraft.length > 0 ? <Tab>Drafting</Tab> : null}
-              {poolDynastie.length > 0 ? <Tab>Dynastie</Tab> : null}
-              {poolInProgress.length > 0 ? <Tab>in Progress</Tab> : null}
+              <Tab>
+                <FaTools size={30} />
+                Created
+              </Tab>
+              {poolDraft.length > 0 ? (
+                <Tab>
+                  <BsFillPenFill size={30} />
+                  Drafting
+                </Tab>
+              ) : null}
+              {poolDynastie.length > 0 ? (
+                <Tab>
+                  <FaHockeyPuck size={30} />
+                  Dynastie
+                </Tab>
+              ) : null}
+              {poolInProgress.length > 0 ? (
+                <Tab>
+                  <FaRunning size={30} />
+                  in Progress
+                </Tab>
+              ) : null}
             </TabList>
             <TabPanel>
               <div className="pool_item">

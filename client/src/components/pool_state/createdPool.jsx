@@ -94,7 +94,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
 
     if (user._id === poolInfo.owner) {
       return (
-        <button onClick={handleChange} disabled={bDisable} type="button">
+        <button className="base_button" onClick={handleChange} disabled={bDisable} type="button">
           Start draft
         </button>
       );

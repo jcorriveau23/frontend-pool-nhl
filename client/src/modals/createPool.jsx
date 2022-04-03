@@ -4,7 +4,8 @@ import Modal from 'react-modal';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 
-import { styleModal } from './styleModal';
+// css
+import './modal.css';
 
 export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePoolModal, user }) {
   const [msg, setMsg] = useState('');
@@ -61,7 +62,7 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
               </select>
             </div>
           </form>
-          <button onClick={() => createPool()} disabled={false} type="button">
+          <button className="base_button" onClick={() => createPool()} disabled={false} type="button">
             Create
           </button>
           <p style={{ color: 'red' }}>{msg}</p>
@@ -77,7 +78,12 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
   };
 
   return (
-    <Modal style={styleModal} isOpen={showCreatePoolModal} onRequestClose={() => setShowCreatePoolModal(false)}>
+    <Modal
+      className="baseModal"
+      overlayClassName="baseOverlay"
+      isOpen={showCreatePoolModal}
+      onRequestClose={() => setShowCreatePoolModal(false)}
+    >
       {isLoggedRender()}
     </Modal>
   );

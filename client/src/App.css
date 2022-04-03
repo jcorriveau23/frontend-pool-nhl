@@ -1,3 +1,150 @@
+.container {
+  min-width: 700;
+}
+
 .inline-left-right {
   display: inline;
+}
+
+.header {
+  border-color: #000;
+  border-style: groove;
+  border-radius: 10px;
+  min-width: 700px;
+  display: flex;
+  position: relative;
+  background-color: #444;
+}
+
+nav {
+  float: left;
+}
+
+nav ul {
+  margin: 1;
+  padding: 0;
+  list-style: none;
+}
+
+nav li {
+  display: inline-block;
+  margin-left: 10px;
+
+  position: relative;
+}
+
+nav a {
+  color: #444;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+nav a:hover {
+  color: #ffffff;
+}
+
+.menu {
+  display: inline-block;
+}
+
+.menu button {
+  background-color: #888;
+  border-color: #000;
+  border-radius: 3px;
+  border: 2px solid #000;
+  display: inline-flex;
+  align-items: center;
+  color: #000;
+}
+
+.menu button:hover:enabled {
+  border-color: #fff;
+  background-color: #888;
+  cursor: pointer;
+  color: #fff;
+}
+
+.search_players {
+  display: inline-block;
+}
+
+.search_players button {
+  background-color: #888;
+  border-color: #000;
+  border-radius: 3px;
+  border: 2px solid #000;
+  color: #000;
+}
+
+.search_players button:hover:enabled {
+  border-color: #fff;
+  background-color: #888;
+  cursor: pointer;
+  color: #fff;
+}
+
+.walletCard {
+  display: inline-block;
+  text-align: right;
+  position: absolute;
+  right: 1%;
+}
+
+.walletCard button {
+  background-color: #888;
+  font-size: 20px;
+  border-color: #000;
+  border-radius: 3px;
+  border: 2px solid #000;
+  text-align: center;
+  min-height: 60px;
+  min-width: 130px;
+  color: #000;
+}
+
+.walletCard button:hover:enabled {
+  border-color: #fff;
+  background-color: #888;
+  cursor: pointer;
+  color: #fff;
+}
+
+.base_button {
+  background-color: #888;
+  border-color: #000;
+  border-radius: 3px;
+  border: 2px solid #000;
+  align-items: center;
+  color: #000;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 3px;
+  width: 200px;
+  height: auto;
+  min-height: 40px;
+}
+
+.base_button:hover:enabled {
+  border-color: #fff;
+  background-color: #888;
+  cursor: pointer;
+  color: #fff;
+}
+
+.base_button_no_border {
+  background-color: #888;
+  border: none;
+  color: #000;
+  display: inline-block;
+  font-size: 16px;
+  height: 35px;
+}
+
+.base_button_no_border:hover:enabled {
+  border-color: #fff;
+  background-color: #888;
+  cursor: pointer;
+  color: #fff;
 }

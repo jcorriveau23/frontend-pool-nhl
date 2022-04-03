@@ -7,7 +7,8 @@ import PropTypes from 'prop-types';
 // images
 import { logos } from '../components/img/logos';
 
-import { styleModal } from './styleModal';
+// css
+import './modal.css';
 
 export default function SendPredictionModal({
   // user,
@@ -79,7 +80,8 @@ export default function SendPredictionModal({
   if (gameInfo)
     return (
       <Modal
-        style={styleModal}
+        className="baseModal"
+        overlayClassName="baseOverlay"
         isOpen={showSendPredictionModal}
         onRequestClose={() => setShowSendPredictionModal(false)}
       >
@@ -121,7 +123,12 @@ export default function SendPredictionModal({
             </div>
           </div>
           <div>
-            <button onClick={() => sendPrediction()} disabled={waitingTransaction} type="button">
+            <button
+              className="base_button"
+              onClick={() => sendPrediction()}
+              disabled={waitingTransaction}
+              type="button"
+            >
               Predict {predictedTeam}{' '}
             </button>
           </div>

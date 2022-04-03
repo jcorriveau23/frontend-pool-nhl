@@ -259,7 +259,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
             >
               <td>
                 {selectedPlayer && selectedPlayer.id === player.id ? ( // Add a button to draft a player when we select a player.
-                  <button onClick={() => chose_player(selectedPlayer)} type="button">
+                  <button className="base_button" onClick={() => chose_player(selectedPlayer)} type="button">
                     Draft
                   </button>
                 ) : null}

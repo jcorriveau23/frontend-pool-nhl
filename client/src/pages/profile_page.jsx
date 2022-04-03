@@ -12,6 +12,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 
+import { AiOutlineEdit } from 'react-icons/ai';
+
 export default function ProfilePage({ user, setUser }) {
   const [newUsername, setNewUsername] = useState('');
   const navigate = useNavigate();
@@ -56,15 +58,16 @@ export default function ProfilePage({ user, setUser }) {
             </tr>
           </tbody>
         </table>
-        <button onClick={logout} type="button">
-          Logout
-        </button>
         <form>
           <input type="text" placeholder={user.name} onChange={event => setNewUsername(event.target.value)} required />
-          <button onClick={set_username} type="button">
+          <button className="base_button_no_border" onClick={set_username} type="button">
+            <AiOutlineEdit size={30} />
             edit username
           </button>
         </form>
+        <button className="base_button" onClick={logout} type="button">
+          Logout
+        </button>
       </div>
     );
   }
