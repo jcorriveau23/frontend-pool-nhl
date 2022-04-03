@@ -31,6 +31,7 @@
   margin: 10px 0;
   font-size: 0.9em;
   min-width: 700px;
+  width: 100%;
 }
 
 .content-table th {

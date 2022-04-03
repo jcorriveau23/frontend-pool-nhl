@@ -19,7 +19,7 @@ export default function StandingPage() {
 
   if (teamsStats != null) {
     return (
-      <div>
+      <div className="cont">
         <TeamsStanding data={teamsStats} />
       </div>
     );

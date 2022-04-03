@@ -106,80 +106,89 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
   return (
     <div className="min-width">
       <div className="floatLeft">
-        {isRegister ? (
-          <div className="login_content">
-            <h2>Register an account</h2>
-            <form>
-              <p>Please fill in this form to create an account.</p>
-              <input
-                type="text"
-                placeholder="Enter Username"
-                onChange={event => setUsername(event.target.value)}
-                required
-              />
-              <input type="text" placeholder="Enter Email" onChange={event => setEmail(event.target.value)} required />
-              <input
-                type="password"
-                placeholder="Enter Password"
-                onChange={event => setPassword(event.target.value)}
-                required
-              />
-              <input
-                type="password"
-                placeholder="Repeat Password"
-                onChange={event => setRepeatPassword(event.target.value)}
-                required
-              />
-            </form>
-            <button className="login_register_button" onClick={() => register()} type="button">
-              Register
-            </button>
-            <button className="base_button_no_border" onClick={() => setIsRegister(false)} type="button">
-              Already Registered...
-            </button>
-          </div>
-        ) : (
-          <div className="login_content">
-            <h2>Login from a username and password</h2>
-            <form>
-              <p>Please fill in this form to login.</p>
-              <input
-                type="text"
-                placeholder="Enter Username"
-                onChange={event => setUsername(event.target.value)}
-                required
-              />
-              <input
-                type="password"
-                placeholder="Enter Password"
-                onChange={event => setPassword(event.target.value)}
-                required
-              />
-            </form>
-            <button className="login_register_button" onClick={() => login()} type="button">
-              Login
-            </button>
-            <button className="base_button_no_border" onClick={() => setIsRegister(true)} type="button">
-              Register an Account...
-            </button>
-          </div>
-        )}
+        <div className="half_cont">
+          {isRegister ? (
+            <div className="login_content">
+              <h2>Register an account</h2>
+              <form>
+                <p>Please fill in this form to create an account.</p>
+                <input
+                  type="text"
+                  placeholder="Enter Username"
+                  onChange={event => setUsername(event.target.value)}
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Enter Email"
+                  onChange={event => setEmail(event.target.value)}
+                  required
+                />
+                <input
+                  type="password"
+                  placeholder="Enter Password"
+                  onChange={event => setPassword(event.target.value)}
+                  required
+                />
+                <input
+                  type="password"
+                  placeholder="Repeat Password"
+                  onChange={event => setRepeatPassword(event.target.value)}
+                  required
+                />
+              </form>
+              <button className="login_register_button" onClick={() => register()} type="button">
+                Register
+              </button>
+              <button className="base_button_no_border" onClick={() => setIsRegister(false)} type="button">
+                Already Registered...
+              </button>
+            </div>
+          ) : (
+            <div className="login_content">
+              <h2>Login from a username and password</h2>
+              <form>
+                <p>Please fill in this form to login.</p>
+                <input
+                  type="text"
+                  placeholder="Enter Username"
+                  onChange={event => setUsername(event.target.value)}
+                  required
+                />
+                <input
+                  type="password"
+                  placeholder="Enter Password"
+                  onChange={event => setPassword(event.target.value)}
+                  required
+                />
+              </form>
+              <button className="login_register_button" onClick={() => login()} type="button">
+                Login
+              </button>
+              <button className="base_button_no_border" onClick={() => setIsRegister(true)} type="button">
+                Register an Account...
+              </button>
+            </div>
+          )}
+        </div>
       </div>
       <div className="floatRight">
-        <div className="login_content">
-          <h2>Login using a wallet</h2>
-          <button className="connect_metamask_button" onClick={() => wallet_login()} type="button">
-            <table>
-              <tbody>
-                <tr>
-                  <td>
-                    <img src="https://static.loopring.io/assets/svg/meta-mask.svg" alt="" width={30} height={30} />
-                  </td>
-                  <td>Connect Wallet</td>
-                </tr>
-              </tbody>
-            </table>
-          </button>
+        <div className="half_cont">
+          <div className="login_content">
+            <h2>Login using a wallet</h2>
+            <button className="connect_metamask_button" onClick={() => wallet_login()} type="button">
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <img src="https://static.loopring.io/assets/svg/meta-mask.svg" alt="" width={30} height={30} />
+                    </td>
+                    <td>Connect Wallet</td>
+                  </tr>
+                </tbody>
+              </table>
+            </button>
+          </div>
         </div>
       </div>
     </div>

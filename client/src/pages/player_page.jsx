@@ -459,7 +459,7 @@ export default function PlayerPage() {
   );
 
   if (playerStats && playerPlayoffStats && playerInfo) {
-    return <div>{render_player_info_stats(playerStats.stats[0].splits, playerInfo.people[0])}</div>;
+    return <div className="cont">{render_player_info_stats(playerStats.stats[0].splits, playerInfo.people[0])}</div>;
   }
 
   if (!Number.isNaN(Number(playerID)) && playerID !== '' && !prospectInfo) {
@@ -472,7 +472,7 @@ export default function PlayerPage() {
   }
 
   if (prospectInfo) {
-    return <div>{render_player_info(prospectInfo)}</div>;
+    return <div className="cont">{render_player_info(prospectInfo)}</div>;
   }
 
   return (

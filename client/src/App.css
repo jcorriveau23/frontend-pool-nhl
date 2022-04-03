@@ -1,47 +1,37 @@
-.container {
-  min-width: 700;
-}
-
-.inline-left-right {
-  display: inline;
+.cont {
+  border-color: #000;
+  border-style: groove;
+  border-radius: 10px;
+  background-color: #444;
+  padding: 10px;
+  margin: 10px;
+  min-width: 700px;
+  align-content: center;
 }
 
 .header {
   border-color: #000;
   border-style: groove;
   border-radius: 10px;
+  background-color: #444;
+  padding: 10px;
+  margin: 10px;
   min-width: 700px;
-  display: flex;
+}
+
+.half_cont {
+  border-color: #000;
+  border-style: groove;
+  border-radius: 10px;
   position: relative;
   background-color: #444;
+  padding: 10px;
+  margin: 10px;
+  min-width: 300px;
 }
 
-nav {
-  float: left;
-}
-
-nav ul {
-  margin: 1;
-  padding: 0;
-  list-style: none;
-}
-
-nav li {
-  display: inline-block;
-  margin-left: 10px;
-
-  position: relative;
-}
-
-nav a {
-  color: #444;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 14px;
-}
-
-nav a:hover {
-  color: #ffffff;
+.inline-left-right {
+  display: inline;
 }
 
 .menu {
@@ -86,9 +76,8 @@ nav a:hover {
 
 .walletCard {
   display: inline-block;
-  text-align: right;
-  position: absolute;
-  right: 1%;
+  position: fixed;
+  right: 2%;
 }
 
 .walletCard button {

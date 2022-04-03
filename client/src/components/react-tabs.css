@@ -1,12 +1,13 @@
 .react-tabs {
   -webkit-tap-highlight-color: transparent;
   display: inline-block;
-  text-align: left;
+  width: 100%;
+  align-self: center;
 }
 
 .react-tabs__tab-list {
   border-bottom: 2px solid #aaa;
-  margin: 0 0 10px;
+  margin: 10px;
   padding: 0;
 }
 

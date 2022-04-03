@@ -7,7 +7,7 @@
   margin: 0;
   padding: 100, 100;
   min-width: 700px;
-  max-width: 700px;
+  width: 100%;
   border: 2px solid black;
 }
 
@@ -28,4 +28,5 @@
 
 .min-width {
   min-width: 700px;
+  width: 100%;
 }

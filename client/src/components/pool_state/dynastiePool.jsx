@@ -242,7 +242,7 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
       return (
         <div>
           <h1>Protect player for pool: {poolInfo.name}</h1>
-          <div className="container">
+          <div className="cont">
             <div className="floatLeft">
               <h2>Protect {poolInfo.next_season_number_players_protected} players of your team</h2>
               <table className="content-table">

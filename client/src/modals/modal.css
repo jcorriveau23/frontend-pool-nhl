@@ -52,7 +52,7 @@
 }
 
 .accountModal {
-  position: absolute;
+  position: fixed;
   top: 100px;
   right: 1%;
   background-color: #888888;

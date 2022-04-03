@@ -41,7 +41,7 @@ export default function ProfilePage({ user, setUser }) {
 
   if (user) {
     return (
-      <div>
+      <div className="cont">
         <table>
           <tbody>
             <tr>

@@ -74,38 +74,30 @@ function App() {
   return (
     <Router>
       <div className="header">
-        <nav>
-          <div>
-            <ul>
-              <div>
-                <li className="menu" ref={refMenu}>
-                  <button onClick={() => setShowMenuModal(!showMenuModal)} type="button">
-                    <CgMenuRound size={55} />
-                  </button>
-                </li>
-                <li className="search_players">
-                  <SearchPlayer />
-                </li>
-                <li className="walletCard" ref={refAccount}>
-                  <WalletCard
-                    user={user}
-                    setUser={setUser}
-                    setContract={setContract}
-                    isWalletConnected={isWalletConnected}
-                    setIsWalletConnected={setIsWalletConnected}
-                    setIsWrongNetwork={setIsWrongNetwork}
-                    showAccountModal={showAccountModal}
-                    setShowAccountModal={setShowAccountModal}
-                    currentAddr={currentAddr}
-                    setCurrentAddr={setCurrentAddr}
-                  />
-                </li>
-              </div>
-            </ul>
-          </div>
-        </nav>
+        <li className="menu" ref={refMenu}>
+          <button onClick={() => setShowMenuModal(!showMenuModal)} type="button">
+            <CgMenuRound size={55} />
+          </button>
+        </li>
+        <li className="search_players">
+          <SearchPlayer />
+        </li>
+        <li className="walletCard" ref={refAccount}>
+          <WalletCard
+            user={user}
+            setUser={setUser}
+            setContract={setContract}
+            isWalletConnected={isWalletConnected}
+            setIsWalletConnected={setIsWalletConnected}
+            setIsWrongNetwork={setIsWrongNetwork}
+            showAccountModal={showAccountModal}
+            setShowAccountModal={setShowAccountModal}
+            currentAddr={currentAddr}
+            setCurrentAddr={setCurrentAddr}
+          />
+        </li>
       </div>
-      <div>
+      <div className="cont">
         <TodayGamesFeed formatDate={formatDate} setFormatDate={setFormatDate} />
       </div>
       <div>

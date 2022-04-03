@@ -18,6 +18,7 @@
 }
 
 .betItem ul li {
+  background-color: #888;
   border-color: #000;
   display: block;
   font-family: 'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif;

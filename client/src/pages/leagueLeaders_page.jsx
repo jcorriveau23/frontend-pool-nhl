@@ -142,7 +142,7 @@ export default function LeagueLeadersPage() {
 
   if (leagueLeaders && leagueLeaderTypes && !noDataFoThisYear) {
     return (
-      <div>
+      <div className="cont">
         {displayDropDowns()}
         {render_leaders(leagueLeaders.leaders)}
       </div>

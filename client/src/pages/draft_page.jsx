@@ -100,7 +100,7 @@ export default function DraftPage() {
 
   if (draftInfo && draftInfo.drafts.length > 0) {
     return (
-      <div>
+      <div className="cont">
         {seasonDropDown()}
         {draftInfo.drafts[0].rounds
           .sort((round1, round2) => round1.round - round2.round)

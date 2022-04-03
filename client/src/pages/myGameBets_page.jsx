@@ -25,17 +25,19 @@ export default function MyGameBetsPage({ user, contract }) {
 
   if (user && userBets) {
     return (
-      <div className="betItem">
-        <h1>My Bets Page</h1>
-        <ul>
-          {userBets.map(id => (
-            <Link to={`/game/${id}`} key={id}>
-              <li>
-                <BetItem user={user} contract={contract} gameID={id} />
-              </li>
-            </Link>
-          ))}
-        </ul>
+      <div className="cont">
+        <div className="betItem">
+          <h1>My Bets Page</h1>
+          <ul>
+            {userBets.map(id => (
+              <Link to={`/game/${id}`} key={id}>
+                <li>
+                  <BetItem user={user} contract={contract} gameID={id} />
+                </li>
+              </Link>
+            ))}
+          </ul>
+        </div>
       </div>
     );
   }

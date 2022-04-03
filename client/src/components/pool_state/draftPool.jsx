@@ -292,7 +292,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
     return (
       <div>
         <h1>Draft for pool {poolInfo.name}</h1>
-        <div className="container">
+        <div className="cont">
           {render_color_user_turn()}
           <div className="floatLeft">
             <div>

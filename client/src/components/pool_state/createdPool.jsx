@@ -105,7 +105,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
 
   if (poolInfo && inRoom) {
     return (
-      <div className="container">
+      <div className="cont">
         <h1>Match Making for Pool {poolName}</h1>
         <div className="floatLeft">
           <h2>Rule: </h2>

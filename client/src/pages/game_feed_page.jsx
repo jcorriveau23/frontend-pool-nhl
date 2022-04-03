@@ -430,7 +430,7 @@ export default function GameFeedPage({ user, contract }) {
 
   if (gameInfo && gameContent) {
     return (
-      <div>
+      <div className="cont">
         <div>
           <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
             <TabList>

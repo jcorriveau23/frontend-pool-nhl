@@ -190,7 +190,7 @@ export default function TeamRosterBySeasonPage() {
 
   if (skatersStats && goaliesStats) {
     return (
-      <div>
+      <div className="cont">
         {render_team_skaters(skatersStats)}
         {render_team_goalies(goaliesStats)}
       </div>

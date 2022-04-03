@@ -85,7 +85,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
 
   if (user) {
     return (
-      <div>
+      <div className="cont">
         <div>
           <h1>Pool list</h1>
           <button className="base_button" type="button" onClick={openCreatePoolModal} disabled={false}>

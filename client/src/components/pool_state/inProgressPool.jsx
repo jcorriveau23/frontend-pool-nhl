@@ -377,31 +377,35 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
 
   if (poolInfo) {
     return (
-      <div className="back-site">
-        <h1>Pool in progress...</h1>
+      <div>
         <div className="floatLeft">
-          <div>{render_tabs_choice_stats()}</div>
+          <div className="half_cont">
+            <h1>Pool in progress...</h1>
+            {render_tabs_choice_stats()}
+            <button className="base_button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
+              Download CSV
+            </button>
+          </div>
         </div>
         <div className="floatRight">
-          <h1>Today&apos;s ranking</h1>
-          <table className="content-table">
-            <thead>
-              <tr>
-                <th>rank</th>
-                <th>pooler name</th>
-                <th>forwards (pts)</th>
-                <th>defenders (pts)</th>
-                <th>goalies (pts)</th>
-                <th>reservists (pts)</th>
-                <th>total (pts)</th>
-              </tr>
-            </thead>
-            <tbody>{render_tabs_pool_rank()}</tbody>
-          </table>
+          <div className="half_cont">
+            <h1>Today&apos;s ranking</h1>
+            <table className="content-table">
+              <thead>
+                <tr>
+                  <th>rank</th>
+                  <th>pooler name</th>
+                  <th>forwards (pts)</th>
+                  <th>defenders (pts)</th>
+                  <th>goalies (pts)</th>
+                  <th>reservists (pts)</th>
+                  <th>total (pts)</th>
+                </tr>
+              </thead>
+              <tbody>{render_tabs_pool_rank()}</tbody>
+            </table>
+          </div>
         </div>
-        <button className="base_button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
-          Download CSV
-        </button>
       </div>
     );
   }
