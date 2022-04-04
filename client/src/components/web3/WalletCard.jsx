@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ethers } from 'ethers';
-import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 import { CgProfile } from 'react-icons/cg';
 
@@ -74,7 +73,7 @@ export default function WalletCard({
   }
 
   const render_account_button = () => {
-    let name = user.name;
+    let { name } = user;
 
     if (isWalletConnected) {
       name = `${currentAddr.substring(0, 6)}...${currentAddr.slice(-4)}`;
@@ -106,12 +105,16 @@ export default function WalletCard({
 }
 
 WalletCard.propTypes = {
-  user: PropTypes.shape({ addr: PropTypes.string.isRequired }),
+  user: PropTypes.shape({ addr: PropTypes.string.isRequired, name: PropTypes.string.isRequired }),
   setUser: PropTypes.func.isRequired,
   setContract: PropTypes.func.isRequired,
   isWalletConnected: PropTypes.bool.isRequired,
   setIsWalletConnected: PropTypes.func.isRequired,
   setIsWrongNetwork: PropTypes.func.isRequired,
+  showAccountModal: PropTypes.bool.isRequired,
+  setShowAccountModal: PropTypes.func.isRequired,
+  currentAddr: PropTypes.string.isRequired,
+  setCurrentAddr: PropTypes.func.isRequired,
 };
 
 WalletCard.defaultProps = {

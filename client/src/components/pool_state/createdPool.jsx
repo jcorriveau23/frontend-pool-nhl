@@ -418,6 +418,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
 
 CreatedPool.propTypes = {
   user: PropTypes.shape({ _id: PropTypes.string.isRequired }).isRequired,
+  DictUsers: PropTypes.shape({}).isRequired,
   poolName: PropTypes.string.isRequired,
   poolInfo: PropTypes.shape({
     name: PropTypes.string.isRequired,

@@ -30,6 +30,12 @@
   min-width: 300px;
 }
 
+.center_content {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
 .inline-left-right {
   display: inline;
 }

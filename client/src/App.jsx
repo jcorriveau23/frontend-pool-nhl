@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { BrowserRouter as Router, Link, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { CgMenuRound } from 'react-icons/cg';
@@ -7,9 +7,6 @@ import { CgMenuRound } from 'react-icons/cg';
 // css
 import './components/components.css';
 import './App.css';
-
-// Logo of web site
-import Logo from './components/img/logo/logo.svg';
 
 // component
 import TodayGamesFeed from './components/game_feed/dayGamesFeed';
@@ -74,6 +71,7 @@ function App() {
   return (
     <Router>
       <div className="header">
+        <meta name="viewport" content="width=device-width" />
         <li className="menu" ref={refMenu}>
           <button onClick={() => setShowMenuModal(!showMenuModal)} type="button">
             <CgMenuRound size={55} />

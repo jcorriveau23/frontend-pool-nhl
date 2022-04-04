@@ -419,6 +419,7 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
 
 InProgressPool.propTypes = {
   user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
+  DictUsers: PropTypes.shape({}).isRequired,
   poolName: PropTypes.string.isRequired,
   poolInfo: PropTypes.shape({
     name: PropTypes.string.isRequired,

@@ -40,6 +40,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
       if (!window.ethereum) throw new Error('Please install MetaMask browser extension to interact');
 
       window.ethereum.request({ method: 'eth_requestAccounts' }).then(result => {
+        console.log(result);
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 
@@ -63,7 +64,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
         });
       });
     } catch (err) {
-      console.error(err);
+      alert(err);
     }
   };
 
@@ -196,5 +197,12 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
 }
 
 LoginPage.propTypes = {
+  user: PropTypes.shape({}),
   setUser: PropTypes.func.isRequired,
+  setIsWalletConnected: PropTypes.bool.isRequired,
+  setCurrentAddr: PropTypes.func.isRequired,
+};
+
+LoginPage.defaultProps = {
+  user: null,
 };

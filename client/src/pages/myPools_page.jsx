@@ -208,6 +208,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
 
 MyPoolsPage.propTypes = {
   user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }),
+  DictUsers: PropTypes.shape({}).isRequired,
 };
 
 MyPoolsPage.defaultProps = {

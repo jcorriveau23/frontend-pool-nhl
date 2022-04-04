@@ -22,7 +22,7 @@ export default function AccountModal({
   setShowAccountModal,
   buttonAccountRef,
 }) {
-  const [ethAmount, setEthAmount] = useState(0.0);
+  const [ethAmount /* setEthAmount */] = useState(0.0);
   const ref = useRef(null);
   const navigate = useNavigate();
 
@@ -107,6 +107,9 @@ AccountModal.propTypes = {
     addr: PropTypes.string.isRequired,
     pool_list: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   }).isRequired,
+  isWalletConnected: PropTypes.bool.isRequired,
   showAccountModal: PropTypes.string.isRequired,
   setShowAccountModal: PropTypes.func.isRequired,
+  buttonAccountRef: PropTypes.shape({ current: PropTypes.shape({ contains: PropTypes.func.isRequired }).isRequired })
+    .isRequired,
 };

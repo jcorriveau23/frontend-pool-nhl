@@ -30,4 +30,5 @@ PoolItem.propTypes = {
   owner: PropTypes.string.isRequired,
   user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
   setPoolDeleted: PropTypes.func.isRequired,
+  DictUsers: PropTypes.shape({}).isRequired,
 };

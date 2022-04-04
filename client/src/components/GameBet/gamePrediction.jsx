@@ -58,7 +58,7 @@ export default function GamePrediction({ gameID, gameInfo, user, contract }) {
   if (gameData && gameInfo) {
     if (gameData.isCreated) {
       return (
-        <div>
+        <div className="center_content">
           {showSendPredictionModal ? (
             <SendPredictionModal
               user={user}

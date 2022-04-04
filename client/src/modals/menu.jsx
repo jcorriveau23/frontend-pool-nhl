@@ -119,8 +119,13 @@ MenuModal.propTypes = {
     phone: PropTypes.string.isRequired,
     addr: PropTypes.string.isRequired,
     pool_list: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  }).isRequired,
+  }),
   isWalletConnected: PropTypes.bool.isRequired,
   showMenuModal: PropTypes.bool.isRequired,
   setShowMenuModal: PropTypes.func.isRequired,
+  buttonMenuRef: PropTypes.shape({ current: PropTypes.shape({ contains: PropTypes.func.isRequired }).isRequired })
+    .isRequired,
+};
+MenuModal.defaultProps = {
+  user: null,
 };

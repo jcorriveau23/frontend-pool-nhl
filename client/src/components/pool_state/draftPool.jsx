@@ -139,7 +139,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
 
   const render_players = players =>
     players.map((player, i) => (
-      <tr key={i}>
+      <tr key={player.id}>
         <td>{i + 1}</td>
         <td>{player.name}</td>
         <td>
@@ -327,6 +327,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
 
 DraftPool.propTypes = {
   user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
+  DictUsers: PropTypes.shape({}).isRequired,
   poolName: PropTypes.string.isRequired,
   poolInfo: PropTypes.shape({
     name: PropTypes.string.isRequired,

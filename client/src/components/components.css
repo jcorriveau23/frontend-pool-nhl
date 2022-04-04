@@ -8,9 +8,6 @@
   float: right;
   background-color: #888888;
 }
-.container {
-  overflow: hidden;
-}
 
 .red-text {
   color: red;
@@ -32,7 +29,15 @@
   font-size: 0.9em;
   min-width: 700px;
   width: 100%;
+  max-width: 1000px;
 }
+/* @media (min-width: 700px) {
+  .content-table {
+    width: 75%;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+} */
 
 .content-table th {
   background-color: #222222;
@@ -55,10 +60,6 @@ table.content-table tr:hover td {
 
 table.content-table tr th:hover {
   background-color: #757575;
-}
-
-.background-app {
-  background-color: #32443b;
 }
 
 body {
@@ -85,6 +86,7 @@ li {
 
 .pool_item ul li {
   border-color: #000;
+  background-color: #888888;
   display: block;
   font-family: 'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif;
   font-size: 12px;

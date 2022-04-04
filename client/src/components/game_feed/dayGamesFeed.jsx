@@ -22,7 +22,7 @@ export default function TodayGamesFeed({ formatDate, setFormatDate }) {
   useEffect(() => {
     let newDate;
 
-    if (!formatDate && date.getHours() < 12) {
+    if (!formatDate && date.getHours() < 17) {
       console.log('tests');
       // this case is when we do a refresh on the site and it is not yet 12h pm,
       // we will display stats and games of yesterday
