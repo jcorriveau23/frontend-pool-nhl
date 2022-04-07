@@ -244,129 +244,133 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
           <h1>Protect player for pool: {poolInfo.name}</h1>
           <div className="cont">
             <div className="floatLeft">
-              <h2>Protect {poolInfo.next_season_number_players_protected} players of your team</h2>
-              <table className="content-table">
-                <thead>
-                  <h3>Forwards</h3>
-                  <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                  </tr>
-                </thead>
-                <tbody>{render_forward_dynastie()}</tbody>
-                <thead>
-                  <h3>Defenders</h3>
-                  <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                  </tr>
-                  <tbody>{render_defender_dynastie()}</tbody>
-                </thead>
-                <thead>
-                  <h3>Goalies</h3>
-                  <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                  </tr>
-                  <tbody>{render_goalies_dynastie()}</tbody>
-                </thead>
-                <thead>
-                  <h3>Reservists</h3>
-                  <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                  </tr>
-                  <tbody>{render_reservist_dynastie()}</tbody>
-                </thead>
-              </table>
+              <div className="half-cont">
+                <h2>Protect {poolInfo.next_season_number_players_protected} players of your team</h2>
+                <table className="content-table">
+                  <thead>
+                    <h3>Forwards</h3>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                  </thead>
+                  <tbody>{render_forward_dynastie()}</tbody>
+                  <thead>
+                    <h3>Defenders</h3>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                    <tbody>{render_defender_dynastie()}</tbody>
+                  </thead>
+                  <thead>
+                    <h3>Goalies</h3>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                    <tbody>{render_goalies_dynastie()}</tbody>
+                  </thead>
+                  <thead>
+                    <h3>Reservists</h3>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
+                    </tr>
+                    <tbody>{render_reservist_dynastie()}</tbody>
+                  </thead>
+                </table>
+              </div>
             </div>
             <div className="floatRight">
-              <h2>Protected players</h2>
-              <table className="content-table">
-                <thead>
-                  <h3>Forwards</h3>
-                  <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {forwProtected.map((player, i) => (
-                    <tr onClick={() => unprotect_player(player, false)} key={player.name}>
-                      <td>{i + 1}</td>
-                      <td>{player.name}</td>
-                      <td>
-                        <img src={logos[player.team]} alt="" width="30" height="30" />
-                      </td>
+              <div className="half-cont">
+                <h2>Protected players</h2>
+                <table className="content-table">
+                  <thead>
+                    <h3>Forwards</h3>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
                     </tr>
-                  ))}
-                </tbody>
-                <thead>
-                  <h3>Defenders</h3>
-                  <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {defProtected.map((player, i) => (
-                    <tr onClick={() => unprotect_player(player, false)} key={player.name}>
-                      <td>{i + 1}</td>
-                      <td>{player.name}</td>
-                      <td>
-                        <img src={logos[player.team]} alt="" width="30" height="30" />
-                      </td>
+                  </thead>
+                  <tbody>
+                    {forwProtected.map((player, i) => (
+                      <tr onClick={() => unprotect_player(player, false)} key={player.name}>
+                        <td>{i + 1}</td>
+                        <td>{player.name}</td>
+                        <td>
+                          <img src={logos[player.team]} alt="" width="30" height="30" />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <thead>
+                    <h3>Defenders</h3>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
                     </tr>
-                  ))}
-                </tbody>
-                <thead>
-                  <h3>Goalies</h3>
-                  <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {goalProtected.map((player, i) => (
-                    <tr onClick={() => unprotect_player(player, false)} key={player.name}>
-                      <td>{i + 1}</td>
-                      <td>{player.name}</td>
-                      <td>
-                        <img src={logos[player.team]} alt="" width="30" height="30" />
-                      </td>
+                  </thead>
+                  <tbody>
+                    {defProtected.map((player, i) => (
+                      <tr onClick={() => unprotect_player(player, false)} key={player.name}>
+                        <td>{i + 1}</td>
+                        <td>{player.name}</td>
+                        <td>
+                          <img src={logos[player.team]} alt="" width="30" height="30" />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <thead>
+                    <h3>Goalies</h3>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
                     </tr>
-                  ))}
-                </tbody>
-                <thead>
-                  <h3>Reservist</h3>
-                  <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>team</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {reservProtected.map((player, i) => (
-                    <tr onClick={() => unprotect_player(player, true)} key={player.name}>
-                      <td>{i + 1}</td>
-                      <td>{player.name}</td>
-                      <td>
-                        <img src={logos[player.team]} alt="" width="30" height="30" />
-                      </td>
+                  </thead>
+                  <tbody>
+                    {goalProtected.map((player, i) => (
+                      <tr onClick={() => unprotect_player(player, false)} key={player.name}>
+                        <td>{i + 1}</td>
+                        <td>{player.name}</td>
+                        <td>
+                          <img src={logos[player.team]} alt="" width="30" height="30" />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <thead>
+                    <h3>Reservist</h3>
+                    <tr>
+                      <th>#</th>
+                      <th>name</th>
+                      <th>team</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              <button className="base_button" onClick={() => send_protected_player()} disabled={false} type="button">
-                complete protecting player
-              </button>
+                  </thead>
+                  <tbody>
+                    {reservProtected.map((player, i) => (
+                      <tr onClick={() => unprotect_player(player, true)} key={player.name}>
+                        <td>{i + 1}</td>
+                        <td>{player.name}</td>
+                        <td>
+                          <img src={logos[player.team]} alt="" width="30" height="30" />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <button className="base_button" onClick={() => send_protected_player()} disabled={false} type="button">
+                  complete protecting player
+                </button>
+              </div>
             </div>
           </div>
         </div>

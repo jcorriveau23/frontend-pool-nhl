@@ -107,7 +107,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
   return (
     <div className="min-width">
       <div className="floatLeft">
-        <div className="half_cont">
+        <div className="half-cont">
           {isRegister ? (
             <div className="login_content">
               <h2>Register an account</h2>
@@ -174,7 +174,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
         </div>
       </div>
       <div className="floatRight">
-        <div className="half_cont">
+        <div className="half-cont">
           <div className="login_content">
             <h2>Login using a wallet</h2>
             <button className="connect_metamask_button" onClick={() => wallet_login()} type="button">

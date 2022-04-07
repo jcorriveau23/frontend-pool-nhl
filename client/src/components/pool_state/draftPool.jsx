@@ -180,19 +180,19 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
         </TabList>
         {poolers.map(pooler => (
           <TabPanel key={pooler}>
-            <table className="content-table">
+            <table className="content-table-no-min">
               <thead>{render_tabs_choice_headers('Forwards')}</thead>
               <tbody>{render_players(poolInfo.context[pooler].chosen_forward)}</tbody>
             </table>
-            <table className="content-table">
+            <table className="content-table-no-min">
               <thead>{render_tabs_choice_headers('Defenders')}</thead>
               <tbody>{render_players(poolInfo.context[pooler].chosen_defender)}</tbody>
             </table>
-            <table className="content-table">
+            <table className="content-table-no-min">
               <thead>{render_tabs_choice_headers('Goalies')}</thead>
               <tbody>{render_players(poolInfo.context[pooler].chosen_goalies)}</tbody>
             </table>
-            <table className="content-table">
+            <table className="content-table-no-min">
               <thead>{render_tabs_choice_headers('Reservists')}</thead>
               <tbody>{render_players(poolInfo.context[pooler].chosen_reservist)}</tbody>
             </table>
@@ -218,7 +218,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
   };
 
   const render_last_season_stats = (position, players) => (
-    <table className="content-table">
+    <table className="content-table-no-min">
       <thead>
         <tr>
           <th colSpan={6}>Forward stats during last season</th>
@@ -291,26 +291,42 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
   if (poolInfo && inRoom) {
     return (
       <div>
-        <h1>Draft for pool {poolInfo.name}</h1>
         <div className="cont">
-          {render_color_user_turn()}
+          <table className="content-table-no-min">
+            <tbody>
+              <tr>
+                <th colSpan={2}>Pool Info</th>
+              </tr>
+              <tr>
+                <th>Pool name:</th>
+                <td>{poolInfo.name}</td>
+              </tr>
+              <tr>
+                <th>Pool status: </th>
+                <td>{poolInfo.status}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
           <div className="floatLeft">
-            <div>
+            <div className="half-cont">
+              {render_color_user_turn()}
               <input type="text" placeholder="Search..." onChange={event => search_players(event.target.value)} />
+              <Tabs>
+                <TabList>
+                  <Tab>Forwards</Tab>
+                  <Tab>Defenders</Tab>
+                  <Tab>Goalies</Tab>
+                </TabList>
+                <TabPanel>{render_last_season_stats('F', forw_l)}</TabPanel>
+                <TabPanel>{render_last_season_stats('D', def_l)}</TabPanel>
+                <TabPanel>{render_last_season_stats('G', goal_l)}</TabPanel>
+              </Tabs>
             </div>
-            <Tabs>
-              <TabList>
-                <Tab>Forwards</Tab>
-                <Tab>Defenders</Tab>
-                <Tab>Goalies</Tab>
-              </TabList>
-              <TabPanel>{render_last_season_stats('F', forw_l)}</TabPanel>
-              <TabPanel>{render_last_season_stats('D', def_l)}</TabPanel>
-              <TabPanel>{render_last_season_stats('G', goal_l)}</TabPanel>
-            </Tabs>
           </div>
           <div className="floatRight">
-            <div>{render_tabs_choice()}</div>
+            <div className="half-cont">{render_tabs_choice()}</div>
           </div>
         </div>
       </div>
@@ -331,6 +347,7 @@ DraftPool.propTypes = {
   poolName: PropTypes.string.isRequired,
   poolInfo: PropTypes.shape({
     name: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
     participants: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     context: PropTypes.arrayOf(
       PropTypes.shape({

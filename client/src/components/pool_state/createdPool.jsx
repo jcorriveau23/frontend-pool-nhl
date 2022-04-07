@@ -105,303 +105,307 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
 
   if (poolInfo && inRoom) {
     return (
-      <div className="cont">
+      <div>
         <h1>Match Making for Pool {poolName}</h1>
         <div className="floatLeft">
-          <h2>Rule: </h2>
-          <table>
-            <tbody>
-              <tr>
-                <td>Number of poolers</td>
-                <td>
-                  <select
-                    name="number_poolers"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.number_poolers}
-                  >
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                    <option>10</option>
-                    <option>11</option>
-                    <option>12</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>Number of forwards:</td>
-                <td>
-                  <select
-                    name="number_forward"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.number_forward}
-                  >
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                    <option>10</option>
-                    <option>11</option>
-                    <option>12</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>Number of defenders:</td>
-                <td>
-                  <select
-                    name="number_defenders"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.number_defenders}
-                  >
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>Number of goalies:</td>
-                <td>
-                  <select
-                    name="number_goalies"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.number_goalies}
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>Number of reservists:</td>
-                <td>
-                  <select
-                    name="number_reservist"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.number_reservist}
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <h2>Points</h2>
-          <table>
-            <tbody>
-              <tr>
-                <td>pts per goal by forward:</td>
-                <td>
-                  <select
-                    name="forward_pts_goals"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.forward_pts_goals}
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>pts per assist by forward:</td>
-                <td>
-                  <select
-                    name="forward_pts_assists"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.forward_pts_assists}
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>pts per hat trick by forward:</td>
-                <td>
-                  <select
-                    name="forward_pts_hattricks"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.forward_pts_hattricks}
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>pts per goal by defender:</td>
-                <td>
-                  <select
-                    name="defender_pts_goals"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.defender_pts_goals}
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>pts per assist by defender:</td>
-                <td>
-                  <select
-                    name="defender_pts_assists"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.defender_pts_assists}
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>pts per hat trick by defender:</td>
-                <td>
-                  <select
-                    name="defender_pts_hattricks"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.defender_pts_hattricks}
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>pts per win by goalies</td>
-                <td>
-                  <select
-                    name="goalies_pts_wins"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.goalies_pts_wins}
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>pts per shutout by goalies</td>
-                <td>
-                  <select
-                    name="goalies_pts_shutouts"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.goalies_pts_shutouts}
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>pts per goal by goalies:</td>
-                <td>
-                  <select
-                    name="goalies_pts_goals"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.goalies_pts_goals}
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>pts per assist by goalies:</td>
-                <td>
-                  <select
-                    name="goalies_pts_assists"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.goalies_pts_assists}
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>next season number player protected:</td>
-                <td>
-                  <select
-                    name="next_season_number_players_protected"
-                    onChange={handleChange}
-                    disabled={poolInfo.owner !== user._id}
-                    value={poolInfo.next_season_number_players_protected}
-                  >
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                    <option>10</option>
-                    <option>11</option>
-                    <option>12</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>number tradable draft picks:</td>
-                <td>
-                  <select name="tradable_picks" onChange={handleChange} disabled={poolInfo.owner !== user._id}>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="half-cont">
+            <h2>Rule: </h2>
+            <table>
+              <tbody>
+                <tr>
+                  <td>Number of poolers</td>
+                  <td>
+                    <select
+                      name="number_poolers"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.number_poolers}
+                    >
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+                      <option>9</option>
+                      <option>10</option>
+                      <option>11</option>
+                      <option>12</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Number of forwards:</td>
+                  <td>
+                    <select
+                      name="number_forward"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.number_forward}
+                    >
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+                      <option>9</option>
+                      <option>10</option>
+                      <option>11</option>
+                      <option>12</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Number of defenders:</td>
+                  <td>
+                    <select
+                      name="number_defenders"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.number_defenders}
+                    >
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Number of goalies:</td>
+                  <td>
+                    <select
+                      name="number_goalies"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.number_goalies}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Number of reservists:</td>
+                  <td>
+                    <select
+                      name="number_reservist"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.number_reservist}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <h2>Points</h2>
+            <table>
+              <tbody>
+                <tr>
+                  <td>pts per goal by forward:</td>
+                  <td>
+                    <select
+                      name="forward_pts_goals"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.forward_pts_goals}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>pts per assist by forward:</td>
+                  <td>
+                    <select
+                      name="forward_pts_assists"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.forward_pts_assists}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>pts per hat trick by forward:</td>
+                  <td>
+                    <select
+                      name="forward_pts_hattricks"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.forward_pts_hattricks}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>pts per goal by defender:</td>
+                  <td>
+                    <select
+                      name="defender_pts_goals"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.defender_pts_goals}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>pts per assist by defender:</td>
+                  <td>
+                    <select
+                      name="defender_pts_assists"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.defender_pts_assists}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>pts per hat trick by defender:</td>
+                  <td>
+                    <select
+                      name="defender_pts_hattricks"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.defender_pts_hattricks}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>pts per win by goalies</td>
+                  <td>
+                    <select
+                      name="goalies_pts_wins"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.goalies_pts_wins}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>pts per shutout by goalies</td>
+                  <td>
+                    <select
+                      name="goalies_pts_shutouts"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.goalies_pts_shutouts}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>pts per goal by goalies:</td>
+                  <td>
+                    <select
+                      name="goalies_pts_goals"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.goalies_pts_goals}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>pts per assist by goalies:</td>
+                  <td>
+                    <select
+                      name="goalies_pts_assists"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.goalies_pts_assists}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>next season number player protected:</td>
+                  <td>
+                    <select
+                      name="next_season_number_players_protected"
+                      onChange={handleChange}
+                      disabled={poolInfo.owner !== user._id}
+                      value={poolInfo.next_season_number_players_protected}
+                    >
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+                      <option>9</option>
+                      <option>10</option>
+                      <option>11</option>
+                      <option>12</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>number tradable draft picks:</td>
+                  <td>
+                    <select name="tradable_picks" onChange={handleChange} disabled={poolInfo.owner !== user._id}>
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div className="floatRight">
-          <input type="checkbox" onChange={handleChange} />
-          <b>Ready?</b>
-          {render_start_draft_button()}
-          <h2>Participants: </h2>
-          <div className="pool_item">
-            <ul>{render_participants()}</ul>
+          <div className="half-cont">
+            <input type="checkbox" onChange={handleChange} />
+            <b>Ready?</b>
+            {render_start_draft_button()}
+            <h2>Participants: </h2>
+            <div className="pool_item">
+              <ul>{render_participants()}</ul>
+            </div>
           </div>
         </div>
       </div>

@@ -379,7 +379,7 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
     return (
       <div>
         <div className="floatLeft">
-          <div className="half_cont">
+          <div className="half-cont">
             <h1>Pool in progress...</h1>
             {render_tabs_choice_stats()}
             <button className="base_button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
@@ -388,7 +388,7 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
           </div>
         </div>
         <div className="floatRight">
-          <div className="half_cont">
+          <div className="half-cont">
             <h1>Today&apos;s ranking</h1>
             <table className="content-table">
               <thead>
