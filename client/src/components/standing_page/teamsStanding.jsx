@@ -38,40 +38,53 @@ export default function TeamsStanding({ data }) {
     setWesternTeams([...westernTeamsTmp]);
   }, []);
 
-  const renderTeamRow = (team, i) => (
-    <tr key={i}>
-      <td>{i}</td>
-      <td>
-        <img src={logos[team.team.name]} alt="" width="30" height="30" />
-      </td>
-      <td>{team.leagueRecord.wins + team.leagueRecord.losses + team.leagueRecord.ot}</td>
-      <td>{team.leagueRecord.wins}</td>
-      <td>{team.leagueRecord.losses}</td>
-      <td>{team.leagueRecord.ot}</td>
-      <td>
-        <b style={team.streak.streakType === 'wins' ? { color: '#080' } : { color: '#b00' }}>
-          {team.streak.streakCode}
-        </b>
-      </td>
-      <td>{team.regulationWins}</td>
-      <td>{team.goalsAgainst}</td>
-      <td>{team.goalsScored}</td>
-      <td>
-        <b>{team.points}</b>
-      </td>
-    </tr>
+  const renderTeamRow = (team, i, isWildCard) => (
+    <>
+      <tr key={i}>
+        <td>
+          {i}
+          {isWildCard && i <= 2 ? '*' : null}
+        </td>
+        <td>
+          <img src={logos[team.team.name]} alt="" width="30" height="30" />
+        </td>
+        <td borderLeft="none">
+          <b>{team.clinchIndicator}</b>
+        </td>
+        <td>{team.leagueRecord.wins + team.leagueRecord.losses + team.leagueRecord.ot}</td>
+        <td>{team.leagueRecord.wins}</td>
+        <td>{team.leagueRecord.losses}</td>
+        <td>{team.leagueRecord.ot}</td>
+        <td>
+          <b style={team.streak.streakType === 'wins' ? { color: '#080' } : { color: '#b00' }}>
+            {team.streak.streakCode}
+          </b>
+        </td>
+        <td>{team.regulationWins}</td>
+        <td>{team.goalsAgainst}</td>
+        <td>{team.goalsScored}</td>
+        <td>
+          <b>{team.points}</b>
+        </td>
+      </tr>
+      {isWildCard && i == 2 ? (
+        <tr>
+          <th colSpan={12}></th>
+        </tr>
+      ) : null}
+    </>
   );
 
-  const renderDivisionTeams = div => div.teamRecords.map(team => renderTeamRow(team, team.divisionRank));
+  const renderDivisionTeams = div => div.teamRecords.map(team => renderTeamRow(team, team.divisionRank, false));
 
   const renderHeader = divName => (
     <thead>
       <tr>
-        <th colSpan={11}>{divName}</th>
+        <th colSpan={12}>{divName}</th>
       </tr>
       <tr>
         <th>#</th>
-        <th>Team</th>
+        <th colSpan={2}>Team</th>
         <th>G</th>
         <th>W</th>
         <th>L</th>
@@ -99,18 +112,20 @@ export default function TeamsStanding({ data }) {
             .map(div => (
               <>
                 <tr key={div.division.name}>
-                  <th colSpan={11}>{div.division.name}</th>
+                  <th colSpan={12}>{div.division.name}</th>
                 </tr>
-                {div.teamRecords.filter(team => team.wildCardRank === '0').map((team, i) => renderTeamRow(team, i + 1))}
+                {div.teamRecords
+                  .filter(team => team.wildCardRank === '0')
+                  .map((team, i) => renderTeamRow(team, i + 1, false))}
               </>
             ))}
           <tr>
-            <th colSpan={11}>Wild Card</th>
+            <th colSpan={12}>Wild Card</th>
           </tr>
           {wildCardTeams
             .filter(team => team.wildCardRank !== '0')
             .sort((team1, team2) => team1.wildCardRank - team2.wildCardRank)
-            .map(team => renderTeamRow(team, team.wildCardRank))}
+            .map(team => renderTeamRow(team, team.wildCardRank, true))}
         </tbody>
       </table>
     );
@@ -135,7 +150,7 @@ export default function TeamsStanding({ data }) {
         <tbody>
           {conferenceTeams
             .sort((team1, team2) => team1.conferenceRank - team2.conferenceRank)
-            .map(team => renderTeamRow(team, team.conferenceRank))}
+            .map(team => renderTeamRow(team, team.conferenceRank, false))}
         </tbody>
       </table>
     );
@@ -147,7 +162,7 @@ export default function TeamsStanding({ data }) {
       <tbody>
         {leagueTeams
           .sort((team1, team2) => team1.leagueRank - team2.leagueRank)
-          .map(team => renderTeamRow(team, team.leagueRank))}
+          .map(team => renderTeamRow(team, team.leagueRank, false))}
       </tbody>
     </table>
   );

@@ -9,6 +9,7 @@
   min-width: 700px;
   width: 100%;
   border: 2px solid black;
+  max-width: 1000px;
 }
 
 .goalItem th {

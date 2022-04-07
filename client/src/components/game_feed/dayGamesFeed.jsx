@@ -9,7 +9,7 @@ import GameItem from './gameItem';
 
 // css
 import './dayGamesFeed.css';
-import 'react-datepicker/dist/react-datepicker.css';
+import './react-datepicker.css';
 
 // icons
 import goPrev from '../img/icons/Actions-go-previous-icon.png';
@@ -71,7 +71,7 @@ export default function TodayGamesFeed({ formatDate, setFormatDate }) {
                 </button>
               </td>
               <td>
-                <DatePicker selected={date} onChange={d => setDate(d)} dateFormat="P" />
+                <DatePicker size={100} selected={date} onChange={d => setDate(d)} dateFormat="yyyy-MM-dd" />
               </td>
               <td>
                 <button onClick={nextDate} type="button">

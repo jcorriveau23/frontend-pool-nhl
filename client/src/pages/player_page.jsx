@@ -27,18 +27,18 @@ export default function PlayerPage() {
           .get(`https://statsapi.web.nhl.com/api/v1/people/${playerID}/stats?stats=yearByYear`) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
           .then(res => {
             // console.log(p)
-            setPlayerStats({ ...res.data });
+            setPlayerStats(res.data);
           });
         axios
           .get(`https://statsapi.web.nhl.com/api/v1/people/${playerID}/stats?stats=yearByYearPlayoffs`) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYearPlayoffs
           .then(res => {
             // console.log(p)
-            setPlayerPlayoffStats({ ...res.data });
+            setPlayerPlayoffStats(res.data);
           });
         axios
           .get(`https://statsapi.web.nhl.com/api/v1/people/${playerID}`) // https://statsapi.web.nhl.com/api/v1/people/8475726/stats?stats=yearByYear
           .then(res => {
-            setPlayerInfo({ ...res.data });
+            setPlayerInfo(res.data);
           });
       } else {
         // console.log("fetching prospect")
@@ -198,7 +198,7 @@ export default function PlayerPage() {
             }
 
             return (
-              <tr key={season.season} style={{ backgroundColor: get_league_row_color(season.league.name) }}>
+              <tr key={season} style={{ backgroundColor: get_league_row_color(season.league.name) }}>
                 <td>{season.team.name}</td>
                 {season.league.id === 133 ? ( // nhl league
                   <>
@@ -330,7 +330,7 @@ export default function PlayerPage() {
             }
             return (
               <tr
-                key={season.season}
+                key={season}
                 style={{
                   backgroundColor: get_league_row_color(season.league.name),
                 }}
