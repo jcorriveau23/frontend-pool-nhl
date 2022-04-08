@@ -23,13 +23,13 @@ export default function WalletCard({
   const navigate = useNavigate();
 
   useEffect(() => {
+    const userTmp = JSON.parse(localStorage.getItem('persist-account'));
+    if (userTmp) {
+      setUser(userTmp);
+    }
+
     if (window.ethereum) {
       // console.log('trying to connect to read wallet');
-
-      const userTmp = JSON.parse(localStorage.getItem('persist-account'));
-      if (userTmp) {
-        setUser(userTmp);
-      }
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
