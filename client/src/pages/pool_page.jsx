@@ -32,7 +32,7 @@ export default function PoolPage({ user, DictUsers }) {
           },
         })
         .then(res => {
-          if (res.data.success === true) {
+          if (res.data.success) {
             // [TODO] display a page or notification to show that the pool was not found
             setPoolInfo(res.data.message);
           }

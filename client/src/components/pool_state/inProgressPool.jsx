@@ -143,7 +143,7 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
           },
         })
         .then(res => {
-          if (res.data.success === true) {
+          if (res.data.success) {
             calculate_pool_stats(res.data.players);
           }
         });
@@ -377,34 +377,30 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
 
   if (poolInfo) {
     return (
-      <div>
-        <div className="floatLeft">
-          <div className="half-cont">
-            <h1>Pool in progress...</h1>
-            {render_tabs_choice_stats()}
-            <button className="base_button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
-              Download CSV
-            </button>
-          </div>
+      <div className="min-width">
+        <div className="cont">
+          <h1>Today&apos;s ranking</h1>
+          <table className="content-table">
+            <thead>
+              <tr>
+                <th>rank</th>
+                <th>pooler name</th>
+                <th>forwards (pts)</th>
+                <th>defenders (pts)</th>
+                <th>goalies (pts)</th>
+                <th>reservists (pts)</th>
+                <th>total (pts)</th>
+              </tr>
+            </thead>
+            <tbody>{render_tabs_pool_rank()}</tbody>
+          </table>
         </div>
-        <div className="floatRight">
-          <div className="half-cont">
-            <h1>Today&apos;s ranking</h1>
-            <table className="content-table">
-              <thead>
-                <tr>
-                  <th>rank</th>
-                  <th>pooler name</th>
-                  <th>forwards (pts)</th>
-                  <th>defenders (pts)</th>
-                  <th>goalies (pts)</th>
-                  <th>reservists (pts)</th>
-                  <th>total (pts)</th>
-                </tr>
-              </thead>
-              <tbody>{render_tabs_pool_rank()}</tbody>
-            </table>
-          </div>
+        <div className="cont">
+          <h1>Pool in progress...</h1>
+          {render_tabs_choice_stats()}
+          <button className="base_button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
+            Download CSV
+          </button>
         </div>
       </div>
     );

@@ -67,15 +67,15 @@ export default function TodayGamesFeed({ formatDate, setFormatDate }) {
             <tr>
               <td>
                 <button onClick={prevDate} type="button">
-                  <img src={goPrev} alt="" />
+                  <img src={goPrev} alt="" width={40} height={40} />
                 </button>
               </td>
               <td>
-                <DatePicker size={100} selected={date} onChange={d => setDate(d)} dateFormat="yyyy-MM-dd" />
+                <DatePicker selected={date} onChange={d => setDate(d)} dateFormat="yyyy-MM-dd" />
               </td>
               <td>
                 <button onClick={nextDate} type="button">
-                  <img src={goNext} alt="" />
+                  <img src={goNext} alt="" width={40} height={40} />
                 </button>
               </td>
             </tr>

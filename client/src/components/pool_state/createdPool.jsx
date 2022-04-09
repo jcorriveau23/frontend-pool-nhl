@@ -105,7 +105,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
 
   if (poolInfo && inRoom) {
     return (
-      <div>
+      <div className="min-width">
         <h1>Match Making for Pool {poolName}</h1>
         <div className="floatLeft">
           <div className="half-cont">

@@ -1,3 +1,12 @@
+.floatLeft {
+  width: 50%;
+  float: left;
+}
+.floatRight {
+  width: 50%;
+  float: right;
+}
+
 .cont {
   border-color: #000;
   border-style: groove;
@@ -5,7 +14,7 @@
   background-color: #444;
   padding: 10px;
   margin: 10px;
-  min-width: 700px;
+  min-width: 1000px;
   align-content: center;
   color: #ddd;
 }
@@ -17,18 +26,16 @@
   background-color: #444;
   padding: 10px;
   margin: 10px;
-  min-width: 700px;
+  min-width: 1000px;
 }
 
 .half-cont {
   border-color: #000;
-  border-style: groove;
   border-radius: 10px;
-  position: relative;
   background-color: #444;
   padding: 10px;
   margin: 10px;
-  min-width: 300px;
+  color: #ddd;
 }
 
 .center_content {
@@ -89,12 +96,12 @@
 
 .walletCard button {
   background-color: #888;
-  font-size: 20px;
+  font-size: 30px;
   border-color: #000;
   border-radius: 3px;
   border: 2px solid #000;
   text-align: center;
-  min-height: 60px;
+  min-height: 85px;
   min-width: 130px;
   color: #000;
 }

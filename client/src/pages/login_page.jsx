@@ -47,7 +47,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
         signer.signMessage('Unlock wallet to access nhl-pool-ethereum.').then(sig => {
           signer.getAddress().then(addr => {
             axios.post('/api/auth/wallet_login', { addr, sig }).then(res => {
-              if (res.data.success === true) {
+              if (res.data.success) {
                 Cookies.set(`token-${res.data.user._id}`, res.data.token);
                 localStorage.setItem('persist-account', JSON.stringify(res.data.user));
                 setUser(res.data.user);
@@ -70,7 +70,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
 
   const login = () => {
     axios.post('/api/auth/login', { username, password }).then(res => {
-      if (res.data.success === true) {
+      if (res.data.success) {
         Cookies.set(`token-${res.data.user._id}`, res.data.token);
         localStorage.setItem('persist-account', JSON.stringify(res.data.user));
         setUser(res.data.user);
@@ -92,7 +92,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
           phone: 'TODO',
         })
         .then(res => {
-          if (res.data.success === true) {
+          if (res.data.success) {
             login(); // when the registration is success, login the user directly.
             navigate('/profile');
           } else {

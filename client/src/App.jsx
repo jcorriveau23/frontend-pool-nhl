@@ -56,7 +56,7 @@ function App() {
     axios.get('https://nhl-pool-ethereum.herokuapp.com/');
     if (user) {
       axios.get('/api/auth/get_all_users', { headers: { token: Cookies.get(`token-${user._id}`) } }).then(res => {
-        if (res.data.success === true) {
+        if (res.data.success) {
           const DictUsersTmp = {};
           res.data.message.forEach(u => {
             DictUsersTmp[u._id] = u.name;
@@ -74,7 +74,7 @@ function App() {
         <meta name="viewport" content="width=device-width" />
         <li className="menu" ref={refMenu}>
           <button onClick={() => setShowMenuModal(!showMenuModal)} type="button">
-            <CgMenuRound size={55} />
+            <CgMenuRound size={80} />
           </button>
         </li>
         <li className="search_players">

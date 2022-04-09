@@ -74,7 +74,6 @@ export default function MyPoolsPage({ user, DictUsers }) {
             setPoolInProgress(pInProgress);
             setPoolDynastie(pDynastie);
           }
-          setPoolDeleted(false);
         });
     }
   }, [user, showCreatePoolModal, poolDeleted]); // showCreatePoolModal force to refetch data when creating a new pool.
@@ -137,9 +136,9 @@ export default function MyPoolsPage({ user, DictUsers }) {
                           name={pool.name}
                           owner={pool.owner}
                           user={user}
-                          DictUsers={DictUsers}
                           poolDeleted={poolDeleted}
                           setPoolDeleted={setPoolDeleted}
+                          DictUsers={DictUsers}
                         />
                       </li>
                     </Link>

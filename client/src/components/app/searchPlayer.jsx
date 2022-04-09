@@ -58,7 +58,7 @@ function SearchPlayer() {
           <tbody>
             <tr>
               <td>
-                <FiSearch size={45} />
+                <FiSearch size={71} />
               </td>
               <td>
                 <input

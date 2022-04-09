@@ -13,7 +13,7 @@ export default function GameItem({ gameData }) {
     if (state === 'Live') {
       return (
         <td>
-          <img src={liveGame} alt="" />
+          <img src={liveGame} alt="" width="30" height="30" />
         </td>
       );
     }
@@ -41,13 +41,13 @@ export default function GameItem({ gameData }) {
       <tbody>
         <tr>
           <td>
-            <img src={logos[gameData.teams.away.team.name]} alt="" width="30" height="30" />
+            <img src={logos[gameData.teams.away.team.name]} alt="" width="50" height="50" />
           </td>
           <td>{gameData.teams.away.score}</td>
         </tr>
         <tr>
           <td>
-            <img src={logos[gameData.teams.home.team.name]} alt="" width="30" height="30" />
+            <img src={logos[gameData.teams.home.team.name]} alt="" width="50" height="50" />
           </td>
           <td>{gameData.teams.home.score}</td>
         </tr>

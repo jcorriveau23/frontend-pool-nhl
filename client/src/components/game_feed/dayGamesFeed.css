@@ -1,5 +1,5 @@
 .dayGamesFeed {
-  min-width: 700px;
+  min-width: 1000px;
   width: 100%;
 }
 
@@ -25,14 +25,16 @@
   line-height: 16px;
   border-radius: 5px;
   border-style: solid;
-  border-width: 2px;
+  border-width: 3px;
   margin: 10px 5px;
   padding: 0 16px 0px 16px;
   max-width: 468px;
+  padding-top: 10px;
 }
 
 .dayGamesFeed ul td {
   text-decoration-color: #fff;
+  font-size: 20px;
 }
 
 .dayGamesFeed ul a {
@@ -57,8 +59,9 @@
   border-color: #000;
   margin: 0px;
   padding: 4px;
-  background: url(../img/icons/calendar.png) no-repeat scroll 7px 3px;
+  background: url(../img/icons/calendar.png) no-repeat scroll 7px 6px;
   cursor: pointer;
+  font-size: 25px;
 }
 
 .dateSelector input:hover {

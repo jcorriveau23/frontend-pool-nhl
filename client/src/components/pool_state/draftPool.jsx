@@ -4,6 +4,8 @@ import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClipLoader from 'react-spinners/ClipLoader';
 import PropTypes from 'prop-types';
+import { confirmAlert } from 'react-confirm-alert';
+import { AiFillStar } from 'react-icons/ai';
 
 // css
 import '../react-tabs.css';
@@ -105,6 +107,12 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
     });
   };
 
+  const confirm_selection = player => {
+    if (window.confirm(`Do you really want to select ${player.name}`)) {
+      chose_player(player);
+    }
+  };
+
   const search_players = val => {
     setSearchText(val);
   };
@@ -139,7 +147,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
 
   const render_players = players =>
     players.map((player, i) => (
-      <tr key={player.id}>
+      <tr key={player}>
         <td>{i + 1}</td>
         <td>{player.name}</td>
         <td>
@@ -163,6 +171,19 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
     </>
   );
 
+  const render_pooler_turn = pooler => {
+    if (poolInfo.next_drafter === pooler) {
+      return (
+        <Tab key={pooler} style={{ color: 'green' }}>
+          <AiFillStar size={30} />
+          <b>{DictUsers[pooler]}</b>
+        </Tab>
+      );
+    }
+
+    return <Tab key={pooler}>{DictUsers[pooler]}</Tab>;
+  };
+
   const render_tabs_choice = () => {
     const poolers = poolInfo.participants;
 
@@ -173,11 +194,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
 
     return (
       <Tabs>
-        <TabList>
-          {poolers.map(pooler => (
-            <Tab key={pooler}>{DictUsers[pooler]}</Tab>
-          ))}
-        </TabList>
+        <TabList>{poolers.map(pooler => render_pooler_turn(pooler))}</TabList>
         {poolers.map(pooler => (
           <TabPanel key={pooler}>
             <table className="content-table-no-min">
@@ -199,21 +216,6 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
           </TabPanel>
         ))}
       </Tabs>
-    );
-  };
-
-  const render_color_user_turn = () => {
-    let textColor = 'red-text';
-
-    if (poolInfo.next_drafter === user._id) {
-      textColor = 'green-text';
-    }
-
-    return (
-      <h2 className={textColor}>
-        {DictUsers[poolInfo.next_drafter]}
-        &apos;s turn
-      </h2>
     );
   };
 
@@ -259,7 +261,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
             >
               <td>
                 {selectedPlayer && selectedPlayer.id === player.id ? ( // Add a button to draft a player when we select a player.
-                  <button className="base_button" onClick={() => chose_player(selectedPlayer)} type="button">
+                  <button className="base_button" onClick={() => confirm_selection(selectedPlayer)} type="button">
                     Draft
                   </button>
                 ) : null}
@@ -290,7 +292,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
 
   if (poolInfo && inRoom) {
     return (
-      <div>
+      <div className="min-width">
         <div className="cont">
           <table className="content-table-no-min">
             <tbody>
@@ -311,7 +313,6 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
         <div>
           <div className="floatLeft">
             <div className="half-cont">
-              {render_color_user_turn()}
               <input type="text" placeholder="Search..." onChange={event => search_players(event.target.value)} />
               <Tabs>
                 <TabList>

@@ -1,14 +1,3 @@
-.floatLeft {
-  width: 50%;
-  float: left;
-  background-color: #888888;
-}
-.floatRight {
-  width: 50%;
-  float: right;
-  background-color: #888888;
-}
-
 .red-text {
   color: red;
 }
@@ -24,7 +13,7 @@
   background-color: #888888;
 }
 
-/* @media (min-width: 700px) {
+/* @media (min-width: 1000px) {
   .content-table {
     width: 75%;
     margin-left: 10%;
@@ -33,7 +22,7 @@
 } */
 
 .content-table {
-  min-width: 700px;
+  min-width: 1000px;
 }
 
 .content-table,

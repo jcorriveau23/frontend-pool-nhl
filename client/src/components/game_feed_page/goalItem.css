@@ -6,7 +6,7 @@
 .goalItem {
   margin: 0;
   padding: 100, 100;
-  min-width: 700px;
+  min-width: 1000px;
   width: 100%;
   border: 2px solid black;
   max-width: 1000px;
@@ -28,6 +28,6 @@
 }
 
 .min-width {
-  min-width: 700px;
+  min-width: 1000px;
   width: 100%;
 }
