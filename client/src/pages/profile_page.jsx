@@ -60,12 +60,12 @@ export default function ProfilePage({ user, setUser }) {
         </table>
         <form>
           <input type="text" placeholder={user.name} onChange={event => setNewUsername(event.target.value)} required />
-          <button className="base_button_no_border" onClick={set_username} type="button">
+          <button className="base-button_no_border" onClick={set_username} type="button">
             <AiOutlineEdit size={30} />
             edit username
           </button>
         </form>
-        <button className="base_button" onClick={logout} type="button">
+        <button className="base-button" onClick={logout} type="button">
           Logout
         </button>
       </div>

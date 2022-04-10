@@ -77,10 +77,10 @@ function App() {
             <CgMenuRound size={80} />
           </button>
         </li>
-        <li className="search_players">
+        <li className="search-players">
           <SearchPlayer />
         </li>
-        <li className="walletCard" ref={refAccount}>
+        <li className="walle-card" ref={refAccount}>
           <WalletCard
             user={user}
             setUser={setUser}

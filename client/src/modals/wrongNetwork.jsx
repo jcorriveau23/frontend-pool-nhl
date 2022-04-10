@@ -19,11 +19,16 @@ export default function WrongNetworkModal({ isWalletConnected, isWrongNetwork })
   };
 
   return (
-    <Modal className="baseModal" overlayClassName="baseOverlay" isOpen={isWalletConnected && isWrongNetwork}>
+    <Modal
+      className="baseModal"
+      overlayClassName="baseOverlay"
+      isOpen={isWalletConnected && isWrongNetwork}
+      appElement={document.getElementById('root')}
+    >
       <div className="modal_content">
         <h1>Connect your wallet to Kovan Network to use our prediction market.</h1>
         <h3>Our system indicates that your wallet is not connected to Ethereum&apos;s Kovan network.</h3>
-        <button className="base_button" type="button" onClick={switchChain}>
+        <button className="base-button" type="button" onClick={switchChain}>
           Switch Networks
         </button>
       </div>

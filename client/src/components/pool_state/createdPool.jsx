@@ -69,7 +69,10 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
       if (i < userList.length) {
         participants.push(
           <li key={userList[i]._id}>
-            <ParticipantItem name={DictUsers[userList[i]._id]} ready={userList[i].ready} />
+            <ParticipantItem
+              name={DictUsers ? DictUsers[userList[i]._id] : userList[i]._id}
+              ready={userList[i].ready}
+            />
           </li>
         ); // TODO: add a modal pop up to add that friend
       } else {
@@ -94,7 +97,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
 
     if (user._id === poolInfo.owner) {
       return (
-        <button className="base_button" onClick={handleChange} disabled={bDisable} type="button">
+        <button className="base-button" onClick={handleChange} disabled={bDisable} type="button">
           Start draft
         </button>
       );
@@ -107,7 +110,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
     return (
       <div className="min-width">
         <h1>Match Making for Pool {poolName}</h1>
-        <div className="floatLeft">
+        <div className="float-left">
           <div className="half-cont">
             <h2>Rule: </h2>
             <table>
@@ -397,7 +400,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
             </table>
           </div>
         </div>
-        <div className="floatRight">
+        <div className="float-right">
           <div className="half-cont">
             <input type="checkbox" onChange={handleChange} />
             <b>Ready?</b>

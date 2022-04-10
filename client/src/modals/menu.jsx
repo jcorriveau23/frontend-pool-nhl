@@ -46,7 +46,12 @@ export default function MenuModal({ user, isWalletConnected, showMenuModal, setS
   };
 
   return (
-    <Modal className="menuModal" overlayClassName="noOverlay" isOpen={showMenuModal}>
+    <Modal
+      className="menuModal"
+      overlayClassName="noOverlay"
+      isOpen={showMenuModal}
+      appElement={document.getElementById('root')}
+    >
       <table ref={ref}>
         <thead>
           <tr style={window.location.pathname === '/' ? { color: '#fff' } : null} onClick={() => link_to('/')}>

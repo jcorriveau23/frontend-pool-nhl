@@ -62,7 +62,7 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
               </select>
             </div>
           </form>
-          <button className="base_button" onClick={() => createPool()} disabled={false} type="button">
+          <button className="base-button" onClick={() => createPool()} disabled={false} type="button">
             Create
           </button>
           <p style={{ color: 'red' }}>{msg}</p>
@@ -81,6 +81,7 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
     <Modal
       className="baseModal"
       overlayClassName="baseOverlay"
+      appElement={document.getElementById('root')}
       isOpen={showCreatePoolModal}
       onRequestClose={() => setShowCreatePoolModal(false)}
     >

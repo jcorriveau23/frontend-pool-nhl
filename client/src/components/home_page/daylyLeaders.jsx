@@ -36,9 +36,9 @@ export default function DayLeaders({ dayLeaders, formatDate }) {
                 {dayLeaders.skaters
                   .sort((a, b) => b.stats.goals + b.stats.assists - (a.stats.goals + a.stats.assists))
                   .map(skater => (
-                    <tr>
+                    <tr key={skater.id}>
                       <td>
-                        <img src={logos[skater.team]} alt="" width="30" height="30" />
+                        <img src={logos[skater.team]} alt="" width="40" height="40" />
                       </td>
                       <td>
                         <Link to={`/player-info/${skater.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
@@ -84,7 +84,7 @@ export default function DayLeaders({ dayLeaders, formatDate }) {
                   .map(goalie => (
                     <tr>
                       <td>
-                        <img src={logos[goalie.team]} alt="" width="30" height="30" />
+                        <img src={logos[goalie.team]} alt="" width="40" height="40" />
                       </td>
                       <td>
                         <Link to={`/player-info/${goalie.id}`} style={{ textDecoration: 'none', color: '#000099' }}>

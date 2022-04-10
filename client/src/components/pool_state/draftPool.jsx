@@ -151,7 +151,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
         <td>{i + 1}</td>
         <td>{player.name}</td>
         <td>
-          <img src={logos[player.team]} alt="" width="30" height="30" />
+          <img src={logos[player.team]} alt="" width="40" height="40" />
         </td>
       </tr>
     ));
@@ -176,12 +176,12 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
       return (
         <Tab key={pooler} style={{ color: 'green' }}>
           <AiFillStar size={30} />
-          <b>{DictUsers[pooler]}</b>
+          <b>{DictUsers ? DictUsers[pooler] : pooler}</b>
         </Tab>
       );
     }
 
-    return <Tab key={pooler}>{DictUsers[pooler]}</Tab>;
+    return <Tab key={pooler}>{DictUsers ? DictUsers[pooler] : pooler}</Tab>;
   };
 
   const render_tabs_choice = () => {
@@ -223,10 +223,12 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
     <table className="content-table-no-min">
       <thead>
         <tr>
-          <th colSpan={6}>Forward stats during last season</th>
+          <th colSpan={7}>Forward stats during last season</th>
         </tr>
         <tr>
-          <th onClick={() => sort_players('name', position)}>name</th>
+          <th colSpan={2} onClick={() => sort_players('name', position)}>
+            name
+          </th>
           <th onClick={() => sort_players('team', position)}>team</th>
           <th onClick={() => sort_players('games', position)}>Games played</th>
           {position === 'F' || position === 'D' ? (
@@ -261,14 +263,14 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
             >
               <td>
                 {selectedPlayer && selectedPlayer.id === player.id ? ( // Add a button to draft a player when we select a player.
-                  <button className="base_button" onClick={() => confirm_selection(selectedPlayer)} type="button">
+                  <button className="draft-button" onClick={() => confirm_selection(selectedPlayer)} type="button">
                     Draft
                   </button>
                 ) : null}
-                {player.name}
               </td>
+              <td>{player.name}</td>
               <td>
-                <img src={logos[player.team]} alt="" width="30" height="30" />
+                <img src={logos[player.team]} alt="" width="40" height="40" />
               </td>
               <td>{player.stats.games}</td>
               {position === 'F' || position === 'D' ? (
@@ -311,7 +313,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
           </table>
         </div>
         <div>
-          <div className="floatLeft">
+          <div className="float-left">
             <div className="half-cont">
               <input type="text" placeholder="Search..." onChange={event => search_players(event.target.value)} />
               <Tabs>
@@ -326,7 +328,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
               </Tabs>
             </div>
           </div>
-          <div className="floatRight">
+          <div className="float-right">
             <div className="half-cont">{render_tabs_choice()}</div>
           </div>
         </div>

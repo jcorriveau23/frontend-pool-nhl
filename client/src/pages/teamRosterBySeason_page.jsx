@@ -71,7 +71,7 @@ export default function TeamRosterBySeasonPage() {
           </tr>
           <tr>
             <th colSpan="12">
-              <img src={logos[teamNameFromId[teamID]]} alt="" width="30" height="30" />
+              <img src={logos[teamNameFromId[teamID]]} alt="" width="40" height="40" />
             </th>
           </tr>
           <tr>

@@ -23,12 +23,12 @@
 
 .content-table {
   min-width: 1000px;
+  font-size: 22px;
 }
 
 .content-table,
 .content-table-no-min {
   margin: 10px 0;
-  font-size: 0.9em;
   width: 100%;
   max-width: 1000px;
 }

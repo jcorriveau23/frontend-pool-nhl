@@ -18,9 +18,9 @@ export default function PoolItem({ name, owner, user, poolDeleted, setPoolDelete
   return (
     <div>
       <p>Pool: {name}</p>
-      <p>Owner: {DictUsers[owner]}</p>
+      <p>Owner: {DictUsers ? DictUsers[owner] : owner}</p>
       {user && user._id === owner ? (
-        <button className="base_button" onClick={delete_pool} type="button">
+        <button className="base-button" onClick={delete_pool} type="button">
           Delete
         </button>
       ) : null}

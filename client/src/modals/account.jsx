@@ -49,14 +49,19 @@ export default function AccountModal({
   }, []);
 
   return (
-    <Modal className="accountModal" overlayClassName="noOverlay" isOpen={showAccountModal}>
+    <Modal
+      className="accountModal"
+      overlayClassName="noOverlay"
+      isOpen={showAccountModal}
+      appElement={document.getElementById('root')}
+    >
       <table ref={ref}>
         <tbody>
           <tr>
             <td>Username:</td>
             <td>{user ? user.name : null}</td>
             <td>
-              <button className="base_button_no_border" onClick={() => navigate('/profile')} type="button">
+              <button className="base-button_no_border" onClick={() => navigate('/profile')} type="button">
                 <IoIosArrowForward size={30} />
               </button>
             </td>
@@ -79,7 +84,7 @@ export default function AccountModal({
               <tr>
                 <td>
                   <button
-                    className="base_button_no_border"
+                    className="base-button_no_border"
                     onClick={() => navigator.clipboard.writeText(user.addr)}
                     type="button"
                   >

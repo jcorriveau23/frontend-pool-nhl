@@ -72,7 +72,7 @@ export default function LeagueLeadersPage() {
               </Link>
             </td>
             <td>
-              <img src={logos[player.team.name]} alt="" width="30" height="30" />
+              <img src={logos[player.team.name]} alt="" width="40" height="40" />
             </td>
             {/* <td>{player.player.positionCode}</td> */}
             <td>{player.value}</td>

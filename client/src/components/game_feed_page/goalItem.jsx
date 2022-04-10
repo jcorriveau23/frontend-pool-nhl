@@ -67,7 +67,7 @@ export default function GoalItem({ goalData, gameContent }) {
         <tbody>
           <tr>
             <td rowSpan={rowSpan} width="30">
-              <img src={logos[goalData.team.name]} alt="" width="30" height="30" />
+              <img src={logos[goalData.team.name]} alt="" width="40" height="40" />
             </td>
             <th width="125">Time:</th>
             <td width="250">{goalData.about.periodTime}</td>

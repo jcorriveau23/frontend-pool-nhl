@@ -13,7 +13,7 @@ export default function GameItem({ gameData }) {
     if (state === 'Live') {
       return (
         <td>
-          <img src={liveGame} alt="" width="30" height="30" />
+          <img src={liveGame} alt="" width="40" height="40" />
         </td>
       );
     }

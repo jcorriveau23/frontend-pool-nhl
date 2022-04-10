@@ -1,8 +1,8 @@
-.floatLeft {
+.float-left {
   width: 50%;
   float: left;
 }
-.floatRight {
+.float-right {
   width: 50%;
   float: right;
 }
@@ -38,7 +38,7 @@
   color: #ddd;
 }
 
-.center_content {
+.center-content {
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -52,6 +52,10 @@
   display: inline-block;
 }
 
+input {
+  font-size: 20px;
+}
+
 .menu button {
   background-color: #888;
   border-color: #000;
@@ -60,6 +64,7 @@
   display: inline-flex;
   align-items: center;
   color: #000;
+  border: 3px solid #000;
 }
 
 .menu button:hover:enabled {
@@ -69,75 +74,42 @@
   color: #fff;
 }
 
-.search_players {
+.search-players {
   display: inline-block;
 }
 
-.search_players button {
-  background-color: #888;
-  border-color: #000;
-  border-radius: 3px;
-  border: 2px solid #000;
-  color: #000;
+.search-players button {
+  border: 3px solid #000;
 }
 
-.search_players button:hover:enabled {
-  border-color: #fff;
-  background-color: #888;
-  cursor: pointer;
-  color: #fff;
-}
-
-.walletCard {
+.walle-card {
   display: inline-block;
   position: fixed;
   right: 2%;
 }
 
-.walletCard button {
-  background-color: #888;
+.walle-card button {
   font-size: 30px;
-  border-color: #000;
-  border-radius: 3px;
-  border: 2px solid #000;
   text-align: center;
   min-height: 85px;
   min-width: 130px;
-  color: #000;
+  border: 3px solid #000;
 }
 
-.walletCard button:hover:enabled {
-  border-color: #fff;
-  background-color: #888;
-  cursor: pointer;
-  color: #fff;
-}
-
-.base_button {
-  background-color: #888;
-  border-color: #000;
-  border-radius: 3px;
-  border: 2px solid #000;
+.base-button {
   align-items: center;
-  color: #000;
   text-align: center;
   display: inline-block;
   font-size: 16px;
   border-radius: 3px;
+  border: 3px solid #000;
   width: 200px;
   height: auto;
   min-height: 40px;
 }
 
-.base_button:hover:enabled {
-  border-color: #fff;
-  background-color: #888;
-  cursor: pointer;
-  color: #fff;
-}
-
-.base_button_no_border {
-  background-color: #888;
+.base-button_no_border {
+  background-color: #444;
   border: none;
   color: #000;
   display: inline-block;
@@ -145,7 +117,33 @@
   height: 35px;
 }
 
-.base_button_no_border:hover:enabled {
+.base-button_no_border:hover:enabled {
+  border-color: #fff;
+  cursor: pointer;
+  color: #fff;
+}
+
+.draft-button {
+  margin: 0px;
+  margin-top: 0px;
+  height: 100%;
+  width: 100%;
+  border: 3px solid #800;
+}
+
+.draft-button,
+.search-players button,
+.walle-card button,
+.base-button {
+  background-color: #888;
+  border-radius: 3px;
+  color: #000;
+}
+
+.draft-button:hover:enabled,
+.search-players button:hover:enabled,
+.walle-card button:hover:enabled,
+.base-button:hover:enabled {
   border-color: #fff;
   background-color: #888;
   cursor: pointer;

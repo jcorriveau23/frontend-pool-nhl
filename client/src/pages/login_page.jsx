@@ -106,7 +106,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
 
   return (
     <div className="min-width">
-      <div className="floatLeft">
+      <div className="float-left">
         <div className="half-cont">
           {isRegister ? (
             <div className="login_content">
@@ -141,7 +141,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
               <button className="login_register_button" onClick={() => register()} type="button">
                 Register
               </button>
-              <button className="base_button_no_border" onClick={() => setIsRegister(false)} type="button">
+              <button className="base-button_no_border" onClick={() => setIsRegister(false)} type="button">
                 Already Registered...
               </button>
             </div>
@@ -166,14 +166,14 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
               <button className="login_register_button" onClick={() => login()} type="button">
                 Login
               </button>
-              <button className="base_button_no_border" onClick={() => setIsRegister(true)} type="button">
+              <button className="base-button_no_border" onClick={() => setIsRegister(true)} type="button">
                 Register an Account...
               </button>
             </div>
           )}
         </div>
       </div>
-      <div className="floatRight">
+      <div className="float-right">
         <div className="half-cont">
           <div className="login_content">
             <h2>Login using a wallet</h2>

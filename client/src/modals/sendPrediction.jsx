@@ -82,6 +82,7 @@ export default function SendPredictionModal({
       <Modal
         className="baseModal"
         overlayClassName="baseOverlay"
+        appElement={document.getElementById('root')}
         isOpen={showSendPredictionModal}
         onRequestClose={() => setShowSendPredictionModal(false)}
       >
@@ -97,7 +98,7 @@ export default function SendPredictionModal({
               onChange={event => setAmountEthersInput(event.target.value)}
               required
             />
-            <div className="floatLeft">
+            <div className="float-left">
               <div>
                 <img src={logos[gameInfo.liveData.boxscore.teams.home.team.name]} alt="" width="100" height="100" />
               </div>
@@ -109,7 +110,7 @@ export default function SendPredictionModal({
                 required
               />
             </div>
-            <div className="floatRight">
+            <div className="float-right">
               <div>
                 <img src={logos[gameInfo.liveData.boxscore.teams.away.team.name]} alt="" width="100" height="100" />
               </div>
@@ -124,7 +125,7 @@ export default function SendPredictionModal({
           </div>
           <div>
             <button
-              className="base_button"
+              className="base-button"
               onClick={() => sendPrediction()}
               disabled={waitingTransaction}
               type="button"

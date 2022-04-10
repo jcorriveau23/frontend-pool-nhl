@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -200,9 +201,14 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
           {playersStats[pooler][chosen_player_key].map((player, i) => (
             <tr key={player.name}>
               <td>{i + 1}</td>
-              <td>{player.name}</td>
+
               <td>
-                <img src={logos[player.team]} alt="" width="30" height="30" />
+                <Link to={`/player-info/${player.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                  {player.name}
+                </Link>
+              </td>
+              <td>
+                <img src={logos[player.team]} alt="" width="40" height="40" />
               </td>
               <td>{player.stats.goals}</td>
               <td>{player.stats.assists}</td>
@@ -233,9 +239,13 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
           {playersStats[pooler].chosen_goalies.map((player, i) => (
             <tr key={player.name}>
               <td>{i + 1}</td>
-              <td>{player.name}</td>
               <td>
-                <img src={logos[player.team]} alt="" width="30" height="30" />
+                <Link to={`/player-info/${player.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                  {player.name}
+                </Link>
+              </td>
+              <td>
+                <img src={logos[player.team]} alt="" width="40" height="40" />
               </td>
               <td>{player.stats.wins}</td>
               <td>{player.stats.losses}</td>
@@ -274,7 +284,7 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
         <Tabs>
           <TabList>
             {poolers.map(pooler => (
-              <Tab key={pooler}>{DictUsers[pooler]}</Tab>
+              <Tab key={pooler}>{DictUsers ? DictUsers[pooler] : pooler}</Tab>
             ))}
           </TabList>
           {poolers.map(pooler => (
@@ -362,7 +372,7 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
       return ranking.map((pooler_stats, i) => (
         <tr key={pooler_stats.name}>
           <td>{i + 1}</td>
-          <td>{DictUsers[pooler_stats.name]}</td>
+          <td>{DictUsers ? DictUsers[pooler_stats.name] : pooler_stats.name}</td>
           <td>{pooler_stats.forwards_total_pts}</td>
           <td>{pooler_stats.defenders_total_pts}</td>
           <td>{pooler_stats.goalies_total_pts}</td>
@@ -398,7 +408,7 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
         <div className="cont">
           <h1>Pool in progress...</h1>
           {render_tabs_choice_stats()}
-          <button className="base_button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
+          <button className="base-button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
             Download CSV
           </button>
         </div>

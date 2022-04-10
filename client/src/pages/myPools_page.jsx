@@ -15,7 +15,7 @@ import '../components/react-tabs.css';
 import './page.css';
 
 // components
-import PoolItem from '../components/poolItem';
+import PoolItem from '../components/myPools_page/poolItem';
 
 // modal
 import CreatePoolModal from '../modals/createPool';
@@ -87,7 +87,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
       <div className="cont">
         <div>
           <h1>Pool list</h1>
-          <button className="base_button" type="button" onClick={openCreatePoolModal} disabled={false}>
+          <button className="base-button" type="button" onClick={openCreatePoolModal} disabled={false}>
             <table>
               <tbody>
                 <tr>
