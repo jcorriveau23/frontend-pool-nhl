@@ -13,6 +13,21 @@
   padding: 4%;
 }
 
+.big-base-modal {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  right: 5%;
+  bottom: 5%;
+  border: 5px solid #000;
+  background: #888888;
+  overflow: auto;
+  -webkit-overflow-scrolling: auto;
+  border-radius: 30px;
+  outline: none;
+  padding: 4%;
+}
+
 .baseOverlay {
   position: fixed;
   top: 0;

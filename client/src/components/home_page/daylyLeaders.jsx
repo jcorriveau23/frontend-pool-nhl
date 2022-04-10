@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import PropTypes from 'prop-types';
@@ -6,7 +7,26 @@ import PropTypes from 'prop-types';
 // images
 import { logos } from '../img/logos';
 
-export default function DayLeaders({ dayLeaders, formatDate }) {
+export default function DayLeaders({ formatDate, playersToPoolerMap, user, DictUsers }) {
+  const [prevFormatDate, setPrevFormatDate] = useState('');
+  const [dayLeaders, setDayLeaders] = useState(null);
+
+  useEffect(() => {
+    if (formatDate !== prevFormatDate && formatDate) {
+      // get the day leaders data from database.
+
+      axios.get(`/api/pool/get_day_leaders`, { headers: { d: formatDate } }).then(res => {
+        if (res.data.success) {
+          setDayLeaders({ ...res.data.message });
+          setPrevFormatDate(formatDate);
+        } else {
+          setDayLeaders(null);
+          setPrevFormatDate('');
+        }
+      });
+    }
+  }, [formatDate]);
+
   return (
     <Tabs>
       <TabList>
@@ -44,6 +64,11 @@ export default function DayLeaders({ dayLeaders, formatDate }) {
                         <Link to={`/player-info/${skater.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
                           {skater.name}
                         </Link>
+                        {playersToPoolerMap && playersToPoolerMap[skater.id] ? (
+                          <b style={{ color: 'red' }}>
+                            {DictUsers ? ` (${DictUsers[playersToPoolerMap[skater.id]]})` : null}
+                          </b>
+                        ) : null}
                       </td>
                       <td>{skater.stats.goals}</td>
                       <td>{skater.stats.assists}</td>
@@ -82,7 +107,7 @@ export default function DayLeaders({ dayLeaders, formatDate }) {
                 {dayLeaders.goalies
                   .sort((a, b) => b.stats.savePercentage - a.stats.savePercentage)
                   .map(goalie => (
-                    <tr>
+                    <tr key={goalie.id}>
                       <td>
                         <img src={logos[goalie.team]} alt="" width="40" height="40" />
                       </td>
@@ -90,6 +115,11 @@ export default function DayLeaders({ dayLeaders, formatDate }) {
                         <Link to={`/player-info/${goalie.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
                           {goalie.name}
                         </Link>
+                        {playersToPoolerMap && playersToPoolerMap[goalie.id] ? (
+                          <b style={{ color: 'red' }}>
+                            {DictUsers ? ` (${DictUsers[playersToPoolerMap[goalie.id]]})` : null}
+                          </b>
+                        ) : null}
                       </td>
                       <td>{goalie.stats.shots}</td>
                       <td>{goalie.stats.saves}</td>

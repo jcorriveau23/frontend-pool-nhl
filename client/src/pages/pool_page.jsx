@@ -40,7 +40,7 @@ export default function PoolPage({ user, DictUsers }) {
     }
   }, [user]);
 
-  if (user && DictUsers) {
+  if (user && poolInfo) {
     switch (poolInfo.status) {
       case 'created':
         return (

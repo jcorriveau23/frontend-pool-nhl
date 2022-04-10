@@ -4,16 +4,16 @@ import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClipLoader from 'react-spinners/ClipLoader';
 import PropTypes from 'prop-types';
-import { confirmAlert } from 'react-confirm-alert';
 import { AiFillStar } from 'react-icons/ai';
+
+// components
+import PlayerList from './playerList';
 
 // css
 import '../react-tabs.css';
 
 // images
 import { logos } from '../img/logos';
-
-// Loader
 
 export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPoolInfo, socket }) {
   const [inRoom, setInRoom] = useState(false);
@@ -145,31 +145,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
     return player;
   };
 
-  const render_players = players =>
-    players.map((player, i) => (
-      <tr key={player}>
-        <td>{i + 1}</td>
-        <td>{player.name}</td>
-        <td>
-          <img src={logos[player.team]} alt="" width="40" height="40" />
-        </td>
-      </tr>
-    ));
-
   const isUser = participant => participant === user._id;
-
-  const render_tabs_choice_headers = position => (
-    <>
-      <tr>
-        <th colSpan={3}>{position}</th>
-      </tr>
-      <tr>
-        <th>#</th>
-        <th>name</th>
-        <th>team</th>
-      </tr>
-    </>
-  );
 
   const render_pooler_turn = pooler => {
     if (poolInfo.next_drafter === pooler) {
@@ -197,22 +173,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
         <TabList>{poolers.map(pooler => render_pooler_turn(pooler))}</TabList>
         {poolers.map(pooler => (
           <TabPanel key={pooler}>
-            <table className="content-table-no-min">
-              <thead>{render_tabs_choice_headers('Forwards')}</thead>
-              <tbody>{render_players(poolInfo.context[pooler].chosen_forward)}</tbody>
-            </table>
-            <table className="content-table-no-min">
-              <thead>{render_tabs_choice_headers('Defenders')}</thead>
-              <tbody>{render_players(poolInfo.context[pooler].chosen_defender)}</tbody>
-            </table>
-            <table className="content-table-no-min">
-              <thead>{render_tabs_choice_headers('Goalies')}</thead>
-              <tbody>{render_players(poolInfo.context[pooler].chosen_goalies)}</tbody>
-            </table>
-            <table className="content-table-no-min">
-              <thead>{render_tabs_choice_headers('Reservists')}</thead>
-              <tbody>{render_players(poolInfo.context[pooler].chosen_reservist)}</tbody>
-            </table>
+            <PlayerList poolerContext={poolInfo.context[pooler]} />
           </TabPanel>
         ))}
       </Tabs>
