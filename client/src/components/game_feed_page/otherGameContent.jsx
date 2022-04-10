@@ -15,6 +15,21 @@ export default function OtherGameContent({ gameContent }) {
     videoRef?.current?.load();
   }, [gameContent]);
 
+  const setVideoFullScreen = () => {
+    const el = videoRef.current;
+
+    // el.paused will detect if paused
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.msRequestFullscreen) {
+      el.msRequestFullscreen();
+    } else if (el.mozRequestFullScreen) {
+      el.mozRequestFullScreen();
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    }
+  };
+
   if (gameContent.media && gameContent.media.milestones.items?.length > 0) {
     return (
       <div>
@@ -47,7 +62,7 @@ export default function OtherGameContent({ gameContent }) {
                     <th>Period:</th>
                     <td>{highlight.period}</td>
                     <td rowSpan={2}>
-                      <video width="224" height="126" controls ref={videoRef}>
+                      <video onPlaying={setVideoFullScreen} width="100%" height="100%" controls ref={videoRef}>
                         <source src={highlight.highlight.playbacks[3].url} type="video/mp4" />
                         <track kind="captions" />
                       </video>

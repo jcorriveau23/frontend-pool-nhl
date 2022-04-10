@@ -13,23 +13,33 @@ export default function GameRecap({ gameContent, isEditorial }) {
     }
   }, [gameContent]);
 
+  const setVideoFullScreen = () => {
+    const el = videoRef.current;
+
+    // el.paused will detect if paused
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.msRequestFullscreen) {
+      el.msRequestFullscreen();
+    } else if (el.mozRequestFullScreen) {
+      el.mozRequestFullScreen();
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    }
+  };
+
   if (isEditorial && gameContent.editorial && gameContent.media.epg[3].items?.length > 0) {
     console.log(gameContent);
     return (
       <div>
-        <table>
+        <table className="content-table">
           <tbody>
-            <tr>
-              <th>{gameContent.title}</th>
-            </tr>
-            <tr>
-              <th>{gameContent.description}</th>
-            </tr>
             <tr>
               <td>
                 <video
-                  width="700"
-                  height="394"
+                  onPlay={setVideoFullScreen}
+                  width="100%"
+                  height="100%"
                   poster={gameContent.media.epg[3].items[0].image.cuts['640x360']?.src}
                   controls
                   ref={videoRef}
@@ -48,25 +58,22 @@ export default function GameRecap({ gameContent, isEditorial }) {
   if (!isEditorial && gameContent.media && gameContent.media.epg[2].items?.length > 0) {
     return (
       <div>
-        <table>
+        <table className="content-table">
           <tbody>
             <tr>
-              <th>{gameContent.title}</th>
-            </tr>
-            <tr>
-              <th>{gameContent.description}</th>
-            </tr>
-            <tr>
-              <video
-                width="700"
-                height="394"
-                controls
-                poster={gameContent.media.epg[2].items[0].image.cuts['640x360']?.src}
-                ref={videoRef}
-              >
-                <source src={gameContent.media.epg[2].items[0].playbacks[3].url} type="video/mp4" />
-                <track kind="captions" />
-              </video>
+              <td>
+                <video
+                  onPlay={setVideoFullScreen}
+                  width="100%"
+                  height="100%"
+                  controls
+                  poster={gameContent.media.epg[2].items[0].image.cuts['640x360']?.src}
+                  ref={videoRef}
+                >
+                  <source src={gameContent.media.epg[2].items[0].playbacks[3].url} type="video/mp4" />
+                  <track kind="captions" />
+                </video>
+              </td>
             </tr>
           </tbody>
         </table>
