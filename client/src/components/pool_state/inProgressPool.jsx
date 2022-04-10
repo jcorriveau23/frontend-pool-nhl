@@ -35,8 +35,11 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
   };
 
   const calculate_pool_stats = async players_stats => {
-    const stats = {};
-    let rank = [];
+    const stats = {}; // contains players list per pooler and poolers total points
+    let rank = []; // contains pooler total points
+
+    // TODO create a mapping of all players in the pool with the users that own it to be able to display
+    // the top scorer of last night with the pooler name that own it. store that map in anoter state. Use the current for loops.
 
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
       const pooler = poolInfo.participants[i];

@@ -61,6 +61,21 @@ export default function GoalItem({ goalData, gameContent }) {
     videoRef?.current?.load();
   }, [goalContent]);
 
+  const setVideoFullScreen = () => {
+    const el = videoRef.current;
+
+    // el.paused will detect if paused
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.msRequestFullscreen) {
+      el.msRequestFullscreen();
+    } else if (el.mozRequestFullScreen) {
+      el.mozRequestFullScreen();
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    }
+  };
+
   return (
     <div>
       <table className="goalItem">
@@ -73,7 +88,14 @@ export default function GoalItem({ goalData, gameContent }) {
             <td width="250">{goalData.about.periodTime}</td>
             <td rowSpan={rowSpan} width="225">
               {goalContent ? (
-                <video width="224" height="126" poster={goalContent.image.cuts['248x140']?.src} controls ref={videoRef}>
+                <video
+                  onPlaying={setVideoFullScreen}
+                  width="100%"
+                  height="100%"
+                  poster={goalContent.image.cuts['248x140']?.src}
+                  ref={videoRef}
+                  controls
+                >
                   <source src={goalContent.playbacks[3].url} type="video/mp4" />
                   <track kind="captions" />
                 </video>
