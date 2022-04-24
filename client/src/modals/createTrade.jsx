@@ -6,7 +6,8 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import { Tabs, TabList, TabPanel, Tab } from 'react-tabs';
-
+import axios from 'axios';
+import Cookies from 'js-cookie';
 // components
 import PlayerList from '../components/pool_state/playerList';
 import TradeItem from '../components/pool_state/tradeItem';
@@ -16,10 +17,15 @@ import './modal.css';
 
 // images
 import { logos } from '../components/img/logos';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 
-export default function CreateTradeModal({ showCreateTradeModal, setShowCreateTradeModal, poolInfo, user, DictUsers }) {
+export default function CreateTradeModal({
+  showCreateTradeModal,
+  setShowCreateTradeModal,
+  poolInfo,
+  setPoolInfo,
+  user,
+  DictUsers,
+}) {
   const [fromPlayers, setFromPlayers] = useState([]);
   const [fromPicks, setFromPicks] = useState([]);
   const [toPlayers, setToPlayers] = useState([]);
@@ -40,8 +46,6 @@ export default function CreateTradeModal({ showCreateTradeModal, setShowCreateTr
       .post('/api/pool/create_trade', { token: Cookies.get(`token-${user._id}`), tradeInfo, name: poolInfo.name })
       .then(res => {
         if (res.data.success) {
-          // TODO: make this post request to generate a trade into the pool document in the data base.
-          // this call will need to return the poolInfo to setPoolInfo and that the trade will be visable into the app without the need to refresh.
           // the trade will need to be confirmed by the user that was selected by the trader.
           // if the trade is accepted, people have 24h to create a counter offer. They can directly get out of the trade.
           // The players in the trade won't cumulate points the day they are traded.
@@ -49,6 +53,7 @@ export default function CreateTradeModal({ showCreateTradeModal, setShowCreateTr
           // user will be able to make a reservists switch (only add player to roster to fill hole, not remove players from roster) on that day, and the players can receive points on that day
 
           setShowCreateTradeModal(false);
+          setPoolInfo(res.data.message);
         } else {
           alert(res.data.message);
         }
@@ -216,7 +221,7 @@ export default function CreateTradeModal({ showCreateTradeModal, setShowCreateTr
             setToPicks={setToPicks}
             DictUsers={DictUsers}
           />
-          <button className="base-button" type="button">
+          <button onClick={() => send_trade()} className="base-button" type="button">
             Create
           </button>
         </div>

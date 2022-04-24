@@ -21,12 +21,14 @@
   }
 } */
 
-.content-table {
+.content-table,
+content-table-no-hover {
   min-width: 1000px;
   font-size: 22px;
 }
 
 .content-table,
+.content-table-no-hover,
 .content-table-no-min {
   margin: 10px 0;
   width: 100%;
@@ -34,6 +36,7 @@
 }
 
 .content-table th,
+.content-table-no-hover th,
 .content-table-no-min th {
   background-color: #222222;
   color: #dddddd;
@@ -43,6 +46,7 @@
 }
 
 .content-table tr,
+.content-table-no-hover tr,
 .content-table-no-min tr {
   padding: 2px 2px;
   text-align: center;

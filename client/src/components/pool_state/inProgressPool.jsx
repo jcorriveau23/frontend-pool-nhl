@@ -10,17 +10,22 @@ import PropTypes from 'prop-types';
 import DayLeaders from '../home_page/daylyLeaders';
 import TradeCenter from './tradeCenter';
 
+// modals
+import FillSpot from '../../modals/FillSpot';
+
 // images
 import { logos } from '../img/logos';
 
 // css
 import '../react-tabs.css';
 
-export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) {
+export default function InProgressPool({ user, DictUsers, poolName, poolInfo, setPoolInfo }) {
   const [playersStats, setPlayersStats] = useState(null);
   const [ranking, setRanking] = useState(null);
   const [playersToPoolerMap, setPlayersToPoolerMap] = useState(null);
   const [formatDate, setFormatDate] = useState('');
+  const [showFillSpotModal, setShowFillSpotModal] = useState(false);
+  const [fillSpotPosition, setFillSpotPosition] = useState('');
 
   const sort_by_player_member = async (playerMember, array) => {
     // TODO: try to simplified this into no if at all
@@ -170,7 +175,7 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
         .then(res => {
           if (res.data.success) {
             const newDate = new Date();
-            if (newDate.getHours < 12) {
+            if (newDate.getHours() < 12) {
               newDate.setDate(newDate.getDate() - 1);
             }
 
@@ -182,7 +187,7 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
         });
     }
     return () => {};
-  }, []);
+  }, [poolInfo]);
 
   const download_csv = pool => {
     let csv = 'Player Name,Team\n';
@@ -226,8 +231,37 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
 
   const isUser = participant => participant === user._id;
 
-  const render_skater_stats = (pooler, chosen_player_key, player_total_pts_key) => {
+  const open_fill_spot_modal = position => {
+    setShowFillSpotModal(true);
+    setFillSpotPosition(position);
+  };
+
+  const get_empty_rows = (players_length, max, pooler, position) => {
+    const emptyRows = [];
+    for (let i = players_length; i < max; i += 1) {
+      emptyRows.push(
+        <tr>
+          <td>{i + 1}</td>
+          <td>
+            {pooler === user._id ? (
+              <button className="base-button" type="button" onClick={() => open_fill_spot_modal(position)}>
+                Fill Spot
+              </button>
+            ) : (
+              '-'
+            )}
+          </td>
+          <td colSpan={6}>Empty spot</td>
+        </tr>
+      );
+    }
+
+    return emptyRows;
+  };
+
+  const render_skater_stats = (pooler, chosen_player_key, player_total_pts_key, max, position) => {
     if (playersStats[pooler]) {
+      const emptyRows = get_empty_rows(playersStats[pooler][chosen_player_key].length, max, pooler, position);
       return (
         <>
           {playersStats[pooler][chosen_player_key].map((player, i) => (
@@ -249,6 +283,7 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
               <td>{player.pool_points}</td>
             </tr>
           ))}
+          {emptyRows.map(row => row)}
           <tr>
             <th>total</th>
             <th> - </th>
@@ -266,8 +301,9 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
     return null;
   };
 
-  const render_goalies_stats = pooler => {
+  const render_goalies_stats = (pooler, max) => {
     if (playersStats[pooler]) {
+      const emptyRows = get_empty_rows(playersStats[pooler].chosen_goalies.length, max, 'G');
       return (
         <>
           {playersStats[pooler].chosen_goalies.map((player, i) => (
@@ -356,28 +392,46 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
                   </tr>
                   {render_header_skaters()}
                 </thead>
-                <tbody>{render_skater_stats(pooler, 'chosen_forward', 'forwards_total_pts')}</tbody>
+                <tbody>
+                  {render_skater_stats(pooler, 'chosen_forward', 'forwards_total_pts', poolInfo.number_forward, 'F')}
+                </tbody>
                 <thead>
                   <tr>
                     <th colSpan={8}>Defenders</th>
                   </tr>
                   {render_header_skaters()}
                 </thead>
-                <tbody>{render_skater_stats(pooler, 'chosen_defender', 'defenders_total_pts')}</tbody>
+                <tbody>
+                  {render_skater_stats(
+                    pooler,
+                    'chosen_defender',
+                    'defenders_total_pts',
+                    poolInfo.number_defenders,
+                    'D'
+                  )}
+                </tbody>
                 <thead>
                   <tr>
                     <th colSpan={8}>Goalies</th>
                   </tr>
                   {render_header_goalies()}
                 </thead>
-                <tbody>{render_goalies_stats(pooler)}</tbody>
+                <tbody>{render_goalies_stats(pooler, poolInfo.number_goalies)}</tbody>
                 <thead>
                   <tr>
                     <th colSpan={8}>Reservists</th>
                   </tr>
                   {render_header_skaters()}
                 </thead>
-                <tbody>{render_skater_stats(pooler, 'chosen_reservist', 'reservists_total_pts')}</tbody>
+                <tbody>
+                  {render_skater_stats(
+                    pooler,
+                    'chosen_reservist',
+                    'reservists_total_pts',
+                    poolInfo.number_reservist,
+                    null
+                  )}
+                </tbody>
               </table>
             </TabPanel>
           ))}
@@ -422,19 +476,27 @@ export default function InProgressPool({ user, DictUsers, poolName, poolInfo }) 
           </table>
         </div>
         <div className="cont">
-          <h1>Pool in progress...</h1>
+          <h1>Pooler&apos;s roster</h1>
           {render_tabs_choice_stats()}
           <button className="base-button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
             Download CSV
           </button>
         </div>
-        <TradeCenter poolInfo={poolInfo} user={user} DictUsers={DictUsers} />
+        <TradeCenter poolInfo={poolInfo} setPoolInfo={setPoolInfo} user={user} DictUsers={DictUsers} />
         <div className="cont">
           <DayLeaders
             formatDate={formatDate}
             playersToPoolerMap={playersToPoolerMap}
             user={user}
             DictUsers={DictUsers}
+          />
+          <FillSpot
+            showFillSpotModal={showFillSpotModal}
+            setShowFillSpotModal={setShowFillSpotModal}
+            poolInfo={poolInfo}
+            setPoolInfo={setPoolInfo}
+            user={user}
+            fillSpotPosition={fillSpotPosition}
           />
         </div>
       </div>

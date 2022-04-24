@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FaExchangeAlt } from 'react-icons/fa';
 
 export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFromPicks, setToPlayers, setToPicks }) {
   const remove_player = (players, setPlayers, player) => {
@@ -33,7 +34,7 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
       </thead>
       <tbody>
         {Items.players.map(player => (
-          <tr onClick={() => remove_player(Items.players, setPlayers, player)}>
+          <tr onClick={setPlayers ? () => remove_player(Items.players, setPlayers, player) : null}>
             <td colSpan={2}>{player.name}</td>
           </tr>
         ))}
@@ -42,7 +43,7 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
           <th>From</th>
         </tr>
         {Items.picks.map(pick => (
-          <tr onClick={() => remove_pick(Items.picks, setPicks, pick)}>
+          <tr onClick={setPicks ? () => remove_pick(Items.picks, setPicks, pick) : null}>
             <td>{pick.rank}</td>
             <td>{DictUsers ? DictUsers[pick.player] : pick.player}</td>
           </tr>
@@ -53,11 +54,13 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
 
   return (
     <div>
-      <table width="80%">
+      <table width="100%">
         <tbody>
           <tr>
             <th>{render_trade_side(tradeInfo.fromItems, tradeInfo.proposedBy, setFromPlayers, setFromPicks)}</th>
-            <th>{'<->' /* TODO Add trading image */}</th>
+            <th>
+              <FaExchangeAlt size={30} />
+            </th>
             <th>{render_trade_side(tradeInfo.toItems, tradeInfo.askTo, setToPlayers, setToPicks)}</th>
           </tr>
         </tbody>
@@ -78,6 +81,7 @@ TradeItem.propTypes = {
       players: PropTypes.arrayOf({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
+        position: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
     toItems: PropTypes.shape({
@@ -88,6 +92,7 @@ TradeItem.propTypes = {
       players: PropTypes.arrayOf({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
+        position: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
   }).isRequired,

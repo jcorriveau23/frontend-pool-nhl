@@ -65,7 +65,15 @@ export default function PoolPage({ user, DictUsers }) {
           />
         );
       case 'in Progress':
-        return <InProgressPool user={user} DictUsers={DictUsers} poolName={poolName} poolInfo={poolInfo} />;
+        return (
+          <InProgressPool
+            user={user}
+            DictUsers={DictUsers}
+            poolName={poolName}
+            poolInfo={poolInfo}
+            setPoolInfo={setPoolInfo}
+          />
+        );
       case 'dynastie':
         return (
           <DynastiePool
