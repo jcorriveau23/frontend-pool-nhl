@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const DayLeaderSchema = new Schema(
@@ -10,6 +10,6 @@ const DayLeaderSchema = new Schema(
   { timestamps: true }
 );
 
-const DayLeaders = mongoose.model("day_leaders", DayLeaderSchema);
+const DayLeaders = mongoose.model('day_leaders', DayLeaderSchema);
 
 module.exports = DayLeaders;

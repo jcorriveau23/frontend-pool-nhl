@@ -1,23 +1,24 @@
-# This scripts fetch live game data to list the best pointers of the day live.
-# It store the information in the day_leaders collection in the mongoDB database.
-
-from pymongo import MongoClient
-from datetime import date, datetime, timedelta
-import requests
+# Schedule Library imported
 import json
 import time
+from datetime import date, datetime, timedelta
+
+import requests
+import schedule
+from pymongo import MongoClient
 
 # create an client instance of the MongoDB class
 
 mo_c = MongoClient()
 db = mo_c.pooljdope
-
-day_leaders = db.day_leaders
-
 SEASON = '20212022'
 API_URL = 'https://statsapi.web.nhl.com'
 
-while True:
+# This function will fetch live game data to list the best pointers of the day live.
+# It store the information in the day_leaders collection in the mongoDB database.
+def get_live_day_points_leaders():
+    day_leaders = db.day_leaders
+
     skaters = []
     goalies = []
     
@@ -44,7 +45,7 @@ while True:
         print(f'Game: {gameID},  State: {gameState}')
 
         if gameState == 'Live' or gameState == 'Final':
-            isLiveGame = gameState == 'Live'
+            isLiveGame = gameState == 'Live'    # TODO use this isLiveGame variable to change the period this function is being called from the scheduler
             gameID = game['gamePk']
 
             GAME_DATA_END_POINT = f'/api/v1/game/{gameID}/feed/live'
@@ -91,8 +92,68 @@ while True:
             }
 
             day_leaders.update_one({'date': str(day)}, {'$set': data}, upsert=True) # upsert = True, to create a new document if not found
+ 
+def dayly_players_stats_update():
+    print("dayly_players_stats_update")
+ 
+# this script will go through each pool in the database and look if there is some trade with status == "ACCEPTED" from yesterday.
+# if yes, add the items of each traded to the corresponding poolers. (players in reservist + picks in tradable_picks)
+# change the trade status to COMPLETED
+# finally save the pool in the database
+# this script should run every morning (lets say 5am)
+def close_accepted_trade():
+    yesterday = date.today() - timedelta(days=1) # TODO change to look only on yesterday 
 
-    if(isLiveGame):
-        time.sleep(180) # fetch live games stats every 3 minutes.
-    else:
-        time.sleep(1200) # when no live game fetch every 20 minutes
+    for pool in db.pools.find():
+        isPoolUpdated = False
+
+        print(pool["name"])
+        for trade in pool["trades"]:
+            if trade["status"] == "ACCEPTED" and yesterday == trade["dateAccepted"].date(): 
+                #print(trade)
+                isPoolUpdated = True
+
+                proposedBy = trade["proposedBy"]
+                askTo = trade["askTo"]
+
+                fromItems = trade["fromItems"]
+                toItems = trade["toItems"]
+
+                # the fromItems are being transfered to the askTo pooler
+
+                for player in fromItems["players"]:
+                    pool["context"][askTo]["chosen_reservist"].append(player)
+
+                for pick in fromItems["picks"]:
+                    pool["context"][askTo]["tradable_picks"].append(pick)
+
+                # the toItems are being transfered to the proposedBy pooler
+
+                for player in toItems["players"]:
+                    pool["context"][proposedBy]["chosen_reservist"].append(player)
+
+                for pick in toItems["picks"]:
+                    pool["context"][proposedBy]["tradable_picks"].append(pick)
+
+                # before updating the document in the database set state of the trade to complete.
+                trade["status"] = "COMPLETED"
+                print("updated one trade")
+
+        # only update when an ACCEPTED trade has been processed
+
+        if isPoolUpdated:
+            db.pools.update_one({'_id': pool["_id"]}, {'$set': pool}, upsert=True) # upsert = True, to create a new document if not found
+ 
+# Task scheduling
+# After every 3mins get_live_day_points_leaders() is called.
+schedule.every(3).minutes.do(get_live_day_points_leaders)
+ 
+# Every day at 05:00 time close_accepted_trade() is called.
+schedule.every().day.at("05:00").do(close_accepted_trade)
+
+print("start the scheduling!")
+while True:
+    # Checks whether a scheduled task
+    # is pending to run or not
+    schedule.run_pending()
+    time.sleep(1)

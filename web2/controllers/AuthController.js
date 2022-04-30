@@ -1,13 +1,9 @@
-const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const ethers = require("ethers");
+const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const ethers = require('ethers');
 
-//const PRIVATE_KEY_DB = require('constants')
-PRIVATE_KEY_DB = "verySecretValue";
-
-// [TODO]: in the register, use the public key received instead of username.
-// for the login, use the signature and the msg to recover the public key to validate the user request and send im the cookie.
+const util = require('./util');
 
 const verifyMessage = async (message, address, signature) => {
   const signerAddr = await ethers.utils.verifyMessage(message, signature);
@@ -16,249 +12,188 @@ const verifyMessage = async (message, address, signature) => {
   return true;
 };
 
-const register = (req, res, next) => {
-  var username = req.body.username;
-
-  if (username) {
-    User.findOne({ name: username }).then((user) => {
-      if (user) {
-        res.json({
-          success: false,
-          message: "username already registered",
-        });
-      } else {
-        bcrypt.hash(req.body.password, 10, function (err, hashedPass) {
-          if (err) {
-            res.json({
-              success: false,
-              message: err,
-            });
-          }
-
-          let user = new User({
-            name: req.body.username,
-            addr: "", // no address when register with password and username
-            email: req.body.email,
-            phone: req.body.phone,
-            password: hashedPass,
-            pool_list: [],
-          });
-
-          console.log(user);
-          user
-            .save()
-            .then((user) => {
-              res.json({
-                success: true,
-                message: "User Added Successfully!",
-              });
-            })
-            .catch((error) => {
-              res.json({
-                success: false,
-                message: error,
-              });
-            });
-        });
-      }
-    });
-  } else {
+const register = async (req, res, next) => {
+  if (!req.body.username || !req.body.password || !req.body.email) {
     res.json({
       success: false,
-      message: "username not valid.",
+      message: 'No username, password or email provided!',
+    });
+    return;
+  }
+
+  const user = await User.findOne({ name: req.body.username });
+
+  if (user) {
+    res.json({
+      success: false,
+      message: 'username already registered',
+    });
+  } else {
+    const salt = await bcrypt.genSalt(1);
+    const hashedPass = await bcrypt.hash(req.body.password, salt);
+
+    let newUser = new User({
+      name: req.body.username,
+      addr: '', // no address when register with password and username
+      email: req.body.email,
+      phone: req.body.phone,
+      password: hashedPass,
+      pool_list: [],
+    });
+
+    await newUser.save();
+    res.json({
+      success: true,
     });
   }
 };
 
-const login = (req, res, next) => {
-  var username = req.body.username;
+const login = async (req, res, next) => {
+  if (!req.body.username || !req.body.password) {
+    res.json({
+      success: false,
+      message: 'No username or password provided!',
+    });
+    return;
+  }
 
-  User.findOne({ name: username }).then((user) => {
-    if (user) {
-      bcrypt.hash(req.body.password, 10, function (err, hashedPass) {
-        if (err) {
-          res.json({
-            success: false,
-            message: err,
-          });
-        }
+  const user = await User.findOne({ name: req.body.username });
 
-        let token = jwt.sign({ _id: user._id }, PRIVATE_KEY_DB, {
-          expiresIn: "1h",
-        });
+  if (user && req.body.password && user.password) {
+    const isValid = await bcrypt.compare(req.body.password, user.password);
 
-        res.json({
-          success: true,
-          message: "login with username and password successfull",
-          token,
-          user,
-        });
+    console.log(isValid);
+    if (isValid) {
+      let token = jwt.sign({ _id: user._id }, util.PRIVATE_KEY_DB, {
+        expiresIn: '1h',
+      });
+
+      res.json({
+        success: true,
+        token,
+        user,
+      });
+      return;
+    } else {
+      res.json({
+        success: false,
+        message: 'the password was wrong!',
+      });
+      return;
+    }
+  } else {
+    res.json({
+      success: false,
+      message: 'user does not exist!',
+    });
+  }
+};
+
+const wallet_login = async (req, res, next) => {
+  const user = await User.findOne({ addr: req.body.addr });
+
+  if (user) {
+    // user found, don't create it in the database.
+
+    const isVerified = await verifyMessage('Unlock wallet to access nhl-pool-ethereum.', req.body.addr, req.body.sig);
+
+    if (isVerified) {
+      let token = jwt.sign({ _id: user._id }, util.PRIVATE_KEY_DB, {
+        expiresIn: '1h',
+      });
+
+      res.json({
+        success: true,
+        token,
+        user,
       });
     } else {
       res.json({
         success: false,
-        message: "user does not exist",
+        message: 'could not verified the signature.',
       });
     }
-  });
-};
+  } else {
+    // user not found create it in the database.
 
-const wallet_login = (req, res, next) => {
-  var addr = req.body.addr;
-  var sig = req.body.sig;
+    let newUser = new User({
+      name: req.body.addr,
+      addr: req.body.addr,
+      pool_list: [],
+    });
 
-  User.findOne({ addr: addr }).then((user) => {
-    if (user) {
-      // user found, don't create it in the database.
+    const user = await newUser.save();
+    const isVerified = await verifyMessage('Unlock wallet to access nhl-pool-ethereum.', addr, req.body.sig);
 
-      verifyMessage(
-        "Unlock wallet to access nhl-pool-ethereum.",
-        addr,
-        sig
-      ).then((isVerified) => {
-        if (isVerified) {
-          let token = jwt.sign({ _id: user._id }, PRIVATE_KEY_DB, {
-            expiresIn: "1h",
-          });
-
-          res.json({
-            success: true,
-            message: "login with wallet Successful!l",
-            token,
-            user,
-          });
-        } else {
-          res.json({
-            success: false,
-            message: "could not verified the signature.",
-          });
-        }
+    if (isVerified) {
+      let token = jwt.sign({ _id: user._id }, util.PRIVATE_KEY_DB, {
+        expiresIn: '1h',
+      });
+      res.json({
+        success: true,
+        token,
+        user,
       });
     } else {
-      // user not found create it in the database.
-
-      let user = new User({
-        name: req.body.addr,
-        addr: req.body.addr,
-        pool_list: [],
+      res.json({
+        success: false,
+        message: 'could not verified the signature.',
       });
-
-      user
-        .save()
-        .then((user) => {
-          verifyMessage(
-            "Unlock wallet to access nhl-pool-ethereum.",
-            addr,
-            sig
-          ).then((isVerified) => {
-            if (isVerified) {
-              let token = jwt.sign({ _id: user._id }, PRIVATE_KEY_DB, {
-                expiresIn: "1h",
-              });
-              res.json({
-                success: true,
-                message: "unlock Successful!",
-                token,
-                user,
-              });
-            } else {
-              res.json({
-                success: false,
-                message: "could not verified the signature.",
-              });
-            }
-          });
-        })
-        .catch((error) => {
-          res.json({
-            success: false,
-            message: error,
-          });
-        });
     }
-  });
-};
-
-const get_all_users = (req, res, next) => {
-  if (req.headers.token !== "undefined") {
-    var encrypt_token = req.headers.token;
-    let token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
-
-    User.find()
-      .then((users) => {
-        res.json({
-          success: true,
-          message: users,
-        });
-        return;
-      })
-      .catch((error) => {
-        res.json({
-          success: false,
-          message: error,
-        });
-        return;
-      });
-  } else {
-    res.json({
-      success: false,
-      message: "You need to be connected.",
-    });
-    return;
   }
 };
 
-const set_username = (req, res, next) => {
-  const encrypt_token = req.body.token;
-  const newUsername = req.body.newUsername;
+const get_all_users = async (req, res, next) => {
+  const [success, message, user] = await util.validate_user(req.headers.token);
 
-  const token = jwt.decode(encrypt_token, PRIVATE_KEY_DB);
-
-  if (token) {
-    // TODO: use token.iat and token.exp to use token expiration and force user to re-login
-    User.findOne({ _id: token._id }).then((user) => {
-      if (user) {
-        user.name = newUsername;
-        User.findOne({ name: newUsername }).then((newUser) => {
-          if (newUser) {
-            res.json({
-              success: false,
-              message: "username already exist!",
-            });
-          } else {
-            user
-              .save()
-              .then((user) => {
-                let token = jwt.sign({ _id: user._id }, PRIVATE_KEY_DB, {
-                  expiresIn: "1h",
-                });
-
-                res.json({
-                  success: true,
-                  message: "changed username successfull!",
-                  token,
-                  user,
-                });
-              })
-              .catch((error) => {
-                res.json({
-                  success: false,
-                  message: error,
-                });
-              });
-          }
-        });
-      } else {
-        res.json({
-          success: false,
-          message: "User is not registered.",
-        });
-      }
-    });
-  } else {
+  if (!success) {
     res.json({
       success: false,
-      message: "The token is not valid.",
+      message: message,
+    });
+    return;
+  }
+
+  const users = await User.find();
+  res.json({
+    success: true,
+    message: users,
+  });
+  return;
+};
+
+const set_username = async (req, res, next) => {
+  const newUsername = req.body.newUsername;
+  const [success, message, user] = await util.validate_user(req.body.token);
+
+  if (!success) {
+    res.json({
+      success: false,
+      message: message,
+    });
+    return;
+  }
+
+  const newUser = await User.findOne({ name: newUsername });
+
+  if (newUser) {
+    res.json({
+      success: false,
+      message: 'username already exist!',
+    });
+  } else {
+    user.name = newUsername;
+
+    const savedUser = await user.save();
+
+    let token = jwt.sign({ _id: savedUser._id }, util.PRIVATE_KEY_DB, {
+      expiresIn: '1h',
+    });
+
+    res.json({
+      success: true,
+      token,
+      user,
     });
   }
 };

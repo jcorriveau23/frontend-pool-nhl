@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const poolSchema = new Schema(
@@ -28,6 +28,8 @@ const poolSchema = new Schema(
     next_drafter: { type: String },
 
     context: { type: Object },
+    trades: [Object],
+    nb_trade: { type: Number },
     nb_player_drafted: { type: Number },
 
     status: { type: String },
@@ -36,5 +38,5 @@ const poolSchema = new Schema(
   { timestamps: true }
 );
 
-const Pool = mongoose.model("Pool", poolSchema);
+const Pool = mongoose.model('Pool', poolSchema);
 module.exports = Pool;
