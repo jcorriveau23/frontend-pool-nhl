@@ -15,15 +15,20 @@ export default function DayLeaders({ formatDate, playersToPoolerMap, user, DictU
     if (formatDate !== prevFormatDate && formatDate) {
       // get the day leaders data from database.
 
-      axios.get(`/api/pool/get_day_leaders`, { headers: { d: formatDate } }).then(res => {
-        if (res.data.success) {
-          setDayLeaders({ ...res.data.message });
-          setPrevFormatDate(formatDate);
-        } else {
+      axios
+        .get(`/api-rust/dayly_leaders/${formatDate}`)
+        .then(res => {
+          console.log(res);
+          if (res.status === 200) {
+            setDayLeaders({ ...res.data });
+            setPrevFormatDate(formatDate);
+          }
+        })
+        .catch(e => {
           setDayLeaders(null);
           setPrevFormatDate('');
-        }
-      });
+          console.log(e.response);
+        });
     }
   }, [formatDate]);
 

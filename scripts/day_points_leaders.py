@@ -17,19 +17,17 @@ day_leaders = db.day_leaders
 SEASON = '20212022'
 API_URL = 'https://statsapi.web.nhl.com'
 
-while True:
+def fetch_pointers_day(day):
     skaters = []
     goalies = []
-    
-    if datetime.now().hour < 12:
-        day = date.today() - timedelta(days=1)
-    else:
-        day = date.today()
-    
+
     TODAY_GAME_END_POINT = f'/api/v1/schedule?startDate={day}&endDate={day}'
 
     response = requests.request('GET', API_URL + TODAY_GAME_END_POINT)  # fetch all todays games
     today_games = json.loads(response.text)
+
+    if len(today_games["dates"]) == 0:
+        return
 
     number_of_games = len(today_games['dates'][0]['games'])
 
@@ -92,7 +90,23 @@ while True:
 
             day_leaders.update_one({'date': str(day)}, {'$set': data}, upsert=True) # upsert = True, to create a new document if not found
 
-    if(isLiveGame):
-        time.sleep(180) # fetch live games stats every 3 minutes.
-    else:
-        time.sleep(1200) # when no live game fetch every 20 minutes
+# fetch all day stats for the past 60 days
+for i in range(60):
+    day = date.today() - timedelta(days=i)
+    fetch_pointers_day(day)
+
+# while True:
+#        
+#     if datetime.now().hour < 12:
+#         day = date.today() - timedelta(days=1)
+#     else:
+#         day = date.today()
+    
+#     fetch_pointers_day(day)
+
+#     if(isLiveGame):
+#         time.sleep(180) # fetch live games stats every 3 minutes.
+#     else:
+#         time.sleep(1200) # when no live game fetch every 20 minutes
+
+

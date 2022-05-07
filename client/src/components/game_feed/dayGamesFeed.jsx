@@ -84,13 +84,17 @@ export default function TodayGamesFeed({ formatDate, setFormatDate }) {
       <div className="dayGamesFeed">
         <div>
           <ul>
-            {gamesStats.map(game => (
-              <Link to={`/game/${game.gamePk}`} key={game.gamePk}>
-                <li>
-                  <GameItem gameData={game} />
-                </li>
-              </Link>
-            ))}
+            {gamesStats && gamesStats.length > 0 ? (
+              gamesStats.map(game => (
+                <Link to={`/game/${game.gamePk}`} key={game.gamePk}>
+                  <li>
+                    <GameItem gameData={game} />
+                  </li>
+                </Link>
+              ))
+            ) : (
+              <h1>No game on that day.</h1>
+            )}
           </ul>
         </div>
       </div>
