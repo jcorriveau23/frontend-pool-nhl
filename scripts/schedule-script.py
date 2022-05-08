@@ -32,6 +32,9 @@ def get_live_day_points_leaders():
     response = requests.request('GET', API_URL + TODAY_GAME_END_POINT)  # fetch all todays games
     today_games = json.loads(response.text)
 
+    if len(today_games["dates"]) == 0:
+        return
+
     number_of_games = len(today_games['dates'][0]['games'])
 
     print(f'fetching for: {day}, there is {number_of_games} games')
@@ -93,8 +96,8 @@ def get_live_day_points_leaders():
 
             day_leaders.update_one({'date': str(day)}, {'$set': data}, upsert=True) # upsert = True, to create a new document if not found
  
-def dayly_players_stats_update():
-    print("dayly_players_stats_update")
+def daily_players_stats_update():
+    print("daily_players_stats_update")
  
 # this script will go through each pool in the database and look if there is some trade with status == "ACCEPTED" from yesterday.
 # if yes, add the items of each traded to the corresponding poolers. (players in reservist + picks in tradable_picks)

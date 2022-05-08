@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // component
-import DayLeaders from '../components/home_page/daylyLeaders';
+import DayLeaders from '../components/home_page/dailyLeaders';
 
 export default function HomePage({ formatDate }) {
   return (

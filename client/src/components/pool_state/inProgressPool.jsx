@@ -7,7 +7,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import PropTypes from 'prop-types';
 
 // component
-import DayLeaders from '../home_page/daylyLeaders';
+import DayLeaders from '../home_page/dailyLeaders';
 import TradeCenter from './tradeCenter';
 
 // modals

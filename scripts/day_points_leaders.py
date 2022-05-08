@@ -90,23 +90,25 @@ def fetch_pointers_day(day):
 
             day_leaders.update_one({'date': str(day)}, {'$set': data}, upsert=True) # upsert = True, to create a new document if not found
 
-# fetch all day stats for the past 60 days
-for i in range(60):
-    day = date.today() - timedelta(days=i)
-    fetch_pointers_day(day)
+    return isLiveGame
 
-# while True:
-#        
-#     if datetime.now().hour < 12:
-#         day = date.today() - timedelta(days=1)
-#     else:
-#         day = date.today()
-    
+# fetch all day stats for the past 60 days
+# for i in range(60):
+#     day = date.today() - timedelta(days=i)
 #     fetch_pointers_day(day)
 
-#     if(isLiveGame):
-#         time.sleep(180) # fetch live games stats every 3 minutes.
-#     else:
-#         time.sleep(1200) # when no live game fetch every 20 minutes
+while True:
+       
+    if datetime.now().hour < 12:
+        day = date.today() - timedelta(days=1)
+    else:
+        day = date.today()
+    
+    isLiveGame = fetch_pointers_day(day)
+
+    if(isLiveGame):
+        time.sleep(180) # fetch live games stats every 3 minutes.
+    else:
+        time.sleep(1200) # when no live game fetch every 20 minutes
 
 

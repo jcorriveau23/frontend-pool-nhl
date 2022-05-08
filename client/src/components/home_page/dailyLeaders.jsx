@@ -16,9 +16,8 @@ export default function DayLeaders({ formatDate, playersToPoolerMap, user, DictU
       // get the day leaders data from database.
 
       axios
-        .get(`/api-rust/dayly_leaders/${formatDate}`)
+        .get(`/api-rust/daily_leaders/${formatDate}`)
         .then(res => {
-          console.log(res);
           if (res.status === 200) {
             setDayLeaders({ ...res.data });
             setPrevFormatDate(formatDate);
