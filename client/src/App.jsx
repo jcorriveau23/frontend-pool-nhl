@@ -55,11 +55,11 @@ function App() {
   useEffect(() => {
     axios.get('https://nhl-pool-ethereum.herokuapp.com/');
     if (user) {
-      axios.get('/api/auth/get_all_users', { headers: { token: Cookies.get(`token-${user._id}`) } }).then(res => {
-        if (res.data.success) {
+      axios.get('/api-rust/users').then(res => {
+        if (res.status === 200) {
           const DictUsersTmp = {};
-          res.data.message.forEach(u => {
-            DictUsersTmp[u._id] = u.name;
+          res.data.forEach(u => {
+            DictUsersTmp[u._id.$oid] = u.name;
           });
 
           setDictUsers(DictUsersTmp);
