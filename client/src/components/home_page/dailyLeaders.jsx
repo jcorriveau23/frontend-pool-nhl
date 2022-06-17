@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import PropTypes from 'prop-types';
+
+// components
+import PlayerLink from '../playerLink';
 
 // images
 import { logos } from '../img/logos';
 
-export default function DayLeaders({ formatDate, playersToPoolerMap, user, DictUsers }) {
+export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, DictUsers, dayLeadersRef, injury }) {
   const [prevFormatDate, setPrevFormatDate] = useState('');
   const [dayLeaders, setDayLeaders] = useState(null);
 
@@ -15,19 +17,23 @@ export default function DayLeaders({ formatDate, playersToPoolerMap, user, DictU
     if (formatDate !== prevFormatDate && formatDate) {
       // get the day leaders data from database.
 
-      axios
-        .get(`/api-rust/daily_leaders/${formatDate}`)
-        .then(res => {
-          if (res.status === 200) {
-            setDayLeaders({ ...res.data });
-            setPrevFormatDate(formatDate);
-          }
-        })
-        .catch(e => {
-          setDayLeaders(null);
-          setPrevFormatDate('');
-          console.log(e.response);
-        });
+      if (dayLeadersRef) {
+        setDayLeaders(dayLeadersRef);
+      } else {
+        axios
+          .get(`/api-rust/daily_leaders/${formatDate}`)
+          .then(res => {
+            if (res.status === 200) {
+              setDayLeaders({ ...res.data });
+              setPrevFormatDate(formatDate);
+            }
+          })
+          .catch(e => {
+            setDayLeaders(null);
+            setPrevFormatDate('');
+            console.log(e.response);
+          });
+      }
     }
   }, [formatDate]);
 
@@ -41,7 +47,7 @@ export default function DayLeaders({ formatDate, playersToPoolerMap, user, DictU
         <table className="content-table">
           <thead>
             <tr>
-              <th colSpan={5}>Dayly Leaders</th>
+              <th colSpan={5}>Daily Leaders</th>
             </tr>
             <tr>
               <th colSpan={5}>{formatDate}</th>
@@ -65,12 +71,10 @@ export default function DayLeaders({ formatDate, playersToPoolerMap, user, DictU
                         <img src={logos[skater.team]} alt="" width="40" height="40" />
                       </td>
                       <td>
-                        <Link to={`/player-info/${skater.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
-                          {skater.name}
-                        </Link>
-                        {playersToPoolerMap && playersToPoolerMap[skater.id] ? (
+                        <PlayerLink name={skater.name} id={skater.id} injury={injury} />
+                        {playersIdToPoolerMap && playersIdToPoolerMap[skater.id] ? (
                           <b style={{ color: 'red' }}>
-                            {DictUsers ? ` (${DictUsers[playersToPoolerMap[skater.id]]})` : null}
+                            {DictUsers ? ` (${DictUsers[playersIdToPoolerMap[skater.id]]})` : null}
                           </b>
                         ) : null}
                       </td>
@@ -92,7 +96,7 @@ export default function DayLeaders({ formatDate, playersToPoolerMap, user, DictU
         <table className="content-table">
           <thead>
             <tr>
-              <th colSpan={5}>Dayly Leaders</th>
+              <th colSpan={5}>Daily Leaders</th>
             </tr>
             <tr>
               <th colSpan={5}>{formatDate}</th>
@@ -116,12 +120,10 @@ export default function DayLeaders({ formatDate, playersToPoolerMap, user, DictU
                         <img src={logos[goalie.team]} alt="" width="40" height="40" />
                       </td>
                       <td>
-                        <Link to={`/player-info/${goalie.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
-                          {goalie.name}
-                        </Link>
-                        {playersToPoolerMap && playersToPoolerMap[goalie.id] ? (
+                        <PlayerLink name={goalie.name} id={goalie.id} injury={injury} />
+                        {playersIdToPoolerMap && playersIdToPoolerMap[goalie.id] ? (
                           <b style={{ color: 'red' }}>
-                            {DictUsers ? ` (${DictUsers[playersToPoolerMap[goalie.id]]})` : null}
+                            {DictUsers ? ` (${DictUsers[playersIdToPoolerMap[goalie.id]]})` : null}
                           </b>
                         ) : null}
                       </td>

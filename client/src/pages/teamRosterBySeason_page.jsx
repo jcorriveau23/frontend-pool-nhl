@@ -8,10 +8,13 @@ import axios from 'axios';
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
 
+// components
+import PlayerLink from '../components/playerLink';
+
 // images
 import { logos, teamNameFromId } from '../components/img/logos';
 
-export default function TeamRosterBySeasonPage() {
+export default function TeamRosterBySeasonPage(injury) {
   const [skatersStats, setSkatersStats] = useState(null);
   const [goaliesStats, setGoaliesStats] = useState(null);
 
@@ -103,9 +106,7 @@ export default function TeamRosterBySeasonPage() {
             <tr key={player.playerId}>
               <td>-</td>
               <td>
-                <Link to={`/player-info/${player.playerId}`} style={{ textDecoration: 'none', color: '#000099' }}>
-                  {player.skaterFullName}
-                </Link>
+                <PlayerLink name={player.skaterFullName} id={player.playerId} injury={injury} />
               </td>
               <td>{player.positionCode}</td>
               <td>{player.gamesPlayed}</td>
@@ -162,9 +163,7 @@ export default function TeamRosterBySeasonPage() {
             <tr key={goalie.playerId}>
               <td>-</td>
               <td>
-                <Link to={`/player-info/${goalie.playerId}`} style={{ textDecoration: 'none', color: '#000099' }}>
-                  {goalie.goalieFullName}
-                </Link>
+                <PlayerLink name={goalie.skaterFullName} id={goalie.playerId} injury={injury} />
               </td>
               <td>G</td>
               <td>{goalie.gamesPlayed}</td>

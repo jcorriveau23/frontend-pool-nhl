@@ -42,37 +42,38 @@ io.on('connection', function (socket) {
     let token = jwt.decode(data, util.PRIVATE_KEY_DB);
 
     if (token !== null) {
-      //TODO: valide token._id is a registered client in db
+      //TODO: valide token._id.$oid is a registered client in db
 
       if (pools[room] == undefined) {
         pools[room] = {};
         pools[room]['numClients'] = 1;
-        pools[room]['listClient'] = [{ _id: token._id, ready: false }];
+        pools[room]['listClient'] = [{ _oid: token._id.$oid, ready: false }];
 
         socket.join(room);
-        addClientToMap(token._id, socket.id);
+        addClientToMap(token._id.$oid, socket.id);
 
         io.in(room).emit('roomData', pools[room]['listClient']);
       } else {
-        if (pools[room]['listClient'].findIndex(e => e._id === token._id) !== -1) {
+        if (pools[room]['listClient'].findIndex(e => e._oid === token._id.$oid) !== -1) {
           // already in the room
           socket.join(room); // still add the duplicate socket
-          addClientToMap(token._id, socket.id);
+          addClientToMap(token._id.$oid, socket.id);
 
           io.in(room).emit('roomData', pools[room]['listClient']);
         } else if (pools[room]['numClients'] > 5) {
           // dont add it
         } else {
           pools[room]['numClients']++;
-          pools[room]['listClient'].push({ _id: token._id, ready: false });
+          pools[room]['listClient'].push({ _oid: token._id.$oid, ready: false });
           socket.join(room); // still add the duplicate socket
-          addClientToMap(token._id, socket.id);
+          addClientToMap(token._id.$oid, socket.id);
 
+          console.log('joined room');
           io.in(room).emit('roomData', pools[room]['listClient']);
         }
       }
-      //console.log(token._id + " join room: " + room);
-      //console.log("in Room now: " + pools[room]["listClient"])
+      console.log(token._id.$oid + ' join room: ' + room);
+      console.log('in Room now: ' + pools[room]['listClient']);
     }
   });
 
@@ -81,35 +82,35 @@ io.on('connection', function (socket) {
 
     if (token !== null) {
       socket.leave(room);
-      //console.log(socket.id + " leave room: " + room);
+      console.log(socket.id + ' leave room: ' + room);
 
-      if (removeClientFromMap(token._id, socket.id)) {
-        var index = pools[room]['listClient'].findIndex(e => e._id === token._id);
+      if (removeClientFromMap(token._id.$oid, socket.id)) {
+        var index = pools[room]['listClient'].findIndex(e => e._oid === token._id.$oid);
         if (index > -1) {
           pools[room]['listClient'].splice(index, 1);
           pools[room]['numClients']--;
 
           io.in(room).emit('roomData', pools[room]['listClient']);
 
-          //console.log(token._id + " leave room: " + room);
+          console.log(token._id.$oid + ' leave room: ' + room);
           if (pools[room]['numClients'] === 0) {
             pools[room] = undefined;
-            //console.log("room: " + room + "closed" )
+            console.log('room: ' + room + 'closed');
             return;
           }
         }
       }
-      //console.log("in Room now: " + pools[room]["listClient"])
+      console.log('in Room now: ' + pools[room]['listClient']);
     }
   });
 
   socket.on('playerReady', function (data, room) {
     let token = jwt.decode(data, util.PRIVATE_KEY_DB);
 
-    var index = pools[room]['listClient'].findIndex(e => e._id === token._id);
+    var index = pools[room]['listClient'].findIndex(e => e._oid === token._id.$oid);
 
     if (index > -1) {
-      console.log('im ready: ' + token._id);
+      // console.log('im ready: ' + token._id.$oid);
       pools[room]['listClient'][index].ready = true;
 
       io.in(room).emit('roomData', pools[room]['listClient']);
@@ -119,7 +120,7 @@ io.on('connection', function (socket) {
   socket.on('playerNotReady', function (data, room) {
     let token = jwt.decode(data, util.PRIVATE_KEY_DB);
 
-    var index = pools[room]['listClient'].findIndex(e => e._id === token._id);
+    var index = pools[room]['listClient'].findIndex(e => e._oid === token._id.$oid);
 
     if (index > -1) {
       pools[room]['listClient'][index].ready = false;
@@ -131,49 +132,51 @@ io.on('connection', function (socket) {
   socket.on('changeRule', function (data, pool_info) {
     let token = jwt.decode(data, util.PRIVATE_KEY_DB);
 
-    var index = pools[pool_info.name]['listClient'].findIndex(e => e._id === token._id);
+    var index = pools[pool_info.name]['listClient'].findIndex(e => e._oid === token._id.$oid);
 
-    if (index > -1 && pool_info.owner === token._id) {
+    if (index > -1 && pool_info.owner === token._id.$oid) {
       io.in(pool_info.name).emit('poolInfo', pool_info);
     }
   });
 
   socket.on('startDraft', function (data, room) {
+    participants = [];
     for (i = 0; i < pools[room]['listClient'].length; i++) {
       if (pools[room]['listClient'][i].ready === false) {
-        console.log('not every body ready');
+        console.log('not every body is ready');
         return;
       }
+      participants.push(pools[room]['listClient'][i]._oid);
     }
 
     axios
-      .put('/api/pool/start_draft', {
-        token: data,
-        pool_name: room,
-        participants: pools[room]['listClient'],
-      })
+      .post(
+        '/api-rust/start-draft',
+        {
+          name: room,
+          participants,
+        },
+        { headers: { Authorization: `Bearer ${data}` } }
+      )
       .then(res => {
         if (res.data.success) {
-          io.in(room).emit('poolInfo', res.data.message);
+          io.in(room).emit('poolInfo', res.data.pool);
         } else {
           console.error(res.data.message);
         }
       })
-      .catch(e => console.error(e));
+      .catch(e => console.error(e.response));
   });
 
   socket.on('pickPlayer', function (data, room, player, callback) {
     axios
-      .put('/api/pool/chose_player', {
-        token: data,
-        pool_name: room,
-        player,
-      })
+      .post('/api-rust/select-player', { name: room, player }, { headers: { Authorization: `Bearer ${data}` } })
       .then(res => {
         if (res.data.success) {
-          io.in(room).emit('poolInfo', res.data.message);
-          callback({ success: true, message: res.data.message });
+          io.in(room).emit('poolInfo', res.data.pool);
+          callback({ success: true });
         } else {
+          console.error(res.data.message);
           //console.log('error with put request (chose_player)' + data.message)
           callback({ success: false, message: res.data.message });
         }

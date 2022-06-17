@@ -25,7 +25,7 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
     setPicks([...picksTmp]);
   };
 
-  const render_trade_side = (Items, fromTo, setPlayers, setPicks) => (
+  const render_trade_side = (items, fromTo, setPlayers, setPicks) => (
     <table className="content-table-no-min">
       <thead>
         <tr>
@@ -33,8 +33,8 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
         </tr>
       </thead>
       <tbody>
-        {Items.players.map(player => (
-          <tr onClick={setPlayers ? () => remove_player(Items.players, setPlayers, player) : null}>
+        {items.players.map(player => (
+          <tr onClick={setPlayers ? () => remove_player(items.players, setPlayers, player) : null}>
             <td colSpan={2}>{player.name}</td>
           </tr>
         ))}
@@ -42,8 +42,8 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
           <th>Round pick</th>
           <th>From</th>
         </tr>
-        {Items.picks.map(pick => (
-          <tr onClick={setPicks ? () => remove_pick(Items.picks, setPicks, pick) : null}>
+        {items.picks.map(pick => (
+          <tr onClick={setPicks ? () => remove_pick(items.picks, setPicks, pick) : null}>
             <td>{pick.rank}</td>
             <td>{DictUsers ? DictUsers[pick.player] : pick.player}</td>
           </tr>
@@ -57,11 +57,11 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
       <table width="100%">
         <tbody>
           <tr>
-            <th>{render_trade_side(tradeInfo.fromItems, tradeInfo.proposedBy, setFromPlayers, setFromPicks)}</th>
+            <th>{render_trade_side(tradeInfo.from_items, tradeInfo.proposed_by, setFromPlayers, setFromPicks)}</th>
             <th>
               <FaExchangeAlt size={30} />
             </th>
-            <th>{render_trade_side(tradeInfo.toItems, tradeInfo.askTo, setToPlayers, setToPicks)}</th>
+            <th>{render_trade_side(tradeInfo.to_items, tradeInfo.ask_to, setToPlayers, setToPicks)}</th>
           </tr>
         </tbody>
       </table>
@@ -71,9 +71,9 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
 
 TradeItem.propTypes = {
   tradeInfo: PropTypes.shape({
-    proposedBy: PropTypes.string.isRequired,
-    askTo: PropTypes.string.isRequired,
-    fromItems: PropTypes.shape({
+    proposed_by: PropTypes.string.isRequired,
+    ask_to: PropTypes.string.isRequired,
+    from_items: PropTypes.shape({
       picks: PropTypes.arrayOf({
         rank: PropTypes.number.isRequired,
         player: PropTypes.string.isRequired /* id of the pooler pick for next season */,
@@ -84,7 +84,7 @@ TradeItem.propTypes = {
         position: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
-    toItems: PropTypes.shape({
+    to_items: PropTypes.shape({
       picks: PropTypes.arrayOf({
         rank: PropTypes.number.isRequired,
         player: PropTypes.string.isRequired /* id of the pooler pick for next season */,

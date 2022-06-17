@@ -12,46 +12,48 @@ from datetime import date, datetime, timedelta
 mo_c = MongoClient()
 db = mo_c.pooljdope
 
-yesterday = date.today()# - timedelta(days=1) # TODO change to look only on yesterday 
+def close_accepted_trade():
+    for pool in db.pools.find():
+        isPoolUpdated = False
 
+        print(pool["name"])
+        if pool["trades"] is not None:
+            for trade in pool["trades"]:
+                if trade["status"] == "ACCEPTED": 
+                    #print(trade)
+                    isPoolUpdated = True
 
+                    proposed_by = trade["proposed_by"]
+                    ask_to = trade["ask_to"]
 
-for pool in db.pools.find():
-    isPoolUpdated = False
+                    from_items = trade["from_items"]
+                    to_items = trade["to_items"]
 
-    print(pool["name"])
-    for trade in pool["trades"]:
-        if trade["status"] == "ACCEPTED" and yesterday == trade["dateAccepted"].date(): 
-            #print(trade)
-            isPoolUpdated = True
+                    # the from_items are being transfered to the ask_to pooler
 
-            proposedBy = trade["proposedBy"]
-            askTo = trade["askTo"]
+                    for player in trade["from_items"]["players"]:
+                        pool["context"]["pooler_roster"][ask_to]["chosen_reservists"].append(player)
 
-            fromItems = trade["fromItems"]
-            toItems = trade["toItems"]
+                    for pick in trade["from_items"]["picks"]:
+                        pool["context"]["pooler_roster"][ask_to]["tradable_picks"].append(pick)
 
-            # the fromItems are being transfered to the askTo pooler
+                    # the to_items are being transfered to the proposed_by pooler
 
-            for player in trade["fromItems"]["players"]:
-                pool["context"][askTo]["chosen_reservist"].append(player)
+                    for player in trade["to_items"]["players"]:
+                        pool["context"]["pooler_roster"][proposed_by]["chosen_reservists"].append(player)
 
-            for pick in trade["fromItems"]["picks"]:
-                pool["context"][askTo]["tradable_picks"].append(pick)
+                    for pick in trade["to_items"]["picks"]:
+                        pool["context"]["pooler_roster"][proposed_by]["tradable_picks"].append(pick)
 
-            # the toItems are being transfered to the proposedBy pooler
+                    # before updating the document in the database set state of the trade to complete.
+                    trade["status"] = "COMPLETED"
+                    print("updated one trade")
 
-            for player in trade["toItems"]["players"]:
-                pool["context"][proposedBy]["chosen_reservist"].append(player)
+        # only update when an ACCEPTED trade has been processed
 
-            for pick in trade["toItems"]["picks"]:
-                pool["context"][proposedBy]["tradable_picks"].append(pick)
+        if isPoolUpdated:
+            db.pools.update_one({'_id': pool["_id"]}, {'$set': pool}, upsert=True) # upsert = True, to create a new document if not found
 
-            # before updating the document in the database set state of the trade to complete.
-            trade["status"] = "COMPLETED"
-            print("updated one trade")
-
-    # only update when an ACCEPTED trade has been processed
-
-    if isPoolUpdated:
-        db.pools.update_one({'_id': pool["_id"]}, {'$set': pool}, upsert=True) # upsert = True, to create a new document if not found
+if __name__ == "__main__":
+    close_accepted_trade()
+        

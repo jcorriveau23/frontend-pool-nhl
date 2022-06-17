@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
+// components
+import PlayerLink from '../playerLink';
 
 // css
 import './goalItem.css';
@@ -50,12 +52,7 @@ export default function OtherGameContent({ gameContent }) {
                 <tbody key={highlight.playerId}>
                   <tr>
                     <td colSpan={3}>
-                      <Link
-                        to={`/player-info/${highlight.playerId}`}
-                        style={{ textDecoration: 'none', color: '#000099' }}
-                      >
-                        {highlight.highlight.description}
-                      </Link>
+                      <PlayerLink name={highlight.highlight.description} id={highlight.playerId} />
                     </td>
                   </tr>
                   <tr>

@@ -15,7 +15,7 @@ import '../react-tabs.css';
 // images
 import { logos } from '../img/logos';
 
-export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPoolInfo, socket }) {
+export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPoolInfo, socket, isUserParticipant }) {
   const [inRoom, setInRoom] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [def_l, setDef_l] = useState([]);
@@ -45,30 +45,26 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
   const fetchPlayerDraft = () => {
     // get all players stats from past season
 
-    axios.get('/api/pool/get_all_players', { headers: { token: Cookies.get(`token-${user._id}`) } }).then(res => {
-      if (res.data.success === false) {
-        // props.history.push('/pool_list');
-      } else {
-        const sortedForwards = sort_by_player_member('pts', res.data.message.F);
-        const sortedDefender = sort_by_player_member('pts', res.data.message.D);
-        const sortedGoalies = sort_by_player_member('wins', res.data.message.G);
+    axios.get('/players.json', { headers: { token: Cookies.get(`token-${user._id.$oid}`) } }).then(res => {
+      const sortedForwards = sort_by_player_member('pts', res.data.F);
+      const sortedDefender = sort_by_player_member('pts', res.data.D);
+      const sortedGoalies = sort_by_player_member('wins', res.data.G);
 
-        setForw_l(sortedForwards);
-        setDef_l([...sortedDefender]);
-        setGoal_l([...sortedGoalies]);
-      }
+      setForw_l(sortedForwards);
+      setDef_l([...sortedDefender]);
+      setGoal_l([...sortedGoalies]);
     });
   };
 
   useEffect(() => {
     if (socket && poolName && user._id) {
-      socket.emit('joinRoom', Cookies.get(`token-${user._id}`), poolName);
+      socket.emit('joinRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
       fetchPlayerDraft();
       setInRoom(true);
     }
     return () => {
       if (socket && poolName) {
-        socket.emit('leaveRoom', Cookies.get(`token-${user._id}`), poolName);
+        socket.emit('leaveRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
         socket.off('roomData');
         setInRoom(false);
       }
@@ -100,7 +96,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
   };
 
   const chose_player = player => {
-    socket.emit('pickPlayer', Cookies.get(`token-${user._id}`), poolInfo.name, player, ack => {
+    socket.emit('pickPlayer', Cookies.get(`token-${user._id.$oid}`), poolInfo.name, player, ack => {
       if (ack.success === false) {
         alert(ack.message);
       }
@@ -125,19 +121,19 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
       const participant = poolInfo.participants[i];
 
-      if (poolInfo.context[participant].chosen_reservist.findIndex(p => p.id === player.id) > -1) {
+      if (poolInfo.context.pooler_roster[participant].chosen_reservists.findIndex(p => p.id === player.id) > -1) {
         return null; // already picked
       }
 
       if (player.position === 'D') {
-        if (poolInfo.context[participant].chosen_defender.findIndex(p => p.id === player.id) > -1) {
+        if (poolInfo.context.pooler_roster[participant].chosen_defenders.findIndex(p => p.id === player.id) > -1) {
           return null; // already picked
         }
       } else if (player.position === 'F') {
-        if (poolInfo.context[participant].chosen_forward.findIndex(p => p.id === player.id) > -1) {
+        if (poolInfo.context.pooler_roster[participant].chosen_forwards.findIndex(p => p.id === player.id) > -1) {
           return null; // already picked
         }
-      } else if (poolInfo.context[participant].chosen_goalies.findIndex(p => p.id === player.id) > -1) {
+      } else if (poolInfo.context.pooler_roster[participant].chosen_goalies.findIndex(p => p.id === player.id) > -1) {
         return null; // already picked
       }
     }
@@ -145,10 +141,10 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
     return player;
   };
 
-  const isUser = participant => participant === user._id;
+  const isUser = participant => participant === user._id.$oid;
 
   const render_pooler_turn = pooler => {
-    if (poolInfo.next_drafter === pooler) {
+    if (poolInfo.context.draft_order[0] === pooler) {
       return (
         <Tab key={pooler} style={{ color: 'green' }}>
           <AiFillStar size={30} />
@@ -164,16 +160,18 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
     const poolers = poolInfo.participants;
 
     // replace pooler user name to be first
-    const i = poolers.findIndex(isUser);
-    poolers.splice(i, 1);
-    poolers.splice(0, 0, user._id);
+    if (isUserParticipant) {
+      const i = poolers.findIndex(isUser);
+      poolers.splice(i, 1);
+      poolers.splice(0, 0, user._id.$oid);
+    }
 
     return (
       <Tabs>
         <TabList>{poolers.map(pooler => render_pooler_turn(pooler))}</TabList>
         {poolers.map(pooler => (
           <TabPanel key={pooler}>
-            <PlayerList poolerContext={poolInfo.context[pooler]} />
+            <PlayerList poolerContext={poolInfo.context.pooler_roster[pooler]} />
           </TabPanel>
         ))}
       </Tabs>
@@ -338,7 +336,6 @@ DraftPool.propTypes = {
     number_defenders: PropTypes.number.isRequired,
     number_goalies: PropTypes.number.isRequired,
     number_reservist: PropTypes.number.isRequired,
-    next_drafter: PropTypes.string.isRequired,
   }).isRequired,
   setPoolInfo: PropTypes.func.isRequired,
   socket: PropTypes.shape({

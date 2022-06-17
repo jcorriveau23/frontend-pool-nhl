@@ -49,11 +49,17 @@ function App() {
   const [DictUsers, setDictUsers] = useState(null);
   const [showMenuModal, setShowMenuModal] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
+  const [injury, setInjury] = useState(null);
   const refMenu = useRef(null);
   const refAccount = useRef(null);
 
   useEffect(() => {
     axios.get('https://nhl-pool-ethereum.herokuapp.com/');
+
+    axios.get('/injury.json').then(res => {
+      setInjury(res.data); // TODO use that Injury player mapping to display a tooltips next to the player name that explained is injury.
+    });
+
     if (user) {
       axios.get('/api-rust/users').then(res => {
         if (res.status === 200) {
@@ -115,20 +121,20 @@ function App() {
         />
         <WrongNetworkModal isWalletConnected={isWalletConnected} isWrongNetwork={isWrongNetwork} />
         <Routes>
-          <Route path="/" element={<HomePage formatDate={formatDate} />} />
+          <Route path="/" element={<HomePage formatDate={formatDate} injury={injury} />} />
           <Route path="/login" element={<LoginPage user={user} setUser={setUser} setCurrentAddr={setCurrentAddr} />} />
           <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
           <Route path="/my-pools" element={<MyPoolsPage user={user} DictUsers={DictUsers} />} />
           <Route path="/my-bets" element={<MyGameBetsPage user={user} contract={contract} />} />
-          <Route path="/my-pools/:name" element={<PoolPage user={user} DictUsers={DictUsers} />} />
+          <Route path="/my-pools/:name" element={<PoolPage user={user} DictUsers={DictUsers} injury={injury} />} />
           <Route path="/standing" element={<StandingPage />} />
-          <Route path="/game/:id" element={<GameFeedPage user={user} contract={contract} />} />
+          <Route path="/game/:id" element={<GameFeedPage user={user} contract={contract} injury={injury} />} />
           <Route path="/player-info" element={<PlayerPage />} />
           <Route path="/player-info/:id" element={<PlayerPage />} />
-          <Route path="/team-roster/:teamID/:season" element={<TeamRosterBySeasonPage />} />
-          <Route path="/draft" element={<DraftPage />} />
+          <Route path="/team-roster/:teamID/:season" element={<TeamRosterBySeasonPage injury={injury} />} />
+          <Route path="/draft" element={<DraftPage injury={injury} />} />
           <Route path="/draft/:year" element={<DraftPage />} />
-          <Route path="/leaders" element={<LeagueLeadersPage />} />
+          <Route path="/leaders" element={<LeagueLeadersPage injury={injury} />} />
         </Routes>
       </div>
     </Router>

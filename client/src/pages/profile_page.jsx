@@ -21,16 +21,16 @@ export default function ProfilePage({ user, setUser }) {
   useEffect(() => {}, []);
 
   const logout = () => {
-    Cookies.remove(`token-${user._id}`);
+    Cookies.remove(`token-${user._id.$oid}`);
     localStorage.clear('persist-account');
     setUser(null);
     navigate('/login');
   };
 
   const set_username = () => {
-    axios.post('/api/auth/set_username', { token: Cookies.get(`token-${user._id}`), newUsername }).then(res => {
+    axios.post('/api/auth/set_username', { token: Cookies.get(`token-${user._id.$oid}`), newUsername }).then(res => {
       if (res.data.success) {
-        Cookies.set(`token-${res.data.user._id}`, res.data.token);
+        Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
         localStorage.setItem('persist-account', JSON.stringify(res.data.user));
         setUser(res.data.user);
       } else {

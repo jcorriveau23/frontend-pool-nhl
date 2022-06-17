@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 // images
 import { logos } from '../img/logos';
 
-export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, socket }) {
+export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, socket, isUserParticipant }) {
   const [inRoom, setInRoom] = useState([]);
 
   const [forwProtected, setForwProtected] = useState([]);
@@ -19,12 +19,12 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
     if (socket && poolName) {
       // TODO: add some validation server socket side to prevent someone joining the pool
       // when there is already the maximum poolers in the room
-      socket.emit('joinRoom', Cookies.get(`token-${user._id}`), poolName);
+      socket.emit('joinRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
       setInRoom(true);
     }
     return () => {
       if (socket && poolName) {
-        socket.emit('leaveRoom', Cookies.get(`token-${user._id}`), poolName);
+        socket.emit('leaveRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
         socket.off('roomData');
         setInRoom(false);
       }
@@ -136,7 +136,7 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
     if (number_protected_player === poolInfo.next_season_number_players_protected) {
       axios
         .post('/api/pool/protect_players', {
-          token: Cookies.get(`token-${user._id}`),
+          token: Cookies.get(`token-${user._id.$oid}`),
           pool_name: poolInfo.name,
           def_protected: defProtected,
           forw_protected: forwProtected,
@@ -152,7 +152,7 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
   };
 
   const render_forward_dynastie = () =>
-    poolInfo.context[user._id].chosen_forward
+    poolInfo.context[user._id.$oid].chosen_forward
       .filter(player => {
         if (forwProtected.findIndex(p => p.name === player.id) === -1) {
           if (reservProtected.findIndex(p => p.name === player.id) === -1) {
@@ -172,7 +172,7 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
       ));
 
   const render_defender_dynastie = () =>
-    poolInfo.context[user._id].chosen_defender
+    poolInfo.context[user._id.$oid].chosen_defender
       .filter(player => {
         if (defProtected.findIndex(p => p.id === player.id) === -1) {
           if (reservProtected.findIndex(p => p.id === player.id) === -1) {
@@ -192,7 +192,7 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
       ));
 
   const render_goalies_dynastie = () =>
-    poolInfo.context[user._id].chosen_goalies
+    poolInfo.context[user._id.$oid].chosen_goalies
       .filter(player => {
         if (goalProtected.findIndex(p => p.id === player.id) === -1) {
           if (reservProtected.findIndex(p => p.id === player.id) === -1) {
@@ -212,7 +212,7 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
       ));
 
   const render_reservist_dynastie = () =>
-    poolInfo.context[user._id].chosen_reservist
+    poolInfo.context[user._id.$oid].chosen_reservist
       .filter(player => {
         if (forwProtected.findIndex(p => p.name === player.id) === -1) {
           if (reservProtected.findIndex(p => p.name === player.id) === -1) {
@@ -233,10 +233,10 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
 
   if (poolInfo && inRoom) {
     const nb_player =
-      poolInfo.context[user._id].nb_defender +
-      poolInfo.context[user._id].nb_forward +
-      poolInfo.context[user._id].nb_goalies +
-      poolInfo.context[user._id].nb_reservist;
+      poolInfo.context[user._id.$oid].nb_defender +
+      poolInfo.context[user._id.$oid].nb_forward +
+      poolInfo.context[user._id.$oid].nb_goalies +
+      poolInfo.context[user._id.$oid].nb_reservist;
 
     if (nb_player > poolInfo.next_season_number_players_protected) {
       return (

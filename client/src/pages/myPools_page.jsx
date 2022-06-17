@@ -31,49 +31,52 @@ export default function MyPoolsPage({ user, DictUsers }) {
   useEffect(() => {
     if (user && showCreatePoolModal === false) {
       axios
-        .get('/api/pool/pool_list', {
-          headers: {
-            token: Cookies.get(`token-${user._id}`),
-          },
+        .get('/api-rust/pools', {
+          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
         })
         .then(res => {
-          if (res.data.success === false) {
-            // [TODO] display a page or notification to tell the user that the pool list could not be fetch.
-            // console.log(data.message);
-          } else {
+          if (res.status === 200) {
             const pDraft = [];
             const pInProgress = [];
             const pDynastie = [];
+            const pCreated = [];
 
-            for (let i = 0; i < res.data.user_pools_info.length; i += 1) {
-              switch (res.data.user_pools_info[i].status) {
-                case 'draft':
+            for (let i = 0; i < res.data.length; i += 1) {
+              switch (res.data[i].status) {
+                case 'Draft':
                   pDraft.push({
-                    name: res.data.user_pools_info[i].name,
-                    owner: res.data.user_pools_info[i].owner,
+                    name: res.data[i].name,
+                    owner: res.data[i].owner,
                   });
                   break;
-                case 'in Progress':
+                case 'InProgress':
                   pInProgress.push({
-                    name: res.data.user_pools_info[i].name,
-                    owner: res.data.user_pools_info[i].owner,
+                    name: res.data[i].name,
+                    owner: res.data[i].owner,
                   });
                   break;
-                case 'dynastie':
+                case 'Dynastie':
                   pDynastie.push({
-                    name: res.data.user_pools_info[i].name,
-                    owner: res.data.user_pools_info[i].owner,
+                    name: res.data[i].name,
+                    owner: res.data[i].owner,
                   });
                   break;
                 default:
+                  pCreated.push({
+                    name: res.data[i].name,
+                    owner: res.data[i].owner,
+                  });
                   break;
               }
             }
-            setPoolCreated(res.data.pool_created);
             setPoolDraft(pDraft);
             setPoolInProgress(pInProgress);
             setPoolDynastie(pDynastie);
+            setPoolCreated(pCreated);
           }
+        })
+        .catch(e => {
+          console.log(e.response);
         });
     }
   }, [user, showCreatePoolModal, poolDeleted]); // showCreatePoolModal force to refetch data when creating a new pool.

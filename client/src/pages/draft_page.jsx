@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
 
+// components
+import PlayerLink from '../components/playerLink';
+
 // images
 import { logos } from '../components/img/logos';
 
-export default function DraftPage() {
+export default function DraftPage(injury) {
   const [draftInfo, setDraftInfo] = useState(null);
   const [prevYear, setPrevYear] = useState('');
   const navigate = useNavigate();
@@ -52,9 +55,7 @@ export default function DraftPage() {
               </td>
               {pick.prospect.id > 0 ? (
                 <td>
-                  <Link to={`/player-info/${pick.prospect.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
-                    {pick.prospect.fullName}
-                  </Link>
+                  <PlayerLink name={pick.prospect.fullName} id={pick.prospect.id} injury={injury} />
                 </td>
               ) : (
                 <td>{pick.prospect.fullName}</td>

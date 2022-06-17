@@ -7,11 +7,23 @@ export default function PoolItem({ name, owner, user, poolDeleted, setPoolDelete
   const delete_pool = () => {
     if (user) {
       // only pass the user if pool is in created status.
-      axios.post('/api/pool/delete_pool', { token: Cookies.get(`token-${user._id}`), name }).then(res => {
-        if (res.data.success) {
-          setPoolDeleted(!poolDeleted);
-        }
-      });
+      axios
+        .post(
+          '/api-rust/delete-pool',
+          { name },
+          {
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+          }
+        )
+        .then(res => {
+          console.log(res);
+          if (res.status === 200) {
+            setPoolDeleted(!poolDeleted);
+          }
+        })
+        .catch(e => {
+          console.log(e.response);
+        });
     }
   };
 
@@ -19,7 +31,7 @@ export default function PoolItem({ name, owner, user, poolDeleted, setPoolDelete
     <div>
       <p>Pool: {name}</p>
       <p>Owner: {DictUsers ? DictUsers[owner] : owner}</p>
-      {user && user._id === owner ? (
+      {user && user._id.$oid === owner ? (
         <button className="base-button" onClick={delete_pool} type="button">
           Delete
         </button>

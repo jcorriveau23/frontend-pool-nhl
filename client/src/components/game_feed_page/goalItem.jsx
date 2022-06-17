@@ -1,9 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // css
 import './goalItem.css';
+
+// components
+import PlayerLink from '../playerLink';
 
 // images
 import { logos } from '../img/logos';
@@ -108,9 +110,7 @@ export default function GoalItem({ goalData, gameContent }) {
             <tr>
               <th>Scorer:</th>
               <td>
-                <Link to={`/player-info/${scorer.player.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
-                  {`${scorer.player.fullName} (${scorer.seasonTotal})`}
-                </Link>
+                <PlayerLink name={scorer.player.fullName} id={scorer.player.id} number={scorer.seasonTotal} />
               </td>
             </tr>
           ) : null}
@@ -118,9 +118,11 @@ export default function GoalItem({ goalData, gameContent }) {
             <tr>
               <th>1st Assists:</th>
               <td>
-                <Link to={`/player-info/${firstAssist.player.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
-                  {`${firstAssist.player.fullName} (${firstAssist.seasonTotal})`}
-                </Link>
+                <PlayerLink
+                  name={firstAssist.player.fullName}
+                  id={firstAssist.player.id}
+                  number={firstAssist.seasonTotal}
+                />
               </td>
             </tr>
           ) : null}
@@ -128,12 +130,11 @@ export default function GoalItem({ goalData, gameContent }) {
             <tr>
               <th>2nd Assists:</th>
               <td>
-                <Link
-                  to={`/player-info/${secondAssist.player.id}`}
-                  style={{ textDecoration: 'none', color: '#000099' }}
-                >
-                  {`${secondAssist.player.fullName} (${secondAssist.seasonTotal})`}
-                </Link>
+                <PlayerLink
+                  name={secondAssist.player.fullName}
+                  id={secondAssist.player.id}
+                  number={secondAssist.seasonTotal}
+                />
               </td>
             </tr>
           ) : null}

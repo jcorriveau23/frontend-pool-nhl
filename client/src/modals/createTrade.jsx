@@ -31,20 +31,30 @@ export default function CreateTradeModal({
   const [toPlayers, setToPlayers] = useState([]);
   const [toPicks, setToPicks] = useState([]);
   const [selectedPooler, setSelectedPooler] = useState(
-    poolInfo.participants[0] === user._id ? poolInfo.participants[1] : poolInfo.participants[0]
+    poolInfo.participants[0] === user._id.$oid ? poolInfo.participants[1] : poolInfo.participants[0]
   );
 
   const send_trade = () => {
     const tradeInfo = {
-      proposedBy: user._id,
-      askTo: selectedPooler,
-      fromItems: { players: fromPlayers, picks: fromPicks },
-      toItems: { players: toPlayers, picks: toPicks },
+      proposed_by: user._id.$oid,
+      ask_to: selectedPooler,
+      from_items: { players: fromPlayers, picks: fromPicks },
+      to_items: { players: toPlayers, picks: toPicks },
+      id: 0,
+      status: 'NEW',
+      date_accepted: '',
     };
 
     axios
-      .post('/api/pool/create_trade', { token: Cookies.get(`token-${user._id}`), tradeInfo, name: poolInfo.name })
+      .post(
+        '/api-rust/create-trade',
+        { trade: tradeInfo, name: poolInfo.name },
+        {
+          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+        }
+      )
       .then(res => {
+        console.log(res.data);
         if (res.data.success) {
           // the trade will need to be confirmed by the user that was selected by the trader.
           // if the trade is accepted, people have 24h to create a counter offer. They can directly get out of the trade.
@@ -53,9 +63,9 @@ export default function CreateTradeModal({
           // user will be able to make a reservists switch (only add player to roster to fill hole, not remove players from roster) on that day, and the players can receive points on that day
 
           setShowCreateTradeModal(false);
-          setPoolInfo(res.data.message);
+          setPoolInfo(res.data.pool);
         } else {
-          alert(res.data.message);
+          alert(res.data.pool);
         }
       });
   };
@@ -159,11 +169,11 @@ export default function CreateTradeModal({
       <TabPanel>
         <table className="content-table-no-min">
           <thead>{render_tabs_choice_headers('Forwards')}</thead>
-          <tbody>{render_players(side, poolerContext.chosen_forward, playersTraded)}</tbody>
+          <tbody>{render_players(side, poolerContext.chosen_forwards, playersTraded)}</tbody>
         </table>
         <table className="content-table-no-min">
           <thead>{render_tabs_choice_headers('Defenders')}</thead>
-          <tbody>{render_players(side, poolerContext.chosen_defender, playersTraded)}</tbody>
+          <tbody>{render_players(side, poolerContext.chosen_defenders, playersTraded)}</tbody>
         </table>
         <table className="content-table-no-min">
           <thead>{render_tabs_choice_headers('Goalies')}</thead>
@@ -171,7 +181,7 @@ export default function CreateTradeModal({
         </table>
         <table className="content-table-no-min">
           <thead>{render_tabs_choice_headers('Reservists')}</thead>
-          <tbody>{render_players(side, poolerContext.chosen_reservist, playersTraded)}</tbody>
+          <tbody>{render_players(side, poolerContext.chosen_reservists, playersTraded)}</tbody>
         </table>
       </TabPanel>
       <TabPanel>
@@ -210,10 +220,10 @@ export default function CreateTradeModal({
           <h1>Create Trade</h1>
           <TradeItem
             tradeInfo={{
-              proposedBy: user._id,
-              askTo: selectedPooler,
-              fromItems: { players: fromPlayers, picks: fromPicks },
-              toItems: { players: toPlayers, picks: toPicks },
+              proposed_by: user._id.$oid,
+              ask_to: selectedPooler,
+              from_items: { players: fromPlayers, picks: fromPicks },
+              to_items: { players: toPlayers, picks: toPicks },
             }}
             setFromPlayers={setFromPlayers}
             setFromPicks={setFromPicks}
@@ -227,20 +237,20 @@ export default function CreateTradeModal({
         </div>
         <div className="float-left">
           <div className="half-cont">
-            {render_pooler_player_list('from', poolInfo.context[user._id], fromPlayers, fromPicks)}
+            {render_pooler_player_list('from', poolInfo.context.pooler_roster[user._id.$oid], fromPlayers, fromPicks)}
           </div>
         </div>
         <div className="float-right">
           <div className="half-cont">
             <select onChange={() => setSelectedPooler(event.target.value)} defaultValue={selectedPooler}>
               {poolInfo.participants
-                .filter(pooler => pooler !== user._id)
+                .filter(pooler => pooler !== user._id.$oid)
                 .map(pooler => (
                   <option value={pooler}>{DictUsers ? DictUsers[pooler] : pooler}</option>
                 ))}
             </select>
 
-            {render_pooler_player_list('to', poolInfo.context[selectedPooler], toPlayers, toPicks)}
+            {render_pooler_player_list('to', poolInfo.context.pooler_roster[selectedPooler], toPlayers, toPicks)}
           </div>
         </div>
       </div>

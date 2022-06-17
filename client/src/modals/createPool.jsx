@@ -8,24 +8,26 @@ import PropTypes from 'prop-types';
 import './modal.css';
 
 export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePoolModal, user }) {
-  const [msg, setMsg] = useState('');
   const [poolNameInput, setPoolNameInput] = useState('');
   const [numberPoolerInput, setNumberPoolerInput] = useState(4);
 
   const createPool = () => {
+    console.log(Cookies.get(`token-${user._id.$oid}`));
     axios
-      .post('/api/pool/pool_creation', {
-        token: Cookies.get(`token-${user._id}`),
-        name: poolNameInput,
-        owner: user._id, // TODO change that to use the _id instead of name since the name can be edit by the user.
-        number_pooler: numberPoolerInput,
-      })
-      .then(res => {
-        if (res.data.success) {
-          setShowCreatePoolModal(false);
-        } else {
-          setMsg(res.data.message);
+      .post(
+        '/api-rust/create-pool',
+        { name: poolNameInput, number_pooler: numberPoolerInput },
+        {
+          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
         }
+      )
+      .then(res => {
+        if (res.status === 200) {
+          setShowCreatePoolModal(false);
+        }
+      })
+      .catch(e => {
+        alert(e.response.data.error.description);
       });
   };
 
@@ -47,7 +49,7 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
             </div>
             <div>
               <b>number of poolers: </b>
-              <select name="number_poolers" onChange={event => setNumberPoolerInput(event.target.value)}>
+              <select name="number_poolers" onChange={event => setNumberPoolerInput(Number(event.target.value))}>
                 <option>2</option>
                 <option>3</option>
                 <option selected>4</option>
@@ -65,7 +67,6 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
           <button className="base-button" onClick={() => createPool()} disabled={false} type="button">
             Create
           </button>
-          <p style={{ color: 'red' }}>{msg}</p>
         </div>
       );
     }

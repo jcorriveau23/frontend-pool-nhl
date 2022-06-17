@@ -17,9 +17,15 @@ day_leaders = db.day_leaders
 SEASON = '20212022'
 API_URL = 'https://statsapi.web.nhl.com'
 
-def fetch_pointers_day(day):
+def fetch_pointers_day(day = None):
     skaters = []
     goalies = []
+
+    if day is None:
+        if datetime.now().hour < 12:
+            day = date.today() - timedelta(days=1)
+        else:
+            day = date.today()
 
     TODAY_GAME_END_POINT = f'/api/v1/schedule?startDate={day}&endDate={day}'
 
@@ -36,6 +42,9 @@ def fetch_pointers_day(day):
     isLiveGame = False
 
     for game in today_games['dates'][0]['games']:
+        if game['gameType'] != "R" and game['gameType'] != "P":
+            continue
+
         gameID = game['gamePk']
         gameState = game['status']['abstractGameState']
 
@@ -92,23 +101,13 @@ def fetch_pointers_day(day):
 
     return isLiveGame
 
-# fetch all day stats for the past 60 days
-# for i in range(60):
-#     day = date.today() - timedelta(days=i)
-#     fetch_pointers_day(day)
-
-while True:
-       
-    if datetime.now().hour < 12:
-        day = date.today() - timedelta(days=1)
-    else:
-        day = date.today()
-    
-    isLiveGame = fetch_pointers_day(day)
-
-    if(isLiveGame):
-        time.sleep(180) # fetch live games stats every 3 minutes.
-    else:
-        time.sleep(1200) # when no live game fetch every 20 minutes
-
-
+if __name__ == "__main__":
+    # start_date = date(2022, 5, 27)
+    start_date = date(2022, 5, 2)  # beginning of the 2021-2022 playoff
+    #start_date = date.today()
+    end_date = date.today()
+    delta = timedelta(days=1)
+    while start_date <= end_date:
+        print(start_date)
+        fetch_pointers_day(start_date)
+        start_date += delta

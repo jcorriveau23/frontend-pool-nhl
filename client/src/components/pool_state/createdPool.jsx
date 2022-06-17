@@ -15,12 +15,12 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
     if (socket && poolName) {
       // TODO: add some validation server socket side to prevent someone joining the pool
       // when there is already the maximum poolers in the room
-      socket.emit('joinRoom', Cookies.get(`token-${user._id}`), poolName);
+      socket.emit('joinRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
       setInRoom(true);
     }
     return () => {
       if (socket && poolName) {
-        socket.emit('leaveRoom', Cookies.get(`token-${user._id}`), poolName);
+        socket.emit('leaveRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
         socket.off('roomData');
         setInRoom(false);
       }
@@ -45,20 +45,20 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
     if (event.target.type === 'checkbox') {
       // the host click on the start button
       if (event.target.checked) {
-        socket.emit('playerReady', Cookies.get(`token-${user._id}`), poolName);
+        socket.emit('playerReady', Cookies.get(`token-${user._id.$oid}`), poolName);
       } else {
-        socket.emit('playerNotReady', Cookies.get(`token-${user._id}`), poolName);
+        socket.emit('playerNotReady', Cookies.get(`token-${user._id.$oid}`), poolName);
       }
     } else if (event.target.type === 'button') {
       // the host click on the start button
-      socket.emit('startDraft', Cookies.get(`token-${user._id}`), poolName);
+      socket.emit('startDraft', Cookies.get(`token-${user._id.$oid}`), poolName);
     } else if (event.target.type === 'select-one') {
       // the host change a value of the pool configuration
       const poolInfoChanged = poolInfo;
 
       poolInfoChanged[event.target.name] = event.target.value;
       setPoolInfo(poolInfoChanged);
-      socket.emit('changeRule', Cookies.get(`token-${user._id}`), poolInfo);
+      socket.emit('changeRule', Cookies.get(`token-${user._id.$oid}`), poolInfo);
     }
   };
 
@@ -68,9 +68,9 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
     for (let i = 0; i < poolInfo.number_poolers; i += 1) {
       if (i < userList.length) {
         participants.push(
-          <li key={userList[i]._id}>
+          <li key={userList[i]._oid}>
             <ParticipantItem
-              name={DictUsers ? DictUsers[userList[i]._id] : userList[i]._id}
+              name={DictUsers ? DictUsers[userList[i]._oid] : userList[i]._oid}
               ready={userList[i].ready}
             />
           </li>
@@ -95,7 +95,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
       }
     } else bDisable = true;
 
-    if (user._id === poolInfo.owner) {
+    if (user._id.$oid === poolInfo.owner) {
       return (
         <button className="base-button" onClick={handleChange} disabled={bDisable} type="button">
           Start draft
@@ -121,7 +121,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="number_poolers"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.number_poolers}
                     >
                       <option>2</option>
@@ -144,7 +144,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="number_forward"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.number_forward}
                     >
                       <option>2</option>
@@ -167,7 +167,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="number_defenders"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.number_defenders}
                     >
                       <option>2</option>
@@ -184,7 +184,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="number_goalies"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.number_goalies}
                     >
                       <option>1</option>
@@ -199,7 +199,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="number_reservist"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.number_reservist}
                     >
                       <option>1</option>
@@ -221,7 +221,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="forward_pts_goals"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.forward_pts_goals}
                     >
                       <option>1</option>
@@ -236,7 +236,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="forward_pts_assists"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.forward_pts_assists}
                     >
                       <option>1</option>
@@ -251,7 +251,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="forward_pts_hattricks"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.forward_pts_hattricks}
                     >
                       <option>1</option>
@@ -266,7 +266,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="defender_pts_goals"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.defender_pts_goals}
                     >
                       <option>1</option>
@@ -281,7 +281,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="defender_pts_assists"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.defender_pts_assists}
                     >
                       <option>1</option>
@@ -296,7 +296,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="defender_pts_hattricks"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.defender_pts_hattricks}
                     >
                       <option>1</option>
@@ -311,7 +311,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="goalies_pts_wins"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.goalies_pts_wins}
                     >
                       <option>1</option>
@@ -326,7 +326,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="goalies_pts_shutouts"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.goalies_pts_shutouts}
                     >
                       <option>1</option>
@@ -341,7 +341,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="goalies_pts_goals"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.goalies_pts_goals}
                     >
                       <option>1</option>
@@ -356,7 +356,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="goalies_pts_assists"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.goalies_pts_assists}
                     >
                       <option>1</option>
@@ -371,7 +371,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                     <select
                       name="next_season_number_players_protected"
                       onChange={handleChange}
-                      disabled={poolInfo.owner !== user._id}
+                      disabled={poolInfo.owner !== user._id.$oid}
                       value={poolInfo.next_season_number_players_protected}
                     >
                       <option>6</option>
@@ -387,7 +387,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                 <tr>
                   <td>number tradable draft picks:</td>
                   <td>
-                    <select name="tradable_picks" onChange={handleChange} disabled={poolInfo.owner !== user._id}>
+                    <select name="tradable_picks" onChange={handleChange} disabled={poolInfo.owner !== user._id.$oid}>
                       <option>1</option>
                       <option>2</option>
                       <option>3</option>

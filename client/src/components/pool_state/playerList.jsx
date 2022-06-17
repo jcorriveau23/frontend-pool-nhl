@@ -32,11 +32,11 @@ export default function PlayerList({ poolerContext }) {
     <>
       <table className="content-table-no-min">
         <thead>{render_tabs_choice_headers('Forwards')}</thead>
-        <tbody>{render_players(poolerContext.chosen_forward)}</tbody>
+        <tbody>{render_players(poolerContext.chosen_forwards)}</tbody>
       </table>
       <table className="content-table-no-min">
         <thead>{render_tabs_choice_headers('Defenders')}</thead>
-        <tbody>{render_players(poolerContext.chosen_defender)}</tbody>
+        <tbody>{render_players(poolerContext.chosen_defenders)}</tbody>
       </table>
       <table className="content-table-no-min">
         <thead>{render_tabs_choice_headers('Goalies')}</thead>
@@ -44,7 +44,7 @@ export default function PlayerList({ poolerContext }) {
       </table>
       <table className="content-table-no-min">
         <thead>{render_tabs_choice_headers('Reservists')}</thead>
-        <tbody>{render_players(poolerContext.chosen_reservist)}</tbody>
+        <tbody>{render_players(poolerContext.chosen_reservists)}</tbody>
       </table>
     </>
   );

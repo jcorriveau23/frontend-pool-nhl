@@ -2,16 +2,18 @@
 // display the list of player with their overal stats with this team
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
 
+// components
+import PlayerLink from '../components/playerLink';
+
 // images
 import { logos } from '../components/img/logos';
 
-export default function LeagueLeadersPage() {
+export default function LeagueLeadersPage({ injury }) {
   const [leagueLeaders, setLeagueLeaders] = useState(null);
   const [statsType, setStatsType] = useState('points');
   const [season, setSeason] = useState('20212022');
@@ -67,9 +69,7 @@ export default function LeagueLeadersPage() {
           <tr key={player.person.id}>
             <td>{player.rank}</td>
             <td>
-              <Link to={`/player-info/${player.person.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
-                {player.person.fullName}
-              </Link>
+              <PlayerLink name={player.person.fullName} id={player.person.id} injury={injury} />
             </td>
             <td>
               <img src={logos[player.team.name]} alt="" width="40" height="40" />

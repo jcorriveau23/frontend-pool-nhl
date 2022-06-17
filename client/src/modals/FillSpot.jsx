@@ -23,11 +23,15 @@ export default function FillSpot({
 }) {
   const fill_spot = player => {
     axios
-      .post('/api/pool/fill_spot', { token: Cookies.get(`token-${user._id}`), player, name: poolInfo.name })
+      .post(
+        '/api-rust/fill-spot',
+        { player, name: poolInfo.name },
+        { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` } }
+      )
       .then(res => {
         if (res.data.success) {
           setShowFillSpotModal(false);
-          setPoolInfo(res.data.message);
+          setPoolInfo(res.data.pool);
         } else {
           alert(res.data.message);
         }
@@ -73,7 +77,7 @@ export default function FillSpot({
       </div>
       <table className="content-table-no-min">
         <thead>{render_tabs_choice_headers('Reservists')}</thead>
-        <tbody>{render_players(poolInfo.context[user._id].chosen_reservist)}</tbody>
+        <tbody>{render_players(poolInfo.context.pooler_roster[user._id.$oid].chosen_reservists)}</tbody>
       </table>
     </Modal>
   );

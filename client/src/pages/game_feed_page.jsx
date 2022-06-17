@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // Loader
@@ -15,12 +15,13 @@ import GamePrediction from '../components/GameBet/gamePrediction';
 import GameRecap from '../components/game_feed_page/gameRecap';
 import PeriodRecap from '../components/game_feed_page/periodRecap';
 import OtherGameContent from '../components/game_feed_page/otherGameContent';
+import PlayerLink from '../components/playerLink';
 
 // css
 import '../components/react-tabs.css';
 import '../components/game_feed_page/goalItem.css';
 
-export default function GameFeedPage({ user, contract }) {
+export default function GameFeedPage({ user, contract, injury }) {
   const [gameInfo, setGameInfo] = useState(null);
   const [gameContent, setGameContent] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
@@ -168,12 +169,11 @@ export default function GameFeedPage({ user, contract }) {
                 <tr key={keyFormat}>
                   <td>{team.players[keyFormat].jerseyNumber}</td>
                   <td>
-                    <Link
-                      to={`/player-info/${team.players[keyFormat].person.id}`}
-                      style={{ textDecoration: 'none', color: '#000099' }}
-                    >
-                      {team.players[keyFormat].person.fullName}
-                    </Link>
+                    <PlayerLink
+                      name={team.players[keyFormat].person.fullName}
+                      id={team.players[keyFormat].person.id}
+                      injury={injury}
+                    />
                   </td>
                   <td>{team.players[keyFormat].position.abbreviation}</td>
                   <td>{team.players[keyFormat].stats.skaterStats.goals}</td>
@@ -222,12 +222,11 @@ export default function GameFeedPage({ user, contract }) {
                 <tr key={keyFormat}>
                   <td>{team.players[keyFormat].jerseyNumber}</td>
                   <td>
-                    <Link
-                      to={`/player-info/${team.players[keyFormat].person.id}`}
-                      style={{ textDecoration: 'none', color: '#000099' }}
-                    >
-                      {team.players[keyFormat].person.fullName}
-                    </Link>
+                    <PlayerLink
+                      name={team.players[keyFormat].person.fullName}
+                      id={team.players[keyFormat].person.id}
+                      injury={injury}
+                    />
                   </td>
                   <td>{team.players[keyFormat].position.abbreviation}</td>
                   <td>{team.players[keyFormat].stats.goalieStats.timeOnIce}</td>
@@ -266,9 +265,7 @@ export default function GameFeedPage({ user, contract }) {
             <tr key={player.person.id}>
               <td>{player.jerseyNumber}</td>
               <td>
-                <Link to={`/player-info/${player.person.id}`} style={{ textDecoration: 'none', color: '#000099' }}>
-                  {player.person.fullName}
-                </Link>
+                <PlayerLink name={player.person.fullName} id={player.person.id} injury={injury} />
               </td>
               <td>{player.position.abbreviation}</td>
             </tr>
@@ -398,12 +395,11 @@ export default function GameFeedPage({ user, contract }) {
                   <img src={logos[liveData.plays.allPlays[i].team.name]} alt="" width="40" height="40" />
                 </td>
                 <td>
-                  <Link
-                    to={`/player-info/${liveData.plays.allPlays[i].players[0].player.id}`}
-                    style={{ textDecoration: 'none', color: '#000099' }}
-                  >
-                    {liveData.plays.allPlays[i].players[0].player.fullName}
-                  </Link>
+                  <PlayerLink
+                    name={liveData.plays.allPlays[i].players[0].player.fullName}
+                    id={liveData.plays.allPlays[i].players[0].player.id}
+                    injury={injury}
+                  />
                 </td>
                 {render_Shootout_result(liveData.plays.allPlays[i])}
               </tr>

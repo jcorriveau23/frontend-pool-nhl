@@ -18,31 +18,35 @@ const socket = io.connect('https://hockeypool.live', {
   path: '/mysocket',
 });
 
-export default function PoolPage({ user, DictUsers }) {
+export default function PoolPage({ user, DictUsers, injury }) {
   const [poolInfo, setPoolInfo] = useState({});
   const [poolName] = useState(useParams().name); // get the name of the pool using the param url
+  const [isUserParticipant, setIsUserParticipant] = useState(false);
 
   useEffect(() => {
     if (user) {
       axios
-        .get('/api/pool/get_pool_info', {
-          headers: {
-            token: Cookies.get(`token-${user._id}`),
-            poolname: poolName,
-          },
+        .get(`/api-rust/pool/${poolName}`, {
+          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
         })
         .then(res => {
-          if (res.data.success) {
+          if (res.status === 200) {
             // [TODO] display a page or notification to show that the pool was not found
-            setPoolInfo(res.data.message);
+            setPoolInfo(res.data);
+
+            setIsUserParticipant(res.data.participants.findIndex(participant => participant === user._id.$oid) > -1);
           }
+        })
+        .catch(e => {
+          setPoolInfo(null);
+          console.log(e.response);
         });
     }
   }, [user]);
 
   if (user && poolInfo) {
     switch (poolInfo.status) {
-      case 'created':
+      case 'Created':
         return (
           <CreatedPool
             user={user}
@@ -53,7 +57,7 @@ export default function PoolPage({ user, DictUsers }) {
             socket={socket}
           />
         );
-      case 'draft':
+      case 'Draft':
         return (
           <DraftPool
             user={user}
@@ -61,10 +65,12 @@ export default function PoolPage({ user, DictUsers }) {
             poolName={poolName}
             poolInfo={poolInfo}
             setPoolInfo={setPoolInfo}
+            injury={injury}
             socket={socket}
+            isUserParticipant={isUserParticipant}
           />
         );
-      case 'in Progress':
+      case 'InProgress':
         return (
           <InProgressPool
             user={user}
@@ -72,9 +78,11 @@ export default function PoolPage({ user, DictUsers }) {
             poolName={poolName}
             poolInfo={poolInfo}
             setPoolInfo={setPoolInfo}
+            injury={injury}
+            isUserParticipant={isUserParticipant}
           />
         );
-      case 'dynastie':
+      case 'Dynastie':
         return (
           <DynastiePool
             user={user}
@@ -82,7 +90,9 @@ export default function PoolPage({ user, DictUsers }) {
             poolName={poolName}
             poolInfo={poolInfo}
             setPoolInfo={setPoolInfo}
+            injury={injury}
             socket={socket}
+            isUserParticipant={isUserParticipant}
           />
         );
       default:

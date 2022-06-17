@@ -1,7 +1,7 @@
 // Page where we can decide if we want to login with a wallet or not. The user should be able to connect without a wallet.
 
 // without wallet:
-// - username
+// - name
 // - password
 // - email address
 
@@ -21,7 +21,7 @@ import Cookies from 'js-cookie';
 import './page.css';
 
 export default function LoginPage({ user, setUser, setIsWalletConnected, setCurrentAddr }) {
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState(''); // for Register
   const [email, setEmail] = useState(''); // for Register
@@ -46,9 +46,9 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
 
         signer.signMessage('Unlock wallet to access nhl-pool-ethereum.').then(sig => {
           signer.getAddress().then(addr => {
-            axios.post('/api/auth/wallet_login', { addr, sig }).then(res => {
+            axios.post('/api-rust/wallet-login', { addr, sig }).then(res => {
               if (res.data.success) {
-                Cookies.set(`token-${res.data.user._id}`, res.data.token);
+                Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
                 localStorage.setItem('persist-account', JSON.stringify(res.data.user));
                 setUser(res.data.user);
                 setIsWalletConnected(true);
@@ -69,35 +69,43 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
   };
 
   const login = () => {
-    axios.post('/api/auth/login', { username, password }).then(res => {
-      if (res.data.success) {
-        Cookies.set(`token-${res.data.user._id}`, res.data.token);
-        localStorage.setItem('persist-account', JSON.stringify(res.data.user));
-        setUser(res.data.user);
-        navigate('/');
-      } else {
+    axios
+      .post('/api-rust/login', { name, password })
+      .then(res => {
+        console.log(res);
+        if (res.status === 200) {
+          Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
+          localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+          setUser(res.data.user);
+          navigate('/');
+        }
+      })
+      .catch(e => {
         setUser(null);
-        alert(res.data.message);
-      }
-    });
+        alert(e.response.data.error.description);
+      });
   };
 
   const register = () => {
     if (password === repeatPassword) {
       axios
-        .post('/api/auth/register', {
-          username,
+        .post('/api-rust/register', {
+          name,
           email,
           password,
           phone: 'TODO',
         })
         .then(res => {
-          if (res.data.success) {
-            login(); // when the registration is success, login the user directly.
-            navigate('/profile');
-          } else {
-            alert(res.data.message);
+          if (res.status === 200) {
+            Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
+            localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+            setUser(res.data.user);
+            navigate('/');
           }
+        })
+        .catch(e => {
+          setUser(null);
+          alert(e.response.data.error.description);
         });
     } else {
       alert('password and repeated password does not correspond!');
@@ -116,7 +124,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
                 <input
                   type="text"
                   placeholder="Enter Username"
-                  onChange={event => setUsername(event.target.value)}
+                  onChange={event => setName(event.target.value)}
                   required
                 />
                 <input
@@ -153,7 +161,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
                 <input
                   type="text"
                   placeholder="Enter Username"
-                  onChange={event => setUsername(event.target.value)}
+                  onChange={event => setName(event.target.value)}
                   required
                 />
                 <input

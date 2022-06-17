@@ -1,20 +1,8 @@
 # This script is made to be fetch daily. We go into all active players to update their stats in the database.
 # TODO should only go into the day_points_leader stored in the yesterday database to limit the numbers of call made to the nhl api.
 
-from pymongo import MongoClient
 import requests
 import json
-
-# create an client instance of the MongoDB class
-mo_c = MongoClient()
-db = mo_c.pooljdope
-
-# TODO use a parameters input for that script for draft mode fetching. Fetch fullRoster and create 3 database for each role.
-
-# draft_forwards = db.draft_forwards
-# draft_defenders = db.draft_defenders
-# draft_goalies = db.draft_goalies
-players = db.players
 
 SEASON = '20212022'
 API_URL = 'https://statsapi.web.nhl.com'
@@ -25,6 +13,11 @@ response = requests.request('GET', TEAM_LIST_URL)
 
 team_list_response_json = json.loads(response.text)
 
+players_dict = {
+    "F": [],
+    "D": [],
+    "G": []
+}
 
 for team in team_list_response_json["teams"]:
     print(team)
@@ -58,30 +51,48 @@ for team in team_list_response_json["teams"]:
                     print("position ??: {}".format(position))
 
             try:
-                p = {"name": player["person"]["fullName"],
-                     "team": team_name,
-                     "id": player["person"]["id"],
-                     "stats": player_stats_json["stats"][0]["splits"][0]["stat"],
-                     "url": player["person"]["link"],
-                     "position": position
-                     }
                 if position == "F" or position == "D":
+                    p = {
+                        "name": player["person"]["fullName"],
+                        "team": team_name,
+                        "id": player["person"]["id"],
+                        "stats": {
+                            "games": player_stats_json["stats"][0]["splits"][0]["stat"]["games"],
+                            "goals": player_stats_json["stats"][0]["splits"][0]["stat"]["goals"],
+                            "assists": player_stats_json["stats"][0]["splits"][0]["stat"]["assists"],
+                            "pts": player_stats_json["stats"][0]["splits"][0]["stat"]["goals"] + player_stats_json["stats"][0]["splits"][0]["stat"]["assists"]
+                        },
+                        "url": player["person"]["link"],
+                        "position": position
+                    }
+
                     if p['stats']['games'] == 0:
                         p['stats']['goals'] = 0
                         p['stats']['assists'] = 0
-
-                    p['stats']['pts'] = p['stats']['goals'] + p['stats']['assists']
+                        p['stats']['pts'] = 0
 
                 else:
+                    p = {
+                        "name": player["person"]["fullName"],
+                        "team": team_name,
+                        "id": player["person"]["id"],
+                        "stats": {
+                            "games": player_stats_json["stats"][0]["splits"][0]["stat"]["games"],
+                            "goals": 0,
+                            "assists": 0,
+                            "pts": 0,
+                            "wins": player_stats_json["stats"][0]["splits"][0]["stat"]["wins"],
+                            "losses": player_stats_json["stats"][0]["splits"][0]["stat"]["losses"],
+                            "savePercentage": player_stats_json["stats"][0]["splits"][0]["stat"]["savePercentage"],
+                        },
+                        "url": player["person"]["link"],
+                        "position": position
+                    }
+
                     if p['stats']['games'] == 0:
                         p['stats']['wins'] = 0
                         p['stats']['losses'] = 0
                         p['stats']['savePercentage'] = 0.0
-
-
-                    p['stats']['goals'] = 0
-                    p['stats']['assist'] = 0
-                    p['stats']['pts'] = 0
 
             except:
                 # print(player["person"]["fullName"] + " Position: " + position)
@@ -110,13 +121,17 @@ for team in team_list_response_json["teams"]:
                          "position": position
                          }
 
-            players.update_one({"id": player["person"]["id"]}, {"$set": p}, upsert=True) # upsert = True, to create a new document if not found
+            # players.update_one({"id": player["person"]["id"]}, {"$set": p}, upsert=True) # upsert = True, to create a new document if not found
 
-            # if position == "F":
-            #     draft_forwards.update_one({"id": player["person"]["id"]}, {"$set": p}, upsert=True) # upsert = True, to create a new document if not found
-            # elif position == "D":
-            #     draft_defenders.update_one({"id": player["person"]["id"]}, {"$set": p}, upsert=True) # upsert = True, to create a new document if not found
-            # elif position == "G":
-            #     draft_goalies.update_one({"id": player["person"]["id"]}, {"$set": p}, upsert=True) # upsert = True, to create a new document if not found
-            # else:
-            #     print("not added to data base {}".format(player["person"]["fullName"]))
+            if position == "F":
+                players_dict["F"].append(p)
+            elif position == "D":
+                players_dict["D"].append(p)
+            elif position == "G":
+                players_dict["G"].append(p)
+            else:
+                print("not added to the dict: {}".format(player["person"]["fullName"]))
+
+file = open("./client/public/players.json", "w+")
+json.dump(players_dict, file, indent=4)
+file.close()
