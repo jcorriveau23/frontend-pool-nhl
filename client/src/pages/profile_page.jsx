@@ -28,15 +28,22 @@ export default function ProfilePage({ user, setUser }) {
   };
 
   const set_username = () => {
-    axios.post('/api/auth/set_username', { token: Cookies.get(`token-${user._id.$oid}`), newUsername }).then(res => {
-      if (res.data.success) {
-        Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
-        localStorage.setItem('persist-account', JSON.stringify(res.data.user));
-        setUser(res.data.user);
-      } else {
-        alert(res.data.message);
-      }
-    });
+    axios
+      .post(
+        '/api/auth/set_username',
+        { newUsername },
+        {
+          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+        }
+      )
+      .then(res => {
+        if (res.data.success) {
+          localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+          setUser(res.data.user);
+        } else {
+          alert(res.data.message);
+        }
+      });
   };
 
   if (user) {

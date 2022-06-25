@@ -135,14 +135,19 @@ export default function DynastiePool({ user, poolName, poolInfo, setPoolInfo, so
 
     if (number_protected_player === poolInfo.next_season_number_players_protected) {
       axios
-        .post('/api/pool/protect_players', {
-          token: Cookies.get(`token-${user._id.$oid}`),
-          pool_name: poolInfo.name,
-          def_protected: defProtected,
-          forw_protected: forwProtected,
-          goal_protected: goalProtected,
-          reserv_protected: reservProtected,
-        })
+        .post(
+          '/api-rust/protect-players',
+          {
+            name: poolInfo.name,
+            forw_protected: forwProtected,
+            def_protected: defProtected,
+            goal_protected: goalProtected,
+            reserv_protected: reservProtected,
+          },
+          {
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+          }
+        )
         .then(res => {
           if (res.data.success === false) {
             // props.history.push('/login');
