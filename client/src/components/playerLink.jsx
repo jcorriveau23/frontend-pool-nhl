@@ -4,15 +4,21 @@ import PropTypes from 'prop-types';
 
 import InjuryTooltips from './injuryTooltips';
 
-export default function PlayerLink({ name, id, injury, number }) {
+export default function PlayerLink({ name, id, injury, number, isLink = true }) {
   return (
     <table width="100%">
       <tbody>
         <tr>
           <td align="middle">
-            <Link to={`/player-info/${id}`} style={{ textDecoration: 'none', color: '#000099' }}>
-              {name} {number ? `(${number})` : null}
-            </Link>
+            {isLink ? (
+              <Link to={`/player-info/${id}`} style={{ textDecoration: 'none', color: '#000099' }}>
+                {name} {number ? `(${number})` : null}
+              </Link>
+            ) : (
+              <b>
+                {name} {number ? `(${number})` : null}
+              </b>
+            )}
           </td>
           <td>
             <InjuryTooltips name={name} injury={injury} />

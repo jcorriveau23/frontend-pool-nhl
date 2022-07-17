@@ -104,7 +104,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
   };
 
   const confirm_selection = player => {
-    if (window.confirm(`Do you really want to select ${player.name}`)) {
+    if (window.confirm(`Do you really want to select ${player.name}?`)) {
       chose_player(player);
     }
   };
@@ -251,7 +251,7 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
     </table>
   );
 
-  if (poolInfo && inRoom) {
+  if (inRoom) {
     return (
       <div className="min-width">
         <div className="cont">

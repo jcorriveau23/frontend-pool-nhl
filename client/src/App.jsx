@@ -57,7 +57,7 @@ function App() {
     axios.get('https://nhl-pool-ethereum.herokuapp.com/');
 
     axios.get('/injury.json').then(res => {
-      setInjury(res.data); // TODO use that Injury player mapping to display a tooltips next to the player name that explained is injury.
+      setInjury(res.data);
     });
 
     if (user) {

@@ -8,13 +8,20 @@ from datetime import date, datetime, timedelta
 mo_c = MongoClient()
 db = mo_c.pooljdope
 
-def get_skaters_stats(id, today_pointers):
+def get_skaters_stats(id, today_pointers, played_today):
     for skater in today_pointers["skaters"]:
         if skater["id"] == id:
             return {
                 "G": skater["stats"]["goals"],
                 "A": skater["stats"]["assists"]
                 }
+
+    for skater in played_today:
+        if skater == id:
+            return {
+                    "G": 0,
+                    "A": 0
+                    }
 
 def get_goalies_stats(id, today_pointers):
     for goaly in today_pointers["goalies"]:
@@ -48,9 +55,6 @@ def init_cumulate_dict():
         "P": 0
     }
 
-
-    dict_cumulate[participant]["P"] = 0
-
 def cumulate_daily_roster_pts(day = None):
     dict_cumulate = {}
 
@@ -60,11 +64,14 @@ def cumulate_daily_roster_pts(day = None):
             day -= timedelta(days=1)
 
     today_pointers = db.day_leaders.find_one({"date": str(day)})
+    played = db.played.find_one({"date": str(day)})
+
+
     if today_pointers is None: # TODO add a verification of the date so this function is only called on the today date.
        print("skip this day.")
        return
 
-    for pool in db.pools.find():
+    for pool in db.pools.find({"status": "InProgress"}):
         if pool["context"] is None or pool["context"]["score_by_day"] is None:
             continue
 
@@ -90,7 +97,8 @@ def cumulate_daily_roster_pts(day = None):
             tot_hat_trick = 0
 
             for key_forward in score_by_day[participant]["roster"]["F"]:
-                score_by_day[participant]["roster"]["F"][key_forward] = get_skaters_stats(int(key_forward), today_pointers)
+                print(score_by_day[participant]["roster"]["F"][key_forward])
+                score_by_day[participant]["roster"]["F"][key_forward] = get_skaters_stats(int(key_forward), today_pointers, played["players"])
                 if score_by_day[participant]["roster"]["F"][key_forward] is not None:
                     tot_goal += score_by_day[participant]["roster"]["F"][key_forward]["G"]
                     tot_assist += score_by_day[participant]["roster"]["F"][key_forward]["A"]
@@ -112,7 +120,7 @@ def cumulate_daily_roster_pts(day = None):
             tot_hat_trick = 0
 
             for key_defender in score_by_day[participant]["roster"]["D"]:
-                score_by_day[participant]["roster"]["D"][key_defender] = get_skaters_stats(int(key_defender), today_pointers)
+                score_by_day[participant]["roster"]["D"][key_defender] = get_skaters_stats(int(key_defender), today_pointers, played["players"])
                 if score_by_day[participant]["roster"]["D"][key_defender] is not None:
                     tot_goal += score_by_day[participant]["roster"]["D"][key_defender]["G"]
                     tot_assist += score_by_day[participant]["roster"]["D"][key_defender]["A"]
@@ -172,7 +180,7 @@ def lock_daily_roster(day = None):
 
     daily_roster = {}
 
-    for pool in db.pools.find():
+    for pool in db.pools.find({"status": "InProgress"}):
         if pool["participants"] is None:
             continue
 
@@ -207,10 +215,10 @@ def lock_daily_roster(day = None):
 
 
 if __name__ == "__main__":
-    #start_date = date(2022, 5, 22)  # beginning of the 2021-2022 season
-    start_date = date(2022, 5, 2)  # beginning of the 2021-2022 playoff
-    #start_date = date.today()
-    end_date = date.today()
+    #start_date = date(2022, 5, 02)     # beginning of the 2021-2022 playoff
+    start_date = date(2021, 10, 13)     # beginning of the 2021-2022 season
+    end_date = date(2022, 5, 2)         # end of the 2021-2022 season
+    #end_date = date.today()
     delta = timedelta(days=1)
     while start_date <= end_date:
         print(start_date)

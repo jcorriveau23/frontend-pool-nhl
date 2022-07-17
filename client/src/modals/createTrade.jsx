@@ -194,13 +194,15 @@ export default function CreateTradeModal({
           </thead>
           <tbody>
             {poolerContext.tradable_picks
-              .filter(pick => picksTraded.findIndex(p => p.rank === pick.rank && p.player === pick.player) === -1)
-              .map(pick => (
-                <tr onClick={() => add_pick(side, pick)} key={pick}>
-                  <td>{pick.rank}</td>
-                  <td>{DictUsers ? DictUsers[pick.player] : pick.player}</td>
-                </tr>
-              ))}
+              ? poolerContext.tradable_picks
+                  .filter(pick => picksTraded.findIndex(p => p.rank === pick.rank && p.player === pick.player) === -1)
+                  .map(pick => (
+                    <tr onClick={() => add_pick(side, pick)} key={pick}>
+                      <td>{pick.rank}</td>
+                      <td>{DictUsers ? DictUsers[pick.player] : pick.player}</td>
+                    </tr>
+                  ))
+              : null}
           </tbody>
         </table>
       </TabPanel>

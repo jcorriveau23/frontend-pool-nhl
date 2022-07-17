@@ -62,12 +62,15 @@ export default function InProgressPool({
     let daily_stats = null;
     const tempDate = new Date(fDate);
 
+    let i = 100;
+
     do {
       const fTempDate = tempDate.toISOString().slice(0, 10);
       daily_stats = poolInfo.context.score_by_day[fTempDate];
 
       tempDate.setDate(tempDate.getDate() - 1);
-    } while (!daily_stats[poolInfo.participants[0]].cumulate);
+      i -= 1;
+    } while (i > 0 && (!daily_stats || !daily_stats[poolInfo.participants[0]].cumulate));
 
     return daily_stats;
   };
@@ -78,8 +81,13 @@ export default function InProgressPool({
     const playersIdToPooler = {};
     const playersIdToPlayersData = {};
 
-    const daily_stats = await find_last_cumulate(fDate);
-    console.log(daily_stats); // TODO make this date variable
+    let daily_stats = null;
+
+    console.log(Object.keys(poolInfo.context.score_by_day).length);
+
+    if (Object.keys(poolInfo.context.score_by_day).length > 0) {
+      daily_stats = await find_last_cumulate(fDate);
+    } // TODO make this date variable
 
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
       const pooler = poolInfo.participants[i];
@@ -187,7 +195,7 @@ export default function InProgressPool({
 
     // Parse the list of all daily games information to get the stats of each players
 
-    const startDate = new Date(2022, 4, 2); // Beginning of the 2021 nhl post season 2022-05-02
+    const startDate = new Date(2021, 9, 13); // Beginning of the 2021 nhl post season 2022-05-02
     const endDate = new Date(); // today
 
     for (let j = startDate; j <= endDate; j.setDate(j.getDate() + 1)) {
@@ -721,7 +729,7 @@ export default function InProgressPool({
   }
   return (
     <div>
-      <h1>trying to fetch pool data info...</h1>
+      <h1>Processing pool informations...</h1>
       <ClipLoader color="#fff" loading size={75} />
     </div>
   );

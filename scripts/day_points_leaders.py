@@ -13,6 +13,7 @@ mo_c = MongoClient()
 db = mo_c.pooljdope
 
 day_leaders = db.day_leaders
+played = db.played
 
 SEASON = '20212022'
 API_URL = 'https://statsapi.web.nhl.com'
@@ -20,6 +21,7 @@ API_URL = 'https://statsapi.web.nhl.com'
 def fetch_pointers_day(day = None):
     skaters = []
     goalies = []
+    played_players = []
 
     if day is None:
         if datetime.now().hour < 12:
@@ -78,6 +80,9 @@ def fetch_pointers_day(day = None):
                                 'team': teams[side]['team']['name'],
                                 'stats': player['stats']['skaterStats']
                             })
+                        elif player['stats']['skaterStats']['timeOnIce'] != '0:00':
+                            played_players.append(player['person']['id'])
+
                     elif 'goalieStats' in player['stats']:
                         if player['stats']['goalieStats']['timeOnIce'] != '0:00':
                             player_name = player['person']['fullName']
@@ -90,22 +95,29 @@ def fetch_pointers_day(day = None):
                                 'team': teams[side]['team']['name'],
                                 'stats': player['stats']['goalieStats']
                             })
+                            played_players.append(player['person']['id'])
 
-            data = {
+            day_leaders_data = {
                 'date': str(day),
                 'skaters': skaters,
                 'goalies': goalies                
             }
 
-            day_leaders.update_one({'date': str(day)}, {'$set': data}, upsert=True) # upsert = True, to create a new document if not found
+            played_data = {
+                'date': str(day),
+                "players": played_players
+            }
+
+            day_leaders.update_one({'date': str(day)}, {'$set': day_leaders_data}, upsert=True) # upsert = True, to create a new document if not found
+            played.update_one({'date': str(day)}, {'$set': played_data}, upsert=True) # upsert = True, to create a new document if not found
 
     return isLiveGame
 
 if __name__ == "__main__":
-    # start_date = date(2022, 5, 27)
-    start_date = date(2022, 5, 2)  # beginning of the 2021-2022 playoff
-    #start_date = date.today()
-    end_date = date.today()
+    # start_date = date(2022, 5, 2)     # beginning of the 2021-2022 playoff
+    start_date = date(2021, 10, 13)     # beginning of the 2021-2022 season
+    end_date = date(2022, 5, 2)         # end of the 2021-2022 season
+    # end_date = date.today()
     delta = timedelta(days=1)
     while start_date <= end_date:
         print(start_date)

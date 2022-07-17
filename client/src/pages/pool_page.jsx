@@ -34,12 +34,13 @@ export default function PoolPage({ user, DictUsers, injury }) {
             // [TODO] display a page or notification to show that the pool was not found
             setPoolInfo(res.data);
 
-            setIsUserParticipant(res.data.participants.findIndex(participant => participant === user._id.$oid) > -1);
+            if (res.data.participants)
+              setIsUserParticipant(res.data.participants.findIndex(participant => participant === user._id.$oid) > -1);
           }
         })
         .catch(e => {
           setPoolInfo(null);
-          console.log(e.response);
+          console.log(e);
         });
     }
   }, [user]);

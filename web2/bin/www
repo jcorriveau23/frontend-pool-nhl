@@ -138,28 +138,29 @@ io.on('connection', function (socket) {
     }
   });
 
-  socket.on('startDraft', function (data, room) {
-    participants = [];
-    for (i = 0; i < pools[room]['listClient'].length; i++) {
-      if (pools[room]['listClient'][i].ready === false) {
+  socket.on('startDraft', function (data, poolInfo) {
+    poolInfo.participants = [];
+    for (i = 0; i < pools[poolInfo.name]['listClient'].length; i++) {
+      if (pools[poolInfo.name]['listClient'][i].ready === false) {
         console.log('not every body is ready');
         return;
       }
-      participants.push(pools[room]['listClient'][i]._oid);
+      poolInfo.participants.push(pools[poolInfo.name]['listClient'][i]._oid);
     }
+
+    console.log(poolInfo);
 
     axios
       .post(
         '/api-rust/start-draft',
         {
-          name: room,
-          participants,
+          poolInfo,
         },
         { headers: { Authorization: `Bearer ${data}` } }
       )
       .then(res => {
         if (res.data.success) {
-          io.in(room).emit('poolInfo', res.data.pool);
+          io.in(poolInfo.name).emit('poolInfo', res.data.pool);
         } else {
           console.error(res.data.message);
         }

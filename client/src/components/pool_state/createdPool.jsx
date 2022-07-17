@@ -51,14 +51,14 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
       }
     } else if (event.target.type === 'button') {
       // the host click on the start button
-      socket.emit('startDraft', Cookies.get(`token-${user._id.$oid}`), poolName);
+      socket.emit('startDraft', Cookies.get(`token-${user._id.$oid}`), poolInfo);
     } else if (event.target.type === 'select-one') {
       // the host change a value of the pool configuration
       const poolInfoChanged = poolInfo;
 
-      poolInfoChanged[event.target.name] = event.target.value;
-      setPoolInfo(poolInfoChanged);
-      socket.emit('changeRule', Cookies.get(`token-${user._id.$oid}`), poolInfo);
+      poolInfoChanged[event.target.name] = Number(event.target.value);
+
+      socket.emit('changeRule', Cookies.get(`token-${user._id.$oid}`), poolInfoChanged);
     }
   };
 
@@ -106,7 +106,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
     return null;
   };
 
-  if (poolInfo && inRoom) {
+  if (inRoom) {
     return (
       <div className="min-width">
         <h1>Match Making for Pool {poolName}</h1>
@@ -142,10 +142,10 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                   <td>Number of forwards:</td>
                   <td>
                     <select
-                      name="number_forward"
+                      name="number_forwards"
                       onChange={handleChange}
                       disabled={poolInfo.owner !== user._id.$oid}
-                      value={poolInfo.number_forward}
+                      value={poolInfo.number_forwards}
                     >
                       <option>2</option>
                       <option>3</option>
@@ -197,10 +197,10 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
                   <td>Number of reservists:</td>
                   <td>
                     <select
-                      name="number_reservist"
+                      name="number_reservists"
                       onChange={handleChange}
                       disabled={poolInfo.owner !== user._id.$oid}
-                      value={poolInfo.number_reservist}
+                      value={poolInfo.number_reservists}
                     >
                       <option>1</option>
                       <option>2</option>
@@ -417,7 +417,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
 
   return (
     <div>
-      <h1>Trying to fetch pool data info...</h1>
+      <h1>Trying to join the room...</h1>
       <ClipLoader color="#fff" loading size={75} />
     </div>
   );
@@ -443,10 +443,10 @@ CreatedPool.propTypes = {
     number_poolers: PropTypes.number.isRequired,
     participants: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     next_season_number_players_protected: PropTypes.number.isRequired,
-    number_forward: PropTypes.number.isRequired,
+    number_forwards: PropTypes.number.isRequired,
     number_defenders: PropTypes.number.isRequired,
     number_goalies: PropTypes.number.isRequired,
-    number_reservist: PropTypes.number.isRequired,
+    number_reservists: PropTypes.number.isRequired,
     next_drafter: PropTypes.string.isRequired,
   }).isRequired,
   setPoolInfo: PropTypes.func.isRequired,

@@ -30,7 +30,7 @@ export default function ProfilePage({ user, setUser }) {
   const set_username = () => {
     axios
       .post(
-        '/api/auth/set_username',
+        '/api-rust/set-username',
         { newUsername },
         {
           headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
