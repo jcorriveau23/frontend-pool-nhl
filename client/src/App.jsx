@@ -34,11 +34,6 @@ import LeagueLeadersPage from './pages/leagueLeaders_page';
 import WalletCard from './components/web3/WalletCard';
 import SearchPlayer from './components/app/searchPlayer';
 
-// always force https as protocol
-if (window.location.protocol !== 'https:') {
-  window.location.replace(`https:${window.location.href.substring(window.location.protocol.length)}`);
-}
-
 function App() {
   const [user, setUser] = useState(null);
   const [currentAddr, setCurrentAddr] = useState('');
@@ -60,19 +55,32 @@ function App() {
       setInjury(res.data);
     });
 
-    if (user) {
-      axios.get('/api-rust/users').then(res => {
-        if (res.status === 200) {
-          const DictUsersTmp = {};
-          res.data.forEach(u => {
-            DictUsersTmp[u._id.$oid] = u.name;
-          });
+    const userTmp = JSON.parse(localStorage.getItem('persist-account'));
 
-          setDictUsers(DictUsersTmp);
-        }
-      });
+    if (userTmp) {
+      console.log('try to fetch users');
+      axios
+        .get('/api-rust/users', {
+          headers: { Authorization: `Bearer ${Cookies.get(`token-${userTmp._id.$oid}`)}` },
+        })
+        .then(res => {
+          if (res.status === 200) {
+            const DictUsersTmp = {};
+            res.data.forEach(u => {
+              DictUsersTmp[u._id.$oid] = u.name;
+              setUser(userTmp);
+            });
+
+            setDictUsers(DictUsersTmp);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          Cookies.remove(`token-${user._id.$oid}`);
+          localStorage.clear('persist-account');
+        });
     }
-  }, [user]);
+  }, []);
 
   return (
     <Router>
@@ -89,7 +97,6 @@ function App() {
         <li className="walle-card" ref={refAccount}>
           <WalletCard
             user={user}
-            setUser={setUser}
             setContract={setContract}
             isWalletConnected={isWalletConnected}
             setIsWalletConnected={setIsWalletConnected}
@@ -122,7 +129,12 @@ function App() {
         <WrongNetworkModal isWalletConnected={isWalletConnected} isWrongNetwork={isWrongNetwork} />
         <Routes>
           <Route path="/" element={<HomePage formatDate={formatDate} injury={injury} />} />
-          <Route path="/login" element={<LoginPage user={user} setUser={setUser} setCurrentAddr={setCurrentAddr} />} />
+          <Route
+            path="/login"
+            element={
+              <LoginPage user={user} setUser={setUser} setCurrentAddr={setCurrentAddr} setDictUsers={setDictUsers} />
+            }
+          />
           <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
           <Route path="/my-pools" element={<MyPoolsPage user={user} DictUsers={DictUsers} />} />
           <Route path="/my-bets" element={<MyGameBetsPage user={user} contract={contract} />} />

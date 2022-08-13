@@ -17,7 +17,7 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
   const remove_pick = (picks, setPicks, pick) => {
     const picksTmp = picks;
 
-    const index = picksTmp.findIndex(p => p.rank === pick.rank && p.player === pick.player);
+    const index = picksTmp.findIndex(p => p.round === pick.round && p.from === pick.from);
 
     if (index > -1) {
       picksTmp.splice(index, 1);
@@ -44,8 +44,8 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
         </tr>
         {items.picks.map(pick => (
           <tr onClick={setPicks ? () => remove_pick(items.picks, setPicks, pick) : null}>
-            <td>{pick.rank}</td>
-            <td>{DictUsers ? DictUsers[pick.player] : pick.player}</td>
+            <td>{pick.round + 1}</td>
+            <td>{DictUsers ? DictUsers[pick.from] : pick.from}</td>
           </tr>
         ))}
       </tbody>
@@ -75,8 +75,8 @@ TradeItem.propTypes = {
     ask_to: PropTypes.string.isRequired,
     from_items: PropTypes.shape({
       picks: PropTypes.arrayOf({
-        rank: PropTypes.number.isRequired,
-        player: PropTypes.string.isRequired /* id of the pooler pick for next season */,
+        round: PropTypes.number.isRequired,
+        from: PropTypes.string.isRequired /* id of the pooler pick for next season */,
       }).isRequired,
       players: PropTypes.arrayOf({
         id: PropTypes.number.isRequired,
@@ -86,8 +86,8 @@ TradeItem.propTypes = {
     }).isRequired,
     to_items: PropTypes.shape({
       picks: PropTypes.arrayOf({
-        rank: PropTypes.number.isRequired,
-        player: PropTypes.string.isRequired /* id of the pooler pick for next season */,
+        round: PropTypes.number.isRequired,
+        from: PropTypes.string.isRequired /* id of the pooler pick for next season */,
       }).isRequired,
       players: PropTypes.arrayOf({
         id: PropTypes.number.isRequired,

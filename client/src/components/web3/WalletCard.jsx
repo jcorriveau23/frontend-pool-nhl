@@ -10,7 +10,6 @@ import NHLGamePredictionsABI from '../../NHLGamePredictionsABI.json';
 
 export default function WalletCard({
   user,
-  setUser,
   setContract,
   isWalletConnected,
   setIsWalletConnected,
@@ -23,11 +22,6 @@ export default function WalletCard({
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userTmp = JSON.parse(localStorage.getItem('persist-account'));
-    if (userTmp) {
-      setUser(userTmp);
-    }
-
     if (window.ethereum) {
       // console.log('trying to connect to read wallet');
 
@@ -41,7 +35,7 @@ export default function WalletCard({
             console.log(`wallet is unlocked: ${address}`);
             setCurrentAddr(address);
 
-            if (userTmp && userTmp.addr === address) {
+            if (user && user.addr === address) {
               setIsWalletConnected(true);
             }
 
@@ -106,7 +100,6 @@ export default function WalletCard({
 
 WalletCard.propTypes = {
   user: PropTypes.shape({ addr: PropTypes.string.isRequired, name: PropTypes.string.isRequired }),
-  setUser: PropTypes.func.isRequired,
   setContract: PropTypes.func.isRequired,
   isWalletConnected: PropTypes.bool.isRequired,
   setIsWalletConnected: PropTypes.func.isRequired,

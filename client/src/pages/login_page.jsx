@@ -20,7 +20,7 @@ import Cookies from 'js-cookie';
 // css
 import './page.css';
 
-export default function LoginPage({ user, setUser, setIsWalletConnected, setCurrentAddr }) {
+export default function LoginPage({ user, setUser, setIsWalletConnected, setCurrentAddr, setDictUsers }) {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState(''); // for Register
@@ -47,13 +47,26 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
         signer.signMessage('Unlock wallet to access nhl-pool-ethereum.').then(sig => {
           signer.getAddress().then(addr => {
             axios.post('/api-rust/wallet-login', { addr, sig }).then(res => {
-              if (res.data.success) {
+              if (res.data.user) {
                 Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
                 localStorage.setItem('persist-account', JSON.stringify(res.data.user));
                 setUser(res.data.user);
                 setIsWalletConnected(true);
-                console.log(addr);
                 setCurrentAddr(addr);
+                axios
+                  .get('/api-rust/users', {
+                    headers: { Authorization: `Bearer ${Cookies.get(`token-${res.data.user._id.$oid}`)}` },
+                  })
+                  .then(res2 => {
+                    if (res.status === 200) {
+                      const DictUsersTmp = {};
+                      res2.data.forEach(u => {
+                        DictUsersTmp[u._id.$oid] = u.name;
+                      });
+
+                      setDictUsers(DictUsersTmp);
+                    }
+                  });
                 navigate('/');
               } else {
                 setUser(null);
@@ -77,6 +90,20 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
           Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
           localStorage.setItem('persist-account', JSON.stringify(res.data.user));
           setUser(res.data.user);
+          axios
+            .get('/api-rust/users', {
+              headers: { Authorization: `Bearer ${Cookies.get(`token-${res.data.user._id.$oid}`)}` },
+            })
+            .then(res2 => {
+              if (res.status === 200) {
+                const DictUsersTmp = {};
+                res2.data.forEach(u => {
+                  DictUsersTmp[u._id.$oid] = u.name;
+                });
+
+                setDictUsers(DictUsersTmp);
+              }
+            });
           navigate('/');
         }
       })
@@ -155,7 +182,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
             </div>
           ) : (
             <div className="login_content">
-              <h2>Login from a username and password</h2>
+              <h2>Login using a username and password</h2>
               <form>
                 <p>Please fill in this form to login.</p>
                 <input

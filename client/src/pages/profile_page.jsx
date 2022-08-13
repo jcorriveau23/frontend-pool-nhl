@@ -31,13 +31,13 @@ export default function ProfilePage({ user, setUser }) {
     axios
       .post(
         '/api-rust/set-username',
-        { newUsername },
+        { new_username: newUsername },
         {
           headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
         }
       )
       .then(res => {
-        if (res.data.success) {
+        if (res.data.user) {
           localStorage.setItem('persist-account', JSON.stringify(res.data.user));
           setUser(res.data.user);
         } else {

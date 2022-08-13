@@ -67,21 +67,18 @@ export default function TradeCenter({ poolInfo, setPoolInfo, user, DictUsers, is
                         Cancel
                       </button>
                     ) : null}
-                  </th>
-                  <th>
                     {tradeInfo.ask_to === user._id.$oid ? (
                       <button onClick={() => respond_trade(tradeInfo.id, true)} type="button">
                         Accept
                       </button>
                     ) : null}
-                  </th>
-                  <th>
                     {tradeInfo.ask_to === user._id.$oid ? (
                       <button onClick={() => respond_trade(tradeInfo.id, false)} type="button">
                         Refuse
                       </button>
                     ) : null}
                   </th>
+                  <th>{new Date(tradeInfo.date_created).toISOString().split('T')[0]}</th>
                 </tr>
               </tbody>
             </table>
@@ -99,6 +96,7 @@ export default function TradeCenter({ poolInfo, setPoolInfo, user, DictUsers, is
                   <th>
                     <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
                   </th>
+                  <th>{tradeInfo.date_accepted}</th>
                 </tr>
               </tbody>
             </table>
@@ -120,7 +118,7 @@ export default function TradeCenter({ poolInfo, setPoolInfo, user, DictUsers, is
           ))}
         <h1>Completed Trades</h1>
         {poolInfo.trades
-          .filter(trade => trade.status === 'COMPLETED')
+          .filter(trade => trade.status === 'CANCELLED')
           .map(tradeInfo => (
             <table className="content-table-no-hover">
               <tbody>

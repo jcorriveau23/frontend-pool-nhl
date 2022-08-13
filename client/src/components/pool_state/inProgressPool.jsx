@@ -11,6 +11,7 @@ import { RiTeamFill } from 'react-icons/ri';
 import DayLeaders from '../home_page/dailyLeaders';
 import TradeCenter from './tradeCenter';
 import PlayerLink from '../playerLink';
+import PickList from './pickList';
 
 // modals
 import FillSpot from '../../modals/FillSpot';
@@ -649,6 +650,7 @@ export default function InProgressPool({
                 </thead>
                 <tbody>{render_reservists(pooler)}</tbody>
               </table>
+              <PickList tradablePicks={poolInfo.context.tradable_picks} participant={pooler} DictUsers={DictUsers} />
             </TabPanel>
           ))}
         </Tabs>

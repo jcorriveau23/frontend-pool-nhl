@@ -10,6 +10,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 // components
 import PlayerList from '../components/pool_state/playerList';
+import PickList from '../components/pool_state/pickList';
 import TradeItem from '../components/pool_state/tradeItem';
 
 // css
@@ -42,7 +43,8 @@ export default function CreateTradeModal({
       to_items: { players: toPlayers, picks: toPicks },
       id: 0,
       status: 'NEW',
-      date_accepted: '',
+      date_accepted: -1,
+      date_created: -1,
     };
 
     axios
@@ -65,7 +67,7 @@ export default function CreateTradeModal({
           setShowCreateTradeModal(false);
           setPoolInfo(res.data.pool);
         } else {
-          alert(res.data.pool);
+          alert(res.data.message);
         }
       });
   };
@@ -87,8 +89,8 @@ export default function CreateTradeModal({
     return true;
   };
 
-  const validate_double_pick = (picks, pick) => {
-    if (picks.findIndex(p => p.rank === pick.rank && p.player === pick.player) > -1) {
+  const validate_double_pick = (picks, round, from) => {
+    if (picks.findIndex(p => p.round === round && p.from === from) > -1) {
       alert('You cannot add 2 times the same pick!');
       return false;
     }
@@ -115,17 +117,17 @@ export default function CreateTradeModal({
     }
   };
 
-  const add_pick = (side, pick) => {
+  const add_pick = (side, round, from) => {
     switch (side) {
       case 'to': {
-        if (validate_trade_size(toPlayers, toPicks) && validate_double_pick(toPicks, pick)) {
-          setToPicks(oldToPicks => [...oldToPicks, pick]);
+        if (validate_trade_size(toPlayers, toPicks) && validate_double_pick(toPicks, round, from)) {
+          setToPicks(oldToPicks => [...oldToPicks, { round, from }]);
         }
         break;
       }
       case 'from': {
-        if (validate_trade_size(fromPlayers, fromPicks) && validate_double_pick(fromPicks, pick)) {
-          setFromPicks(oldFromPicks => [...oldFromPicks, pick]);
+        if (validate_trade_size(fromPlayers, fromPicks) && validate_double_pick(fromPicks, round, from)) {
+          setFromPicks(oldFromPicks => [...oldFromPicks, { round, from }]);
         }
         break;
       }
@@ -160,7 +162,7 @@ export default function CreateTradeModal({
     </>
   );
 
-  const render_pooler_player_list = (side, poolerContext, playersTraded, picksTraded) => (
+  const render_pooler_player_list = (side, poolerContext, participant, playersTraded, picksTraded) => (
     <Tabs>
       <TabList>
         <Tab>Players</Tab>
@@ -185,26 +187,14 @@ export default function CreateTradeModal({
         </table>
       </TabPanel>
       <TabPanel>
-        <table className="content-table-no-min">
-          <thead>
-            <tr>
-              <th>round</th>
-              <th>owner</th>
-            </tr>
-          </thead>
-          <tbody>
-            {poolerContext.tradable_picks
-              ? poolerContext.tradable_picks
-                  .filter(pick => picksTraded.findIndex(p => p.rank === pick.rank && p.player === pick.player) === -1)
-                  .map(pick => (
-                    <tr onClick={() => add_pick(side, pick)} key={pick}>
-                      <td>{pick.rank}</td>
-                      <td>{DictUsers ? DictUsers[pick.player] : pick.player}</td>
-                    </tr>
-                  ))
-              : null}
-          </tbody>
-        </table>
+        <PickList
+          tradablePicks={poolInfo.context.tradable_picks}
+          participant={participant}
+          add_pick={add_pick}
+          side={side}
+          filterPicks={picksTraded}
+          DictUsers={DictUsers}
+        />
       </TabPanel>
     </Tabs>
   );
@@ -239,7 +229,13 @@ export default function CreateTradeModal({
         </div>
         <div className="float-left">
           <div className="half-cont">
-            {render_pooler_player_list('from', poolInfo.context.pooler_roster[user._id.$oid], fromPlayers, fromPicks)}
+            {render_pooler_player_list(
+              'from',
+              poolInfo.context.pooler_roster[user._id.$oid],
+              user._id.$oid,
+              fromPlayers,
+              fromPicks
+            )}
           </div>
         </div>
         <div className="float-right">
@@ -252,7 +248,13 @@ export default function CreateTradeModal({
                 ))}
             </select>
 
-            {render_pooler_player_list('to', poolInfo.context.pooler_roster[selectedPooler], toPlayers, toPicks)}
+            {render_pooler_player_list(
+              'to',
+              poolInfo.context.pooler_roster[selectedPooler],
+              selectedPooler,
+              toPlayers,
+              toPicks
+            )}
           </div>
         </div>
       </div>
