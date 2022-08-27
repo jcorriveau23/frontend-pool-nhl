@@ -22,8 +22,10 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
         }
       )
       .then(res => {
-        if (res.status === 200) {
+        if (res.data.success) {
           setShowCreatePoolModal(false);
+        } else {
+          alert(res.data.message);
         }
       })
       .catch(e => {

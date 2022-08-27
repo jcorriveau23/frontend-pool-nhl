@@ -451,19 +451,19 @@ export default function PlayerPage() {
   );
 
   const render_player_info_stats = (stats, info) => (
-    <div>
+    <div div className="cont">
       {render_player_info(info)}
       {info.primaryPosition.abbreviation !== 'G' ? render_skater_stats(stats) : render_goalie_stats(stats)}
     </div>
   );
 
   if (playerStats && playerPlayoffStats && playerInfo) {
-    return <div className="cont">{render_player_info_stats(playerStats.stats[0].splits, playerInfo.people[0])}</div>;
+    return render_player_info_stats(playerStats.stats[0].splits, playerInfo.people[0]);
   }
 
   if (!Number.isNaN(Number(playerID)) && playerID !== '' && !prospectInfo) {
     return (
-      <div>
+      <div className="cont">
         <h1>Trying to fetch player data from nhl api...</h1>
         <ClipLoader color="#fff" loading size={75} />
       </div>
@@ -475,7 +475,7 @@ export default function PlayerPage() {
   }
 
   return (
-    <div>
+    <div className="cont">
       <h1>Player does not exist</h1>
     </div>
   );

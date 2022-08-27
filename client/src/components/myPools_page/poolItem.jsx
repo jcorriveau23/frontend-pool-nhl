@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
@@ -16,9 +17,10 @@ export default function PoolItem({ name, owner, user, poolDeleted, setPoolDelete
           }
         )
         .then(res => {
-          console.log(res);
-          if (res.status === 200) {
+          if (res.data.success) {
             setPoolDeleted(!poolDeleted);
+          } else {
+            alert(res.data.message);
           }
         })
         .catch(e => {
@@ -28,15 +30,25 @@ export default function PoolItem({ name, owner, user, poolDeleted, setPoolDelete
   };
 
   return (
-    <div>
-      <p>Pool: {name}</p>
-      <p>Owner: {DictUsers ? DictUsers[owner] : owner}</p>
-      {user && user._id.$oid === owner ? (
-        <button className="base-button" onClick={delete_pool} type="button">
-          Delete
-        </button>
-      ) : null}
-    </div>
+    <tr>
+      <td>
+        <Link to={`/my-pools/${name}`} key={name}>
+          <li>
+            <div>
+              <h1>Pool: {name}</h1>
+              <h2>Owner: {DictUsers ? DictUsers[owner] : owner}</h2>
+            </div>
+          </li>
+        </Link>
+      </td>
+      <td>
+        {user && user._id.$oid === owner ? (
+          <button className="base-button" onClick={delete_pool} type="button">
+            Delete
+          </button>
+        ) : null}
+      </td>
+    </tr>
   );
 }
 

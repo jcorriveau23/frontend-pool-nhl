@@ -1,5 +1,5 @@
-# This script is made to be fetch daily. We go into all active players to update their stats in the database.
-# TODO should only go into the day_points_leader stored in the yesterday database to limit the numbers of call made to the nhl api.
+# This script will fetch every active players in the nhl and store them in a list inside a json file. 
+# The json file will be saved as a static file stored inside the public folder to be accessed during the draft status.
 
 import requests
 import json

@@ -14,7 +14,7 @@ export default function PeriodRecap({ gameInfo, gameContent, period }) {
   if (gameInfo.liveData && gameInfo.liveData.plays) {
     return (
       <div>
-        <table className="goalItem">
+        <table className="goal-item">
           <thead>
             {isItem ? (
               <tr>

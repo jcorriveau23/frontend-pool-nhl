@@ -80,7 +80,7 @@ export default function GoalItem({ goalData, gameContent }) {
 
   return (
     <div>
-      <table className="goalItem">
+      <table className="goal-item">
         <tbody>
           <tr>
             <td rowSpan={rowSpan} width="30">

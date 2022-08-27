@@ -9,8 +9,8 @@ from pymongo import MongoClient
 
 from pool_cumulate_yesterday_roster_points import lock_daily_roster, cumulate_daily_roster_pts
 from day_points_leaders import fetch_pointers_day
-from pool_close_yesterday_accepted_trade import close_accepted_trade
 from fetch_injury import fetch_injured_players
+from update_pool_players_team import update_pool_players_team
 
 # create an client instance of the MongoDB class
 
@@ -25,9 +25,9 @@ schedule.every(3).minutes.do(fetch_pointers_day)
 schedule.every(3).minutes.do(cumulate_daily_roster_pts)
  
 # Every day at 05:00 time close_accepted_trade() is called.
-schedule.every().day.at("05:00").do(close_accepted_trade)
 schedule.every().day.at("12:00").do(lock_daily_roster)
 schedule.every().day.at("05:00").do(fetch_injured_players)
+schedule.every().day.at("05:00").do(update_pool_players_team)
 
 print("start the scheduling!")
 while True:

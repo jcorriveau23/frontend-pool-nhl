@@ -1,10 +1,3 @@
-.red-text {
-  color: red;
-}
-.green-text {
-  color: green;
-}
-
 .tab-background {
   background-color: #888888;
 }
@@ -13,36 +6,32 @@
   background-color: #888888;
 }
 
-/* @media (min-width: 1000px) {
-  .content-table {
-    width: 75%;
-    margin-left: 10%;
-    margin-right: 10%;
-  }
-} */
-
 .content-table,
 content-table-no-hover {
   min-width: 1000px;
-  font-size: 22px;
 }
 
 .content-table,
 .content-table-no-hover,
 .content-table-no-min {
-  margin: 10px 0;
+  border-radius: 6px;
   width: 100%;
   max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 22px;
 }
 
 .content-table th,
 .content-table-no-hover th,
 .content-table-no-min th {
+  border-radius: 4px;
   background-color: #222222;
   color: #dddddd;
   text-align: center;
   font-weight: bold;
   padding: 6px 5px;
+  min-height: 30px;
 }
 
 .content-table tr,
@@ -78,12 +67,11 @@ li {
 
 .pool_item ul li:hover {
   border-color: #fff;
-  border-width: 2px;
 }
 
 .pool_item ul {
-  margin: 0;
   padding: 0;
+  margin: 0;
 }
 
 .pool_item ul li {
@@ -94,16 +82,13 @@ li {
   font-size: 12px;
   font-weight: bold;
   line-height: 16px;
-  border-radius: 5px;
+  border-radius: 8px;
   border-style: solid;
-  border-width: 2px;
-  margin: 10px 5px;
+  border-width: 4px;
+  margin: 5px 5px;
   padding: 0 16px 0px 16px;
   max-width: 468px;
-}
-
-.pool_item ul td {
-  text-decoration-color: #fff;
+  min-width: 300px;
 }
 
 .pool_item ul a {

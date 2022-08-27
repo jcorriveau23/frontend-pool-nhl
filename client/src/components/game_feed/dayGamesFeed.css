@@ -46,10 +46,6 @@
   border: none;
 }
 
-.dateSelector button:hover {
-  background-color: transparent;
-}
-
 .dateSelector input {
   color: white;
   border-style: groove;
@@ -57,7 +53,6 @@
   border-radius: 5px;
   border-width: 3px;
   border-color: #000;
-  margin: 0px;
   padding: 4px;
   background: url(../img/icons/calendar.png) no-repeat scroll 7px 6px;
   cursor: pointer;

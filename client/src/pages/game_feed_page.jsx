@@ -278,7 +278,7 @@ export default function GameFeedPage({ user, contract, injury }) {
   const render_game_stats = (teams, linescores) => {
     if (teams.away.teamStats.teamSkaterStats) {
       return (
-        <table className="goalItem">
+        <table className="goal-item">
           <thead>
             <tr>
               <th>
@@ -371,7 +371,7 @@ export default function GameFeedPage({ user, contract, injury }) {
   };
 
   const render_shootout = liveData => (
-    <table className="goalItem">
+    <table className="goal-item">
       <thead>
         <tr>
           <th colSpan={3}>Shootout results</th>

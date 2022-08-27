@@ -208,7 +208,7 @@ export default function CreateTradeModal({
       onRequestClose={() => setShowCreateTradeModal(false)}
     >
       <div>
-        <div className="cont">
+        <div className="half-cont">
           <h1>Create Trade</h1>
           <TradeItem
             tradeInfo={{

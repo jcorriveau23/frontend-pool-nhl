@@ -35,7 +35,7 @@ export default function OtherGameContent({ gameContent }) {
   if (gameContent.media && gameContent.media.milestones.items?.length > 0) {
     return (
       <div>
-        <table className="goalItem">
+        <table className="goal-item">
           <thead>
             {isItem ? (
               <tr>

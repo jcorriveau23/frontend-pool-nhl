@@ -36,6 +36,7 @@ export default function DraftPool({
   const [forw_l, setForw_l] = useState([]);
   const [goal_l, setGoal_l] = useState([]);
   const [searchText, setSearchText] = useState('');
+  const [selectedTeamIndex, setSelectedTeamIndex] = useState(0);
 
   const sort_by_player_member = (playerMember, array) => {
     // TODO: try to simplified this into no if at all
@@ -204,17 +205,12 @@ export default function DraftPool({
     return (
       <Tabs>
         <TabList>
-          {poolers.map(pooler => render_pooler_turn(pooler))}
           <Tab>
             <BsPenFill size={30} />
             Draft Order
           </Tab>
+          <Tab>Teams</Tab>
         </TabList>
-        {poolers.map(pooler => (
-          <TabPanel key={pooler}>
-            <PlayerList poolerContext={poolInfo.context.pooler_roster[pooler]} injury={injury} />
-          </TabPanel>
-        ))}
         <TabPanel>
           <DraftOrder
             players_name_drafted={poolInfo.context.players_name_drafted}
@@ -232,6 +228,16 @@ export default function DraftPool({
             DictUsers={DictUsers}
           />
         </TabPanel>
+        <TabPanel>
+          <Tabs selectedIndex={selectedTeamIndex} onSelect={index => setSelectedTeamIndex(index)}>
+            <TabList>{poolers.map(pooler => render_pooler_turn(pooler))}</TabList>
+            {poolers.map(pooler => (
+              <TabPanel key={pooler}>
+                <PlayerList poolerContext={poolInfo.context.pooler_roster[pooler]} injury={injury} />
+              </TabPanel>
+            ))}
+          </Tabs>
+        </TabPanel>
       </Tabs>
     );
   };
@@ -240,7 +246,7 @@ export default function DraftPool({
     <table className="content-table-no-min">
       <thead>
         <tr>
-          <th colSpan={7}>Forward stats during last season</th>
+          <th colSpan={7}>Stats during last season</th>
         </tr>
         <tr>
           <th colSpan={2} onClick={() => sort_players('name', position)}>

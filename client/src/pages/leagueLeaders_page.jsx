@@ -125,13 +125,17 @@ export default function LeagueLeadersPage({ injury }) {
     <table>
       <tbody>
         <tr>
-          <th>Stats Type</th>
+          <th>
+            <h3>Stats Type</h3>
+          </th>
           <td>
             <select onChange={handleChangeStatsType}>{leagueLeadersTypeOptions(leagueLeaderTypes)}</select>
           </td>
         </tr>
         <tr>
-          <th>Season</th>
+          <th>
+            <h3>Season</h3>
+          </th>
           <td>
             <select onChange={handleChangeSeason}>{SeasonOptions()}</select>
           </td>
@@ -151,7 +155,7 @@ export default function LeagueLeadersPage({ injury }) {
 
   if (noDataFoThisYear) {
     return (
-      <div>
+      <div className="cont">
         {displayDropDowns()}
         <h1>There is no data for this year.</h1>
       </div>
@@ -159,7 +163,7 @@ export default function LeagueLeadersPage({ injury }) {
   }
 
   return (
-    <div>
+    <div className="cont">
       <h1>Trying to fetch league leaders for this year...</h1>
       <ClipLoader color="#fff" loading size={75} />
     </div>

@@ -55,24 +55,28 @@ def init_cumulate_dict():
         "P": 0
     }
 
-def cumulate_daily_roster_pts(day = None):
-    dict_cumulate = {}
-
-    if day is None:
-        day = date.today()
-        if datetime.now().hour < 12:
-            day -= timedelta(days=1)
+def get_db_infos(day):
+    if day is None: # If no time was provided, use the current time.
+            day = date.today()
+            if datetime.now().hour < 12:    # Before 12h AM, fetch the data from yesterday in the case a game was completed after 12h PM.
+                day -= timedelta(days=1)
 
     today_pointers = db.day_leaders.find_one({"date": str(day)})
     played = db.played.find_one({"date": str(day)})
 
+    return today_pointers, played
 
-    if today_pointers is None: # TODO add a verification of the date so this function is only called on the today date.
+def cumulate_daily_roster_pts(day = None):
+    dict_cumulate = {}
+
+    today_pointers, played = get_db_infos(day)
+
+    if today_pointers is None or played is None:
        print("skip this day.")
        return
 
     for pool in db.pools.find({"status": "InProgress"}):
-        if pool["context"] is None or pool["context"]["score_by_day"] is None:
+        if pool["context"]["score_by_day"] is None:
             continue
 
         score_by_day = pool["context"]["score_by_day"][str(day)]
@@ -97,7 +101,7 @@ def cumulate_daily_roster_pts(day = None):
             tot_hat_trick = 0
 
             for key_forward in score_by_day[participant]["roster"]["F"]:
-                print(score_by_day[participant]["roster"]["F"][key_forward])
+                # print(score_by_day[participant]["roster"]["F"][key_forward])
                 score_by_day[participant]["roster"]["F"][key_forward] = get_skaters_stats(int(key_forward), today_pointers, played["players"])
                 if score_by_day[participant]["roster"]["F"][key_forward] is not None:
                     tot_goal += score_by_day[participant]["roster"]["F"][key_forward]["G"]
@@ -168,22 +172,15 @@ def cumulate_daily_roster_pts(day = None):
             score_by_day[participant]["cumulate"] = dict_cumulate[participant]
 
         db.pools.update_one({"name": pool["name"]}, {"$set": {f"context.score_by_day.{str(day)}": score_by_day}}, upsert=True)
-        #print(score_by_day)
+        # print(score_by_day)
 
 def lock_daily_roster(day = None):
-    #if today_pointers is None: # TODO add a verification of the date so this function is only called on the today date.
-    #    print("skip this day.")
-    #    return
-
     if day is None:
         day = date.today()
 
     daily_roster = {}
 
     for pool in db.pools.find({"status": "InProgress"}):
-        if pool["participants"] is None:
-            continue
-
         for participant in pool["participants"]:
             print(participant)
             daily_roster[participant] = {}

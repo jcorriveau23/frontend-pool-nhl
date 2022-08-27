@@ -29,7 +29,6 @@ export default function GameRecap({ gameContent, isEditorial }) {
   };
 
   if (isEditorial && gameContent.editorial && gameContent.media.epg[3].items?.length > 0) {
-    console.log(gameContent);
     return (
       <div>
         <table className="content-table">

@@ -1,10 +1,7 @@
-/* .goalItem ul li:hover{
-    border-color: #fff;
-    border-width: 2px;
-} */
-
-.goalItem {
+.goal-item {
   margin: 0;
+  margin-left: auto;
+  margin-right: auto;
   padding: 100, 100;
   min-width: 1000px;
   width: 100%;
@@ -13,7 +10,7 @@
   font-size: 22px;
 }
 
-.goalItem th {
+.goal-item th {
   background-color: #222222;
   color: #eeeeee;
   text-align: center;
@@ -21,7 +18,7 @@
   padding: 3px 2.5px;
 }
 
-.goalItem td {
+.goal-item td {
   padding: 1px 1px;
   text-align: center;
   color: #000000;

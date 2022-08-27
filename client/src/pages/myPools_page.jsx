@@ -79,7 +79,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
           console.log(e.response);
         });
     }
-  }, [user, showCreatePoolModal, poolDeleted]); // showCreatePoolModal force to refetch data when creating a new pool.
+  }, [user, showCreatePoolModal, poolDeleted]); //  force to refetch data when creating/deleting a new pool.
 
   const openCreatePoolModal = () => {
     setShowCreatePoolModal(true);
@@ -133,18 +133,14 @@ export default function MyPoolsPage({ user, DictUsers }) {
               <div className="pool_item">
                 <ul>
                   {poolCreated.map(pool => (
-                    <Link to={`/my-pools/${pool.name}`} key={pool.name}>
-                      <li>
-                        <PoolItem
-                          name={pool.name}
-                          owner={pool.owner}
-                          user={user}
-                          poolDeleted={poolDeleted}
-                          setPoolDeleted={setPoolDeleted}
-                          DictUsers={DictUsers}
-                        />
-                      </li>
-                    </Link>
+                    <PoolItem
+                      name={pool.name}
+                      owner={pool.owner}
+                      user={user}
+                      poolDeleted={poolDeleted}
+                      setPoolDeleted={setPoolDeleted}
+                      DictUsers={DictUsers}
+                    />
                   ))}
                 </ul>
               </div>
@@ -154,11 +150,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
                 <div className="pool_item">
                   <ul>
                     {poolDraft.map(pool => (
-                      <Link to={`/my-pools/${pool.name}`} key={pool.name}>
-                        <li>
-                          <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
-                        </li>
-                      </Link>
+                      <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
                     ))}
                   </ul>
                 </div>
@@ -184,11 +176,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
                 <div className="pool_item">
                   <ul>
                     {poolInProgress.map(pool => (
-                      <Link to={`/my-pools/${pool.name}`} key={pool.name}>
-                        <li>
-                          <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
-                        </li>
-                      </Link>
+                      <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
                     ))}
                   </ul>
                 </div>

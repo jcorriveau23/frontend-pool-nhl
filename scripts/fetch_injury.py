@@ -1,4 +1,4 @@
-# This script fetch the same of every teams that exist in the nhl api database and prints the result in a file.
+# This script fetch the current players injured in the nhl store it in a dictionnary and paste it in a static file inside the public folder.
 
 import requests
 import json
@@ -13,6 +13,7 @@ def fetch_injured_players():
     data = BeautifulSoup(response.text, 'lxml')
 
     for row in data.table.tbody.find_all("tr"):
+        print(player_injury_name[0].a.text)
         player_injury_info = row.find_all("td")
         player_injury_name = row.find_all("th")
 

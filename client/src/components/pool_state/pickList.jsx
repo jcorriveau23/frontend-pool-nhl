@@ -36,7 +36,7 @@ export default function PickList({ tradablePicks, participant, add_pick, side, f
 
   if (tradablePicks) {
     return (
-      <table className="content-table">
+      <table className="content-table-no-min">
         <thead>{render_tab_pick_headers()}</thead>
         <tbody>{render_pick(tradablePicks)}</tbody>
       </table>
