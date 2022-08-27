@@ -11,9 +11,13 @@ export default function PickList({ tradablePicks, participant, add_pick, side, f
           }
         })
         .map(from => (
-          <tr key={from} onClick={add_pick ? () => add_pick(side, i, from) : () => null}>
-            <td>{i + 1}</td>
-            <td>{DictUsers ? DictUsers[from] : from}</td>
+          <tr onClick={add_pick ? () => add_pick(side, i, from) : () => null}>
+            <td>
+              <b>{i + 1}</b>
+            </td>
+            <td>
+              <b style={from === participant ? null : { color: 'red' }}>{DictUsers ? DictUsers[from] : from}</b>
+            </td>
           </tr>
         ))
     );
@@ -21,7 +25,7 @@ export default function PickList({ tradablePicks, participant, add_pick, side, f
   const render_tab_pick_headers = () => (
     <>
       <tr>
-        <th colSpan={3}>{DictUsers ? DictUsers[participant] : participant}'s tradable picks</th>
+        <th colSpan={3}>{DictUsers ? DictUsers[participant] : participant}&apos;s tradable picks</th>
       </tr>
       <tr>
         <th>Round #</th>

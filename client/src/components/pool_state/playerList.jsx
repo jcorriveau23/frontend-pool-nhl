@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+// component
+import PlayerNoLink from '../playerNoLink';
+
 // images
 import { logos } from '../img/logos';
 
-export default function PlayerList({ poolerContext }) {
+export default function PlayerList({ poolerContext, injury }) {
   const render_players = players =>
     players.map((player, i) => (
       <tr key={player}>
         <td>{i + 1}</td>
-        <td>{player.name}</td>
+        <td>
+          <PlayerNoLink name={player.name} injury={injury} />
+        </td>
         <td>
           <img src={logos[player.team]} alt="" width="40" height="40" />
         </td>

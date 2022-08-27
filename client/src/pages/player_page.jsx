@@ -5,6 +5,9 @@ import axios from 'axios';
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
 
+// images
+import { logos } from '../components/img/logos';
+
 export default function PlayerPage() {
   const [playerStats, setPlayerStats] = useState(null);
   const [playerPlayoffStats, setPlayerPlayoffStats] = useState(null);
@@ -398,58 +401,54 @@ export default function PlayerPage() {
     );
   };
 
-  const render_player_info = p => {
-    const today = new Date();
-    const birthDate = new Date(p.birthDate);
-    const ageTime = today - birthDate;
-
-    const age = new Date(ageTime).getFullYear() - 1970;
-    return (
-      <table className="content-table">
-        <thead>
-          <tr>
-            <th colSpan={2}>
-              <h3>{p.fullName}</h3>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th>Position</th>
-            <td>{p.primaryPosition.abbreviation}</td>
-          </tr>
-          <tr>
-            <th>Shoot Catches</th>
-            <td>{p.shootsCatches}</td>
-          </tr>
-          <tr>
-            <th>Birth date</th>
-            <td>{p.birthDate}</td>
-          </tr>
-          <tr>
-            <th>Age</th>
-            <td>{age}</td>
-          </tr>
-          <tr>
-            <th>Birth city</th>
-            <td>{p.birthCity}</td>
-          </tr>
-          <tr>
-            <th>Birth country</th>
-            <td>{p.birthCountry}</td>
-          </tr>
-          <tr>
-            <th>Height</th>
-            <td>{p.height}</td>
-          </tr>
-          <tr>
-            <th>Weight</th>
-            <td>{p.weight}</td>
-          </tr>
-        </tbody>
-      </table>
-    );
-  };
+  const render_player_info = p => (
+    <table className="content-table">
+      <thead>
+        <tr>
+          <th>
+            <img src={logos[p.currentTeam.name]} alt="" width="60" height="60" />
+          </th>
+          <th>
+            <h3>{p.fullName}</h3>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Position</th>
+          <td>{p.primaryPosition.abbreviation}</td>
+        </tr>
+        <tr>
+          <th>Shoot Catches</th>
+          <td>{p.shootsCatches}</td>
+        </tr>
+        <tr>
+          <th>Birth date</th>
+          <td>{p.birthDate}</td>
+        </tr>
+        <tr>
+          <th>Age</th>
+          <td>{p.currentAge}</td>
+        </tr>
+        <tr>
+          <th>Birth city</th>
+          <td>{p.birthCity}</td>
+        </tr>
+        <tr>
+          <th>Birth country</th>
+          <td>{p.birthCountry}</td>
+        </tr>
+        <tr>
+          <th>Height</th>
+          <td>{p.height}</td>
+        </tr>
+        <tr>
+          <th>Weight</th>
+          <td>{p.weight}</td>
+        </tr>
+      </tbody>
+    </table>
+  );
 
   const render_player_info_stats = (stats, info) => (
     <div>

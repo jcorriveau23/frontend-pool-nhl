@@ -4,10 +4,15 @@ import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClipLoader from 'react-spinners/ClipLoader';
 import PropTypes from 'prop-types';
+
+// Icons
 import { AiFillStar } from 'react-icons/ai';
+import { BsPenFill } from 'react-icons/bs';
 
 // components
 import PlayerList from './playerList';
+import DraftOrder from './draftOrder';
+import PlayerNoLink from '../playerNoLink';
 
 // css
 import '../react-tabs.css';
@@ -15,7 +20,16 @@ import '../react-tabs.css';
 // images
 import { logos } from '../img/logos';
 
-export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPoolInfo, socket, isUserParticipant }) {
+export default function DraftPool({
+  user,
+  DictUsers,
+  poolName,
+  poolInfo,
+  setPoolInfo,
+  injury,
+  socket,
+  isUserParticipant,
+}) {
   const [inRoom, setInRoom] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [def_l, setDef_l] = useState([]);
@@ -143,8 +157,29 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
 
   const isUser = participant => participant === user._id.$oid;
 
+  const draft_turn = () => {
+    if (poolInfo.final_rank) {
+      // Comes from dynastie
+
+      const number_players_drafted = poolInfo.context.players_name_drafted.length;
+      const next_drafter =
+        poolInfo.final_rank[poolInfo.number_poolers - 1 - (number_players_drafted % poolInfo.number_poolers)]; // The last one have the first pick
+
+      const round = number_players_drafted / poolInfo.number_poolers;
+
+      if (poolInfo.tradable_picks && poolInfo.tradable_picks.length > round) {
+        return poolInfo.tradable_picks[round][next_drafter]; // tradable picks
+      }
+      return next_drafter; // No more tradable picks
+    }
+    // comes from new draft
+
+    const number_players_drafted = poolInfo.context.players_name_drafted.length;
+    return poolInfo.participants[number_players_drafted % poolInfo.number_poolers];
+  };
+
   const render_pooler_turn = pooler => {
-    if (poolInfo.context.draft_order[0] === pooler) {
+    if (draft_turn() === pooler) {
       return (
         <Tab key={pooler} style={{ color: 'green' }}>
           <AiFillStar size={30} />
@@ -168,12 +203,35 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
 
     return (
       <Tabs>
-        <TabList>{poolers.map(pooler => render_pooler_turn(pooler))}</TabList>
+        <TabList>
+          {poolers.map(pooler => render_pooler_turn(pooler))}
+          <Tab>
+            <BsPenFill size={30} />
+            Draft Order
+          </Tab>
+        </TabList>
         {poolers.map(pooler => (
           <TabPanel key={pooler}>
-            <PlayerList poolerContext={poolInfo.context.pooler_roster[pooler]} />
+            <PlayerList poolerContext={poolInfo.context.pooler_roster[pooler]} injury={injury} />
           </TabPanel>
         ))}
+        <TabPanel>
+          <DraftOrder
+            players_name_drafted={poolInfo.context.players_name_drafted}
+            participants={poolInfo.participants}
+            final_rank={poolInfo.final_rank}
+            tradable_picks={poolInfo.context.tradable_picks}
+            nb_players={
+              poolInfo.number_forwards +
+              poolInfo.number_defenders +
+              poolInfo.number_goalies +
+              poolInfo.number_reservists
+            }
+            nb_protected_players={poolInfo.next_season_number_players_protected}
+            injury={injury}
+            DictUsers={DictUsers}
+          />
+        </TabPanel>
       </Tabs>
     );
   };
@@ -227,7 +285,9 @@ export default function DraftPool({ user, DictUsers, poolName, poolInfo, setPool
                   </button>
                 ) : null}
               </td>
-              <td>{player.name}</td>
+              <td>
+                <PlayerNoLink name={player.name} injury={injury} />
+              </td>
               <td>
                 <img src={logos[player.team]} alt="" width="40" height="40" />
               </td>

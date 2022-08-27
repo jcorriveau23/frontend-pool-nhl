@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 // components
 import TradeItem from './tradeItem';
@@ -50,87 +51,94 @@ export default function TradeCenter({ poolInfo, setPoolInfo, user, DictUsers, is
   if (poolInfo.trades) {
     return (
       <div className="cont">
-        <h1>Open Trades</h1>
-        {poolInfo.trades
-          .filter(trade => trade.status === 'NEW')
-          .map(tradeInfo => (
-            <table className="content-table-no-hover">
-              <tbody>
-                <tr>
-                  <th>{tradeInfo.status}</th>
-                  <th>
-                    <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
-                  </th>
-                  <th>
-                    {tradeInfo.proposed_by === user._id.$oid ? (
-                      <button onClick={() => cancel_trade(tradeInfo.id)} type="button">
-                        Cancel
-                      </button>
-                    ) : null}
-                    {tradeInfo.ask_to === user._id.$oid ? (
-                      <button onClick={() => respond_trade(tradeInfo.id, true)} type="button">
-                        Accept
-                      </button>
-                    ) : null}
-                    {tradeInfo.ask_to === user._id.$oid ? (
-                      <button onClick={() => respond_trade(tradeInfo.id, false)} type="button">
-                        Refuse
-                      </button>
-                    ) : null}
-                  </th>
-                  <th>{new Date(tradeInfo.date_created).toISOString().split('T')[0]}</th>
-                </tr>
-              </tbody>
-            </table>
-          ))}
-        <h1>Accepted Trades</h1>
-        {poolInfo.trades
-          .filter(trade => trade.status === 'ACCEPTED')
-          .map(tradeInfo => (
-            <table className="content-table-no-hover">
-              <tbody>
-                <tr>
-                  <th>
-                    {tradeInfo.status} on {new Date(tradeInfo.dateAccepted).toISOString().split('T')[0]}
-                  </th>
-                  <th>
-                    <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
-                  </th>
-                  <th>{tradeInfo.date_accepted}</th>
-                </tr>
-              </tbody>
-            </table>
-          ))}
-        <h1>Refused Trades</h1>
-        {poolInfo.trades
-          .filter(trade => trade.status === 'REFUSED')
-          .map(tradeInfo => (
-            <table className="content-table-no-hover">
-              <tbody>
-                <tr>
-                  <th>{tradeInfo.status}</th>
-                  <th>
-                    <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
-                  </th>
-                </tr>
-              </tbody>
-            </table>
-          ))}
-        <h1>Completed Trades</h1>
-        {poolInfo.trades
-          .filter(trade => trade.status === 'CANCELLED')
-          .map(tradeInfo => (
-            <table className="content-table-no-hover">
-              <tbody>
-                <tr>
-                  <th>{tradeInfo.status}</th>
-                  <th>
-                    <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
-                  </th>
-                </tr>
-              </tbody>
-            </table>
-          ))}
+        <Tabs>
+          <TabList>
+            <Tab>Open Trades</Tab>
+            <Tab>Accepted Trades</Tab>
+            <Tab>Refused Trades</Tab>
+            <Tab>Cancelled Trades</Tab>
+          </TabList>
+          <TabPanel>
+            {poolInfo.trades
+              .filter(trade => trade.status === 'NEW')
+              .map(tradeInfo => (
+                <table className="content-table-no-hover">
+                  <tbody>
+                    <tr>
+                      <th>
+                        <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
+                      </th>
+                      <th>
+                        {tradeInfo.proposed_by === user._id.$oid ? (
+                          <button onClick={() => cancel_trade(tradeInfo.id)} type="button">
+                            Cancel
+                          </button>
+                        ) : null}
+                        {tradeInfo.ask_to === user._id.$oid ? (
+                          <button onClick={() => respond_trade(tradeInfo.id, true)} type="button">
+                            Accept
+                          </button>
+                        ) : null}
+                        {tradeInfo.ask_to === user._id.$oid ? (
+                          <button onClick={() => respond_trade(tradeInfo.id, false)} type="button">
+                            Refuse
+                          </button>
+                        ) : null}
+                      </th>
+                      <th>{new Date(tradeInfo.date_created).toISOString().split('T')[0]}</th>
+                    </tr>
+                  </tbody>
+                </table>
+              ))}
+          </TabPanel>
+          <TabPanel>
+            {poolInfo.trades
+              .filter(trade => trade.status === 'ACCEPTED')
+              .map(tradeInfo => (
+                <table className="content-table-no-hover">
+                  <tbody>
+                    <tr>
+                      <th>
+                        <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
+                      </th>
+                      <th>{new Date(tradeInfo.date_accepted).toISOString().split('T')[0]}</th>
+                    </tr>
+                  </tbody>
+                </table>
+              ))}
+          </TabPanel>
+          <TabPanel>
+            {poolInfo.trades
+              .filter(trade => trade.status === 'REFUSED')
+              .map(tradeInfo => (
+                <table className="content-table-no-hover">
+                  <tbody>
+                    <tr>
+                      <th>
+                        <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
+                      </th>
+                      <th>{new Date(tradeInfo.date_created).toISOString().split('T')[0]}</th>
+                    </tr>
+                  </tbody>
+                </table>
+              ))}
+          </TabPanel>
+          <TabPanel>
+            {poolInfo.trades
+              .filter(trade => trade.status === 'CANCELLED')
+              .map(tradeInfo => (
+                <table className="content-table-no-hover">
+                  <tbody>
+                    <tr>
+                      <th>
+                        <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
+                      </th>
+                    </tr>
+                  </tbody>
+                </table>
+              ))}
+          </TabPanel>
+        </Tabs>
         {isUserParticipant ? (
           <>
             <button className="base-button" type="button" onClick={() => setShowCreateTradeModal(true)}>

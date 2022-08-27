@@ -22,20 +22,23 @@ export default function FillSpot({
   fillSpotPosition,
 }) {
   const fill_spot = player => {
-    axios
-      .post(
-        '/api-rust/fill-spot',
-        { player, name: poolInfo.name },
-        { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` } }
-      )
-      .then(res => {
-        if (res.data.success) {
-          setShowFillSpotModal(false);
-          setPoolInfo(res.data.pool);
-        } else {
-          alert(res.data.message);
-        }
-      });
+    if (window.confirm(`Do you really chose ${player.name} to fill the empty spot?`)) {
+      axios
+        .post(
+          '/api-rust/fill-spot',
+          { player, name: poolInfo.name },
+          { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` } }
+        )
+        .then(res => {
+          console.log(res.data);
+          if (res.data.success) {
+            setShowFillSpotModal(false);
+            setPoolInfo(res.data.pool);
+          } else {
+            alert(res.data.message);
+          }
+        });
+    }
   };
 
   const render_players = players =>

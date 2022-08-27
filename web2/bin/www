@@ -152,7 +152,7 @@ io.on('connection', function (socket) {
 
     axios
       .post(
-        '/api-rust/start-draft',
+        'https://hockeypool.live/api-rust/start-draft',
         {
           poolInfo,
         },
@@ -170,7 +170,11 @@ io.on('connection', function (socket) {
 
   socket.on('pickPlayer', function (data, room, player, callback) {
     axios
-      .post('/api-rust/select-player', { name: room, player }, { headers: { Authorization: `Bearer ${data}` } })
+      .post(
+        'https://hockeypool.live/api-rust/select-player',
+        { name: room, player },
+        { headers: { Authorization: `Bearer ${data}` } }
+      )
       .then(res => {
         if (res.data.success) {
           io.in(room).emit('poolInfo', res.data.pool);

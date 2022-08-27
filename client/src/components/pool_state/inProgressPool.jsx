@@ -22,15 +22,7 @@ import { logos } from '../img/logos';
 // css
 import '../react-tabs.css';
 
-export default function InProgressPool({
-  user,
-  DictUsers,
-  poolName,
-  poolInfo,
-  setPoolInfo,
-  injury,
-  isUserParticipant,
-}) {
+export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo, injury, isUserParticipant }) {
   const [playersStats, setPlayersStats] = useState(null);
   const [ranking, setRanking] = useState(null);
   const [playersIdToPoolerMap, setPlayersIdToPoolerMap] = useState(null);
@@ -63,7 +55,7 @@ export default function InProgressPool({
     let daily_stats = null;
     const tempDate = new Date(fDate);
 
-    let i = 100;
+    let i = 200;
 
     do {
       const fTempDate = tempDate.toISOString().slice(0, 10);
@@ -215,7 +207,7 @@ export default function InProgressPool({
           const player = poolInfo.context.score_by_day[jDate][participant].roster.F[key];
 
           if (player) {
-            const index = stats[participant].chosen_forwards.findIndex(object => object.id === Number(key));
+            const index = stats[participant].chosen_forwards.findIndex(object => Number(object.id) === Number(key));
 
             if (index === -1) {
               player.id = key;
@@ -740,7 +732,6 @@ export default function InProgressPool({
 InProgressPool.propTypes = {
   user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
   DictUsers: PropTypes.shape({}).isRequired,
-  poolName: PropTypes.string.isRequired,
   poolInfo: PropTypes.shape({
     name: PropTypes.string.isRequired,
     participants: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,

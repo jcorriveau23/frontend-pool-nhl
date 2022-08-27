@@ -30,6 +30,7 @@ export default function PoolPage({ user, DictUsers, injury }) {
           headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
         })
         .then(res => {
+          console.log(res.data);
           if (res.status === 200) {
             // [TODO] display a page or notification to show that the pool was not found
             setPoolInfo(res.data);
@@ -76,7 +77,6 @@ export default function PoolPage({ user, DictUsers, injury }) {
           <InProgressPool
             user={user}
             DictUsers={DictUsers}
-            poolName={poolName}
             poolInfo={poolInfo}
             setPoolInfo={setPoolInfo}
             injury={injury}
