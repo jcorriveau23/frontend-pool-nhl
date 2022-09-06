@@ -10,7 +10,7 @@ import TradeItem from './tradeItem';
 // modal
 import CreateTradeModal from '../../modals/createTrade';
 
-export default function TradeCenter({ poolInfo, setPoolInfo, user, DictUsers, isUserParticipant }) {
+export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictUsers, isUserParticipant }) {
   const [showCreateTradeModal, setShowCreateTradeModal] = useState(false);
 
   const respond_trade = (tradeID, isAccepted) => {
@@ -50,7 +50,7 @@ export default function TradeCenter({ poolInfo, setPoolInfo, user, DictUsers, is
 
   if (poolInfo.trades) {
     return (
-      <div className="cont">
+      <div className="half-cont">
         <Tabs>
           <TabList>
             <Tab>Open Trades</Tab>
@@ -149,6 +149,7 @@ export default function TradeCenter({ poolInfo, setPoolInfo, user, DictUsers, is
               setShowCreateTradeModal={setShowCreateTradeModal}
               poolInfo={poolInfo}
               setPoolInfo={setPoolInfo}
+              injury={injury}
               user={user}
               DictUsers={DictUsers}
             />

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -161,11 +160,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
                 <div className="pool_item">
                   <ul>
                     {poolDynastie.map(pool => (
-                      <Link to={`/my-pools/${pool.name}`} key={pool.name}>
-                        <li>
-                          <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
-                        </li>
-                      </Link>
+                      <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
                     ))}
                   </ul>
                 </div>

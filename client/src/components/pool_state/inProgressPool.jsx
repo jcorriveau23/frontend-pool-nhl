@@ -5,16 +5,21 @@ import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClipLoader from 'react-spinners/ClipLoader';
 import PropTypes from 'prop-types';
+
+// icons
 import { RiTeamFill } from 'react-icons/ri';
+import { BsCalendarDay, BsFillCalculatorFill, BsCashCoin } from 'react-icons/bs';
 
 // component
 import DayLeaders from '../home_page/dailyLeaders';
 import TradeCenter from './tradeCenter';
 import PlayerLink from '../playerLink';
 import PickList from './pickList';
+import DailyRanking from './dailyRanking';
 
 // modals
 import FillSpot from '../../modals/FillSpot';
+import RosterModificationModal from '../../modals/rosterModification';
 
 // images
 import { logos } from '../img/logos';
@@ -22,16 +27,26 @@ import { logos } from '../img/logos';
 // css
 import '../react-tabs.css';
 
-export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo, injury, isUserParticipant }) {
+export default function InProgressPool({
+  user,
+  DictUsers,
+  poolInfo,
+  setPoolInfo,
+  injury,
+  isUserParticipant,
+  formatDate,
+  date,
+  setDate,
+}) {
   const [playersStats, setPlayersStats] = useState(null);
   const [ranking, setRanking] = useState(null);
   const [playersIdToPoolerMap, setPlayersIdToPoolerMap] = useState(null);
   const [playerIdToPlayersDataMap, setPlayerIdToPlayersDataMap] = useState(null);
-  const [formatDate, setFormatDate] = useState('');
+  const [todayFormatDate] = useState(new Date().toISOString().slice(0, 10));
   const [showFillSpotModal, setShowFillSpotModal] = useState(false);
   const [fillSpotPosition, setFillSpotPosition] = useState('');
-  const [dayLeaders, setDayLeaders] = useState(null);
-  const [isCumulative, seIsCumulative] = useState(true); // TODO: use this to be in cumulative or daily mode.
+  const [showRosterModificationModal, setShowRosterModificationModal] = useState(false);
+  const [selectedRosterPickIndex, setSelectedRosterPickIndex] = useState(0);
 
   const sort_by_player_member = async (playerMember, array) => {
     // TODO: try to simplified this into no if at all
@@ -76,37 +91,38 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
 
     let daily_stats = null;
 
-    console.log(Object.keys(poolInfo.context.score_by_day).length);
-
     if (Object.keys(poolInfo.context.score_by_day).length > 0) {
       daily_stats = await find_last_cumulate(fDate);
     } // TODO make this date variable
 
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
-      const pooler = poolInfo.participants[i];
+      const participant = poolInfo.participants[i];
 
-      stats[pooler] = {};
+      stats[participant] = {};
 
-      stats[pooler].forwards_total_goal =
-        daily_stats && daily_stats[pooler].cumulate ? daily_stats[pooler].cumulate.G_F : 0;
-      stats[pooler].forwards_total_assist = daily_stats ? daily_stats[pooler].cumulate.A_F : 0;
-      stats[pooler].forwards_total_pts = daily_stats ? daily_stats[pooler].cumulate.P_F : 0;
-      stats[pooler].forwards_total_hattrick = daily_stats ? daily_stats[pooler].cumulate.HT_F : 0;
-      stats[pooler].defenders_total_goal = daily_stats ? daily_stats[pooler].cumulate.G_D : 0;
-      stats[pooler].defenders_total_assist = daily_stats ? daily_stats[pooler].cumulate.A_D : 0;
-      stats[pooler].defenders_total_hattrick = daily_stats ? daily_stats[pooler].cumulate.HT_D : 0;
-      stats[pooler].defenders_total_pts = daily_stats ? daily_stats[pooler].cumulate.P_D : 0;
-      stats[pooler].goalies_total_goal = daily_stats ? daily_stats[pooler].cumulate.G_G : 0;
-      stats[pooler].goalies_total_assist = daily_stats ? daily_stats[pooler].cumulate.A_G : 0;
-      stats[pooler].goalies_total_win = daily_stats ? daily_stats[pooler].cumulate.W_G : 0;
-      stats[pooler].goalies_total_shutout = daily_stats ? daily_stats[pooler].cumulate.SO_G : 0;
-      stats[pooler].goalies_total_pts = daily_stats ? daily_stats[pooler].cumulate.P_G : 0;
-      stats[pooler].total_pts = daily_stats ? daily_stats[pooler].cumulate.P : 0;
+      stats[participant].forwards_total_goal =
+        daily_stats && daily_stats[participant].cumulate ? daily_stats[participant].cumulate.G_F : 0;
+      stats[participant].forwards_total_game = 0; // will be count during the for loop.
+      stats[participant].forwards_total_assist = daily_stats ? daily_stats[participant].cumulate.A_F : 0;
+      stats[participant].forwards_total_pts = daily_stats ? daily_stats[participant].cumulate.P_F : 0;
+      stats[participant].forwards_total_hattrick = daily_stats ? daily_stats[participant].cumulate.HT_F : 0;
+      stats[participant].defenders_total_game = 0; // will be count during the for loop.
+      stats[participant].defenders_total_goal = daily_stats ? daily_stats[participant].cumulate.G_D : 0;
+      stats[participant].defenders_total_assist = daily_stats ? daily_stats[participant].cumulate.A_D : 0;
+      stats[participant].defenders_total_hattrick = daily_stats ? daily_stats[participant].cumulate.HT_D : 0;
+      stats[participant].defenders_total_pts = daily_stats ? daily_stats[participant].cumulate.P_D : 0;
+      stats[participant].goalies_total_game = 0; // will be count during the for loop.
+      stats[participant].goalies_total_goal = daily_stats ? daily_stats[participant].cumulate.G_G : 0;
+      stats[participant].goalies_total_assist = daily_stats ? daily_stats[participant].cumulate.A_G : 0;
+      stats[participant].goalies_total_win = daily_stats ? daily_stats[participant].cumulate.W_G : 0;
+      stats[participant].goalies_total_shutout = daily_stats ? daily_stats[participant].cumulate.SO_G : 0;
+      stats[participant].goalies_total_pts = daily_stats ? daily_stats[participant].cumulate.P_G : 0;
+      stats[participant].total_pts = daily_stats ? daily_stats[participant].cumulate.P : 0;
 
-      stats[pooler].chosen_forwards = [];
-      stats[pooler].chosen_defenders = [];
-      stats[pooler].chosen_goalies = [];
-      stats[pooler].chosen_reservists = [];
+      stats[participant].chosen_forwards = [];
+      stats[participant].chosen_defenders = [];
+      stats[participant].chosen_goalies = [];
+      stats[participant].chosen_reservists = [];
 
       // Create 2 HashMaps for each players that is included in this pool.
       // 1st Player-ID -> Pooler-owner
@@ -114,10 +130,10 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
 
       // Forwards
 
-      for (let j = 0; j < poolInfo.context.pooler_roster[pooler].chosen_forwards.length; j += 1) {
-        const player = poolInfo.context.pooler_roster[pooler].chosen_forwards[j];
+      for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_forwards.length; j += 1) {
+        const player = poolInfo.context.pooler_roster[participant].chosen_forwards[j];
 
-        playersIdToPooler[player.id] = pooler;
+        playersIdToPooler[player.id] = participant;
         playersIdToPlayersData[player.id] = player;
 
         player.nb_game = 0;
@@ -126,15 +142,15 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
         player.HT = 0;
         player.pool_points = 0;
         player.own = true;
-        stats[pooler].chosen_forwards.push(player);
+        stats[participant].chosen_forwards.push(player);
       }
 
       // Defenders
 
-      for (let j = 0; j < poolInfo.context.pooler_roster[pooler].chosen_defenders.length; j += 1) {
-        const player = poolInfo.context.pooler_roster[pooler].chosen_defenders[j];
+      for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_defenders.length; j += 1) {
+        const player = poolInfo.context.pooler_roster[participant].chosen_defenders[j];
 
-        playersIdToPooler[player.id] = pooler;
+        playersIdToPooler[player.id] = participant;
         playersIdToPlayersData[player.id] = player;
 
         player.nb_game = 0;
@@ -143,15 +159,15 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
         player.HT = 0;
         player.pool_points = 0;
         player.own = true;
-        stats[pooler].chosen_defenders.push(player);
+        stats[participant].chosen_defenders.push(player);
       }
 
       // Goalies
 
-      for (let j = 0; j < poolInfo.context.pooler_roster[pooler].chosen_goalies.length; j += 1) {
-        const player = poolInfo.context.pooler_roster[pooler].chosen_goalies[j];
+      for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_goalies.length; j += 1) {
+        const player = poolInfo.context.pooler_roster[participant].chosen_goalies[j];
 
-        playersIdToPooler[player.id] = pooler;
+        playersIdToPooler[player.id] = participant;
         playersIdToPlayersData[player.id] = player;
 
         player.nb_game = 0;
@@ -161,35 +177,26 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
         player.SO = 0;
         player.pool_points = 0;
         player.own = true;
-        stats[pooler].chosen_goalies.push(player);
+        stats[participant].chosen_goalies.push(player);
       }
 
       // Reservists
 
-      for (let j = 0; j < poolInfo.context.pooler_roster[pooler].chosen_reservists.length; j += 1) {
-        const player = poolInfo.context.pooler_roster[pooler].chosen_reservists[j];
+      for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_reservists.length; j += 1) {
+        const player = poolInfo.context.pooler_roster[participant].chosen_reservists[j];
+        player.own = false;
 
-        playersIdToPooler[player.id] = pooler;
+        playersIdToPooler[player.id] = participant;
         playersIdToPlayersData[player.id] = player;
       }
-
-      const pooler_global_stats = {
-        name: pooler,
-        defenders_total_pts: stats[pooler].defenders_total_pts,
-        forwards_total_pts: stats[pooler].forwards_total_pts,
-        goalies_total_pts: stats[pooler].goalies_total_pts,
-        total_pts: stats[pooler].total_pts,
-      };
-
-      rank.push(pooler_global_stats);
     }
-
-    rank = await sort_by_player_member('total_pts', rank);
 
     // Parse the list of all daily games information to get the stats of each players
 
-    const startDate = new Date(2021, 9, 13); // Beginning of the 2021 nhl post season 2022-05-02
-    const endDate = new Date(); // today
+    const startDate = new Date(2021, 9, 13);
+    const endDate = new Date(formatDate); // today TODO: change this to match the date selected with the date picker to see the roster and the ranking on each date.
+
+    endDate.setDate(endDate.getDate() + 1);
 
     for (let j = startDate; j <= endDate; j.setDate(j.getDate() + 1)) {
       const jDate = j.toISOString().slice(0, 10);
@@ -207,14 +214,19 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
           const player = poolInfo.context.score_by_day[jDate][participant].roster.F[key];
 
           if (player) {
-            const index = stats[participant].chosen_forwards.findIndex(object => Number(object.id) === Number(key));
+            const index = stats[participant].chosen_forwards.findIndex(f => Number(f.id) === Number(key));
 
             if (index === -1) {
-              player.id = key;
-              player.nb_game = 1;
-              player.HT = player.G >= 3 ? 1 : 0;
-              player.own = false;
-              stats[participant].chosen_forwards.push(player);
+              const newPlayer = {
+                id: key,
+                nb_game: 1,
+                G: player.G,
+                A: player.A,
+                HT: player.G >= 3 ? 1 : 0,
+                own: false,
+              };
+              stats[participant].forwards_total_game += 1;
+              stats[participant].chosen_forwards.push(newPlayer);
             } else {
               stats[participant].chosen_forwards[index].G += player.G;
               stats[participant].chosen_forwards[index].A += player.A;
@@ -222,6 +234,7 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
                 stats[participant].chosen_forwards[index].HT += 1;
               }
               stats[participant].chosen_forwards[index].nb_game += 1;
+              stats[participant].forwards_total_game += 1;
               // total pool points
               stats[participant].chosen_forwards[index].pool_points =
                 stats[participant].chosen_forwards[index].G * poolInfo.forward_pts_goals +
@@ -237,14 +250,19 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
           const player = poolInfo.context.score_by_day[jDate][participant].roster.D[key];
 
           if (player) {
-            const index = stats[participant].chosen_defenders.findIndex(object => object.id === Number(key));
+            const index = stats[participant].chosen_defenders.findIndex(d => Number(d.id) === Number(key));
 
             if (index === -1) {
-              player.id = key;
-              player.nb_game = 1;
-              player.HT = player.G >= 3 ? 1 : 0;
-              player.own = false;
-              stats[participant].chosen_defenders.push(player);
+              const newPlayer = {
+                id: key,
+                nb_game: 1,
+                G: player.G,
+                A: player.A,
+                HT: player.G >= 3 ? 1 : 0,
+                own: false,
+              };
+              stats[participant].defenders_total_game += 1;
+              stats[participant].chosen_defenders.push(newPlayer);
             } else {
               stats[participant].chosen_defenders[index].G += player.G;
               stats[participant].chosen_defenders[index].A += player.A;
@@ -252,6 +270,7 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
                 stats[participant].chosen_defenders[index].HT += 1;
               }
               stats[participant].chosen_defenders[index].nb_game += 1;
+              stats[participant].defenders_total_game += 1;
               // total pool points
               stats[participant].chosen_defenders[index].pool_points =
                 stats[participant].chosen_defenders[index].G * poolInfo.defender_pts_goals +
@@ -267,19 +286,27 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
           const player = poolInfo.context.score_by_day[jDate][participant].roster.G[key];
 
           if (player) {
-            const index = stats[participant].chosen_goalies.findIndex(object => object.id === Number(key));
+            const index = stats[participant].chosen_goalies.findIndex(g => Number(g.id) === Number(key));
 
             if (index === -1) {
-              player.id = key;
-              player.nb_game = 1;
-              player.own = false;
-              stats[participant].chosen_goalies.push(player);
+              const newPlayer = {
+                id: key,
+                nb_game: 1,
+                G: player.G,
+                A: player.A,
+                W: player.W,
+                SO: player.SO,
+                own: false,
+              };
+              stats[participant].goalies_total_game += 1;
+              stats[participant].chosen_goalies.push(newPlayer);
             } else {
               stats[participant].chosen_goalies[index].G += player.G;
               stats[participant].chosen_goalies[index].A += player.A;
               stats[participant].chosen_goalies[index].W += player.W;
               stats[participant].chosen_goalies[index].SO += player.SO;
               stats[participant].chosen_goalies[index].nb_game += 1;
+              stats[participant].goalies_total_game += 1;
               // total pool points
               stats[participant].chosen_goalies[index].pool_points =
                 stats[participant].chosen_goalies[index].G * poolInfo.goalies_pts_goals +
@@ -292,7 +319,8 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
       }
     }
 
-    // count the number of player currently own in each position.
+    // Count the number of players own on that date
+    // Also create the Rank table.
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
       const participant = poolInfo.participants[i];
 
@@ -310,7 +338,39 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
       for (let j = 0; j < stats[participant].chosen_goalies.length; j += 1) {
         stats[participant].goalies_own += stats[participant].chosen_goalies[j].own ? 1 : 0;
       }
+
+      const pooler_global_stats = {
+        participant,
+        // forwards global stats
+        forwards_total_game: stats[participant].forwards_total_game,
+        forwards_total_goal: stats[participant].forwards_total_goal,
+        forwards_total_assist: stats[participant].forwards_total_assist,
+        forwards_total_hattrick: stats[participant].forwards_total_hattrick,
+        forwards_total_pts: stats[participant].forwards_total_pts,
+        // Defenders global stats
+        defenders_total_game: stats[participant].defenders_total_game,
+        defenders_total_goal: stats[participant].defenders_total_goal,
+        defenders_total_assist: stats[participant].defenders_total_assist,
+        defenders_total_hattrick: stats[participant].defenders_total_hattrick,
+        defenders_total_pts: stats[participant].defenders_total_pts,
+        // goalies global stats
+        goalies_total_game: stats[participant].goalies_total_game,
+        goalies_total_goal: stats[participant].goalies_total_goal,
+        goalies_total_assist: stats[participant].goalies_total_assist,
+        goalies_total_win: stats[participant].goalies_total_win,
+        goalies_total_shutout: stats[participant].goalies_total_shutout,
+        goalies_total_pts: stats[participant].goalies_total_pts,
+        total_game:
+          stats[participant].forwards_total_game +
+          stats[participant].defenders_total_game +
+          stats[participant].goalies_total_game,
+        total_pts: stats[participant].total_pts,
+      };
+
+      rank.push(pooler_global_stats);
     }
+
+    rank = await sort_by_player_member('total_pts', rank);
 
     setRanking(rank);
     setPlayersStats(stats);
@@ -319,28 +379,8 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
   };
 
   useEffect(() => {
-    const newDate = new Date();
-
-    let fDate = newDate.toISOString().slice(0, 10);
-
-    // This mechanics allows us to dynamically get the live data game or the past day if no data games are yet discovered for today.
-
-    axios
-      .get(`/api-rust/daily_leaders/${fDate}`)
-      .then(res => {
-        if (res.status === 200) {
-          setFormatDate(fDate);
-          setDayLeaders({ ...res.data }); // set it in this component
-          calculate_pool_stats(fDate);
-        }
-      })
-      .catch(e => {
-        newDate.setDate(newDate.getDate() - 1);
-        fDate = newDate.toISOString().slice(0, 10);
-        setFormatDate(fDate);
-        calculate_pool_stats(fDate);
-      });
-  }, [poolInfo]);
+    calculate_pool_stats(formatDate);
+  }, [poolInfo, formatDate]);
 
   const download_csv = pool => {
     let csv = 'Player Name,Team\n';
@@ -425,9 +465,7 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
     return (
       <>
         {playersStats[pooler][chosen_player_key]
-          .sort((p1, p2) => {
-            return p2.pool_points - p1.pool_points;
-          })
+          .sort((p1, p2) => p2.pool_points - p1.pool_points)
           .map((player, i) => (
             <tr key={player.id}>
               <td>{i + 1}</td>
@@ -443,7 +481,9 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
               <td>{player.A}</td>
               <td>{player.G + player.A}</td>
               <td>{player.HT}</td>
-              <td>{player.pool_points}</td>
+              <td>
+                <b>{player.pool_points}</b>
+              </td>
             </tr>
           ))}
         {emptyRows.map(row => row)}
@@ -452,12 +492,16 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
           <th> - </th>
           <th> - </th>
           <th> - </th>
-          <th> - </th>
+          <th>
+            {position === 'F' ? playersStats[pooler].forwards_total_game : playersStats[pooler].defenders_total_game}
+          </th>
           <th>{playersStats[pooler][player_total_goal_key]}</th>
           <th>{playersStats[pooler][player_total_assist_key]}</th>
           <th>{playersStats[pooler][player_total_goal_key] + playersStats[pooler][player_total_assist_key]}</th>
           <th>{playersStats[pooler][player_total_hattrick_key]}</th>
-          <th>{playersStats[pooler][player_total_pts_key]}</th>
+          <th>
+            <b>{playersStats[pooler][player_total_pts_key]}</b>
+          </th>
         </tr>
       </>
     );
@@ -468,9 +512,7 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
     return (
       <>
         {playersStats[pooler].chosen_goalies
-          .sort((p1, p2) => {
-            return p2.pool_points - p1.pool_points;
-          })
+          .sort((p1, p2) => p2.pool_points - p1.pool_points)
           .map((player, i) => (
             <tr key={player.id}>
               <td>{i + 1}</td>
@@ -486,7 +528,9 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
               <td>{player.A}</td>
               <td>{player.W}</td>
               <td>{player.SO}</td>
-              <td>{player.pool_points}</td>
+              <td>
+                <b>{player.pool_points}</b>
+              </td>
             </tr>
           ))}
         {emptyRows.map(row => row)}
@@ -495,12 +539,14 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
           <th> - </th>
           <th> - </th>
           <th> - </th>
-          <th> - </th>
+          <th>{playersStats[pooler].goalies_total_game}</th>
           <th>{playersStats[pooler].goalies_total_goal}</th>
           <th>{playersStats[pooler].goalies_total_assist}</th>
           <th>{playersStats[pooler].goalies_total_win}</th>
           <th>{playersStats[pooler].goalies_total_shutout}</th>
-          <th>{playersStats[pooler].goalies_total_pts}</th>
+          <th>
+            <b>{playersStats[pooler].goalies_total_pts}</b>
+          </th>
         </tr>
       </>
     );
@@ -508,7 +554,7 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
 
   const render_reservists = pooler =>
     poolInfo.context.pooler_roster[pooler].chosen_reservists.map((player, i) => (
-      <tr key={player.id}>
+      <tr key={player.name}>
         <td>{i + 1}</td>
         <td>
           <RiTeamFill size={25} />
@@ -563,104 +609,158 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
     </tr>
   );
 
-  const render_tabs_choice_stats = () => {
-    if (poolInfo.participants) {
-      const poolers = poolInfo.participants;
+  const render_tabs_roster_stats = () => {
+    const poolers = poolInfo.participants;
 
-      if (isUserParticipant) {
-        // replace pooler user name to be first
-        const i = poolers.findIndex(participant => participant === user._id.$oid);
-        poolers.splice(i, 1);
-        poolers.splice(0, 0, user._id.$oid);
-      }
-      return (
-        <Tabs>
-          <TabList>
-            {poolers.map(pooler => (
-              <Tab key={pooler}>{DictUsers ? DictUsers[pooler] : pooler}</Tab>
-            ))}
-          </TabList>
-          {poolers.map(pooler => (
-            <TabPanel key={pooler}>
-              <table className="content-table">
-                <thead>
-                  <tr>
-                    <th colSpan={10}>
-                      Forwards ({playersStats[pooler].forwards_own}/{poolInfo.number_forwards})
-                    </th>
-                  </tr>
-                  {render_header_skaters()}
-                </thead>
-                <tbody>
-                  {render_skater_stats(
-                    pooler,
-                    'forwards_own',
-                    'chosen_forwards',
-                    'forwards_total_pts',
-                    'forwards_total_goal',
-                    'forwards_total_assist',
-                    'forwards_total_hattrick',
-                    poolInfo.number_forwards,
-                    'F'
-                  )}
-                </tbody>
-                <thead>
-                  <tr>
-                    <th colSpan={10}>
-                      Defenders ({playersStats[pooler].defenders_own}/{poolInfo.number_defenders})
-                    </th>
-                  </tr>
-                  {render_header_skaters()}
-                </thead>
-                <tbody>
-                  {render_skater_stats(
-                    pooler,
-                    'defenders_own',
-                    'chosen_defenders',
-                    'defenders_total_pts',
-                    'defenders_total_goal',
-                    'defenders_total_assist',
-                    'defenders_total_hattrick',
-                    poolInfo.number_defenders,
-                    'D'
-                  )}
-                </tbody>
-                <thead>
-                  <tr>
-                    <th colSpan={10}>
-                      Goalies ({playersStats[pooler].goalies_own}/{poolInfo.number_goalies})
-                    </th>
-                  </tr>
-                  {render_header_goalies()}
-                </thead>
-                <tbody>{render_goalies_stats(pooler, poolInfo.number_goalies)}</tbody>
-                <thead>
-                  <tr>
-                    <th colSpan={10}>Reservists</th>
-                  </tr>
-                  {render_header_reservists()}
-                </thead>
-                <tbody>{render_reservists(pooler)}</tbody>
-              </table>
-              <PickList tradablePicks={poolInfo.context.tradable_picks} participant={pooler} DictUsers={DictUsers} />
-            </TabPanel>
-          ))}
-        </Tabs>
-      );
+    if (isUserParticipant) {
+      // replace pooler user name to be first
+      const i = poolers.findIndex(participant => participant === user._id.$oid);
+      poolers.splice(i, 1);
+      poolers.splice(0, 0, user._id.$oid);
     }
 
-    return null;
+    return (
+      <Tabs>
+        <TabList>
+          {poolers.map(pooler => (
+            <Tab key={pooler}>{DictUsers ? DictUsers[pooler] : pooler}</Tab>
+          ))}
+        </TabList>
+        {poolers.map(pooler => (
+          <TabPanel key={pooler}>
+            <div className="half-cont">
+              <Tabs selectedIndex={selectedRosterPickIndex} onSelect={index => setSelectedRosterPickIndex(index)}>
+                <TabList>
+                  <Tab>Roster</Tab>
+                  <Tab>Picks</Tab>
+                </TabList>
+                <TabPanel>
+                  {pooler === user._id.$oid ? (
+                    <button className="base-button" type="button" onClick={() => setShowRosterModificationModal(true)}>
+                      Modify Roster
+                    </button>
+                  ) : (
+                    '-'
+                  )}
+                  <table className="content-table-no-min">
+                    <thead>
+                      <tr>
+                        {formatDate === todayFormatDate ? (
+                          <th colSpan={10}>Today&apos;s {DictUsers ? DictUsers[pooler] : pooler}&apos; roster</th>
+                        ) : (
+                          <th colSpan={10}>
+                            {DictUsers ? DictUsers[pooler] : pooler}&apos;s roster ({formatDate})
+                            <button className="base-button" onClick={() => setDate(new Date())} type="button">
+                              See today&apos;s stats
+                            </button>
+                          </th>
+                        )}
+                      </tr>
+                      <tr>
+                        <th colSpan={10}>
+                          Forwards ({playersStats[pooler].forwards_own}/{poolInfo.number_forwards})
+                        </th>
+                      </tr>
+                      {render_header_skaters()}
+                    </thead>
+                    <tbody>
+                      {render_skater_stats(
+                        pooler,
+                        'forwards_own',
+                        'chosen_forwards',
+                        'forwards_total_pts',
+                        'forwards_total_goal',
+                        'forwards_total_assist',
+                        'forwards_total_hattrick',
+                        poolInfo.number_forwards,
+                        'F'
+                      )}
+                    </tbody>
+                    <thead>
+                      <tr>
+                        <th colSpan={10}>
+                          Defenders ({playersStats[pooler].defenders_own}/{poolInfo.number_defenders})
+                        </th>
+                      </tr>
+                      {render_header_skaters()}
+                    </thead>
+                    <tbody>
+                      {render_skater_stats(
+                        pooler,
+                        'defenders_own',
+                        'chosen_defenders',
+                        'defenders_total_pts',
+                        'defenders_total_goal',
+                        'defenders_total_assist',
+                        'defenders_total_hattrick',
+                        poolInfo.number_defenders,
+                        'D'
+                      )}
+                    </tbody>
+                    <thead>
+                      <tr>
+                        <th colSpan={10}>
+                          Goalies ({playersStats[pooler].goalies_own}/{poolInfo.number_goalies})
+                        </th>
+                      </tr>
+                      {render_header_goalies()}
+                    </thead>
+                    <tbody>{render_goalies_stats(pooler, poolInfo.number_goalies)}</tbody>
+                    <thead>
+                      <tr>
+                        <th colSpan={10}>Reservists</th>
+                      </tr>
+                      {render_header_reservists()}
+                    </thead>
+                    <tbody>{render_reservists(pooler)}</tbody>
+                  </table>
+                </TabPanel>
+                <TabPanel>
+                  <PickList
+                    tradablePicks={poolInfo.context.tradable_picks}
+                    participant={pooler}
+                    DictUsers={DictUsers}
+                  />
+                </TabPanel>
+              </Tabs>
+            </div>
+          </TabPanel>
+        ))}
+      </Tabs>
+    );
   };
 
   const render_tabs_pool_rank = () =>
     ranking.map((pooler_stats, i) => (
       <tr key={pooler_stats.name}>
         <td>{i + 1}</td>
-        <td>{DictUsers ? DictUsers[pooler_stats.name] : pooler_stats.name}</td>
-        <td>{pooler_stats.forwards_total_pts}</td>
-        <td>{pooler_stats.defenders_total_pts}</td>
-        <td>{pooler_stats.goalies_total_pts}</td>
-        <td>{pooler_stats.total_pts}</td>
+        <td>{DictUsers ? DictUsers[pooler_stats.participant] : pooler_stats.participant}</td>
+        <td>{pooler_stats.forwards_total_game}</td>
+        <td>{pooler_stats.forwards_total_goal}</td>
+        <td>{pooler_stats.forwards_total_assist}</td>
+        <td>{pooler_stats.forwards_total_hattrick}</td>
+        <td>
+          <b>{pooler_stats.forwards_total_pts}</b>
+        </td>
+        <td>{pooler_stats.defenders_total_game}</td>
+        <td>{pooler_stats.defenders_total_goal}</td>
+        <td>{pooler_stats.defenders_total_assist}</td>
+        <td>{pooler_stats.defenders_total_hattrick}</td>
+        <td>
+          <b>{pooler_stats.defenders_total_pts}</b>
+        </td>
+        <td>{pooler_stats.goalies_total_game}</td>
+        <td>{pooler_stats.goalies_total_goal}</td>
+        <td>{pooler_stats.goalies_total_assist}</td>
+        <td>{pooler_stats.goalies_total_win}</td>
+        <td>{pooler_stats.goalies_total_shutout}</td>
+        <td>
+          <b>{pooler_stats.goalies_total_pts}</b>
+        </td>
+        <td>{pooler_stats.total_game}</td>
+        <td>
+          <b>{pooler_stats.total_pts}</b>
+        </td>
       </tr>
     ));
 
@@ -668,45 +768,111 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
     return (
       <div className="min-width">
         <div className="cont">
-          <h1>Today&apos;s ranking</h1>
-          <table className="content-table">
-            <thead>
-              <tr>
-                <th>rank</th>
-                <th>pooler name</th>
-                <th>forwards (pts)</th>
-                <th>defenders (pts)</th>
-                <th>goalies (pts)</th>
-                <th>total (pts)</th>
-              </tr>
-            </thead>
-            <tbody>{render_tabs_pool_rank()}</tbody>
-          </table>
+          <Tabs>
+            <TabList>
+              <Tab>
+                <BsFillCalculatorFill size={30} />
+                Cumulative
+              </Tab>
+              <Tab>
+                <BsCalendarDay size={30} />
+                Daily
+              </Tab>
+              <Tab>
+                <BsCashCoin size={30} />
+                Trade Center
+              </Tab>
+            </TabList>
+            <TabPanel>
+              <div className="half-cont">
+                <table className="content-table-no-min">
+                  <thead>
+                    <tr>
+                      {formatDate === todayFormatDate ? (
+                        <th colSpan={22}>Today Cumulative ranking</th>
+                      ) : (
+                        <th colSpan={22}>
+                          Cumulative ranking ({formatDate})
+                          <button className="base-button" onClick={() => setDate(new Date())} type="button">
+                            See today&apos;s stats
+                          </button>
+                        </th>
+                      )}
+                    </tr>
+                    <tr>
+                      <th rowSpan={2}>Rank</th>
+                      <th rowSpan={2}>Pooler</th>
+                      <th colSpan={5}>Forwards</th>
+                      <th colSpan={5}>Defenders</th>
+                      <th colSpan={6}>Goalies</th>
+                      <th colSpan={2}>Total</th>
+                    </tr>
+                    <tr>
+                      <th>GP</th>
+                      <th>G</th>
+                      <th>A</th>
+                      <th>HT</th>
+                      <th>PTS</th>
+                      <th>GP</th>
+                      <th>G</th>
+                      <th>A</th>
+                      <th>HT</th>
+                      <th>PTS</th>
+                      <th>GP</th>
+                      <th>G</th>
+                      <th>A</th>
+                      <th>W</th>
+                      <th>SO</th>
+                      <th>PTS</th>
+                      <th>GP</th>
+                      <th>PTS</th>
+                    </tr>
+                  </thead>
+                  <tbody>{render_tabs_pool_rank()}</tbody>
+                </table>
+                {render_tabs_roster_stats()}
+
+                <button className="base-button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
+                  Download CSV
+                </button>
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className="half-cont">
+                <DailyRanking
+                  setDate={setDate}
+                  formatDate={formatDate}
+                  todayFormatDate={todayFormatDate}
+                  poolInfo={poolInfo}
+                  isUserParticipant={isUserParticipant}
+                  playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+                  injury={injury}
+                  user={user}
+                  DictUsers={DictUsers}
+                />
+                <DayLeaders
+                  formatDate={formatDate}
+                  playersIdToPoolerMap={playersIdToPoolerMap}
+                  user={user}
+                  DictUsers={DictUsers}
+                  injury={injury}
+                />
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <TradeCenter
+                poolInfo={poolInfo}
+                setPoolInfo={setPoolInfo}
+                injury={injury}
+                user={user}
+                DictUsers={DictUsers}
+                isUserParticipant={isUserParticipant}
+              />
+            </TabPanel>
+          </Tabs>
         </div>
-        <div className="cont">
-          <h1>Pooler&apos;s roster</h1>
-          {render_tabs_choice_stats()}
-          <button className="base-button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
-            Download CSV
-          </button>
-        </div>
-        <TradeCenter
-          poolInfo={poolInfo}
-          setPoolInfo={setPoolInfo}
-          user={user}
-          DictUsers={DictUsers}
-          isUserParticipant={isUserParticipant}
-        />
-        <div className="cont">
-          <DayLeaders
-            formatDate={formatDate}
-            playersIdToPoolerMap={playersIdToPoolerMap}
-            user={user}
-            DictUsers={DictUsers}
-            dayLeadersRef={dayLeaders}
-            injury={injury}
-          />
-          {isUserParticipant ? (
+        {isUserParticipant ? (
+          <>
             <FillSpot
               showFillSpotModal={showFillSpotModal}
               setShowFillSpotModal={setShowFillSpotModal}
@@ -716,8 +882,16 @@ export default function InProgressPool({ user, DictUsers, poolInfo, setPoolInfo,
               fillSpotPosition={fillSpotPosition}
               isUserParticipant={isUserParticipant}
             />
-          ) : null}
-        </div>
+            <RosterModificationModal
+              showRosterModificationModal={showRosterModificationModal}
+              setShowRosterModificationModal={setShowRosterModificationModal}
+              poolInfo={poolInfo}
+              setPoolInfo={setPoolInfo}
+              injury={injury}
+              user={user}
+            />
+          </>
+        ) : null}
       </div>
     );
   }
@@ -753,8 +927,12 @@ InProgressPool.propTypes = {
     ).isRequired,
     forward_pts_goals: PropTypes.number.isRequired,
     forward_pts_assists: PropTypes.number.isRequired,
+    forward_pts_hattricks: PropTypes.number.isRequired,
     defender_pts_goals: PropTypes.number.isRequired,
     defender_pts_assists: PropTypes.number.isRequired,
+    defender_pts_hattricks: PropTypes.number.isRequired,
+    goalies_pts_goals: PropTypes.number.isRequired,
+    goalies_pts_assists: PropTypes.number.isRequired,
     goalies_pts_wins: PropTypes.number.isRequired,
     goalies_pts_shutouts: PropTypes.number.isRequired,
   }).isRequired,

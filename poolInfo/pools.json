@@ -2,7 +2,7 @@
   "_id": {
     "$oid": "62bed6134fb504ee8c306d87"
   },
-  "name": "Ulysse6",
+  "name": "Ulysse7",
   "owner": "62b8bc22dc6fe2de9e2f9cdc",
   "number_poolers": 6,
   "participants": [
@@ -32,11 +32,11 @@
   "status": "InProgress",
   "final_rank": [
     "62b8bb0bdc6fe2de9e2f9cd8",
-    "62b8bb1edc6fe2de9e2f9cd9",
-    "62b8bc22dc6fe2de9e2f9cdc",
-    "62b8bc07dc6fe2de9e2f9cdb",
     "62b8badddc6fe2de9e2f9cd7",
-    "62b8bbf8dc6fe2de9e2f9cda"
+    "62b8bc22dc6fe2de9e2f9cdc",
+    "62b8bb1edc6fe2de9e2f9cd9",
+    "62b8bbf8dc6fe2de9e2f9cda",
+    "62b8bc22dc6fe2de9e2f9cdc"
   ],
   "nb_player_drafted": 0,
   "nb_trade": 0,
@@ -968,7 +968,7 @@
         ]
       }
     },
-    "draft_order": [],
+    "players_name_drafted": [],
     "score_by_day": {},
     "tradable_picks": [
       {

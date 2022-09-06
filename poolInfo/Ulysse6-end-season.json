@@ -1,6 +1,6 @@
 [{
   "_id": {
-    "$oid": "62bed6134fb504ee8c306d86"
+    "$oid": "62bed6134fb504ee8c306d85"
   },
   "name": "Ulysse6",
   "owner": "62b8bc22dc6fe2de9e2f9cdc",
@@ -39,16 +39,639 @@
     "62b8bbf8dc6fe2de9e2f9cda"
   ],
   "nb_player_drafted": 0,
-  "nb_trade": 0,
-  "trades": null,
+  "nb_trade": 8,
+  "trades": [
+    {
+      "proposed_by": "62b8bc22dc6fe2de9e2f9cdc",
+      "ask_to": "62b8bb0bdc6fe2de9e2f9cd8",
+      "from_items": {
+        "players": [
+          {
+            "id": 8478864,
+            "name": "Kirill Kaprizov",
+            "team": "Minnesota Wild",
+            "position": "F"
+          }
+        ],
+        "picks": [
+          {
+            "round": 0,
+            "from": "62b8badddc6fe2de9e2f9cd7"
+          }
+        ]
+      },
+      "to_items": {
+        "players": [
+          {
+            "id": 8474564,
+            "name": "Steven Stamkos",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          }
+        ],
+        "picks": [
+          {
+            "round": 0,
+            "from": "62b8bb0bdc6fe2de9e2f9cd8"
+          }
+        ]
+      },
+      "status": "CANCELLED",
+      "id": 0,
+      "date_created": {
+        "$numberLong": "1660398625682"
+      },
+      "date_accepted": -1
+    },
+    {
+      "proposed_by": "62b8bc22dc6fe2de9e2f9cdc",
+      "ask_to": "62b8bb0bdc6fe2de9e2f9cd8",
+      "from_items": {
+        "players": [
+          {
+            "id": 8478864,
+            "name": "Kirill Kaprizov",
+            "team": "Minnesota Wild",
+            "position": "F"
+          }
+        ],
+        "picks": []
+      },
+      "to_items": {
+        "players": [
+          {
+            "id": 8474564,
+            "name": "Steven Stamkos",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          }
+        ],
+        "picks": []
+      },
+      "status": "CANCELLED",
+      "id": 1,
+      "date_created": {
+        "$numberLong": "1660398667818"
+      },
+      "date_accepted": -1
+    },
+    {
+      "proposed_by": "62b8bc22dc6fe2de9e2f9cdc",
+      "ask_to": "62b8bb0bdc6fe2de9e2f9cd8",
+      "from_items": {
+        "players": [
+          {
+            "id": 8478864,
+            "name": "Kirill Kaprizov",
+            "team": "Minnesota Wild",
+            "position": "F"
+          }
+        ],
+        "picks": []
+      },
+      "to_items": {
+        "players": [
+          {
+            "id": 8474564,
+            "name": "Steven Stamkos",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          }
+        ],
+        "picks": []
+      },
+      "status": "ACCEPTED",
+      "id": 2,
+      "date_created": {
+        "$numberLong": "1660409601000"
+      },
+      "date_accepted": {
+        "$numberLong": "1660409601000"
+      }
+    },
+    {
+      "proposed_by": "62b8bb0bdc6fe2de9e2f9cd8",
+      "ask_to": "62b8bc22dc6fe2de9e2f9cdc",
+      "from_items": {
+        "players": [
+          {
+            "id": 8478864,
+            "name": "Kirill Kaprizov",
+            "team": "Minnesota Wild",
+            "position": "F"
+          }
+        ],
+        "picks": []
+      },
+      "to_items": {
+        "players": [
+          {
+            "id": 8474564,
+            "name": "Steven Stamkos",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          }
+        ],
+        "picks": []
+      },
+      "status": "ACCEPTED",
+      "id": 3,
+      "date_created": {
+        "$numberLong": "1660409601000"
+      },
+      "date_accepted": {
+        "$numberLong": "1660506691955"
+      }
+    },
+    {
+      "proposed_by": "62b8bb0bdc6fe2de9e2f9cd8",
+      "ask_to": "62b8bc22dc6fe2de9e2f9cdc",
+      "from_items": {
+        "players": [
+          {
+            "id": 8474564,
+            "name": "Steven Stamkos",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          }
+        ],
+        "picks": [
+          {
+            "round": 0,
+            "from": "62b8bb0bdc6fe2de9e2f9cd8"
+          }
+        ]
+      },
+      "to_items": {
+        "players": [
+          {
+            "id": 8478864,
+            "name": "Kirill Kaprizov",
+            "team": "Minnesota Wild",
+            "position": "F"
+          }
+        ],
+        "picks": [
+          {
+            "round": 0,
+            "from": "62b8bc22dc6fe2de9e2f9cdc"
+          }
+        ]
+      },
+      "status": "ACCEPTED",
+      "id": 4,
+      "date_created": {
+        "$numberLong": "1660409601000"
+      },
+      "date_accepted": {
+        "$numberLong": "1660508615202"
+      }
+    },
+    {
+      "proposed_by": "62b8bc22dc6fe2de9e2f9cdc",
+      "ask_to": "62b8bb0bdc6fe2de9e2f9cd8",
+      "from_items": {
+        "players": [
+          {
+            "id": 8474564,
+            "name": "Steven Stamkos",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          }
+        ],
+        "picks": [
+          {
+            "round": 0,
+            "from": "62b8bc22dc6fe2de9e2f9cdc"
+          }
+        ]
+      },
+      "to_items": {
+        "players": [
+          {
+            "id": 8478864,
+            "name": "Kirill Kaprizov",
+            "team": "Minnesota Wild",
+            "position": "F"
+          }
+        ],
+        "picks": [
+          {
+            "round": 0,
+            "from": "62b8bb0bdc6fe2de9e2f9cd8"
+          }
+        ]
+      },
+      "status": "ACCEPTED",
+      "id": 5,
+      "date_created": {
+        "$numberLong": "1660409601000"
+      },
+      "date_accepted": {
+        "$numberLong": "1660509264725"
+      }
+    },
+    {
+      "proposed_by": "62b8bb0bdc6fe2de9e2f9cd8",
+      "ask_to": "62b8bc22dc6fe2de9e2f9cdc",
+      "from_items": {
+        "players": [],
+        "picks": [
+          {
+            "round": 0,
+            "from": "62b8bc22dc6fe2de9e2f9cdc"
+          }
+        ]
+      },
+      "to_items": {
+        "players": [],
+        "picks": [
+          {
+            "round": 0,
+            "from": "62b8bb0bdc6fe2de9e2f9cd8"
+          }
+        ]
+      },
+      "status": "ACCEPTED",
+      "id": 6,
+      "date_created": {
+        "$numberLong": "1660409601000"
+      },
+      "date_accepted": {
+        "$numberLong": "1660509362136"
+      }
+    },
+    {
+      "proposed_by": "62b8badddc6fe2de9e2f9cd7",
+      "ask_to": "62b8bc22dc6fe2de9e2f9cdc",
+      "from_items": {
+        "players": [
+          {
+            "id": 8476346,
+            "name": "Johnny Gaudreau",
+            "team": "Columbus Blue Jackets",
+            "position": "F"
+          },
+          {
+            "id": 8480027,
+            "name": "Jason Robertson",
+            "team": "Dallas Stars",
+            "position": "F"
+          },
+          {
+            "id": 8478010,
+            "name": "Brayden Point",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          },
+          {
+            "id": 8480801,
+            "name": "Brady Tkachuk",
+            "team": "Ottawa Senators",
+            "position": "F"
+          },
+          {
+            "id": 8476453,
+            "name": "Nikita Kucherov",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          }
+        ],
+        "picks": []
+      },
+      "to_items": {
+        "players": [],
+        "picks": [
+          {
+            "round": 4,
+            "from": "62b8bc22dc6fe2de9e2f9cdc"
+          }
+        ]
+      },
+      "status": "CANCELLED",
+      "id": 7,
+      "date_created": {
+        "$numberLong": "1662163730182"
+      },
+      "date_accepted": -1
+    }
+  ],
   "context": {
     "pooler_roster": {
+      "62b8bc22dc6fe2de9e2f9cdc": {
+        "chosen_forwards": [
+          {
+            "id": 8478864,
+            "name": "Kirill Kaprizov",
+            "team": "Minnesota Wild",
+            "position": "F"
+          },
+          {
+            "id": 8478550,
+            "name": "Artemi Panarin",
+            "team": "New York Rangers",
+            "position": "F"
+          },
+          {
+            "id": 8477493,
+            "name": "Aleksander Barkov",
+            "team": "Florida Panthers",
+            "position": "F"
+          },
+          {
+            "id": 8477956,
+            "name": "David Pastrnak",
+            "team": "Boston Bruins",
+            "position": "F"
+          },
+          {
+            "id": 8478414,
+            "name": "Timo Meier",
+            "team": "San Jose Sharks",
+            "position": "F"
+          },
+          {
+            "id": 8480830,
+            "name": "Andrei Svechnikov",
+            "team": "Carolina Hurricanes",
+            "position": "F"
+          },
+          {
+            "id": 8476455,
+            "name": "Gabriel Landeskog",
+            "team": "Colorado Avalanche",
+            "position": "F"
+          },
+          {
+            "id": 8480018,
+            "name": "Nick Suzuki",
+            "team": "Montréal Canadiens",
+            "position": "F"
+          },
+          {
+            "id": 8478856,
+            "name": "Conor Garland",
+            "team": "Vancouver Canucks",
+            "position": "F"
+          },
+          {
+            "id": 8475794,
+            "name": "Tyler Seguin",
+            "team": "Dallas Stars",
+            "position": "F"
+          },
+          {
+            "id": 8476292,
+            "name": "Ondrej Palat",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          },
+          {
+            "id": 8481523,
+            "name": "Kirby Dach",
+            "team": "Chicago Blackhawks",
+            "position": "F"
+          }
+        ],
+        "chosen_defenders": [
+          {
+            "id": 8480069,
+            "name": "Cale Makar",
+            "team": "Colorado Avalanche",
+            "position": "D"
+          },
+          {
+            "id": 8479325,
+            "name": "Charlie McAvoy",
+            "team": "Boston Bruins",
+            "position": "D"
+          },
+          {
+            "id": 8479410,
+            "name": "Mikhail Sergachev",
+            "team": "Tampa Bay Lightning",
+            "position": "D"
+          },
+          {
+            "id": 8480036,
+            "name": "Miro Heiskanen",
+            "team": "Dallas Stars",
+            "position": "D"
+          },
+          {
+            "id": 8479398,
+            "name": "Samuel Girard",
+            "team": "Colorado Avalanche",
+            "position": "D"
+          },
+          {
+            "id": 8477346,
+            "name": "MacKenzie Weegar",
+            "team": "Calgary Flames",
+            "position": "D"
+          }
+        ],
+        "chosen_goalies": [
+          {
+            "id": 8476412,
+            "name": "Jordan Binnington",
+            "team": "St. Louis Blues",
+            "position": "G"
+          },
+          {
+            "id": 8477465,
+            "name": "Tristan Jarry",
+            "team": "Pittsburgh Penguins",
+            "position": "G"
+          }
+        ],
+        "chosen_reservists": [
+          {
+            "id": 8474157,
+            "name": "Max Pacioretty",
+            "team": "Carolina Hurricanes",
+            "position": "F"
+          },
+          {
+            "id": 8477944,
+            "name": "Jakub Vrana",
+            "team": "Detroit Red Wings",
+            "position": "F"
+          },
+          {
+            "id": 8479345,
+            "name": "Jakob Chychrun",
+            "team": "Arizona Coyotes",
+            "position": "D"
+          },
+          {
+            "id": 8471679,
+            "name": "Carey Price",
+            "team": "Montréal Canadiens",
+            "position": "G"
+          }
+        ]
+      },
+      "62b8bb1edc6fe2de9e2f9cd9": {
+        "chosen_forwards": [
+          {
+            "id": 8478402,
+            "name": "Connor McDavid",
+            "team": "Edmonton Oilers",
+            "position": "F"
+          },
+          {
+            "id": 8477934,
+            "name": "Leon Draisaitl",
+            "team": "Edmonton Oilers",
+            "position": "F"
+          },
+          {
+            "id": 8475744,
+            "name": "Evgeny Kuznetsov",
+            "team": "Washington Capitals",
+            "position": "F"
+          },
+          {
+            "id": 8471685,
+            "name": "Anze Kopitar",
+            "team": "Los Angeles Kings",
+            "position": "F"
+          },
+          {
+            "id": 8470638,
+            "name": "Patrice Bergeron",
+            "team": "Boston Bruins",
+            "position": "F"
+          },
+          {
+            "id": 8476881,
+            "name": "Tomas Hertl",
+            "team": "San Jose Sharks",
+            "position": "F"
+          },
+          {
+            "id": 8481533,
+            "name": "Trevor Zegras",
+            "team": "Anaheim Ducks",
+            "position": "F"
+          },
+          {
+            "id": 8478445,
+            "name": "Mathew Barzal",
+            "team": "New York Islanders",
+            "position": "F"
+          },
+          {
+            "id": 8478449,
+            "name": "Roope Hintz",
+            "team": "Dallas Stars",
+            "position": "F"
+          },
+          {
+            "id": 8482116,
+            "name": "Tim Stützle",
+            "team": "Ottawa Senators",
+            "position": "F"
+          },
+          {
+            "id": 8478873,
+            "name": "Troy Terry",
+            "team": "Anaheim Ducks",
+            "position": "F"
+          },
+          {
+            "id": 8478403,
+            "name": "Jack Eichel",
+            "team": "Vegas Golden Knights",
+            "position": "F"
+          }
+        ],
+        "chosen_defenders": [
+          {
+            "id": 8474600,
+            "name": "Roman Josi",
+            "team": "Nashville Predators",
+            "position": "D"
+          },
+          {
+            "id": 8474565,
+            "name": "Alex Pietrangelo",
+            "team": "Vegas Golden Knights",
+            "position": "D"
+          },
+          {
+            "id": 8476792,
+            "name": "Torey Krug",
+            "team": "St. Louis Blues",
+            "position": "D"
+          },
+          {
+            "id": 8480145,
+            "name": "Neal Pionk",
+            "team": "Winnipeg Jets",
+            "position": "D"
+          },
+          {
+            "id": 8476462,
+            "name": "Dougie Hamilton",
+            "team": "New Jersey Devils",
+            "position": "D"
+          },
+          {
+            "id": 8477950,
+            "name": "Tony DeAngelo",
+            "team": "Philadelphia Flyers",
+            "position": "D"
+          }
+        ],
+        "chosen_goalies": [
+          {
+            "id": 8475683,
+            "name": "Sergei Bobrovsky",
+            "team": "Florida Panthers",
+            "position": "G"
+          },
+          {
+            "id": 8475311,
+            "name": "Darcy Kuemper",
+            "team": "Washington Capitals",
+            "position": "G"
+          }
+        ],
+        "chosen_reservists": [
+          {
+            "id": 8478444,
+            "name": "Brock Boeser",
+            "team": "Vancouver Canucks",
+            "position": "F"
+          },
+          {
+            "id": 8477940,
+            "name": "Nikolaj Ehlers",
+            "team": "Winnipeg Jets",
+            "position": "F"
+          },
+          {
+            "id": 8475218,
+            "name": "Mattias Ekholm",
+            "team": "Nashville Predators",
+            "position": "D"
+          },
+          {
+            "id": 8477424,
+            "name": "Juuse Saros",
+            "team": "Nashville Predators",
+            "position": "G"
+          }
+        ]
+      },
       "62b8badddc6fe2de9e2f9cd7": {
         "chosen_forwards": [
           {
             "id": 8476346,
             "name": "Johnny Gaudreau",
-            "team": "Calgary Flames",
+            "team": "Columbus Blue Jackets",
             "position": "F"
           },
           {
@@ -192,8 +815,310 @@
           {
             "id": 8475660,
             "name": "Cam Talbot",
+            "team": "Ottawa Senators",
+            "position": "G"
+          }
+        ]
+      },
+      "62b8bb0bdc6fe2de9e2f9cd8": {
+        "chosen_forwards": [
+          {
+            "id": 8478483,
+            "name": "Mitchell Marner",
+            "team": "Toronto Maple Leafs",
+            "position": "F"
+          },
+          {
+            "id": 8478420,
+            "name": "Mikko Rantanen",
+            "team": "Colorado Avalanche",
+            "position": "F"
+          },
+          {
+            "id": 8471675,
+            "name": "Sidney Crosby",
+            "team": "Pittsburgh Penguins",
+            "position": "F"
+          },
+          {
+            "id": 8475765,
+            "name": "Vladimir Tarasenko",
+            "team": "St. Louis Blues",
+            "position": "F"
+          },
+          {
+            "id": 8473419,
+            "name": "Brad Marchand",
+            "team": "Boston Bruins",
+            "position": "F"
+          },
+          {
+            "id": 8476882,
+            "name": "Teuvo Teravainen",
+            "team": "Carolina Hurricanes",
+            "position": "F"
+          },
+          {
+            "id": 8474102,
+            "name": "David Perron",
+            "team": "Detroit Red Wings",
+            "position": "F"
+          },
+          {
+            "id": 8476454,
+            "name": "Ryan Nugent-Hopkins",
+            "team": "Edmonton Oilers",
+            "position": "F"
+          },
+          {
+            "id": 8471215,
+            "name": "Evgeni Malkin",
+            "team": "Pittsburgh Penguins",
+            "position": "F"
+          },
+          {
+            "id": 8475184,
+            "name": "Chris Kreider",
+            "team": "New York Rangers",
+            "position": "F"
+          },
+          {
+            "id": 8473563,
+            "name": "Nicklas Backstrom",
+            "team": "Washington Capitals",
+            "position": "F"
+          },
+          {
+            "id": 8474564,
+            "name": "Steven Stamkos",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          }
+        ],
+        "chosen_defenders": [
+          {
+            "id": 8479323,
+            "name": "Adam Fox",
+            "team": "New York Rangers",
+            "position": "D"
+          },
+          {
+            "id": 8471724,
+            "name": "Kris Letang",
+            "team": "Pittsburgh Penguins",
+            "position": "D"
+          },
+          {
+            "id": 8480800,
+            "name": "Quinn Hughes",
+            "team": "Vancouver Canucks",
+            "position": "D"
+          },
+          {
+            "id": 8470613,
+            "name": "Brent Burns",
+            "team": "Carolina Hurricanes",
+            "position": "D"
+          },
+          {
+            "id": 8474578,
+            "name": "Erik Karlsson",
+            "team": "San Jose Sharks",
+            "position": "D"
+          },
+          {
+            "id": 8475197,
+            "name": "Tyson Barrie",
+            "team": "Edmonton Oilers",
+            "position": "D"
+          }
+        ],
+        "chosen_goalies": [
+          {
+            "id": 8474593,
+            "name": "Jacob Markstrom",
+            "team": "Calgary Flames",
+            "position": "G"
+          },
+          {
+            "id": 8475883,
+            "name": "Frederik Andersen",
+            "team": "Carolina Hurricanes",
+            "position": "G"
+          }
+        ],
+        "chosen_reservists": [
+          {
+            "id": 8476458,
+            "name": "Ryan Strome",
+            "team": "Anaheim Ducks",
+            "position": "F"
+          },
+          {
+            "id": 8477935,
+            "name": "Sam Bennett",
+            "team": "Florida Panthers",
+            "position": "F"
+          },
+          {
+            "id": 8478396,
+            "name": "Noah Hanifin",
+            "team": "Calgary Flames",
+            "position": "D"
+          },
+          {
+            "id": 8479394,
+            "name": "Carter Hart",
+            "team": "Philadelphia Flyers",
+            "position": "G"
+          }
+        ]
+      },
+      "62b8bbf8dc6fe2de9e2f9cda": {
+        "chosen_forwards": [
+          {
+            "id": 8479314,
+            "name": "Matthew Tkachuk",
+            "team": "Florida Panthers",
+            "position": "F"
+          },
+          {
+            "id": 8476468,
+            "name": "J.T. Miller",
+            "team": "Vancouver Canucks",
+            "position": "F"
+          },
+          {
+            "id": 8478398,
+            "name": "Kyle Connor",
+            "team": "Winnipeg Jets",
+            "position": "F"
+          },
+          {
+            "id": 8476887,
+            "name": "Filip Forsberg",
+            "team": "Nashville Predators",
+            "position": "F"
+          },
+          {
+            "id": 8477496,
+            "name": "Elias Lindholm",
+            "team": "Calgary Flames",
+            "position": "F"
+          },
+          {
+            "id": 8477939,
+            "name": "William Nylander",
+            "team": "Toronto Maple Leafs",
+            "position": "F"
+          },
+          {
+            "id": 8471218,
+            "name": "Blake Wheeler",
+            "team": "Winnipeg Jets",
+            "position": "F"
+          },
+          {
+            "id": 8475791,
+            "name": "Taylor Hall",
+            "team": "Boston Bruins",
+            "position": "F"
+          },
+          {
+            "id": 8477946,
+            "name": "Dylan Larkin",
+            "team": "Detroit Red Wings",
+            "position": "F"
+          },
+          {
+            "id": 8477479,
+            "name": "Tyler Bertuzzi",
+            "team": "Detroit Red Wings",
+            "position": "F"
+          },
+          {
+            "id": 8475172,
+            "name": "Nazem Kadri",
+            "team": "Calgary Flames",
+            "position": "F"
+          },
+          {
+            "id": 8481540,
+            "name": "Cole Caufield",
+            "team": "Montréal Canadiens",
+            "position": "F"
+          }
+        ],
+        "chosen_defenders": [
+          {
+            "id": 8477932,
+            "name": "Aaron Ekblad",
+            "team": "Florida Panthers",
+            "position": "D"
+          },
+          {
+            "id": 8480839,
+            "name": "Rasmus Dahlin",
+            "team": "Buffalo Sabres",
+            "position": "D"
+          },
+          {
+            "id": 8475906,
+            "name": "John Klingberg",
+            "team": "Anaheim Ducks",
+            "position": "D"
+          },
+          {
+            "id": 8478469,
+            "name": "Thomas Chabot",
+            "team": "Ottawa Senators",
+            "position": "D"
+          },
+          {
+            "id": 8475171,
+            "name": "Oliver Ekman-Larsson",
+            "team": "Vancouver Canucks",
+            "position": "D"
+          },
+          {
+            "id": 8477488,
+            "name": "Brett Pesce",
+            "team": "Carolina Hurricanes",
+            "position": "D"
+          }
+        ],
+        "chosen_goalies": [
+          {
+            "id": 8478048,
+            "name": "Igor Shesterkin",
+            "team": "New York Rangers",
+            "position": "G"
+          },
+          {
+            "id": 8470594,
+            "name": "Marc-Andre Fleury",
             "team": "Minnesota Wild",
             "position": "G"
+          }
+        ],
+        "chosen_reservists": [
+          {
+            "id": 8479343,
+            "name": "Clayton Keller",
+            "team": "Arizona Coyotes",
+            "position": "F"
+          },
+          {
+            "id": 8480039,
+            "name": "Martin Necas",
+            "team": "Carolina Hurricanes",
+            "position": "F"
+          },
+          {
+            "id": 8476461,
+            "name": "Sean Couturier",
+            "team": "Philadelphia Flyers",
+            "position": "F"
           }
         ]
       },
@@ -202,7 +1127,7 @@
           {
             "id": 8476456,
             "name": "Jonathan Huberdeau",
-            "team": "Florida Panthers",
+            "team": "Calgary Flames",
             "position": "F"
           },
           {
@@ -214,7 +1139,7 @@
           {
             "id": 8477942,
             "name": "Kevin Fiala",
-            "team": "Minnesota Wild",
+            "team": "Los Angeles Kings",
             "position": "F"
           },
           {
@@ -232,7 +1157,7 @@
           {
             "id": 8479337,
             "name": "Alex DeBrincat",
-            "team": "Chicago Blackhawks",
+            "team": "Ottawa Senators",
             "position": "F"
           },
           {
@@ -314,7 +1239,7 @@
           {
             "id": 8475789,
             "name": "Jack Campbell",
-            "team": "Toronto Maple Leafs",
+            "team": "Edmonton Oilers",
             "position": "G"
           },
           {
@@ -328,13 +1253,13 @@
           {
             "id": 8477330,
             "name": "Dominik Kubalik",
-            "team": "Chicago Blackhawks",
+            "team": "Detroit Red Wings",
             "position": "F"
           },
           {
             "id": 8476389,
             "name": "Vincent Trocheck",
-            "team": "Carolina Hurricanes",
+            "team": "New York Rangers",
             "position": "F"
           },
           {
@@ -356,619 +1281,8 @@
             "position": "G"
           }
         ]
-      },
-      "62b8bc22dc6fe2de9e2f9cdc": {
-        "chosen_forwards": [
-          {
-            "id": 8478864,
-            "name": "Kirill Kaprizov",
-            "team": "Minnesota Wild",
-            "position": "F"
-          },
-          {
-            "id": 8478550,
-            "name": "Artemi Panarin",
-            "team": "New York Rangers",
-            "position": "F"
-          },
-          {
-            "id": 8477493,
-            "name": "Aleksander Barkov",
-            "team": "Florida Panthers",
-            "position": "F"
-          },
-          {
-            "id": 8477956,
-            "name": "David Pastrnak",
-            "team": "Boston Bruins",
-            "position": "F"
-          },
-          {
-            "id": 8478414,
-            "name": "Timo Meier",
-            "team": "San Jose Sharks",
-            "position": "F"
-          },
-          {
-            "id": 8480830,
-            "name": "Andrei Svechnikov",
-            "team": "Carolina Hurricanes",
-            "position": "F"
-          },
-          {
-            "id": 8476455,
-            "name": "Gabriel Landeskog",
-            "team": "Colorado Avalanche",
-            "position": "F"
-          },
-          {
-            "id": 8480018,
-            "name": "Nick Suzuki",
-            "team": "Montréal Canadiens",
-            "position": "F"
-          },
-          {
-            "id": 8478856,
-            "name": "Conor Garland",
-            "team": "Vancouver Canucks",
-            "position": "F"
-          },
-          {
-            "id": 8475794,
-            "name": "Tyler Seguin",
-            "team": "Dallas Stars",
-            "position": "F"
-          },
-          {
-            "id": 8476292,
-            "name": "Ondrej Palat",
-            "team": "Tampa Bay Lightning",
-            "position": "F"
-          },
-          {
-            "id": 8481523,
-            "name": "Kirby Dach",
-            "team": "Chicago Blackhawks",
-            "position": "F"
-          }
-        ],
-        "chosen_defenders": [
-          {
-            "id": 8480069,
-            "name": "Cale Makar",
-            "team": "Colorado Avalanche",
-            "position": "D"
-          },
-          {
-            "id": 8479325,
-            "name": "Charlie McAvoy",
-            "team": "Boston Bruins",
-            "position": "D"
-          },
-          {
-            "id": 8479410,
-            "name": "Mikhail Sergachev",
-            "team": "Tampa Bay Lightning",
-            "position": "D"
-          },
-          {
-            "id": 8480036,
-            "name": "Miro Heiskanen",
-            "team": "Dallas Stars",
-            "position": "D"
-          },
-          {
-            "id": 8479398,
-            "name": "Samuel Girard",
-            "team": "Colorado Avalanche",
-            "position": "D"
-          },
-          {
-            "id": 8477346,
-            "name": "MacKenzie Weegar",
-            "team": "Florida Panthers",
-            "position": "D"
-          }
-        ],
-        "chosen_goalies": [
-          {
-            "id": 8476412,
-            "name": "Jordan Binnington",
-            "team": "St. Louis Blues",
-            "position": "G"
-          },
-          {
-            "id": 8477465,
-            "name": "Tristan Jarry",
-            "team": "Pittsburgh Penguins",
-            "position": "G"
-          }
-        ],
-        "chosen_reservists": [
-          {
-            "id": 8474157,
-            "name": "Max Pacioretty",
-            "team": "Vegas Golden Knights",
-            "position": "F"
-          },
-          {
-            "id": 8477944,
-            "name": "Jakub Vrana",
-            "team": "Detroit Red Wings",
-            "position": "F"
-          },
-          {
-            "id": 8479345,
-            "name": "Jakob Chychrun",
-            "team": "Arizona Coyotes",
-            "position": "D"
-          },
-          {
-            "id": 8471679,
-            "name": "Carey Price",
-            "team": "Montréal Canadiens",
-            "position": "G"
-          }
-        ]
-      },
-      "62b8bb0bdc6fe2de9e2f9cd8": {
-        "chosen_forwards": [
-          {
-            "id": 8474564,
-            "name": "Steven Stamkos",
-            "team": "Tampa Bay Lightning",
-            "position": "F"
-          },
-          {
-            "id": 8478483,
-            "name": "Mitchell Marner",
-            "team": "Toronto Maple Leafs",
-            "position": "F"
-          },
-          {
-            "id": 8478420,
-            "name": "Mikko Rantanen",
-            "team": "Colorado Avalanche",
-            "position": "F"
-          },
-          {
-            "id": 8471675,
-            "name": "Sidney Crosby",
-            "team": "Pittsburgh Penguins",
-            "position": "F"
-          },
-          {
-            "id": 8475765,
-            "name": "Vladimir Tarasenko",
-            "team": "St. Louis Blues",
-            "position": "F"
-          },
-          {
-            "id": 8473419,
-            "name": "Brad Marchand",
-            "team": "Boston Bruins",
-            "position": "F"
-          },
-          {
-            "id": 8476882,
-            "name": "Teuvo Teravainen",
-            "team": "Carolina Hurricanes",
-            "position": "F"
-          },
-          {
-            "id": 8474102,
-            "name": "David Perron",
-            "team": "St. Louis Blues",
-            "position": "F"
-          },
-          {
-            "id": 8476454,
-            "name": "Ryan Nugent-Hopkins",
-            "team": "Edmonton Oilers",
-            "position": "F"
-          },
-          {
-            "id": 8471215,
-            "name": "Evgeni Malkin",
-            "team": "Pittsburgh Penguins",
-            "position": "F"
-          },
-          {
-            "id": 8475184,
-            "name": "Chris Kreider",
-            "team": "New York Rangers",
-            "position": "F"
-          },
-          {
-            "id": 8473563,
-            "name": "Nicklas Backstrom",
-            "team": "Washington Capitals",
-            "position": "F"
-          }
-        ],
-        "chosen_defenders": [
-          {
-            "id": 8479323,
-            "name": "Adam Fox",
-            "team": "New York Rangers",
-            "position": "D"
-          },
-          {
-            "id": 8471724,
-            "name": "Kris Letang",
-            "team": "Pittsburgh Penguins",
-            "position": "D"
-          },
-          {
-            "id": 8480800,
-            "name": "Quinn Hughes",
-            "team": "Vancouver Canucks",
-            "position": "D"
-          },
-          {
-            "id": 8470613,
-            "name": "Brent Burns",
-            "team": "San Jose Sharks",
-            "position": "D"
-          },
-          {
-            "id": 8474578,
-            "name": "Erik Karlsson",
-            "team": "San Jose Sharks",
-            "position": "D"
-          },
-          {
-            "id": 8475197,
-            "name": "Tyson Barrie",
-            "team": "Edmonton Oilers",
-            "position": "D"
-          }
-        ],
-        "chosen_goalies": [
-          {
-            "id": 8474593,
-            "name": "Jacob Markstrom",
-            "team": "Calgary Flames",
-            "position": "G"
-          },
-          {
-            "id": 8475883,
-            "name": "Frederik Andersen",
-            "team": "Carolina Hurricanes",
-            "position": "G"
-          }
-        ],
-        "chosen_reservists": [
-          {
-            "id": 8476458,
-            "name": "Ryan Strome",
-            "team": "New York Rangers",
-            "position": "F"
-          },
-          {
-            "id": 8477935,
-            "name": "Sam Bennett",
-            "team": "Florida Panthers",
-            "position": "F"
-          },
-          {
-            "id": 8478396,
-            "name": "Noah Hanifin",
-            "team": "Calgary Flames",
-            "position": "D"
-          },
-          {
-            "id": 8479394,
-            "name": "Carter Hart",
-            "team": "Philadelphia Flyers",
-            "position": "G"
-          }
-        ]
-      },
-      "62b8bb1edc6fe2de9e2f9cd9": {
-        "chosen_forwards": [
-          {
-            "id": 8478402,
-            "name": "Connor McDavid",
-            "team": "Edmonton Oilers",
-            "position": "F"
-          },
-          {
-            "id": 8477934,
-            "name": "Leon Draisaitl",
-            "team": "Edmonton Oilers",
-            "position": "F"
-          },
-          {
-            "id": 8475744,
-            "name": "Evgeny Kuznetsov",
-            "team": "Washington Capitals",
-            "position": "F"
-          },
-          {
-            "id": 8471685,
-            "name": "Anze Kopitar",
-            "team": "Los Angeles Kings",
-            "position": "F"
-          },
-          {
-            "id": 8470638,
-            "name": "Patrice Bergeron",
-            "team": "Boston Bruins",
-            "position": "F"
-          },
-          {
-            "id": 8476881,
-            "name": "Tomas Hertl",
-            "team": "San Jose Sharks",
-            "position": "F"
-          },
-          {
-            "id": 8481533,
-            "name": "Trevor Zegras",
-            "team": "Anaheim Ducks",
-            "position": "F"
-          },
-          {
-            "id": 8478445,
-            "name": "Mathew Barzal",
-            "team": "New York Islanders",
-            "position": "F"
-          },
-          {
-            "id": 8478449,
-            "name": "Roope Hintz",
-            "team": "Dallas Stars",
-            "position": "F"
-          },
-          {
-            "id": 8482116,
-            "name": "Tim Stützle",
-            "team": "Ottawa Senators",
-            "position": "F"
-          },
-          {
-            "id": 8478873,
-            "name": "Troy Terry",
-            "team": "Anaheim Ducks",
-            "position": "F"
-          },
-          {
-            "id": 8478403,
-            "name": "Jack Eichel",
-            "team": "Vegas Golden Knights",
-            "position": "F"
-          }
-        ],
-        "chosen_defenders": [
-          {
-            "id": 8474600,
-            "name": "Roman Josi",
-            "team": "Nashville Predators",
-            "position": "D"
-          },
-          {
-            "id": 8474565,
-            "name": "Alex Pietrangelo",
-            "team": "Vegas Golden Knights",
-            "position": "D"
-          },
-          {
-            "id": 8476792,
-            "name": "Torey Krug",
-            "team": "St. Louis Blues",
-            "position": "D"
-          },
-          {
-            "id": 8480145,
-            "name": "Neal Pionk",
-            "team": "Winnipeg Jets",
-            "position": "D"
-          },
-          {
-            "id": 8476462,
-            "name": "Dougie Hamilton",
-            "team": "New Jersey Devils",
-            "position": "D"
-          },
-          {
-            "id": 8477950,
-            "name": "Tony DeAngelo",
-            "team": "Carolina Hurricanes",
-            "position": "D"
-          }
-        ],
-        "chosen_goalies": [
-          {
-            "id": 8475683,
-            "name": "Sergei Bobrovsky",
-            "team": "Florida Panthers",
-            "position": "G"
-          },
-          {
-            "id": 8475311,
-            "name": "Darcy Kuemper",
-            "team": "Colorado Avalanche",
-            "position": "G"
-          }
-        ],
-        "chosen_reservists": [
-          {
-            "id": 8478444,
-            "name": "Brock Boeser",
-            "team": "Vancouver Canucks",
-            "position": "F"
-          },
-          {
-            "id": 8477940,
-            "name": "Nikolaj Ehlers",
-            "team": "Winnipeg Jets",
-            "position": "F"
-          },
-          {
-            "id": 8475218,
-            "name": "Mattias Ekholm",
-            "team": "Nashville Predators",
-            "position": "D"
-          },
-          {
-            "id": 8477424,
-            "name": "Juuse Saros",
-            "team": "Nashville Predators",
-            "position": "G"
-          }
-        ]
-      },
-      "62b8bbf8dc6fe2de9e2f9cda": {
-        "chosen_forwards": [
-          {
-            "id": 8479314,
-            "name": "Matthew Tkachuk",
-            "team": "Calgary Flames",
-            "position": "F"
-          },
-          {
-            "id": 8476468,
-            "name": "J.T. Miller",
-            "team": "Vancouver Canucks",
-            "position": "F"
-          },
-          {
-            "id": 8478398,
-            "name": "Kyle Connor",
-            "team": "Winnipeg Jets",
-            "position": "F"
-          },
-          {
-            "id": 8476887,
-            "name": "Filip Forsberg",
-            "team": "Nashville Predators",
-            "position": "F"
-          },
-          {
-            "id": 8477496,
-            "name": "Elias Lindholm",
-            "team": "Calgary Flames",
-            "position": "F"
-          },
-          {
-            "id": 8477939,
-            "name": "William Nylander",
-            "team": "Toronto Maple Leafs",
-            "position": "F"
-          },
-          {
-            "id": 8471218,
-            "name": "Blake Wheeler",
-            "team": "Winnipeg Jets",
-            "position": "F"
-          },
-          {
-            "id": 8475791,
-            "name": "Taylor Hall",
-            "team": "Boston Bruins",
-            "position": "F"
-          },
-          {
-            "id": 8477946,
-            "name": "Dylan Larkin",
-            "team": "Detroit Red Wings",
-            "position": "F"
-          },
-          {
-            "id": 8477479,
-            "name": "Tyler Bertuzzi",
-            "team": "Detroit Red Wings",
-            "position": "F"
-          },
-          {
-            "id": 8475172,
-            "name": "Nazem Kadri",
-            "team": "Colorado Avalanche",
-            "position": "F"
-          },
-          {
-            "id": 8481540,
-            "name": "Cole Caufield",
-            "team": "Montréal Canadiens",
-            "position": "F"
-          }
-        ],
-        "chosen_defenders": [
-          {
-            "id": 8477932,
-            "name": "Aaron Ekblad",
-            "team": "Florida Panthers",
-            "position": "D"
-          },
-          {
-            "id": 8480839,
-            "name": "Rasmus Dahlin",
-            "team": "Buffalo Sabres",
-            "position": "D"
-          },
-          {
-            "id": 8475906,
-            "name": "John Klingberg",
-            "team": "Dallas Stars",
-            "position": "D"
-          },
-          {
-            "id": 8478469,
-            "name": "Thomas Chabot",
-            "team": "Ottawa Senators",
-            "position": "D"
-          },
-          {
-            "id": 8475171,
-            "name": "Oliver Ekman-Larsson",
-            "team": "Vancouver Canucks",
-            "position": "D"
-          },
-          {
-            "id": 8477488,
-            "name": "Brett Pesce",
-            "team": "Carolina Hurricanes",
-            "position": "D"
-          }
-        ],
-        "chosen_goalies": [
-          {
-            "id": 8478048,
-            "name": "Igor Shesterkin",
-            "team": "New York Rangers",
-            "position": "G"
-          },
-          {
-            "id": 8470594,
-            "name": "Marc-Andre Fleury",
-            "team": "Minnesota Wild",
-            "position": "G"
-          }
-        ],
-        "chosen_reservists": [
-          {
-            "id": 8479343,
-            "name": "Clayton Keller",
-            "team": "Arizona Coyotes",
-            "position": "F"
-          },
-          {
-            "id": 8480039,
-            "name": "Martin Necas",
-            "team": "Carolina Hurricanes",
-            "position": "F"
-          },
-          {
-            "id": 8476461,
-            "name": "Sean Couturier",
-            "team": "Philadelphia Flyers",
-            "position": "F"
-          }
-        ]
       }
     },
-    "draft_order": [],
     "score_by_day": {
       "2021-10-13": {
         "62b8bb0bdc6fe2de9e2f9cd8": {
@@ -105386,45 +105700,46 @@
     },
     "tradable_picks": [
       {
-        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
-        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda",
-        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
-        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
         "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
-        "62b8badddc6fe2de9e2f9cd7": "62b8bc22dc6fe2de9e2f9cdc"
+        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8badddc6fe2de9e2f9cd7": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda"
       },
       {
-        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
-        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
-        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
         "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
-        "62b8badddc6fe2de9e2f9cd7": "62b8bbf8dc6fe2de9e2f9cda ",
-        "62b8bbf8dc6fe2de9e2f9cda": "62b8bc22dc6fe2de9e2f9cdc"
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8badddc6fe2de9e2f9cd7": "62b8bbf8dc6fe2de9e2f9cda"
       },
       {
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
+        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
         "62b8badddc6fe2de9e2f9cd7": "62b8badddc6fe2de9e2f9cd7",
-        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
-        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
-        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
-        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
-        "62b8bbf8dc6fe2de9e2f9cda": "62b8bb1edc6fe2de9e2f9cd9"
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8"
       },
       {
         "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
-        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda",
         "62b8badddc6fe2de9e2f9cd7": "62b8bb1edc6fe2de9e2f9cd9",
         "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda",
         "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
         "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb"
       },
       {
-        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda",
         "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
         "62b8badddc6fe2de9e2f9cd7": "62b8badddc6fe2de9e2f9cd7",
-        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda",
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
         "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
-        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb"
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8"
       }
-    ]
+    ],
+    "players_name_drafted": []
   }
 }]

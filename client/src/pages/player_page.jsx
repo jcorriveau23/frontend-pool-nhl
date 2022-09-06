@@ -405,9 +405,7 @@ export default function PlayerPage() {
     <table className="content-table">
       <thead>
         <tr>
-          <th>
-            <img src={logos[p.currentTeam.name]} alt="" width="60" height="60" />
-          </th>
+          <th>{p.currentTeam ? <img src={logos[p.currentTeam.name]} alt="" width="60" height="60" /> : null}</th>
           <th>
             <h3>{p.fullName}</h3>
           </th>

@@ -8,8 +8,9 @@ import PropTypes from 'prop-types';
 import { Tabs, TabList, TabPanel, Tab } from 'react-tabs';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+
 // components
-import PlayerList from '../components/pool_state/playerList';
+import PlayerNoLink from '../components/playerNoLink';
 import PickList from '../components/pool_state/pickList';
 import TradeItem from '../components/pool_state/tradeItem';
 
@@ -24,6 +25,7 @@ export default function CreateTradeModal({
   setShowCreateTradeModal,
   poolInfo,
   setPoolInfo,
+  injury,
   user,
   DictUsers,
 }) {
@@ -142,7 +144,7 @@ export default function CreateTradeModal({
       .map((player, i) => (
         <tr onClick={() => add_player(side, player)} key={player}>
           <td>{i + 1}</td>
-          <td>{player.name}</td>
+          <PlayerNoLink name={player.name} injury={injury} />
           <td>
             <img src={logos[player.team]} alt="" width="40" height="40" />
           </td>

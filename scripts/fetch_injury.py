@@ -13,9 +13,9 @@ def fetch_injured_players():
     data = BeautifulSoup(response.text, 'lxml')
 
     for row in data.table.tbody.find_all("tr"):
-        print(player_injury_name[0].a.text)
         player_injury_info = row.find_all("td")
         player_injury_name = row.find_all("th")
+        print(player_injury_name[0].a.text)
 
         injured_players[player_injury_name[0].a.text] = {
             "team": player_injury_info[0].text,
@@ -27,3 +27,6 @@ def fetch_injured_players():
     file = open("./client/public/injury.json", "w+")
     json.dump(injured_players, file, indent=4)
     file.close()
+
+if __name__ == "__main__":
+    fetch_injured_players()

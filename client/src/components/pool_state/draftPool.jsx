@@ -37,6 +37,7 @@ export default function DraftPool({
   const [goal_l, setGoal_l] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [selectedTeamIndex, setSelectedTeamIndex] = useState(0);
+  const [playerIdToPlayerNameDict, setPlayerIdToPlayerNameDict] = useState(null);
 
   const sort_by_player_member = (playerMember, array) => {
     // TODO: try to simplified this into no if at all
@@ -66,9 +67,35 @@ export default function DraftPool({
       const sortedGoalies = sort_by_player_member('wins', res.data.G);
 
       setForw_l(sortedForwards);
-      setDef_l([...sortedDefender]);
-      setGoal_l([...sortedGoalies]);
+      setDef_l(sortedDefender);
+      setGoal_l(sortedGoalies);
     });
+  };
+
+  const setDictPlayersIdToPlayersName = poolData => {
+    const DictPlayerIdToPlayerName = {};
+
+    for (const [poolerName, poolerRoster] of Object.entries(poolData.context.pooler_roster)) {
+      console.log(poolerRoster);
+      // Forwards
+      poolerRoster.chosen_forwards.forEach(forward => {
+        DictPlayerIdToPlayerName[forward.id] = forward.name;
+      });
+      // Defenders
+      poolerRoster.chosen_defenders.forEach(defender => {
+        DictPlayerIdToPlayerName[defender.id] = defender.name;
+      });
+      // Goalies
+      poolerRoster.chosen_goalies.forEach(goaly => {
+        DictPlayerIdToPlayerName[goaly.id] = goaly.name;
+      });
+      // Reservists
+      poolerRoster.chosen_reservists.forEach(reservist => {
+        DictPlayerIdToPlayerName[reservist.id] = reservist.name;
+      });
+    }
+
+    setPlayerIdToPlayerNameDict(DictPlayerIdToPlayerName);
   };
 
   useEffect(() => {
@@ -76,6 +103,7 @@ export default function DraftPool({
       socket.emit('joinRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
       fetchPlayerDraft();
       setInRoom(true);
+      setDictPlayersIdToPlayersName(poolInfo); // Create the dictionary mapping players id to players name
     }
     return () => {
       if (socket && poolName) {
@@ -90,6 +118,7 @@ export default function DraftPool({
     if (socket) {
       socket.on('poolInfo', data => {
         setPoolInfo(data);
+        setDictPlayersIdToPlayersName(data); // Create the dictionary mapping players id to players name
       });
     }
   }, [socket]);
@@ -225,6 +254,7 @@ export default function DraftPool({
             }
             nb_protected_players={poolInfo.next_season_number_players_protected}
             injury={injury}
+            playerIdToPlayerNameDict={playerIdToPlayerNameDict}
             DictUsers={DictUsers}
           />
         </TabPanel>

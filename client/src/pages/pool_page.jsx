@@ -18,7 +18,7 @@ const socket = io.connect('https://hockeypool.live', {
   path: '/mysocket',
 });
 
-export default function PoolPage({ user, DictUsers, injury }) {
+export default function PoolPage({ user, DictUsers, injury, formatDate, date, setDate }) {
   const [poolInfo, setPoolInfo] = useState({});
   const [poolName] = useState(useParams().name); // get the name of the pool using the param url
   const [isUserParticipant, setIsUserParticipant] = useState(false);
@@ -30,7 +30,6 @@ export default function PoolPage({ user, DictUsers, injury }) {
           headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
         })
         .then(res => {
-          console.log(res.data);
           if (res.status === 200) {
             // [TODO] display a page or notification to show that the pool was not found
             setPoolInfo(res.data);
@@ -81,6 +80,9 @@ export default function PoolPage({ user, DictUsers, injury }) {
             setPoolInfo={setPoolInfo}
             injury={injury}
             isUserParticipant={isUserParticipant}
+            formatDate={formatDate}
+            date={date}
+            setDate={setDate}
           />
         );
       case 'Dynastie':

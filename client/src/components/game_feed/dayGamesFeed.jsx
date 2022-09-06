@@ -15,9 +15,8 @@ import './react-datepicker.css';
 import goPrev from '../img/icons/Actions-go-previous-icon.png';
 import goNext from '../img/icons/Actions-go-next-icon.png';
 
-export default function TodayGamesFeed({ formatDate, setFormatDate }) {
+export default function TodayGamesFeed({ formatDate, setFormatDate, date, setDate }) {
   const [gamesStats, setGamesStats] = useState([]);
-  const [date, setDate] = useState(new Date());
 
   useEffect(() => {
     let newDate;

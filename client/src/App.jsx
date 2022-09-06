@@ -39,6 +39,7 @@ function App() {
   const [currentAddr, setCurrentAddr] = useState('');
   const [contract, setContract] = useState(null);
   const [formatDate, setFormatDate] = useState(null);
+  const [date, setDate] = useState(new Date());
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [isWrongNetwork, setIsWrongNetwork] = useState(false);
   const [DictUsers, setDictUsers] = useState(null);
@@ -68,10 +69,9 @@ function App() {
             const DictUsersTmp = {};
             res.data.forEach(u => {
               DictUsersTmp[u._id.$oid] = u.name;
-              setUser(userTmp);
             });
-
             setDictUsers(DictUsersTmp);
+            setUser(userTmp);
           }
         })
         .catch(err => {
@@ -109,7 +109,7 @@ function App() {
         </li>
       </div>
       <div className="cont">
-        <TodayGamesFeed formatDate={formatDate} setFormatDate={setFormatDate} />
+        <TodayGamesFeed formatDate={formatDate} setFormatDate={setFormatDate} date={date} setDate={setDate} />
       </div>
       <div>
         <MenuModal
@@ -138,7 +138,19 @@ function App() {
           <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
           <Route path="/my-pools" element={<MyPoolsPage user={user} DictUsers={DictUsers} />} />
           <Route path="/my-bets" element={<MyGameBetsPage user={user} contract={contract} />} />
-          <Route path="/my-pools/:name" element={<PoolPage user={user} DictUsers={DictUsers} injury={injury} />} />
+          <Route
+            path="/my-pools/:name"
+            element={
+              <PoolPage
+                user={user}
+                DictUsers={DictUsers}
+                injury={injury}
+                formatDate={formatDate}
+                date={date}
+                setDate={setDate}
+              />
+            }
+          />
           <Route path="/standing" element={<StandingPage />} />
           <Route path="/game/:id" element={<GameFeedPage user={user} contract={contract} injury={injury} />} />
           <Route path="/player-info" element={<PlayerPage />} />

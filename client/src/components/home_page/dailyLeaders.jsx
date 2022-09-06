@@ -9,7 +9,7 @@ import PlayerLink from '../playerLink';
 // images
 import { logos } from '../img/logos';
 
-export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, DictUsers, dayLeadersRef, injury }) {
+export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, DictUsers, injury }) {
   const [prevFormatDate, setPrevFormatDate] = useState('');
   const [dayLeaders, setDayLeaders] = useState(null);
 
@@ -17,23 +17,19 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, Dic
     if (formatDate !== prevFormatDate && formatDate) {
       // get the day leaders data from database.
 
-      if (dayLeadersRef) {
-        setDayLeaders(dayLeadersRef);
-      } else {
-        axios
-          .get(`/api-rust/daily_leaders/${formatDate}`)
-          .then(res => {
-            if (res.status === 200) {
-              setDayLeaders({ ...res.data });
-              setPrevFormatDate(formatDate);
-            }
-          })
-          .catch(e => {
-            setDayLeaders(null);
-            setPrevFormatDate('');
-            console.log(e.response);
-          });
-      }
+      axios
+        .get(`/api-rust/daily_leaders/${formatDate}`)
+        .then(res => {
+          if (res.status === 200) {
+            setDayLeaders(res.data);
+            setPrevFormatDate(formatDate);
+          }
+        })
+        .catch(e => {
+          setDayLeaders(null);
+          setPrevFormatDate('');
+          console.log(e.response);
+        });
     }
   }, [formatDate]);
 
@@ -44,7 +40,7 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, Dic
         <Tab>Goalies</Tab>
       </TabList>
       <TabPanel>
-        <table className="content-table">
+        <table className="content-table-no-min">
           <thead>
             <tr>
               <th colSpan={5}>Daily Leaders</th>
@@ -86,7 +82,7 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, Dic
               </>
             ) : (
               <tr>
-                <th colSpan={5}>No games started yet on the {formatDate}.</th>
+                <td colSpan={5}>No games started yet ({formatDate})</td>
               </tr>
             )}
           </tbody>
@@ -135,7 +131,7 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, Dic
               </>
             ) : (
               <tr>
-                <th colSpan={5}>No games started yet on the {formatDate}.</th>
+                <td colSpan={5}>No games started yet ({formatDate})</td>
               </tr>
             )}
           </tbody>
