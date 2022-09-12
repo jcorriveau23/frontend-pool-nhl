@@ -187,6 +187,25 @@ io.on('connection', function (socket) {
       });
   });
 
+  socket.on('undo', function (data, room, callback) {
+    axios
+      .post(
+        'https://hockeypool.live/api-rust/undo-select-player',
+        { name: room },
+        { headers: { Authorization: `Bearer ${data}` } }
+      )
+      .then(res => {
+        if (res.data.success) {
+          io.in(room).emit('poolInfo', res.data.pool);
+          callback({ success: true });
+        } else {
+          console.error(res.data.message);
+          //console.log('error with put request (chose_player)' + data.message)
+          callback({ success: false, message: res.data.message });
+        }
+      });
+  });
+
   socket.on('disconnect', () => {
     //console.log("device disconnected")
   });

@@ -1,8 +1,8 @@
 [{
   "_id": {
-    "$oid": "62bed6134fb504ee8c306d87"
+    "$oid": "62bed6134fb504ee8c306d70"
   },
-  "name": "Ulysse7",
+  "name": "jax",
   "owner": "62b8bc22dc6fe2de9e2f9cdc",
   "number_poolers": 6,
   "participants": [
@@ -17,23 +17,23 @@
   "number_defenders": 6,
   "number_goalies": 2,
   "number_reservists": 4,
-  "forward_pts_goals": 2,
+  "forward_pts_goals": 1,
   "forward_pts_assists": 1,
-  "forward_pts_hattricks": 3,
-  "defender_pts_goals": 3,
-  "defender_pts_assists": 2,
-  "defender_pts_hattricks": 2,
+  "forward_pts_hattricks": 1,
+  "defender_pts_goals": 1,
+  "defender_pts_assists": 1,
+  "defender_pts_hattricks": 1,
   "goalies_pts_wins": 2,
-  "goalies_pts_shutouts": 3,
-  "goalies_pts_goals": 3,
-  "goalies_pts_assists": 2,
+  "goalies_pts_shutouts": 1,
+  "goalies_pts_goals": 5,
+  "goalies_pts_assists": 1,
   "next_season_number_players_protected": 10,
   "tradable_picks": 5,
-  "status": "InProgress",
+  "status": "Dynastie",
   "final_rank": [
     "62b8bb0bdc6fe2de9e2f9cd8",
     "62b8badddc6fe2de9e2f9cd7",
-    "62b8bc22dc6fe2de9e2f9cdc",
+    "62b8bc07dc6fe2de9e2f9cdb",
     "62b8bb1edc6fe2de9e2f9cd9",
     "62b8bbf8dc6fe2de9e2f9cda",
     "62b8bc22dc6fe2de9e2f9cdc"
@@ -48,7 +48,7 @@
           {
             "id": 8476346,
             "name": "Johnny Gaudreau",
-            "team": "Calgary Flames",
+            "team": "Columbus Blue Jackets",
             "position": "F"
           },
           {
@@ -192,7 +192,7 @@
           {
             "id": 8475660,
             "name": "Cam Talbot",
-            "team": "Minnesota Wild",
+            "team": "Ottawa Senators",
             "position": "G"
           }
         ]
@@ -202,7 +202,7 @@
           {
             "id": 8476456,
             "name": "Jonathan Huberdeau",
-            "team": "Florida Panthers",
+            "team": "Calgary Flames",
             "position": "F"
           },
           {
@@ -214,7 +214,7 @@
           {
             "id": 8477942,
             "name": "Kevin Fiala",
-            "team": "Minnesota Wild",
+            "team": "Los Angeles Kings",
             "position": "F"
           },
           {
@@ -232,7 +232,7 @@
           {
             "id": 8479337,
             "name": "Alex DeBrincat",
-            "team": "Chicago Blackhawks",
+            "team": "Ottawa Senators",
             "position": "F"
           },
           {
@@ -314,7 +314,7 @@
           {
             "id": 8475789,
             "name": "Jack Campbell",
-            "team": "Toronto Maple Leafs",
+            "team": "Edmonton Oilers",
             "position": "G"
           },
           {
@@ -328,13 +328,13 @@
           {
             "id": 8477330,
             "name": "Dominik Kubalik",
-            "team": "Chicago Blackhawks",
+            "team": "Detroit Red Wings",
             "position": "F"
           },
           {
             "id": 8476389,
             "name": "Vincent Trocheck",
-            "team": "Carolina Hurricanes",
+            "team": "New York Rangers",
             "position": "F"
           },
           {
@@ -422,13 +422,13 @@
           {
             "id": 8476292,
             "name": "Ondrej Palat",
-            "team": "Tampa Bay Lightning",
+            "team": "New Jersey Devils",
             "position": "F"
           },
           {
             "id": 8481523,
             "name": "Kirby Dach",
-            "team": "Chicago Blackhawks",
+            "team": "Montréal Canadiens",
             "position": "F"
           }
         ],
@@ -466,7 +466,7 @@
           {
             "id": 8477346,
             "name": "MacKenzie Weegar",
-            "team": "Florida Panthers",
+            "team": "Calgary Flames",
             "position": "D"
           }
         ],
@@ -488,7 +488,7 @@
           {
             "id": 8474157,
             "name": "Max Pacioretty",
-            "team": "Vegas Golden Knights",
+            "team": "Carolina Hurricanes",
             "position": "F"
           },
           {
@@ -558,7 +558,7 @@
           {
             "id": 8474102,
             "name": "David Perron",
-            "team": "St. Louis Blues",
+            "team": "Detroit Red Wings",
             "position": "F"
           },
           {
@@ -608,7 +608,7 @@
           {
             "id": 8470613,
             "name": "Brent Burns",
-            "team": "San Jose Sharks",
+            "team": "Carolina Hurricanes",
             "position": "D"
           },
           {
@@ -642,7 +642,7 @@
           {
             "id": 8476458,
             "name": "Ryan Strome",
-            "team": "New York Rangers",
+            "team": "Anaheim Ducks",
             "position": "F"
           },
           {
@@ -774,7 +774,7 @@
           {
             "id": 8477950,
             "name": "Tony DeAngelo",
-            "team": "Carolina Hurricanes",
+            "team": "Philadelphia Flyers",
             "position": "D"
           }
         ],
@@ -788,7 +788,7 @@
           {
             "id": 8475311,
             "name": "Darcy Kuemper",
-            "team": "Colorado Avalanche",
+            "team": "Washington Capitals",
             "position": "G"
           }
         ],
@@ -824,7 +824,7 @@
           {
             "id": 8479314,
             "name": "Matthew Tkachuk",
-            "team": "Calgary Flames",
+            "team": "Florida Panthers",
             "position": "F"
           },
           {
@@ -884,7 +884,7 @@
           {
             "id": 8475172,
             "name": "Nazem Kadri",
-            "team": "Colorado Avalanche",
+            "team": "Calgary Flames",
             "position": "F"
           },
           {
@@ -910,7 +910,7 @@
           {
             "id": 8475906,
             "name": "John Klingberg",
-            "team": "Dallas Stars",
+            "team": "Anaheim Ducks",
             "position": "D"
           },
           {
@@ -1012,5 +1012,6 @@
         "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb"
       }
     ]
-  }
+  },
+  "date_updated": 1
 }]

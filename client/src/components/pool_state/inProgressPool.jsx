@@ -70,7 +70,7 @@ export default function InProgressPool({
     let daily_stats = null;
     const tempDate = new Date(fDate);
 
-    let i = 200;
+    let i = 200; // Will look into the past 200 days to find the last date from now.
 
     do {
       const fTempDate = tempDate.toISOString().slice(0, 10);

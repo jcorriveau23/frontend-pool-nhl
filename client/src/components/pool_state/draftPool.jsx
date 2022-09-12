@@ -38,6 +38,7 @@ export default function DraftPool({
   const [searchText, setSearchText] = useState('');
   const [selectedTeamIndex, setSelectedTeamIndex] = useState(0);
   const [playerIdToPlayerNameDict, setPlayerIdToPlayerNameDict] = useState(null);
+  const [nextDrafter, setNextDrafter] = useState('');
 
   const sort_by_player_member = (playerMember, array) => {
     // TODO: try to simplified this into no if at all
@@ -147,6 +148,16 @@ export default function DraftPool({
     });
   };
 
+  const undo = player => {
+    if (window.confirm(`Do you really want to undo the last selection?`)) {
+      socket.emit('undo', Cookies.get(`token-${user._id.$oid}`), poolInfo.name, ack => {
+        if (ack.success === false) {
+          alert(ack.message);
+        }
+      });
+    }
+  };
+
   const confirm_selection = player => {
     if (window.confirm(`Do you really want to select ${player.name}?`)) {
       chose_player(player);
@@ -187,26 +198,7 @@ export default function DraftPool({
 
   const isUser = participant => participant === user._id.$oid;
 
-  const draft_turn = () => {
-    if (poolInfo.final_rank) {
-      // Comes from dynastie
-
-      const number_players_drafted = poolInfo.context.players_name_drafted.length;
-      const next_drafter =
-        poolInfo.final_rank[poolInfo.number_poolers - 1 - (number_players_drafted % poolInfo.number_poolers)]; // The last one have the first pick
-
-      const round = number_players_drafted / poolInfo.number_poolers;
-
-      if (poolInfo.tradable_picks && poolInfo.tradable_picks.length > round) {
-        return poolInfo.tradable_picks[round][next_drafter]; // tradable picks
-      }
-      return next_drafter; // No more tradable picks
-    }
-    // comes from new draft
-
-    const number_players_drafted = poolInfo.context.players_name_drafted.length;
-    return poolInfo.participants[number_players_drafted % poolInfo.number_poolers];
-  };
+  const draft_turn = () => nextDrafter;
 
   const render_pooler_turn = pooler => {
     if (draft_turn() === pooler) {
@@ -241,6 +233,11 @@ export default function DraftPool({
           <Tab>Teams</Tab>
         </TabList>
         <TabPanel>
+          {user._id.$oid === poolInfo.owner ? (
+            <button className="base-button" onClick={undo} type="button">
+              Undo
+            </button>
+          ) : null}
           <DraftOrder
             players_name_drafted={poolInfo.context.players_name_drafted}
             participants={poolInfo.participants}
@@ -256,6 +253,7 @@ export default function DraftPool({
             injury={injury}
             playerIdToPlayerNameDict={playerIdToPlayerNameDict}
             DictUsers={DictUsers}
+            setNextDrafter={setNextDrafter}
           />
         </TabPanel>
         <TabPanel>
@@ -279,22 +277,22 @@ export default function DraftPool({
           <th colSpan={7}>Stats during last season</th>
         </tr>
         <tr>
-          <th colSpan={2} onClick={() => sort_players('name', position)}>
+          <th colSpan={1} onClick={() => sort_players('name', position)}>
             name
           </th>
           <th onClick={() => sort_players('team', position)}>team</th>
-          <th onClick={() => sort_players('games', position)}>Games played</th>
+          <th onClick={() => sort_players('games', position)}>GP</th>
           {position === 'F' || position === 'D' ? (
             <>
-              <th onClick={() => sort_players('goals', position)}>Goals</th>
-              <th onClick={() => sort_players('assists', position)}>Assists</th>
-              <th onClick={() => sort_players('pts', position)}>pts</th>
+              <th onClick={() => sort_players('goals', position)}>G</th>
+              <th onClick={() => sort_players('assists', position)}>A</th>
+              <th onClick={() => sort_players('pts', position)}>P</th>
             </>
           ) : (
             <>
-              <th onClick={() => sort_players('wins', position)}>Win</th>
-              <th onClick={() => sort_players('losses', position)}>losses</th>
-              <th onClick={() => sort_players('savePercentage', position)}>save percentage</th>
+              <th onClick={() => sort_players('wins', position)}>W</th>
+              <th onClick={() => sort_players('losses', position)}>L</th>
+              <th onClick={() => sort_players('savePercentage', position)}>S%</th>
             </>
           )}
         </tr>
@@ -315,27 +313,28 @@ export default function DraftPool({
               key={player.id}
             >
               <td>
-                {selectedPlayer && selectedPlayer.id === player.id ? ( // Add a button to draft a player when we select a player.
-                  <button className="draft-button" onClick={() => confirm_selection(selectedPlayer)} type="button">
-                    Draft
-                  </button>
-                ) : null}
-              </td>
-              <td>
                 <PlayerNoLink name={player.name} injury={injury} />
               </td>
               <td>
                 <img src={logos[player.team]} alt="" width="40" height="40" />
               </td>
-              <td>{player.stats.games}</td>
-              {position === 'F' || position === 'D' ? (
+
+              {selectedPlayer && selectedPlayer.id === player.id ? ( // Add a button to draft a player when we select a player.
+                <td colSpan={4}>
+                  <button className="base-button" onClick={() => confirm_selection(selectedPlayer)} type="button">
+                    Draft
+                  </button>
+                </td>
+              ) : position === 'F' || position === 'D' ? (
                 <>
+                  <td>{player.stats.games}</td>
                   <td>{player.stats.goals}</td>
                   <td>{player.stats.assists}</td>
                   <td>{player.stats.pts}</td>
                 </>
               ) : (
                 <>
+                  <td>{player.stats.games}</td>
                   <td>{player.stats.wins}</td>
                   <td>{player.stats.losses}</td>
                   <td>{player.stats.savePercentage}</td>

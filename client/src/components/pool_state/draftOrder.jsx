@@ -17,6 +17,7 @@ export default function DraftOrder({
   injury,
   playerIdToPlayerNameDict,
   DictUsers,
+  setNextDrafter,
 }) {
   const render_table_header = () => (
     <tr>
@@ -77,8 +78,6 @@ export default function DraftOrder({
             const next_drafter = final_rank[final_rank.length - 1 - j];
             const real_next_drafter = tradable_picks[i][next_drafter];
 
-            participantsToRosterCountDict[real_next_drafter] += 1;
-
             const isUserDone = participantsToRosterCountDict[next_drafter] > nb_players;
             const isPickTraded = next_drafter !== tradable_picks[i][next_drafter]; // was the pick traded last season ?
 
@@ -90,8 +89,10 @@ export default function DraftOrder({
               // We take the first participants that do not have completed its roster for the next user turn
               isUserTurn = true;
               isUserTurnFound = true;
+              if (setNextDrafter) setNextDrafter(real_next_drafter);
             }
 
+            participantsToRosterCountDict[real_next_drafter] += 1;
             picks.push(
               <tr>
                 <td>{isUserTurn ? <ImArrowRight size={30} style={{ color: 'green' }} /> : null}</td>
@@ -120,7 +121,6 @@ export default function DraftOrder({
           } else {
             // the next drafter comes from final_rank
             const next_drafter = final_rank[final_rank.length - 1 - j];
-            participantsToRosterCountDict[next_drafter] += 1;
             const isUserDone = participantsToRosterCountDict[next_drafter] > nb_players;
 
             if (
@@ -131,7 +131,9 @@ export default function DraftOrder({
               // We take the first participants that do not have completed its roster for the next user turn
               isUserTurn = true;
               isUserTurnFound = true;
+              if (setNextDrafter) setNextDrafter(next_drafter);
             }
+            participantsToRosterCountDict[next_drafter] += 1;
 
             picks.push(
               <tr>
@@ -163,6 +165,10 @@ export default function DraftOrder({
           const next_drafter = participants[j];
           participantsToRosterCountDict[next_drafter] += 1;
           const isUserTurn = player_drafted_index === players_name_drafted.length;
+
+          if (isUserTurn) {
+            if (setNextDrafter) setNextDrafter(next_drafter);
+          }
 
           picks.push(
             <tr>

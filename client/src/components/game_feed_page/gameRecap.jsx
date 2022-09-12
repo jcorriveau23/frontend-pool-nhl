@@ -28,7 +28,7 @@ export default function GameRecap({ gameContent, isEditorial }) {
     }
   };
 
-  if (isEditorial && gameContent.editorial && gameContent.media.epg[3].items?.length > 0) {
+  if (isEditorial && gameContent && gameContent.editorial && gameContent.media.epg[3].items?.length > 0) {
     return (
       <div>
         <table className="content-table">
@@ -54,7 +54,7 @@ export default function GameRecap({ gameContent, isEditorial }) {
     );
   }
 
-  if (!isEditorial && gameContent.media && gameContent.media.epg[2].items?.length > 0) {
+  if (!isEditorial && gameContent && gameContent.media && gameContent.media.epg[2].items?.length > 0) {
     return (
       <div>
         <table className="content-table">

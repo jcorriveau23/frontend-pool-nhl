@@ -5,9 +5,17 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import PropTypes from 'prop-types';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { AiFillCheckCircle } from 'react-icons/ai';
+
+// Components
 import PlayerLink from '../playerLink';
-// images
+import DraftOrder from './draftOrder';
+
+// Images
 import { logos } from '../img/logos';
+
+// Logos
+import { BsPenFill } from 'react-icons/bs';
+import { GiDirectionSigns } from 'react-icons/gi';
 
 export default function DynastiePool({
   user,
@@ -151,7 +159,11 @@ export default function DynastiePool({
   };
 
   const send_protected_player = () => {
-    if (!window.confirm(`Are you sure you want to send this list of protected players?`)) {
+    if (
+      !window.confirm(
+        `Are you sure you want to send this list of protected players? This action is not reversible, Make sure you are confortable with your choices before confirming.`
+      )
+    ) {
       return;
     }
 
@@ -257,102 +269,134 @@ export default function DynastiePool({
       forwProtected.length + defProtected.length + goalProtected.length + reservProtected.length;
 
     return (
-      <div className="min-width">
-        <div className="float-left">
-          <div className="half-cont">
-            <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
-              <TabList>
-                {poolInfo.participants.map(participant => (
-                  <Tab>
-                    {isParticipantDone(participant) ? <AiFillCheckCircle size={30} color="green" /> : null}
-                    <b style={participant === user._id.$oid ? { color: 'green' } : null}>
-                      {DictUsers ? DictUsers[participant] : participant}
-                    </b>
-                  </Tab>
-                ))}
-              </TabList>
-              {poolInfo.participants.map(participant => (
-                <TabPanel>
+      <div className="cont">
+        <Tabs>
+          <TabList>
+            <Tab>
+              <GiDirectionSigns size={40} />
+              Protection
+            </Tab>
+            <Tab>
+              <BsPenFill size={30} />
+              Preview Draft Order
+            </Tab>
+          </TabList>
+          <TabPanel>
+            <div className="float-left">
+              <div className="half-cont">
+                <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
+                  <TabList>
+                    {poolInfo.participants.map(participant => (
+                      <Tab>
+                        {isParticipantDone(participant) ? <AiFillCheckCircle size={30} color="green" /> : null}
+                        <b style={participant === user._id.$oid ? { color: 'green' } : null}>
+                          {DictUsers ? DictUsers[participant] : participant}
+                        </b>
+                      </Tab>
+                    ))}
+                  </TabList>
+                  {poolInfo.participants.map(participant => (
+                    <TabPanel>
+                      <h2>
+                        {participant === user._id.$oid
+                          ? `Protect ${poolInfo.next_season_number_players_protected} players.`
+                          : null}
+                      </h2>
+                      <table className="content-table-no-min">
+                        {render_position_header('Forward')}
+                        <tbody>
+                          {render_not_protected_players(
+                            poolInfo.context.pooler_roster[participant].chosen_forwards,
+                            participant === user._id.$oid,
+                            isParticipantDone(user._id.$oid)
+                          )}
+                        </tbody>
+                        {render_position_header('Defenders')}
+                        <tbody>
+                          {render_not_protected_players(
+                            poolInfo.context.pooler_roster[participant].chosen_defenders,
+                            participant === user._id.$oid,
+                            isParticipantDone(user._id.$oid)
+                          )}
+                        </tbody>
+                        {render_position_header('Goalies')}
+                        <tbody>
+                          {render_not_protected_players(
+                            poolInfo.context.pooler_roster[participant].chosen_goalies,
+                            participant === user._id.$oid,
+                            isParticipantDone(user._id.$oid)
+                          )}
+                        </tbody>
+                        {render_position_header('Reservists')}
+                        <tbody>
+                          {render_not_protected_players(
+                            poolInfo.context.pooler_roster[participant].chosen_reservists,
+                            participant === user._id.$oid,
+                            isParticipantDone(user._id.$oid)
+                          )}
+                        </tbody>
+                      </table>
+                    </TabPanel>
+                  ))}
+                </Tabs>
+              </div>
+            </div>
+            <div className="float-right">
+              <div className="half-cont">
+                {!isParticipantDone(user._id.$oid) ? (
+                  <>
+                    <h2>
+                      My Protected players ({nb_player_protected}/{poolInfo.next_season_number_players_protected})
+                    </h2>
+                    <table className="content-table-no-min">
+                      {render_position_header('Forwards')}
+                      {render_protected_players(forwProtected)}
+                      {render_position_header('Defenders')}
+                      {render_protected_players(defProtected)}
+                      {render_position_header('Goalies')}
+                      {render_protected_players(goalProtected)}
+                      {render_position_header('Reservists')}
+                      {render_protected_players(reservProtected)}
+                    </table>
+                    <button
+                      className="base-button"
+                      onClick={() => send_protected_player()}
+                      disabled={nb_player_protected !== poolInfo.next_season_number_players_protected}
+                      type="button"
+                    >
+                      Send Protection list
+                    </button>
+                  </>
+                ) : (
                   <h2>
-                    {isParticipantDone(participant) ? <AiFillCheckCircle size={30} color="green" /> : null}
-                    Protect {poolInfo.next_season_number_players_protected} players.
+                    You have already protected your {poolInfo.next_season_number_players_protected} players. Waiting for
+                    {poolInfo.participants.map(part =>
+                      !isParticipantDone(part) ? (DictUsers ? ` ${DictUsers[part]}, ` : null) : null
+                    )}
+                    to complete the process...
                   </h2>
-                  <table className="content-table-no-min">
-                    {render_position_header('Forward')}
-                    <tbody>
-                      {render_not_protected_players(
-                        poolInfo.context.pooler_roster[participant].chosen_forwards,
-                        participant === user._id.$oid,
-                        isParticipantDone(user._id.$oid)
-                      )}
-                    </tbody>
-                    {render_position_header('Defenders')}
-                    <tbody>
-                      {render_not_protected_players(
-                        poolInfo.context.pooler_roster[participant].chosen_defenders,
-                        participant === user._id.$oid,
-                        isParticipantDone(user._id.$oid)
-                      )}
-                    </tbody>
-                    {render_position_header('Goalies')}
-                    <tbody>
-                      {render_not_protected_players(
-                        poolInfo.context.pooler_roster[participant].chosen_goalies,
-                        participant === user._id.$oid,
-                        isParticipantDone(user._id.$oid)
-                      )}
-                    </tbody>
-                    {render_position_header('Reservists')}
-                    <tbody>
-                      {render_not_protected_players(
-                        poolInfo.context.pooler_roster[participant].chosen_reservists,
-                        participant === user._id.$oid,
-                        isParticipantDone(user._id.$oid)
-                      )}
-                    </tbody>
-                  </table>
-                </TabPanel>
-              ))}
-            </Tabs>
-          </div>
-        </div>
-        <div className="float-right">
-          <div className="half-cont">
-            {!isParticipantDone(user._id.$oid) ? (
-              <>
-                <h2>
-                  Protected players ({nb_player_protected}/{poolInfo.next_season_number_players_protected})
-                </h2>
-                <table className="content-table-no-min">
-                  {render_position_header('Forwards')}
-                  {render_protected_players(forwProtected)}
-                  {render_position_header('Defenders')}
-                  {render_protected_players(defProtected)}
-                  {render_position_header('Goalies')}
-                  {render_protected_players(goalProtected)}
-                  {render_position_header('Reservists')}
-                  {render_protected_players(reservProtected)}
-                </table>
-                <button
-                  className="base-button"
-                  onClick={() => send_protected_player()}
-                  disabled={nb_player_protected !== poolInfo.next_season_number_players_protected}
-                  type="button"
-                >
-                  Send Protection list
-                </button>
-              </>
-            ) : (
-              <h2>
-                You have already protected your {poolInfo.next_season_number_players_protected} players. Waiting for
-                {poolInfo.participants.map(part =>
-                  !isParticipantDone(part) ? (DictUsers ? ` ${DictUsers[part]}, ` : null) : null
                 )}
-                to complete the process...
-              </h2>
-            )}
-          </div>
-        </div>
+              </div>
+            </div>
+          </TabPanel>
+          <TabPanel>
+            <DraftOrder
+              players_name_drafted={poolInfo.context.players_name_drafted}
+              participants={poolInfo.participants}
+              final_rank={poolInfo.final_rank}
+              tradable_picks={poolInfo.context.tradable_picks}
+              nb_players={
+                poolInfo.number_forwards +
+                poolInfo.number_defenders +
+                poolInfo.number_goalies +
+                poolInfo.number_reservists
+              }
+              nb_protected_players={poolInfo.next_season_number_players_protected}
+              injury={injury}
+              DictUsers={DictUsers}
+            />
+          </TabPanel>
+        </Tabs>
       </div>
     );
   }

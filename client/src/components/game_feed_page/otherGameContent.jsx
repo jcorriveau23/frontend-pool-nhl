@@ -32,7 +32,7 @@ export default function OtherGameContent({ gameContent }) {
     }
   };
 
-  if (gameContent.media && gameContent.media.milestones.items?.length > 0) {
+  if (gameContent && gameContent.media && gameContent.media.milestones.items?.length > 0) {
     return (
       <div>
         <table className="goal-item">
@@ -77,7 +77,7 @@ export default function OtherGameContent({ gameContent }) {
     );
   }
 
-  return <h1> </h1>;
+  return <h1>No video provided yet.</h1>;
 }
 
 OtherGameContent.propTypes = {

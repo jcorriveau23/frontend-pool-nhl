@@ -24,7 +24,7 @@ export default function GoalItem({ goalData, gameContent }) {
     // console.log(goalData)
     // console.log(gameContent)
 
-    if (gameContent.media.milestones.items) {
+    if (gameContent && gameContent.media.milestones.items) {
       for (let i = 0; i < gameContent.media.milestones.items.length; i += 1) {
         if (parseInt(gameContent.media.milestones.items[i].statsEventId, 10) === goalData.about.eventId)
           if (

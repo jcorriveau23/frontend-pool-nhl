@@ -64,12 +64,12 @@ def get_db_infos(day):
     today_pointers = db.day_leaders.find_one({"date": str(day)})
     played = db.played.find_one({"date": str(day)})
 
-    return today_pointers, played
+    return today_pointers, played, day
 
 def cumulate_daily_roster_pts(day = None):
     dict_cumulate = {}
 
-    today_pointers, played = get_db_infos(day)
+    today_pointers, played, day = get_db_infos(day)
 
     if today_pointers is None or played is None:
        print("skip this day.")

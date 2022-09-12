@@ -2,7 +2,7 @@
   "_id": {
     "$oid": "62bed6134fb504ee8c306d88"
   },
-  "name": "jax",
+  "name": "jax-test",
   "owner": "62b8bc22dc6fe2de9e2f9cdc",
   "number_poolers": 6,
   "participants": [
@@ -1020,5 +1020,6 @@
         "62b8badddc6fe2de9e2f9cd7": "62b8badddc6fe2de9e2f9cd7"
       }
     ]
-  }
+  },
+  "date_updated": 1
 }]

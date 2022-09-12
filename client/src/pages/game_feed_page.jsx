@@ -424,7 +424,7 @@ export default function GameFeedPage({ user, contract, injury }) {
     return null;
   };
 
-  if (gameInfo && gameContent) {
+  if (gameInfo) {
     return (
       <div className="cont">
         <div>

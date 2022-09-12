@@ -14,6 +14,8 @@ import DraftPool from '../components/pool_state/draftPool';
 import InProgressPool from '../components/pool_state/inProgressPool';
 import DynastiePool from '../components/pool_state/dynastiePool';
 
+import { db } from '../components/db/db';
+
 const socket = io.connect('https://hockeypool.live', {
   path: '/mysocket',
 });
@@ -23,24 +25,58 @@ export default function PoolPage({ user, DictUsers, injury, formatDate, date, se
   const [poolName] = useState(useParams().name); // get the name of the pool using the param url
   const [isUserParticipant, setIsUserParticipant] = useState(false);
 
-  useEffect(() => {
+  const find_last_date_in_db = pool => {
+    if (!pool || !pool.context || !pool.context.score_by_day) {
+      return null;
+    }
+
+    const tempDate = new Date();
+
+    let i = 200; // Will look into the past 200 days to find the last date from now.
+
+    do {
+      const fTempDate = tempDate.toISOString().slice(0, 10);
+      if (fTempDate in pool.context.score_by_day) {
+        return fTempDate;
+      }
+
+      tempDate.setDate(tempDate.getDate() - 1);
+      i -= 1;
+    } while (i > 0);
+
+    return null;
+  };
+
+  useEffect(async () => {
     if (user) {
+      const pool = await db.pools.get({ name: poolName });
+      const lastFormatDate = find_last_date_in_db(pool);
+
+      // console.log(lastFormatDate);
       axios
-        .get(`/api-rust/pool/${poolName}`, {
+        .get(lastFormatDate ? `/api-rust/pool/${poolName}/${lastFormatDate}` : `/api-rust/pool/${poolName}`, {
           headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
         })
         .then(res => {
           if (res.status === 200) {
             // [TODO] display a page or notification to show that the pool was not found
+            if (lastFormatDate) {
+              res.data.context.score_by_day = { ...pool.context.score_by_day, ...res.data.context.score_by_day }; // merge the new keys to the past saved pool.
+            }
+
+            if (pool) {
+              res.data.id = pool.id;
+            }
+
             setPoolInfo(res.data);
+            db.pools.put(res.data, 'name');
 
             if (res.data.participants)
               setIsUserParticipant(res.data.participants.findIndex(participant => participant === user._id.$oid) > -1);
           }
         })
         .catch(e => {
-          setPoolInfo(null);
-          console.log(e);
+          console.log(e.response);
         });
     }
   }, [user]);
