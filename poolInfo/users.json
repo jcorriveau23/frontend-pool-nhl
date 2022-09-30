@@ -1,0 +1,82 @@
+[{
+  "_id": {
+    "$oid": "62b8badddc6fe2de9e2f9cd7"
+  },
+  "name": "vincent",
+  "password": "$2b$04$yQrEC0OQhfkBi76kHYIgveq.YQoCQfiDy/dsa32Vo78Q674aZXoRO",
+  "email": "",
+  "phone": "TODO",
+  "pool_list": [
+    "jax",
+    "jax (Pre-season)"
+  ]
+},{
+  "_id": {
+    "$oid": "62b8bb0bdc6fe2de9e2f9cd8"
+  },
+  "name": "francis",
+  "password": "$2b$04$hnF3KC6cfGri4ND2icTv3eCWFxpxVbSbiuj0ANC3/iH9wSl8gTbSm",
+  "email": "francis",
+  "phone": "TODO",
+  "pool_list": [
+    "jax",
+    "jax (Pre-season)"
+  ]
+},{
+  "_id": {
+    "$oid": "62b8bb1edc6fe2de9e2f9cd9"
+  },
+  "name": "gengis",
+  "password": "$2b$04$Gc6H247qbL5ebvxI7Iz0FOK1o/05AWBZCricZSZswCfN.oAohClDi",
+  "email": "",
+  "phone": "TODO",
+  "pool_list": [
+    "jax",
+    "jax (Pre-season)"
+  ]
+},{
+  "_id": {
+    "$oid": "62b8bbf8dc6fe2de9e2f9cda"
+  },
+  "name": "lp",
+  "password": "$2b$04$8V.wan6Ac4HSHR5exFk1U.xPZiMfCcDkXL2vh5GRSiLL7CTVCPm86",
+  "email": "lp",
+  "phone": "TODO",
+  "pool_list": [
+    "jax",
+    "jax (Pre-season)"
+  ]
+},{
+  "_id": {
+    "$oid": "62b8bc07dc6fe2de9e2f9cdb"
+  },
+  "name": "anthony",
+  "password": "$2b$04$BxB3C6F5poePVuYxrS/mDuUKTLwWqpULakIxxy02shO8zGJWFTJke",
+  "email": "anthony",
+  "phone": "TODO",
+  "pool_list": [
+    "jax",
+    "jax (Pre-season)"
+  ]
+},{
+  "_id": {
+    "$oid": "62b8bc22dc6fe2de9e2f9cdc"
+  },
+  "name": "jf",
+  "password": "$2b$04$QWR5/8ULzqj0.K3f0nW.j.g5wAkM2weDsY/VmZwj7e52TSFzd5LnK",
+  "email": "jf",
+  "phone": "TODO",
+  "pool_list": [
+    "jax",
+    "jax (Pre-season)"
+  ]
+},{
+  "_id": {
+    "$oid": "6336e81bbb24aae64763bf52"
+  },
+  "name": "jfc",
+  "password": "$2b$04$/LZlXl6neelYWxHgI03qTelDEye7rTVzN9YExsmn1V1RPE9GdUYNm",
+  "email": "",
+  "phone": "TODO",
+  "pool_list": []
+}]

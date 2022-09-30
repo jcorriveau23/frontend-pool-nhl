@@ -4,6 +4,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 
+// Component
+import User from '../user';
+
 export default function PoolItem({ name, owner, user, poolDeleted, setPoolDeleted, DictUsers }) {
   const delete_pool = () => {
     if (user) {
@@ -37,7 +40,7 @@ export default function PoolItem({ name, owner, user, poolDeleted, setPoolDelete
             <li>
               <div>
                 <h1>Pool: {name}</h1>
-                <h2>Owner: {DictUsers ? DictUsers[owner] : owner}</h2>
+                <User id={owner} user={user} DictUsers={DictUsers} />
               </div>
             </li>
           </Link>

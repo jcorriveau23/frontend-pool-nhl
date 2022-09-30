@@ -20,9 +20,10 @@ const socket = io.connect('https://hockeypool.live', {
   path: '/mysocket',
 });
 
-export default function PoolPage({ user, DictUsers, injury, formatDate, date, setDate }) {
-  const [poolInfo, setPoolInfo] = useState({});
-  const [poolName] = useState(useParams().name); // get the name of the pool using the param url
+export default function PoolPage({ user, DictUsers, injury, formatDate, date, setDate, gameStatus, DictTeamAgainst }) {
+  const [poolInfo, setPoolInfo] = useState(null);
+  const url = useParams(); // get the name of the pool using the param url
+  const [poolName, setPoolName] = useState('');
   const [isUserParticipant, setIsUserParticipant] = useState(false);
 
   const find_last_date_in_db = pool => {
@@ -48,40 +49,55 @@ export default function PoolPage({ user, DictUsers, injury, formatDate, date, se
   };
 
   useEffect(async () => {
-    if (user) {
-      const pool = await db.pools.get({ name: poolName });
+    const poolName_temp = url.name;
+
+    if (user && poolName_temp) {
+      setPoolName(poolName_temp);
+
+      const pool = await db.pools.get({ name: poolName_temp });
       const lastFormatDate = find_last_date_in_db(pool);
 
       // console.log(lastFormatDate);
-      axios
-        .get(lastFormatDate ? `/api-rust/pool/${poolName}/${lastFormatDate}` : `/api-rust/pool/${poolName}`, {
+      let res = await axios.get(
+        lastFormatDate ? `/api-rust/pool/${poolName_temp}/${lastFormatDate}` : `/api-rust/pool/${poolName_temp}`,
+        {
           headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
-        })
-        .then(res => {
-          if (res.status === 200) {
-            // [TODO] display a page or notification to show that the pool was not found
-            if (lastFormatDate) {
-              res.data.context.score_by_day = { ...pool.context.score_by_day, ...res.data.context.score_by_day }; // merge the new keys to the past saved pool.
+        }
+      );
+
+      if (res.status === 200) {
+        // [TODO] display a page or notification to show that the pool was not found
+
+        if (pool) {
+          if (res.data.date_updated !== pool.date_updated) {
+            // In the case we want to force a complete pool update we check that field if an updated happened to request the complete pool information instead.
+
+            try {
+              res = await axios.get(`/api-rust/pool/${poolName_temp}`, {
+                headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+              });
+            } catch (e) {
+              console.log(e);
             }
+          } else if (lastFormatDate) {
+            // This is in the case we called the pool information for only a ranges of date since the rest of the date were already stored in the client database.
 
-            if (pool) {
-              res.data.id = pool.id;
-            }
-
-            setPoolInfo(res.data);
-            db.pools.put(res.data, 'name');
-
-            if (res.data.participants)
-              setIsUserParticipant(res.data.participants.findIndex(participant => participant === user._id.$oid) > -1);
+            res.data.context.score_by_day = { ...pool.context.score_by_day, ...res.data.context.score_by_day }; // merge the new keys to the past saved pool.
           }
-        })
-        .catch(e => {
-          console.log(e.response);
-        });
-    }
-  }, [user]);
 
-  if (user && poolInfo) {
+          res.data.id = pool.id;
+        }
+
+        setPoolInfo(res.data);
+        db.pools.put(res.data, 'name');
+
+        if (res.data.participants)
+          setIsUserParticipant(res.data.participants.findIndex(participant => participant === user._id.$oid) > -1);
+      }
+    }
+  }, [user, url]);
+
+  if (user && poolInfo && gameStatus) {
     switch (poolInfo.status) {
       case 'Created':
         return (
@@ -119,6 +135,8 @@ export default function PoolPage({ user, DictUsers, injury, formatDate, date, se
             formatDate={formatDate}
             date={date}
             setDate={setDate}
+            gameStatus={gameStatus}
+            DictTeamAgainst={DictTeamAgainst}
           />
         );
       case 'Dynastie':

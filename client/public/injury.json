@@ -1,404 +1,608 @@
 {
-    "Jakob Chychrun": {
-        "team": "Arizona Coyotes",
-        "date": "Sat, Mar 12, 2022",
-        "type": "Ankle",
-        "recovery": "Chychrun may not return this season, according to Jose M. Romero of The Arizona Republic."
+    "Trevor Zegras": {
+        "position": "C",
+        "date": "Thu, Sep 29",
+        "type": "Upper Body",
+        "recovery": "Day-to-Day"
     },
-    "Lawson Crouse": {
-        "team": "Arizona Coyotes",
-        "date": "Tue, Mar 29, 2022",
-        "type": "Hand",
-        "recovery": "Crouse broke a bone in his right hand and could miss the rest of the season, according to Arizona Coyotes insider Craig Morgan."
+    "John Klingberg": {
+        "position": "D",
+        "date": "Thu, Sep 29",
+        "type": "Personal",
+        "recovery": "Day-to-Day"
+    },
+    "Mason McTavish": {
+        "position": "C",
+        "date": "Thu, Sep 29",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
+    "Max Jones": {
+        "position": "LW",
+        "date": "Wed, Sep 28",
+        "type": "Lower Body",
+        "recovery": "Day-to-Day"
+    },
+    "Sam Carrick": {
+        "position": "C",
+        "date": "Wed, Sep 21",
+        "type": "Hip",
+        "recovery": "IR. Expected to be out until at least Nov 1"
+    },
+    "Jakob Chychrun": {
+        "position": "D",
+        "date": "Wed, Sep 28",
+        "type": "Ankle",
+        "recovery": "Day-to-Day"
+    },
+    "Andrew Ladd": {
+        "position": "LW",
+        "date": "Thu, Sep 22",
+        "type": "Knee",
+        "recovery": "IR. Expected to be out until at least Jan 17"
     },
     "Clayton Keller": {
-        "team": "Arizona Coyotes",
-        "date": "Thu, Mar 31, 2022",
-        "type": "Lower-body",
-        "recovery": "Keller announced he will not return this season."
-    },
-    "Conor Timmins": {
-        "team": "Arizona Coyotes",
-        "date": "Tue, Oct 26, 2021",
-        "type": "Lower Body",
-        "recovery": "Timmins has been placed on the injured reserve with a lower body injury."
+        "position": "C",
+        "date": "Sat, Sep 17",
+        "type": "Leg",
+        "recovery": "Expected to be out until at least Oct 13"
     },
     "Matt Grzelcyk": {
-        "team": "Boston Bruins",
-        "date": "Fri, Jun 3, 2022",
+        "position": "D",
+        "date": "Sat, Sep 24",
         "type": "Shoulder",
-        "recovery": "The Bruins announced that Grzelyck underwent a shoulder procedure and will miss approximately five months. Grzelcyk is expected to return in early November at the earliest."
+        "recovery": "IR. Expected to be out until at least Nov 1"
     },
     "Brad Marchand": {
-        "team": "Boston Bruins",
-        "date": "Fri, May 27, 2022",
+        "position": "LW",
+        "date": "Sat, Sep 24",
         "type": "Hip",
-        "recovery": "The Bruins announced that Marchand underwent successful arthroscopy and labral repair on both hips and will miss approximately six months. Marchand is expected to return in late November at the earliest."
+        "recovery": "IR. Expected to be out until at least Nov 29"
     },
     "Charlie McAvoy": {
-        "team": "Boston Bruins",
-        "date": "Fri, Jun 3, 2022",
+        "position": "D",
+        "date": "Sat, Sep 24",
         "type": "Shoulder",
-        "recovery": "The Bruins announced that McAvoy underwent a shoulder procedure and will miss approximately six months. McAvoy is expected to return early December."
+        "recovery": "IR. Expected to be out until at least Dec 1"
     },
-    "Jakub Zboril": {
-        "team": "Boston Bruins",
-        "date": "Thu, Dec 2, 2021",
+    "Ben Bishop": {
+        "position": "G",
+        "date": "Fri, Sep 2",
         "type": "Knee",
-        "recovery": "The Boston Bruins placed D Jakub Zboril on Injured Reserve. Zboril underwent surgery on his ACL in December 2021. He started skating in May. Zboril is expected to participate in training camp."
+        "recovery": "IR. Expected to be out until at least Aug 1"
     },
-    "Tyler Parsons": {
-        "team": "Calgary Flames",
-        "date": "Wed, Mar 23, 2022",
-        "type": "Undisclosed",
-        "recovery": "The Calgary Flames placed G Tyler Parsons on Injured Reserve."
-    },
-    "Frederik Andersen": {
-        "team": "Carolina Hurricanes",
-        "date": "Mon, Apr 18, 2022",
-        "type": "Lower body",
-        "recovery": "Hurricanes coach Rod Brind'Amour said there's no update on Andersen's return."
-    },
-    "Max Pacioretty": {
-        "team": "Carolina Hurricanes",
-        "date": "Tue, Aug 9, 2022",
-        "type": "Achilles",
-        "recovery": "The Hurricanes announced that Pacioratty will likely miss the first half of the season."
-    },
-    "Jujhar Khaira": {
-        "team": "Chicago Blackhawks",
-        "date": "Mon, Jan 17, 2022",
-        "type": "Back",
-        "recovery": "The Blackhawks announced that Khaire underwent surgery and will be out 10-12 weeks."
-    },
-    "Petr Mrazek": {
-        "team": "Chicago Blackhawks",
-        "date": "Tue, Mar 29, 2022",
-        "type": "Groin",
-        "recovery": "Maple Leafs coach Sheldon Keefe said Mrazek is out for a minimum of six weeks."
-    },
-    "Joonas Korpisalo": {
-        "team": "Columbus Blue Jackets",
-        "date": "Thu, Mar 24, 2022",
-        "type": "Hip",
-        "recovery": "The Blue Jackets announced that Korpisalo will undergo surgery. It is expected Korpisalo will need six months to recover (September/October)."
-    },
-    "Daniil Tarasov": {
-        "team": "Columbus Blue Jackets",
-        "date": "Sat, Jan 1, 2022",
-        "type": "Hip",
-        "recovery": "Tarasov underwent season-ending surgery, according to Aaron Portzline of The Athletic."
-    },
-    "Robby Fabbri": {
-        "team": "Detroit Red Wings",
-        "date": "Thu, Mar 10, 2022",
-        "type": "Knee",
-        "recovery": "The Red Wings believe Fabbri tore his ACL and he's expected to miss the rest of the season. It is unsure if Fabbri will be available for the start of the 2022-23 season."
-    },
-    "Alex Nedeljkovic": {
-        "team": "Detroit Red Wings",
-        "date": "Mon, May 16, 2022",
-        "type": "Lower-Body",
-        "recovery": "Alex Nedeljikovic left the IIHF World Championship with a lower-body injury (B. Duff - Detroit Hockey Now)."
-    },
-    "Mark Pysyk": {
-        "team": "Detroit Red Wings",
-        "date": "Mon, Jul 25, 2022",
-        "type": "Achilles",
-        "recovery": "The Red Wings announced that Pysyk will miss 4-6 months with a torn Achilles tendon."
-    },
-    "Oscar Klefbom": {
-        "team": "Edmonton Oilers",
-        "date": "Mon, Dec 21, 2020",
-        "type": "Shoulder",
-        "recovery": "Klefbom will have shoulder surgery this month, according to Jason Gregor of TSN Radio. Klefbom is not expected to play this season."
-    },
-    "Anthony Duclair": {
-        "team": "Florida Panthers",
-        "date": "Wed, Jun 29, 2022",
-        "type": "Achilles",
-        "recovery": "The Panthers announced that Duclair is expected to return some time mid-season of 2022-2023 after surgery to repair his Achilles."
-    },
-    "Drew Doughty": {
-        "team": "Los Angeles Kings",
-        "date": "Thu, Mar 10, 2022",
-        "type": "Wrist",
-        "recovery": "The Kings announced that Doughty underwent wrist surgery and will miss the rest of the season."
-    },
-    "Sean Walker": {
-        "team": "Los Angeles Kings",
-        "date": "Wed, Oct 27, 2021",
-        "type": "Lower body",
-        "recovery": "The Kings announced D Sean Walker will miss the rest of the season with a torn ACL/MCL."
-    },
-    "Jake Allen": {
-        "team": "Montreal Canadiens",
-        "date": "Sat, Apr 9, 2022",
-        "type": "Groin",
-        "recovery": "The Canadiens announced that Allen is dealing with a groin injury and will not play again this season."
-    },
-    "Justin Barron": {
-        "team": "Montreal Canadiens",
-        "date": "Tue, Apr 12, 2022",
-        "type": "Ankle",
-        "recovery": "The Canadiens announced that Barron is dealing with a ankle injury and will not play again this season."
-    },
-    "Jonathan Drouin": {
-        "team": "Montreal Canadiens",
-        "date": "Thu, Mar 24, 2022",
-        "type": "Upper Body",
-        "recovery": "The Montreal Canadiens placed F Jonathan Drouin on Injured Reserve."
+    "Oliver Kylington": {
+        "position": "D",
+        "date": "Wed, Sep 28",
+        "type": "Personal",
+        "recovery": "Day-to-Day"
     },
     "Sean Monahan": {
-        "team": "Montreal Canadiens",
-        "date": "Sat, Apr 2, 2022",
+        "position": "C",
+        "date": "Thu, Sep 15",
         "type": "Hip",
-        "recovery": "The Flames placed Monahan on injured reserve."
+        "recovery": "IR. Expected to be out until at least Oct 12"
+    },
+    "Max Pacioretty": {
+        "position": "LW",
+        "date": "Sat, Sep 24",
+        "type": "Achilles",
+        "recovery": "IR. Expected to be out until at least Feb 11"
+    },
+    "Jake Gardiner": {
+        "position": "D",
+        "date": "Mon, Sep 19",
+        "type": "Hip",
+        "recovery": "IR. Expected to be out until at least Jul 1"
+    },
+    "Jake McCabe": {
+        "position": "D",
+        "date": "Sat, Sep 24",
+        "type": "Neck",
+        "recovery": "IR. Expected to be out until at least Oct 30"
+    },
+    "Gabriel Landeskog": {
+        "position": "LW",
+        "date": "Sat, Sep 24",
+        "type": "Lower Body",
+        "recovery": "IR. Expected to be out until at least Oct 19"
+    },
+    "Boone Jenner": {
+        "position": "C",
+        "date": "Thu, Sep 29",
+        "type": "Back",
+        "recovery": "Day-to-Day"
+    },
+    "Joonas Korpisalo": {
+        "position": "G",
+        "date": "Tue, Sep 27",
+        "type": "Hip",
+        "recovery": "Expected to be out until at least Oct 12"
+    },
+    "Ty Dellandrea": {
+        "position": "C",
+        "date": "Thu, Sep 29",
+        "type": "Finger",
+        "recovery": "Expected to be out until at least Oct 13"
+    },
+    "Jason Robertson": {
+        "position": "LW",
+        "date": "Thu, Sep 29",
+        "type": "Contract Dispute",
+        "recovery": "Day-to-Day"
+    },
+    "Robert Hagg": {
+        "position": "D",
+        "date": "Thu, Sep 29",
+        "type": "Head",
+        "recovery": "Expected to be out until at least Oct 14"
+    },
+    "Oskar Sundqvist": {
+        "position": "C",
+        "date": "Wed, Sep 28",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
+    "Jakub Vrana": {
+        "position": "C",
+        "date": "Wed, Sep 28",
+        "type": "Illness",
+        "recovery": "Day-to-Day"
+    },
+    "Mark Pysyk": {
+        "position": "D",
+        "date": "Wed, Sep 21",
+        "type": "Achilles",
+        "recovery": "IR. Expected to be out until at least Jan 4"
+    },
+    "Chase Pearson": {
+        "position": "C",
+        "date": "Wed, Sep 21",
+        "type": "Personal",
+        "recovery": "Expected to be out until at least Oct 14"
+    },
+    "Jake Walman": {
+        "position": "D",
+        "date": "Wed, Sep 21",
+        "type": "Shoulder",
+        "recovery": "IR. Expected to be out until at least Nov 15"
+    },
+    "Robby Fabbri": {
+        "position": "C",
+        "date": "Wed, Sep 21",
+        "type": "Knee",
+        "recovery": "IR. Expected to be out until at least Jan 4"
+    },
+    "Andrew Copp": {
+        "position": "C",
+        "date": "Wed, Sep 21",
+        "type": "Abdomen",
+        "recovery": "Expected to be out until at least Oct 14"
+    },
+    "Carter Savoie": {
+        "position": "LW",
+        "date": "Fri, Sep 23",
+        "type": "Lower Body",
+        "recovery": "Expected to be out until at least Oct 18"
+    },
+    "Mike Smith": {
+        "position": "G",
+        "date": "Wed, Sep 21",
+        "type": "Undisclosed",
+        "recovery": "IR. Expected to be out until at least Jul 1"
+    },
+    "Oscar Klefbom": {
+        "position": "D",
+        "date": "Fri, Sep 2",
+        "type": "Shoulder",
+        "recovery": "IR. Expected to be out until at least Jul 1"
+    },
+    "Anthony Duclair": {
+        "position": "LW",
+        "date": "Sat, Sep 24",
+        "type": "Achilles",
+        "recovery": "IR. Expected to be out until at least Dec 1"
+    },
+    "Calvin Petersen": {
+        "position": "G",
+        "date": "Wed, Sep 28",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
+    "Sean Durzi": {
+        "position": "D",
+        "date": "Wed, Sep 28",
+        "type": "Shoulder",
+        "recovery": "Day-to-Day"
+    },
+    "Viktor Arvidsson": {
+        "position": "RW",
+        "date": "Wed, Sep 28",
+        "type": "Back",
+        "recovery": "Day-to-Day"
+    },
+    "Kirill Kaprizov": {
+        "position": "LW",
+        "date": "Thu, Sep 29",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
+    "Jon Merrill": {
+        "position": "D",
+        "date": "Sat, Sep 24",
+        "type": "Arm",
+        "recovery": "IR. Expected to be out until at least Oct 27"
+    },
+    "Jordan Greenway": {
+        "position": "LW",
+        "date": "Sat, Sep 24",
+        "type": "Upper Body",
+        "recovery": "IR. Expected to be out until at least Oct 27"
+    },
+    "Madison Bowey": {
+        "position": "D",
+        "date": "Thu, Sep 29",
+        "type": "Lower Body",
+        "recovery": "Day-to-Day"
+    },
+    "Jake Evans": {
+        "position": "C",
+        "date": "Thu, Sep 29",
+        "type": "Upper Body",
+        "recovery": "Day-to-Day"
+    },
+    "Josh Anderson": {
+        "position": "RW",
+        "date": "Tue, Sep 27",
+        "type": "Upper Body",
+        "recovery": "Day-to-Day"
+    },
+    "Joel Edmundson": {
+        "position": "D",
+        "date": "Sat, Sep 24",
+        "type": "Lower Body",
+        "recovery": "IR. Expected to be out until at least Oct 6"
+    },
+    "Nick Suzuki": {
+        "position": "C",
+        "date": "Thu, Sep 22",
+        "type": "Lower Body",
+        "recovery": "Expected to be out until at least Oct 6"
+    },
+    "Jonathan Drouin": {
+        "position": "C",
+        "date": "Thu, Sep 15",
+        "type": "Wrist",
+        "recovery": "IR. Expected to be out until at least Oct 12"
     },
     "Carey Price": {
-        "team": "Montreal Canadiens",
-        "date": "Thu, Aug 18, 2022",
+        "position": "G",
+        "date": "Wed, Sep 7",
         "type": "Knee",
-        "recovery": "Canadiens GM Kent Hughes said he doesn't see Price playing during the 2022-23 season."
+        "recovery": "IR. Expected to be out until at least Nov 5"
     },
-    "Jeremy Lauzon": {
-        "team": "Nashville Predators",
-        "date": "Sat, Apr 16, 2022",
+    "Paul Byron": {
+        "position": "C",
+        "date": "Wed, Sep 7",
+        "type": "Lower Body",
+        "recovery": "Expected to be out until at least Oct 17"
+    },
+    "Juuse Saros": {
+        "position": "G",
+        "date": "Tue, Sep 27",
+        "type": "Ankle",
+        "recovery": "Day-to-Day"
+    },
+    "MacKenzie Blackwood": {
+        "position": "G",
+        "date": "Fri, Sep 30",
+        "type": "Illness",
+        "recovery": "Day-to-Day"
+    },
+    "Nico Hischier": {
+        "position": "C",
+        "date": "Thu, Sep 29",
+        "type": "Hamstring",
+        "recovery": "Expected to be out until at least Oct 13"
+    },
+    "Tyce Thompson": {
+        "position": "RW",
+        "date": "Thu, Sep 29",
         "type": "Undisclosed",
-        "recovery": "The Predators announced that Lauzon is week-to-week."
+        "recovery": "Day-to-Day"
     },
     "Jonathan Bernier": {
-        "team": "New Jersey Devils",
-        "date": "Fri, Dec 10, 2021",
+        "position": "G",
+        "date": "Thu, Sep 29",
         "type": "Hip",
-        "recovery": "The New Jersey Devils announced that G Jonathan Bernier will miss the rest of the season as he recovers from hip surgery."
+        "recovery": "IR. Expected to be out until at least Sep 30"
     },
-    "Mackenzie Blackwood": {
-        "team": "New Jersey Devils",
-        "date": "Tue, Jan 25, 2022",
-        "type": "Left Heel",
-        "recovery": "The New Jersey Devils placed G Mackenzie Blackwood on Injured Reserve."
-    },
-    "Jack Hughes": {
-        "team": "New Jersey Devils",
-        "date": "Tue, Apr 5, 2022",
-        "type": "Knee",
-        "recovery": "The Devils announced that Hughes will miss the rest of the season with MCL sprain on his left knee."
-    },
-    "Jonas Siegenthaler": {
-        "team": "New Jersey Devils",
-        "date": "Sat, Apr 9, 2022",
-        "type": "Hand",
-        "recovery": "The Devils announced that Siegenthaler won't return this season."
-    },
-    "Miles Wood": {
-        "team": "New Jersey Devils",
-        "date": "Fri, Apr 8, 2022",
-        "type": "Hip",
-        "recovery": "Devils coach Lindy Ruff said Wood has been shut down for the season."
-    },
-    "Cal Clutterbuck": {
-        "team": "New York Islanders",
-        "date": "Tue, Mar 22, 2022",
-        "type": "Shoulder",
-        "recovery": "The Islanders announced that Clutterbuck will miss the rest of the season. Clutterbuck is expected to be available for the 2022-23 season opener."
+    "Vincent Trocheck": {
+        "position": "C",
+        "date": "Thu, Sep 29",
+        "type": "Illness",
+        "recovery": "Day-to-Day"
     },
     "Barclay Goodrow": {
-        "team": "New York Rangers",
-        "date": "Thu, May 5, 2022",
+        "position": "LW",
+        "date": "Wed, Sep 21",
+        "type": "Ankle",
+        "recovery": "Expected to be out until at least Oct 11"
+    },
+    "Alex Formenton": {
+        "position": "LW",
+        "date": "Sun, Sep 25",
+        "type": "Contract Dispute",
+        "recovery": "Day-to-Day"
+    },
+    "Cam Atkinson": {
+        "position": "RW",
+        "date": "Wed, Sep 28",
+        "type": "Upper Body",
+        "recovery": "Day-to-Day"
+    },
+    "Carter Hart": {
+        "position": "G",
+        "date": "Tue, Sep 27",
         "type": "Lower Body",
-        "recovery": "Goodrow is week-to-week with a lower-body injury, according to Mollie Walker of the New York Post."
-    },
-    "Shane Pinto": {
-        "team": "Ottawa Senators",
-        "date": "Thu, Oct 21, 2021",
-        "type": "Shoulder",
-        "recovery": "The Senators placed F Shane Pinto on injured reserve."
-    },
-    "Bobby Brink": {
-        "team": "Philadelphia Flyers",
-        "date": "Tue, Jul 26, 2022",
-        "type": "Hip",
-        "recovery": "The Flyers announced that Brink will miss about five months after undergoing surgery."
-    },
-    "Patrick Brown": {
-        "team": "Philadelphia Flyers",
-        "date": "Wed, Apr 13, 2022",
-        "type": "Back",
-        "recovery": "Brown is not expected to play again this season, according to Charlie O'Connor of The Athletic. Brown is expected to be rehabbing during the summer and is likely to be healthy for training camp."
+        "recovery": "Day-to-Day"
     },
     "Sean Couturier": {
-        "team": "Philadelphia Flyers",
-        "date": "Fri, Feb 11, 2022",
+        "position": "C",
+        "date": "Sun, Sep 25",
         "type": "Back",
-        "recovery": "The Flyers announced that Couturier had back surgery and will miss the rest of the season. Couturier is expected to be ready for the start of the 2022-23 season."
+        "recovery": "IR. Expected to be out until at least Oct 23"
+    },
+    "Bobby Brink": {
+        "position": "RW",
+        "date": "Sat, Sep 24",
+        "type": "Hip",
+        "recovery": "IR. Expected to be out until at least Dec 29"
+    },
+    "Patrick Brown": {
+        "position": "C",
+        "date": "Thu, Sep 22",
+        "type": "Back",
+        "recovery": "Expected to be out until at least Oct 4"
     },
     "Ryan Ellis": {
-        "team": "Philadelphia Flyers",
-        "date": "Sat, Nov 13, 2021",
-        "type": "Pelvis",
-        "recovery": "Flyers coach John Tortorella said Ellis could miss the start of the regular season."
+        "position": "D",
+        "date": "Thu, Sep 22",
+        "type": "Back",
+        "recovery": "IR. Expected to be out until at least Jul 19"
     },
     "Joel Farabee": {
-        "team": "Philadelphia Flyers",
-        "date": "Mon, Jun 27, 2022",
-        "type": "Back",
-        "recovery": "Joel Farabee is recovering from disc-replacement surgery, and it has yet to be determined if he will be available for the 2022-23 season opener."
+        "position": "LW",
+        "date": "Tue, Sep 20",
+        "type": "Neck",
+        "recovery": "Expected to be out until at least Oct 13"
     },
-    "Drake Caggiula": {
-        "team": "Pittsburgh Penguins",
-        "date": "Fri, Nov 26, 2021",
-        "type": "Back",
-        "recovery": "Sabres GM Kevyn Adams said Caggiula will undergo season-ending surgery. His recovery time is 6-8 months."
+    "Teddy Blueger": {
+        "position": "C",
+        "date": "Wed, Sep 28",
+        "type": "Upper Body",
+        "recovery": "Day-to-Day"
     },
-    "Casey DeSmith": {
-        "team": "Pittsburgh Penguins",
-        "date": "Tue, May 3, 2022",
-        "type": "Core",
-        "recovery": "DeSmith will miss the rest of the playoffs after undergoing core muscle surgery according to NHL.com."
+    "Owen Pickering": {
+        "position": "D",
+        "date": "Tue, Sep 27",
+        "type": "Upper Body",
+        "recovery": "Day-to-Day"
     },
-    "Brian Dumoulin": {
-        "team": "Pittsburgh Penguins",
-        "date": "Tue, May 3, 2022",
-        "type": "Knee",
-        "recovery": "Dumoulin suffered a grade-3 MCL tear."
+    "Jeff Carter": {
+        "position": "C",
+        "date": "Mon, Sep 26",
+        "type": "Upper Body",
+        "recovery": "Day-to-Day"
+    },
+    "Markus Nutivaara": {
+        "position": "D",
+        "date": "Thu, Sep 29",
+        "type": "Lower Body",
+        "recovery": "Day-to-Day"
+    },
+    "Oskar Lindblom": {
+        "position": "LW",
+        "date": "Wed, Sep 28",
+        "type": "Upper Body",
+        "recovery": "Day-to-Day"
+    },
+    "Alexander Barabanov": {
+        "position": "RW",
+        "date": "Tue, Sep 27",
+        "type": "Lower Body",
+        "recovery": "Day-to-Day"
     },
     "Nikolai Knyzhov": {
-        "team": "San Jose Sharks",
-        "date": "Wed, Aug 10, 2022",
+        "position": "D",
+        "date": "Sat, Sep 24",
         "type": "Achilles",
-        "recovery": "The Sharks announced that Knyzhov suffered a torn Achilles tendon and will miss about six months. "
+        "recovery": "IR. Expected to be out until at least Feb 12"
     },
-    "Kevin Labanc": {
-        "team": "San Jose Sharks",
-        "date": "Wed, Dec 15, 2021",
+    "Joonas Donskoi": {
+        "position": "RW",
+        "date": "Thu, Sep 29",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
+    "Michal Kempny": {
+        "position": "D",
+        "date": "Thu, Sep 29",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
+    "Ryan Winterton": {
+        "position": "C",
+        "date": "Sat, Sep 24",
         "type": "Shoulder",
-        "recovery": "Labanc won't return this season, according to Corey Masisak of The Athletic. Labanc is expected to participate in training camp."
+        "recovery": "IR. Expected to be out until at least Dec 28"
     },
     "Chris Driedger": {
-        "team": "Seattle Kraken",
-        "date": "Tue, Jun 7, 2022",
+        "position": "G",
+        "date": "Sat, Sep 24",
         "type": "Knee",
-        "recovery": "Chris Driedger tore his right ACL during the third period of Team Canada's Gold Medal match against Finland during the IIHF World Championships. He has undergone surgery to repair the torn ACL, and he is expected to be sidelined for 7-9 months."
+        "recovery": "IR. Expected to be out until at least Feb 7"
     },
-    "Brandon Tanev": {
-        "team": "Seattle Kraken",
-        "date": "Mon, Dec 27, 2021",
-        "type": "Knee",
-        "recovery": "The Kraken announced F Brandon Tanev will miss the rest of the season with an ACL injury. Tanev is expected to return in time for training camp (R. Clark - The Athletic)."
+    "Scott Perunovich": {
+        "position": "D",
+        "date": "Thu, Sep 29",
+        "type": "Upper Body",
+        "recovery": "Day-to-Day"
     },
-    "Jordan Binnington": {
-        "team": "St. Louis Blues",
-        "date": "Sat, May 21, 2022",
-        "type": "Knee",
-        "recovery": "Binnington is expected to miss multiple weeks, according to Jeremy Rutherford of The Athletic."
+    "Martin Frk": {
+        "position": "RW",
+        "date": "Thu, Sep 29",
+        "type": "Lower Body",
+        "recovery": "Day-to-Day"
     },
     "Alexei Toropchenko": {
-        "team": "St. Louis Blues",
-        "date": "Fri, Jul 1, 2022",
+        "position": "RW",
+        "date": "Sat, Sep 24",
         "type": "Shoulder",
-        "recovery": "According to coach Doug Armstrong, Toropchenko underwent shoulder surgery and will be out until early December."
+        "recovery": "IR. Expected to be out until at least Dec 1"
     },
-    "Pierre-Edouard Bellemare": {
-        "team": "Tampa Bay Lightning",
-        "date": "Tue, Jun 28, 2022",
-        "type": "Knee",
-        "recovery": "Pierre-Edouard Bellemare has a meniscus injury that will need arthroscopic surgery."
+    "Marco Scandella": {
+        "position": "D",
+        "date": "Sat, Sep 24",
+        "type": "Hip",
+        "recovery": "IR. Expected to be out until at least Mar 21"
     },
     "Zach Bogosian": {
-        "team": "Tampa Bay Lightning",
-        "date": "Wed, Jul 13, 2022",
+        "position": "D",
+        "date": "Wed, Sep 21",
         "type": "Shoulder",
-        "recovery": "Will miss the start of the 2022-23 season with a shoulder injury (Capfriendly). Expected duration: 5 months."
+        "recovery": "IR. Expected to be out until at least Nov 25"
     },
     "Anthony Cirelli": {
-        "team": "Tampa Bay Lightning",
-        "date": "Wed, Jun 22, 2022",
+        "position": "C",
+        "date": "Wed, Sep 21",
         "type": "Shoulder",
-        "recovery": "Anthony Cirelli suffered an AC join sprain, which will require surgery, during Game 4 of the Stanley Cup Finals (J. Smith - The Athletic). Cirelli was placed on IR on Jul. 13 and will miss the start of the 2022-23 season. (Capfriendly)."
+        "recovery": "IR. Expected to be out until at least Nov 25"
     },
-    "Brayden Point": {
-        "team": "Tampa Bay Lightning",
-        "date": "Sat, Jun 18, 2022",
-        "type": "Quad",
-        "recovery": "Brayden Point has a tear in his right quadricep sustained during the Eastern Conference First Round. He is expected to be fully recovered for training camp. "
-    },
-    "Matt Murray": {
-        "team": "Toronto Maple Leafs",
-        "date": "Thu, Mar 10, 2022",
-        "type": "Neck",
-        "recovery": "Murray is not skating and is not close to a return to action, according to report from TSN Sports in Ottawa, ON, CAN."
-    },
-    "Nils Hoglander": {
-        "team": "Vancouver Canucks",
-        "date": "Tue, Mar 22, 2022",
+    "Jordie Benn": {
+        "position": "D",
+        "date": "Wed, Sep 28",
         "type": "Groin",
-        "recovery": "The Vancouver Canucks announced that Hoglander underwent surgery and there is no timetable for his return."
+        "recovery": "Day-to-Day"
     },
-    "Tucker Poolman": {
-        "team": "Vancouver Canucks",
-        "date": "Tue, Apr 26, 2022",
-        "type": "Head",
-        "recovery": "The Vancouver Canucks plaed D Tucker Poolman on long-term injureed reserve."
+    "Carl Dahlstrom": {
+        "position": "D",
+        "date": "Wed, Sep 28",
+        "type": "Shoulder",
+        "recovery": "Day-to-Day"
     },
-    "Laurent Brossoit": {
-        "team": "Vegas Golden Knights",
-        "date": "Thu, Mar 24, 2022",
+    "John Tavares": {
+        "position": "C",
+        "date": "Tue, Sep 27",
+        "type": "Oblique",
+        "recovery": "Expected to be out until at least Oct 20"
+    },
+    "Pierre Engvall": {
+        "position": "LW",
+        "date": "Sat, Sep 24",
+        "type": "Ankle",
+        "recovery": "IR. Expected to be out until at least Oct 3"
+    },
+    "Timothy Liljegren": {
+        "position": "D",
+        "date": "Wed, Sep 21",
+        "type": "Groin",
+        "recovery": "IR. Expected to be out until at least Nov 2"
+    },
+    "Travis Dermott": {
+        "position": "D",
+        "date": "Thu, Sep 29",
         "type": "Undisclosed",
-        "recovery": "Brossoit is not close to returning, according to Jesse Granger of The Athletic."
+        "recovery": "Day-to-Day"
     },
-    "Nicolas Hague": {
-        "team": "Vegas Golden Knights",
-        "date": "Tue, Mar 29, 2022",
+    "Ilya Mikheyev": {
+        "position": "RW",
+        "date": "Thu, Sep 29",
         "type": "Lower Body",
-        "recovery": "The Vegas Golden Knights placed D Nicolas Hague on injured reserve."
+        "recovery": "Expected to be out until at least Oct 12"
     },
-    "Brett Howden": {
-        "team": "Vegas Golden Knights",
-        "date": "Sat, Apr 9, 2022",
-        "type": "Undisclosed",
-        "recovery": "The Vegas Golden Knights placed F Brett Howden on injured reserve."
+    "Brock Boeser": {
+        "position": "RW",
+        "date": "Mon, Sep 26",
+        "type": "Hand",
+        "recovery": "Expected to be out until at least Oct 24"
+    },
+    "Micheal Ferland": {
+        "position": "LW",
+        "date": "Thu, Sep 15",
+        "type": "Head",
+        "recovery": "IR. Expected to be out until at least Jul 1"
+    },
+    "William Carrier": {
+        "position": "LW",
+        "date": "Wed, Sep 28",
+        "type": "Abdomen",
+        "recovery": "Expected to be out until at least Oct 6"
+    },
+    "Mark Stone": {
+        "position": "RW",
+        "date": "Wed, Sep 28",
+        "type": "Back",
+        "recovery": "Day-to-Day"
+    },
+    "Alec Martinez": {
+        "position": "D",
+        "date": "Wed, Sep 28",
+        "type": "Upper Body",
+        "recovery": "Day-to-Day"
     },
     "Robin Lehner": {
-        "team": "Vegas Golden Knights",
-        "date": "Mon, Apr 25, 2022",
+        "position": "G",
+        "date": "Sat, Sep 24",
         "type": "Hip",
-        "recovery": "The Golden Knights said Lehner is expected to miss the 2022-23 season."
+        "recovery": "IR. Expected to be out until at least Sep 15"
+    },
+    "Laurent Brossoit": {
+        "position": "G",
+        "date": "Fri, Sep 23",
+        "type": "Hip",
+        "recovery": "IR. Expected to be out until at least Oct 4"
+    },
+    "Spencer Foo": {
+        "position": "RW",
+        "date": "Thu, Sep 22",
+        "type": "Lower Body",
+        "recovery": "Expected to be out until at least Oct 11"
+    },
+    "Nicolas Hague": {
+        "position": "D",
+        "date": "Wed, Sep 21",
+        "type": "Lower Body",
+        "recovery": "IR. Expected to be out until at least Oct 11"
     },
     "Nolan Patrick": {
-        "team": "Vegas Golden Knights",
-        "date": "Tue, Apr 12, 2022",
-        "type": "Undisclosed",
-        "recovery": "The Vegas Golden Knights placed F Nolan Patrick on the long-term injured reserve list."
+        "position": "C",
+        "date": "Mon, Sep 19",
+        "type": "Upper Body",
+        "recovery": "IR. Expected to be out until at least Jul 1"
     },
     "Shea Weber": {
-        "team": "Vegas Golden Knights",
-        "date": "Thu, Jul 22, 2021",
-        "type": "Lower body",
-        "recovery": "GM Marc Bergevin said it's unlikely that D Shea Weber plays next season and is likely to retire."
-    },
-    "Nicklas Backstrom": {
-        "team": "Washington Capitals",
-        "date": "Wed, Jun 1, 2022",
-        "type": "Hip",
-        "recovery": "Nicklas Backstrom has resurfacing surgery on his left hip in early June. There is no defined timeline for Backstrom's return."
-    },
-    "Connor Brown": {
-        "team": "Washington Capitals",
-        "date": "Sat, Apr 23, 2022",
-        "type": "Undisclosed",
-        "recovery": "Brown won't return this season, according to Claire Hanna of TSN."
+        "position": "D",
+        "date": "Fri, Sep 2",
+        "type": "Ankle",
+        "recovery": "IR. Expected to be out until at least Jul 1"
     },
     "Carl Hagelin": {
-        "team": "Washington Capitals",
-        "date": "Tue, Mar 1, 2022",
+        "position": "LW",
+        "date": "Wed, Sep 28",
         "type": "Eye",
-        "recovery": "The Washington Capitals placed F Carl Hagelin on injured reserve. Hagelin underwent two eye surgeries in March. He was skating early May (Tarik El-Bashir - The Athletic), but his return timeline is uncertain."
+        "recovery": "IR. Expected to be out until at least Sep 30"
+    },
+    "Nicklas Backstrom": {
+        "position": "C",
+        "date": "Sat, Sep 24",
+        "type": "Hip",
+        "recovery": "IR. Expected to be out until at least Jan 1"
     },
     "Tom Wilson": {
-        "team": "Washington Capitals",
-        "date": "Tue, May 3, 2022",
+        "position": "RW",
+        "date": "Sat, Sep 24",
         "type": "Knee",
-        "recovery": "The Capitals announced that Wilson underwent surgery for a torn ACL and will miss 6-8 months. Wilson is expect to return in mid-January 2023 at the earliest."
+        "recovery": "IR. Expected to be out until at least Dec 7"
     }
 }

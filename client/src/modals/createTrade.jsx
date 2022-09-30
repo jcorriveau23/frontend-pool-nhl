@@ -37,6 +37,27 @@ export default function CreateTradeModal({
     poolInfo.participants[0] === user._id.$oid ? poolInfo.participants[1] : poolInfo.participants[0]
   );
 
+  const reset_from_items = () => {
+    setFromPlayers([]);
+    setFromPicks([]);
+  };
+
+  const reset_to_items = () => {
+    setToPlayers([]);
+    setToPicks([]);
+  };
+
+  const complete_reset = closeModal => {
+    reset_from_items();
+    reset_to_items();
+    if (closeModal) setShowCreateTradeModal(false);
+  };
+
+  const on_change_to_selection = participant => {
+    reset_to_items();
+    setSelectedPooler(participant);
+  };
+
   const send_trade = () => {
     const tradeInfo = {
       proposed_by: user._id.$oid,
@@ -62,7 +83,6 @@ export default function CreateTradeModal({
         if (res.data.success) {
           // the trade will need to be confirmed by the user that was selected by the trader.
           // if the trade is accepted, people have 24h to create a counter offer. They can directly get out of the trade.
-          // The players in the trade won't cumulate points the day they are traded.
           // At the end of the 24 hours, the traded players won't go in the roster they will go in the reservists.
           // user will be able to make a reservists switch (only add player to roster to fill hole, not remove players from roster) on that day, and the players can receive points on that day
 
@@ -207,7 +227,7 @@ export default function CreateTradeModal({
       overlayClassName="baseOverlay"
       isOpen={showCreateTradeModal}
       appElement={document.getElementById('root')}
-      onRequestClose={() => setShowCreateTradeModal(false)}
+      onRequestClose={() => complete_reset(true)}
     >
       <div>
         <div className="half-cont">
@@ -242,7 +262,7 @@ export default function CreateTradeModal({
         </div>
         <div className="float-right">
           <div className="half-cont">
-            <select onChange={() => setSelectedPooler(event.target.value)} defaultValue={selectedPooler}>
+            <select onChange={() => on_change_to_selection(event.target.value)} defaultValue={selectedPooler}>
               {poolInfo.participants
                 .filter(pooler => pooler !== user._id.$oid)
                 .map(pooler => (

@@ -5,7 +5,7 @@
 
 .dayGamesFeed ul li:hover {
   border-color: #fff;
-  border-width: 2px;
+  border-width: 5px;
 }
 .dayGamesFeed ul {
   margin: 0;
@@ -25,7 +25,7 @@
   line-height: 16px;
   border-radius: 5px;
   border-style: solid;
-  border-width: 3px;
+  border-width: 5px;
   margin: 10px 5px;
   padding: 0 16px 0px 16px;
   max-width: 468px;
@@ -55,8 +55,9 @@
   border-color: #000;
   padding: 4px;
   background: url(../img/icons/calendar.png) no-repeat scroll 7px 6px;
+  background-size: 30px;
   cursor: pointer;
-  font-size: 25px;
+  font-size: 35px;
 }
 
 .dateSelector input:hover {

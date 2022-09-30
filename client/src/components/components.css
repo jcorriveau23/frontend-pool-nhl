@@ -67,6 +67,7 @@ li {
 
 .pool_item ul li:hover {
   border-color: #fff;
+  color: #fff;
 }
 
 .pool_item ul {
@@ -84,7 +85,7 @@ li {
   line-height: 16px;
   border-radius: 8px;
   border-style: solid;
-  border-width: 4px;
+  border-width: 5px;
   margin: 5px 5px;
   padding: 0 16px 0px 16px;
   max-width: 468px;
@@ -95,6 +96,15 @@ li {
   color: #000;
 }
 
+.pool_item ul p,
+.pool_item ul b {
+  font-size: 20px;
+}
+
 .pool_item ul button {
   background-color: #a00;
+}
+
+.tooltip {
+  font-size: 25px !important;
 }

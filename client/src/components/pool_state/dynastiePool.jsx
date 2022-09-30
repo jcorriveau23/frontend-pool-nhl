@@ -9,6 +9,7 @@ import { AiFillCheckCircle } from 'react-icons/ai';
 // Components
 import PlayerLink from '../playerLink';
 import DraftOrder from './draftOrder';
+import User from '../user';
 
 // Images
 import { logos } from '../img/logos';
@@ -289,9 +290,7 @@ export default function DynastiePool({
                     {poolInfo.participants.map(participant => (
                       <Tab>
                         {isParticipantDone(participant) ? <AiFillCheckCircle size={30} color="green" /> : null}
-                        <b style={participant === user._id.$oid ? { color: 'green' } : null}>
-                          {DictUsers ? DictUsers[participant] : participant}
-                        </b>
+                        <User id={participant} user={user} DictUsers={DictUsers} />
                       </Tab>
                     ))}
                   </TabList>
@@ -370,8 +369,8 @@ export default function DynastiePool({
                 ) : (
                   <h2>
                     You have already protected your {poolInfo.next_season_number_players_protected} players. Waiting for
-                    {poolInfo.participants.map(part =>
-                      !isParticipantDone(part) ? (DictUsers ? ` ${DictUsers[part]}, ` : null) : null
+                    {poolInfo.participants.map(participant =>
+                      !isParticipantDone(participant) ? (DictUsers ? ` ${DictUsers[participant]}, ` : null) : null
                     )}
                     to complete the process...
                   </h2>
@@ -394,6 +393,7 @@ export default function DynastiePool({
               nb_protected_players={poolInfo.next_season_number_players_protected}
               injury={injury}
               DictUsers={DictUsers}
+              user={user}
             />
           </TabPanel>
         </Tabs>

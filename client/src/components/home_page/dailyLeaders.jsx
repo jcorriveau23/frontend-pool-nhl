@@ -5,11 +5,13 @@ import PropTypes from 'prop-types';
 
 // components
 import PlayerLink from '../playerLink';
+import User from '../user';
+import NaviguateToday from '../pool_state/naviguateToday';
 
 // images
 import { logos } from '../img/logos';
 
-export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, DictUsers, injury }) {
+export default function DayLeaders({ formatDate, playersIdToPoolerMap, setDate, gameStatus, user, DictUsers, injury }) {
   const [prevFormatDate, setPrevFormatDate] = useState('');
   const [dayLeaders, setDayLeaders] = useState(null);
 
@@ -42,12 +44,13 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, Dic
       <TabPanel>
         <table className="content-table-no-min">
           <thead>
-            <tr>
-              <th colSpan={5}>Daily Leaders</th>
-            </tr>
-            <tr>
-              <th colSpan={5}>{formatDate}</th>
-            </tr>
+            <NaviguateToday
+              formatDate={formatDate}
+              setDate={setDate}
+              gameStatus={gameStatus}
+              msg="Daily Leaders"
+              colSpan={5}
+            />
           </thead>
           <tbody>
             {dayLeaders ? (
@@ -60,7 +63,7 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, Dic
                   <th>PTS</th>
                 </tr>
                 {dayLeaders.skaters
-                  .sort((a, b) => b.stats.goals + b.stats.assists - (a.stats.goals + a.stats.assists))
+                  .sort((a, b) => 1.01 * b.stats.goals + b.stats.assists - (1.01 * a.stats.goals + a.stats.assists))
                   .map(skater => (
                     <tr key={skater.id}>
                       <td>
@@ -69,9 +72,12 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, Dic
                       <td>
                         <PlayerLink name={skater.name} id={skater.id} injury={injury} />
                         {playersIdToPoolerMap && playersIdToPoolerMap[skater.id] ? (
-                          <b style={{ color: 'red' }}>
-                            {DictUsers ? ` (${DictUsers[playersIdToPoolerMap[skater.id]]})` : null}
-                          </b>
+                          <User
+                            id={playersIdToPoolerMap[skater.id]}
+                            user={user}
+                            DictUsers={DictUsers}
+                            parenthesis={true}
+                          />
                         ) : null}
                       </td>
                       <td>{skater.stats.goals}</td>
@@ -89,14 +95,15 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, Dic
         </table>
       </TabPanel>
       <TabPanel>
-        <table className="content-table">
+        <table className="content-table-no-min">
           <thead>
-            <tr>
-              <th colSpan={5}>Daily Leaders</th>
-            </tr>
-            <tr>
-              <th colSpan={5}>{formatDate}</th>
-            </tr>
+            <NaviguateToday
+              formatDate={formatDate}
+              setDate={setDate}
+              gameStatus={gameStatus}
+              msg="Daily Leaders"
+              colSpan={5}
+            />
           </thead>
           <tbody>
             {dayLeaders ? (
@@ -118,9 +125,12 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, user, Dic
                       <td>
                         <PlayerLink name={goalie.name} id={goalie.id} injury={injury} />
                         {playersIdToPoolerMap && playersIdToPoolerMap[goalie.id] ? (
-                          <b style={{ color: 'red' }}>
-                            {DictUsers ? ` (${DictUsers[playersIdToPoolerMap[goalie.id]]})` : null}
-                          </b>
+                          <User
+                            id={playersIdToPoolerMap[goalie.id]}
+                            user={user}
+                            DictUsers={DictUsers}
+                            parenthesis={true}
+                          />
                         ) : null}
                       </td>
                       <td>{goalie.stats.shots}</td>

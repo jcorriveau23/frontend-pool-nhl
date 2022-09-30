@@ -16,6 +16,7 @@ import { AiOutlineEdit } from 'react-icons/ai';
 
 export default function ProfilePage({ user, setUser }) {
   const [newUsername, setNewUsername] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {}, []);
@@ -40,6 +41,27 @@ export default function ProfilePage({ user, setUser }) {
         if (res.data.user) {
           localStorage.setItem('persist-account', JSON.stringify(res.data.user));
           setUser(res.data.user);
+          alert("You have successfullly change you're username.");
+        } else {
+          alert(res.data.message);
+        }
+      });
+  };
+
+  const set_password = () => {
+    axios
+      .post(
+        '/api-rust/set-password',
+        { password: newPassword },
+        {
+          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+        }
+      )
+      .then(res => {
+        if (res.data.user) {
+          localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+          setUser(res.data.user);
+          alert("You have successfullly change you're password.");
         } else {
           alert(res.data.message);
         }
@@ -49,7 +71,7 @@ export default function ProfilePage({ user, setUser }) {
   if (user) {
     return (
       <div className="cont">
-        <table>
+        <table className="content-table">
           <tbody>
             <tr>
               <th>Username</th>
@@ -60,21 +82,33 @@ export default function ProfilePage({ user, setUser }) {
               <td>{user.addr}</td>
             </tr>
             <tr>
-              <th>Email:</th>
+              <th>Email</th>
               <td>{user.email}</td>
             </tr>
           </tbody>
         </table>
-        <form>
-          <input type="text" placeholder={user.name} onChange={event => setNewUsername(event.target.value)} required />
-          <button className="base-button_no_border" onClick={set_username} type="button">
-            <AiOutlineEdit size={30} />
-            edit username
+        <div>
+          <form>
+            <input
+              type="text"
+              placeholder={user.name}
+              onChange={event => setNewUsername(event.target.value)}
+              required
+            />
+            <button className="base-button_no_border" onClick={set_username} type="button">
+              <AiOutlineEdit size={30} />
+              edit username
+            </button>
+            <input type="password" onChange={event => setNewPassword(event.target.value)} required />
+            <button className="base-button_no_border" onClick={set_password} type="button">
+              <AiOutlineEdit size={30} />
+              Change password
+            </button>
+          </form>
+          <button className="base-button" onClick={logout} type="button">
+            Logout
           </button>
-        </form>
-        <button className="base-button" onClick={logout} type="button">
-          Logout
-        </button>
+        </div>
       </div>
     );
   }

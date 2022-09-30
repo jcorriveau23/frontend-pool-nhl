@@ -1145,6 +1145,19 @@
             "position": "F"
         },
         {
+            "name": "Hayden Hodgson",
+            "team": "Philadelphia Flyers",
+            "id": 8478173,
+            "stats": {
+                "games": 6,
+                "goals": 1,
+                "assists": 2,
+                "pts": 3
+            },
+            "url": "/api/v1/people/8478173",
+            "position": "F"
+        },
+        {
             "name": "Travis Konecny",
             "team": "Philadelphia Flyers",
             "id": 8478439,
@@ -1480,6 +1493,19 @@
                 "pts": 58
             },
             "url": "/api/v1/people/8475810",
+            "position": "F"
+        },
+        {
+            "name": "Josh Archibald",
+            "team": "Pittsburgh Penguins",
+            "id": 8476326,
+            "stats": {
+                "games": 8,
+                "goals": 0,
+                "assists": 1,
+                "pts": 1
+            },
+            "url": "/api/v1/people/8476326",
             "position": "F"
         },
         {
@@ -2068,6 +2094,32 @@
             "position": "F"
         },
         {
+            "name": "Jiri Kulich",
+            "team": "Buffalo Sabres",
+            "id": 8483468,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8483468",
+            "position": "F"
+        },
+        {
+            "name": "Noah Ostlund",
+            "team": "Buffalo Sabres",
+            "id": 8483500,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8483500",
+            "position": "F"
+        },
+        {
             "name": "Kyle Okposo",
             "team": "Buffalo Sabres",
             "id": 8473449,
@@ -2380,6 +2432,19 @@
             "position": "F"
         },
         {
+            "name": "Isak Rosen",
+            "team": "Buffalo Sabres",
+            "id": 8482765,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8482765",
+            "position": "F"
+        },
+        {
             "name": "Josh Bloom",
             "team": "Buffalo Sabres",
             "id": 8482865,
@@ -2406,7 +2471,7 @@
             "position": "F"
         },
         {
-            "name": "Matthew Savoie",
+            "name": "Matt Savoie",
             "team": "Buffalo Sabres",
             "id": 8483512,
             "stats": {
@@ -2627,6 +2692,19 @@
             "position": "F"
         },
         {
+            "name": "Kirby Dach",
+            "team": "Montr\u00e9al Canadiens",
+            "id": 8481523,
+            "stats": {
+                "games": 70,
+                "goals": 9,
+                "assists": 17,
+                "pts": 26
+            },
+            "url": "/api/v1/people/8481523",
+            "position": "F"
+        },
+        {
             "name": "Cole Caufield",
             "team": "Montr\u00e9al Canadiens",
             "id": 8481540,
@@ -2650,6 +2728,32 @@
                 "pts": 0
             },
             "url": "/api/v1/people/8482476",
+            "position": "F"
+        },
+        {
+            "name": "Joshua Roy",
+            "team": "Montr\u00e9al Canadiens",
+            "id": 8482749,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8482749",
+            "position": "F"
+        },
+        {
+            "name": "Riley Kidney",
+            "team": "Montr\u00e9al Canadiens",
+            "id": 8482828,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8482828",
             "position": "F"
         },
         {
@@ -3641,19 +3745,6 @@
             "position": "F"
         },
         {
-            "name": "Ville Koivunen",
-            "team": "Carolina Hurricanes",
-            "id": 8482758,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8482758",
-            "position": "F"
-        },
-        {
             "name": "Patric Hornqvist",
             "team": "Florida Panthers",
             "id": 8471887,
@@ -4486,19 +4577,6 @@
             "position": "F"
         },
         {
-            "name": "Henrik Rybinski",
-            "team": "Washington Capitals",
-            "id": 8481662,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8481662",
-            "position": "F"
-        },
-        {
             "name": "Hendrix Lapierre",
             "team": "Washington Capitals",
             "id": 8482148,
@@ -4509,19 +4587,6 @@
                 "pts": 1
             },
             "url": "/api/v1/people/8482148",
-            "position": "F"
-        },
-        {
-            "name": "Alexander Suzdalev",
-            "team": "Washington Capitals",
-            "id": 8483518,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8483518",
             "position": "F"
         },
         {
@@ -4639,6 +4704,19 @@
                 "pts": 13
             },
             "url": "/api/v1/people/8478043",
+            "position": "F"
+        },
+        {
+            "name": "Dylan Sikura",
+            "team": "Chicago Blackhawks",
+            "id": 8478106,
+            "stats": {
+                "games": 5,
+                "goals": 0,
+                "assists": 1,
+                "pts": 1
+            },
+            "url": "/api/v1/people/8478106",
             "position": "F"
         },
         {
@@ -5461,19 +5539,6 @@
             "position": "F"
         },
         {
-            "name": "Josh Leivo",
-            "team": "St. Louis Blues",
-            "id": 8476410,
-            "stats": {
-                "games": 7,
-                "goals": 1,
-                "assists": 2,
-                "pts": 3
-            },
-            "url": "/api/v1/people/8476410",
-            "position": "F"
-        },
-        {
             "name": "Brandon Saad",
             "team": "St. Louis Blues",
             "id": 8476438,
@@ -5484,19 +5549,6 @@
                 "pts": 49
             },
             "url": "/api/v1/people/8476438",
-            "position": "F"
-        },
-        {
-            "name": "Martin Frk",
-            "team": "St. Louis Blues",
-            "id": 8476924,
-            "stats": {
-                "games": 6,
-                "goals": 2,
-                "assists": 0,
-                "pts": 2
-            },
-            "url": "/api/v1/people/8476924",
             "position": "F"
         },
         {
@@ -5539,19 +5591,6 @@
             "position": "F"
         },
         {
-            "name": "Anthony Angello",
-            "team": "St. Louis Blues",
-            "id": 8478074,
-            "stats": {
-                "games": 4,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8478074",
-            "position": "F"
-        },
-        {
             "name": "Noel Acciari",
             "team": "St. Louis Blues",
             "id": 8478569,
@@ -5575,19 +5614,6 @@
                 "pts": 11
             },
             "url": "/api/v1/people/8479366",
-            "position": "F"
-        },
-        {
-            "name": "William Bitten",
-            "team": "St. Louis Blues",
-            "id": 8479375,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8479375",
             "position": "F"
         },
         {
@@ -5630,19 +5656,6 @@
             "position": "F"
         },
         {
-            "name": "Dylan McLaughlin",
-            "team": "St. Louis Blues",
-            "id": 8481429,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8481429",
-            "position": "F"
-        },
-        {
             "name": "Adam Ruzicka",
             "team": "Calgary Flames",
             "id": 8480008,
@@ -5653,6 +5666,71 @@
                 "pts": 10
             },
             "url": "/api/v1/people/8480008",
+            "position": "F"
+        },
+        {
+            "name": "Lucas Feuk",
+            "team": "Calgary Flames",
+            "id": 8481717,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8481717",
+            "position": "F"
+        },
+        {
+            "name": "Cole Huckins",
+            "team": "Calgary Flames",
+            "id": 8482664,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8482664",
+            "position": "F"
+        },
+        {
+            "name": "Jack Beck",
+            "team": "Calgary Flames",
+            "id": 8482736,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8482736",
+            "position": "F"
+        },
+        {
+            "name": "Lucas Ciona",
+            "team": "Calgary Flames",
+            "id": 8482889,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8482889",
+            "position": "F"
+        },
+        {
+            "name": "Parker Bell",
+            "team": "Calgary Flames",
+            "id": 8483772,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8483772",
             "position": "F"
         },
         {
@@ -5877,6 +5955,19 @@
             "position": "F"
         },
         {
+            "name": "Jakob Pelletier",
+            "team": "Calgary Flames",
+            "id": 8481592,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8481592",
+            "position": "F"
+        },
+        {
             "name": "Cole Schwindt",
             "team": "Calgary Flames",
             "id": 8481655,
@@ -5890,6 +5981,19 @@
             "position": "F"
         },
         {
+            "name": "Connor Zary",
+            "team": "Calgary Flames",
+            "id": 8482074,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8482074",
+            "position": "F"
+        },
+        {
             "name": "Rory Kerins",
             "team": "Calgary Flames",
             "id": 8482209,
@@ -5900,6 +6004,19 @@
                 "pts": 0
             },
             "url": "/api/v1/people/8482209",
+            "position": "F"
+        },
+        {
+            "name": "Walker Duehr",
+            "team": "Calgary Flames",
+            "id": 8482652,
+            "stats": {
+                "games": 1,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8482652",
             "position": "F"
         },
         {
@@ -6319,68 +6436,16 @@
             "position": "F"
         },
         {
-            "name": "James Hamblin",
+            "name": "Dylan Holloway",
             "team": "Edmonton Oilers",
-            "id": 8480468,
+            "id": 8482077,
             "stats": {
                 "games": 0,
                 "goals": 0,
                 "assists": 0,
                 "pts": 0
             },
-            "url": "/api/v1/people/8480468",
-            "position": "F"
-        },
-        {
-            "name": "Noah Philp",
-            "team": "Edmonton Oilers",
-            "id": 8481491,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8481491",
-            "position": "F"
-        },
-        {
-            "name": "Tyler Tullio",
-            "team": "Edmonton Oilers",
-            "id": 8482151,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8482151",
-            "position": "F"
-        },
-        {
-            "name": "Matvey Petrov",
-            "team": "Edmonton Oilers",
-            "id": 8482718,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8482718",
-            "position": "F"
-        },
-        {
-            "name": "Reid Schaefer",
-            "team": "Edmonton Oilers",
-            "id": 8483513,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8483513",
+            "url": "/api/v1/people/8482077",
             "position": "F"
         },
         {
@@ -6969,6 +7034,19 @@
             "position": "F"
         },
         {
+            "name": "Mason McTavish",
+            "team": "Anaheim Ducks",
+            "id": 8482745,
+            "stats": {
+                "games": 9,
+                "goals": 2,
+                "assists": 1,
+                "pts": 3
+            },
+            "url": "/api/v1/people/8482745",
+            "position": "F"
+        },
+        {
             "name": "Josh Lopina",
             "team": "Anaheim Ducks",
             "id": 8482925,
@@ -7086,7 +7164,7 @@
             "position": "F"
         },
         {
-            "name": "Frederik Olofsson",
+            "name": "Fredrik Olofsson",
             "team": "Dallas Stars",
             "id": 8478028,
             "stats": {
@@ -7519,10 +7597,10 @@
             "team": "Los Angeles Kings",
             "id": 8480845,
             "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
+                "games": 57,
+                "goals": 5,
+                "assists": 8,
+                "pts": 13
             },
             "url": "/api/v1/people/8480845",
             "position": "F"
@@ -7554,19 +7632,6 @@
             "position": "F"
         },
         {
-            "name": "Andre Lee",
-            "team": "Los Angeles Kings",
-            "id": 8481732,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8481732",
-            "position": "F"
-        },
-        {
             "name": "Quinton Byfield",
             "team": "Los Angeles Kings",
             "id": 8482124,
@@ -7577,45 +7642,6 @@
                 "pts": 10
             },
             "url": "/api/v1/people/8482124",
-            "position": "F"
-        },
-        {
-            "name": "Martin Chromiak",
-            "team": "Los Angeles Kings",
-            "id": 8482160,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8482160",
-            "position": "F"
-        },
-        {
-            "name": "Francesco Pinelli",
-            "team": "Los Angeles Kings",
-            "id": 8482748,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8482748",
-            "position": "F"
-        },
-        {
-            "name": "Taylor Ward",
-            "team": "Los Angeles Kings",
-            "id": 8483406,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8483406",
             "position": "F"
         },
         {
@@ -7736,6 +7762,19 @@
             "position": "F"
         },
         {
+            "name": "Evgeny Svechnikov",
+            "team": "San Jose Sharks",
+            "id": 8478431,
+            "stats": {
+                "games": 72,
+                "goals": 7,
+                "assists": 12,
+                "pts": 19
+            },
+            "url": "/api/v1/people/8478431",
+            "position": "F"
+        },
+        {
             "name": "Steven Lorentz",
             "team": "San Jose Sharks",
             "id": 8478904,
@@ -7785,6 +7824,19 @@
                 "pts": 5
             },
             "url": "/api/v1/people/8479705",
+            "position": "F"
+        },
+        {
+            "name": "Jonah Gadjovich",
+            "team": "San Jose Sharks",
+            "id": 8479981,
+            "stats": {
+                "games": 43,
+                "goals": 1,
+                "assists": 2,
+                "pts": 3
+            },
+            "url": "/api/v1/people/8479981",
             "position": "F"
         },
         {
@@ -8360,6 +8412,19 @@
             "position": "F"
         },
         {
+            "name": "Sam Steel",
+            "team": "Minnesota Wild",
+            "id": 8479351,
+            "stats": {
+                "games": 68,
+                "goals": 6,
+                "assists": 14,
+                "pts": 20
+            },
+            "url": "/api/v1/people/8479351",
+            "position": "F"
+        },
+        {
             "name": "Tyson Jost",
             "team": "Minnesota Wild",
             "id": 8479370,
@@ -8461,6 +8526,19 @@
                 "pts": 60
             },
             "url": "/api/v1/people/8471218",
+            "position": "F"
+        },
+        {
+            "name": "Sam Gagner",
+            "team": "Winnipeg Jets",
+            "id": 8474040,
+            "stats": {
+                "games": 81,
+                "goals": 13,
+                "assists": 18,
+                "pts": 31
+            },
+            "url": "/api/v1/people/8474040",
             "position": "F"
         },
         {
@@ -8890,32 +8968,6 @@
                 "pts": 4
             },
             "url": "/api/v1/people/8480979",
-            "position": "F"
-        },
-        {
-            "name": "Conor Geekie",
-            "team": "Arizona Coyotes",
-            "id": 8483447,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8483447",
-            "position": "F"
-        },
-        {
-            "name": "Milos Kelemen",
-            "team": "Arizona Coyotes",
-            "id": 8483597,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8483597",
             "position": "F"
         },
         {
@@ -9984,19 +10036,6 @@
                 "pts": 0
             },
             "url": "/api/v1/people/8481541",
-            "position": "D"
-        },
-        {
-            "name": "Calle Odelius",
-            "team": "New York Islanders",
-            "id": 8483498,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8483498",
             "position": "D"
         },
         {
@@ -11105,6 +11144,19 @@
             "position": "D"
         },
         {
+            "name": "Erik Brannstrom",
+            "team": "Ottawa Senators",
+            "id": 8480073,
+            "stats": {
+                "games": 53,
+                "goals": 0,
+                "assists": 14,
+                "pts": 14
+            },
+            "url": "/api/v1/people/8480073",
+            "position": "D"
+        },
+        {
             "name": "Jacob Bernard-Docker",
             "team": "Ottawa Senators",
             "id": 8480879,
@@ -11544,19 +11596,6 @@
                 "pts": 0
             },
             "url": "/api/v1/people/8482187",
-            "position": "D"
-        },
-        {
-            "name": "Aleksi Heimosalmi",
-            "team": "Carolina Hurricanes",
-            "id": 8482860,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8482860",
             "position": "D"
         },
         {
@@ -12665,19 +12704,6 @@
             "position": "D"
         },
         {
-            "name": "Luke Witkowski",
-            "team": "St. Louis Blues",
-            "id": 8474722,
-            "stats": {
-                "games": 1,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8474722",
-            "position": "D"
-        },
-        {
             "name": "Nick Leddy",
             "team": "St. Louis Blues",
             "id": 8475181,
@@ -12743,19 +12769,6 @@
             "position": "D"
         },
         {
-            "name": "Brady Lyle",
-            "team": "St. Louis Blues",
-            "id": 8480404,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8480404",
-            "position": "D"
-        },
-        {
             "name": "Scott Perunovich",
             "team": "St. Louis Blues",
             "id": 8481059,
@@ -12769,16 +12782,29 @@
             "position": "D"
         },
         {
-            "name": "Matthew Kessel",
-            "team": "St. Louis Blues",
-            "id": 8482516,
+            "name": "Cameron Whynot",
+            "team": "Calgary Flames",
+            "id": 8482735,
             "stats": {
                 "games": 0,
                 "goals": 0,
                 "assists": 0,
                 "pts": 0
             },
-            "url": "/api/v1/people/8482516",
+            "url": "/api/v1/people/8482735",
+            "position": "D"
+        },
+        {
+            "name": "Cole Jordan",
+            "team": "Calgary Flames",
+            "id": 8482876,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8482876",
             "position": "D"
         },
         {
@@ -13133,6 +13159,19 @@
             "position": "D"
         },
         {
+            "name": "Ryan Murray",
+            "team": "Edmonton Oilers",
+            "id": 8476850,
+            "stats": {
+                "games": 37,
+                "goals": 0,
+                "assists": 4,
+                "pts": 4
+            },
+            "url": "/api/v1/people/8476850",
+            "position": "D"
+        },
+        {
             "name": "Cody Ceci",
             "team": "Edmonton Oilers",
             "id": 8476879,
@@ -13416,6 +13455,19 @@
                 "pts": 35
             },
             "url": "/api/v1/people/8474031",
+            "position": "D"
+        },
+        {
+            "name": "Dmitry Kulikov",
+            "team": "Anaheim Ducks",
+            "id": 8475179,
+            "stats": {
+                "games": 80,
+                "goals": 7,
+                "assists": 17,
+                "pts": 24
+            },
+            "url": "/api/v1/people/8475179",
             "position": "D"
         },
         {
@@ -13887,19 +13939,6 @@
             "position": "D"
         },
         {
-            "name": "Frederic Allard",
-            "team": "Los Angeles Kings",
-            "id": 8479329,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8479329",
-            "position": "D"
-        },
-        {
             "name": "Jacob Moverare",
             "team": "Los Angeles Kings",
             "id": 8479421,
@@ -13910,19 +13949,6 @@
                 "pts": 2
             },
             "url": "/api/v1/people/8479421",
-            "position": "D"
-        },
-        {
-            "name": "Tobie Paquette-Bisson",
-            "team": "Los Angeles Kings",
-            "id": 8481110,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8481110",
             "position": "D"
         },
         {
@@ -13949,32 +13975,6 @@
                 "pts": 8
             },
             "url": "/api/v1/people/8481606",
-            "position": "D"
-        },
-        {
-            "name": "Kim Nousiainen",
-            "team": "Los Angeles Kings",
-            "id": 8481696,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8481696",
-            "position": "D"
-        },
-        {
-            "name": "Brandt Clarke",
-            "team": "Los Angeles Kings",
-            "id": 8482730,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8482730",
             "position": "D"
         },
         {
@@ -14381,19 +14381,6 @@
             "position": "D"
         },
         {
-            "name": "Dmitry Kulikov",
-            "team": "Minnesota Wild",
-            "id": 8475179,
-            "stats": {
-                "games": 80,
-                "goals": 7,
-                "assists": 17,
-                "pts": 24
-            },
-            "url": "/api/v1/people/8475179",
-            "position": "D"
-        },
-        {
             "name": "Jon Merrill",
             "team": "Minnesota Wild",
             "id": 8475750,
@@ -14628,19 +14615,6 @@
             "position": "D"
         },
         {
-            "name": "Elias Salomonsson",
-            "team": "Winnipeg Jets",
-            "id": 8483510,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8483510",
-            "position": "D"
-        },
-        {
             "name": "Conor Timmins",
             "team": "Arizona Coyotes",
             "id": 8479982,
@@ -14768,45 +14742,6 @@
                 "pts": 15
             },
             "url": "/api/v1/people/8482655",
-            "position": "D"
-        },
-        {
-            "name": "Maveric Lamoureux",
-            "team": "Arizona Coyotes",
-            "id": 8483472,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8483472",
-            "position": "D"
-        },
-        {
-            "name": "Ronald Knot",
-            "team": "Arizona Coyotes",
-            "id": 8483625,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8483625",
-            "position": "D"
-        },
-        {
-            "name": "Lukas Klok",
-            "team": "Arizona Coyotes",
-            "id": 8483810,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0
-            },
-            "url": "/api/v1/people/8483810",
             "position": "D"
         },
         {
@@ -15080,6 +15015,19 @@
                 "pts": 2
             },
             "url": "/api/v1/people/8479482",
+            "position": "D"
+        },
+        {
+            "name": "Cale Fleury",
+            "team": "Seattle Kraken",
+            "id": 8479985,
+            "stats": {
+                "games": 9,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0
+            },
+            "url": "/api/v1/people/8479985",
             "position": "D"
         },
         {
@@ -15636,6 +15584,22 @@
             "position": "G"
         },
         {
+            "name": "Ukko-Pekka Luukkonen",
+            "team": "Buffalo Sabres",
+            "id": 8480045,
+            "stats": {
+                "games": 9,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0,
+                "wins": 2,
+                "losses": 5,
+                "savePercentage": 0.917
+            },
+            "url": "/api/v1/people/8480045",
+            "position": "G"
+        },
+        {
             "name": "Carey Price",
             "team": "Montr\u00e9al Canadiens",
             "id": 8471679,
@@ -15681,6 +15645,22 @@
                 "savePercentage": 0.891
             },
             "url": "/api/v1/people/8478470",
+            "position": "G"
+        },
+        {
+            "name": "Cayden Primeau",
+            "team": "Montr\u00e9al Canadiens",
+            "id": 8480051,
+            "stats": {
+                "games": 12,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0,
+                "wins": 1,
+                "losses": 7,
+                "savePercentage": 0.868
+            },
+            "url": "/api/v1/people/8480051",
             "position": "G"
         },
         {
@@ -16036,22 +16016,6 @@
             "position": "G"
         },
         {
-            "name": "Garin Bjorklund",
-            "team": "Washington Capitals",
-            "id": 8482188,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0,
-                "wins": 0,
-                "losses": 0,
-                "savePercentage": 0.0
-            },
-            "url": "/api/v1/people/8482188",
-            "position": "G"
-        },
-        {
             "name": "Alex Stalock",
             "team": "Chicago Blackhawks",
             "id": 8471774,
@@ -16292,22 +16256,6 @@
             "position": "G"
         },
         {
-            "name": "Vadim Zherenko",
-            "team": "St. Louis Blues",
-            "id": 8481689,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0,
-                "wins": 0,
-                "losses": 0,
-                "savePercentage": 0.0
-            },
-            "url": "/api/v1/people/8481689",
-            "position": "G"
-        },
-        {
             "name": "Jacob Markstrom",
             "team": "Calgary Flames",
             "id": 8474593,
@@ -16353,6 +16301,22 @@
                 "savePercentage": 0.906
             },
             "url": "/api/v1/people/8478435",
+            "position": "G"
+        },
+        {
+            "name": "Dustin Wolf",
+            "team": "Calgary Flames",
+            "id": 8481692,
+            "stats": {
+                "games": 0,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0,
+                "wins": 0,
+                "losses": 0,
+                "savePercentage": 0.0
+            },
+            "url": "/api/v1/people/8481692",
             "position": "G"
         },
         {
@@ -16465,22 +16429,6 @@
                 "savePercentage": 0.913
             },
             "url": "/api/v1/people/8479973",
-            "position": "G"
-        },
-        {
-            "name": "Ryan Fanti",
-            "team": "Edmonton Oilers",
-            "id": 8483534,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0,
-                "wins": 0,
-                "losses": 0,
-                "savePercentage": 0.0
-            },
-            "url": "/api/v1/people/8483534",
             "position": "G"
         },
         {
@@ -16644,6 +16592,22 @@
             "position": "G"
         },
         {
+            "name": "Jake Oettinger",
+            "team": "Dallas Stars",
+            "id": 8479979,
+            "stats": {
+                "games": 48,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0,
+                "wins": 30,
+                "losses": 15,
+                "savePercentage": 0.914
+            },
+            "url": "/api/v1/people/8479979",
+            "position": "G"
+        },
+        {
             "name": "Remi Poirier",
             "team": "Dallas Stars",
             "id": 8482465,
@@ -16724,38 +16688,6 @@
             "position": "G"
         },
         {
-            "name": "Jacob Ingham",
-            "team": "Los Angeles Kings",
-            "id": 8480857,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0,
-                "wins": 0,
-                "losses": 0,
-                "savePercentage": 0.0
-            },
-            "url": "/api/v1/people/8480857",
-            "position": "G"
-        },
-        {
-            "name": "David Hrenak",
-            "team": "Los Angeles Kings",
-            "id": 8481069,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0,
-                "wins": 0,
-                "losses": 0,
-                "savePercentage": 0.0
-            },
-            "url": "/api/v1/people/8481069",
-            "position": "G"
-        },
-        {
             "name": "James Reimer",
             "team": "San Jose Sharks",
             "id": 8473503,
@@ -16801,22 +16733,6 @@
                 "savePercentage": 0.912
             },
             "url": "/api/v1/people/8478039",
-            "position": "G"
-        },
-        {
-            "name": "Adin Hill",
-            "team": "San Jose Sharks",
-            "id": 8478499,
-            "stats": {
-                "games": 25,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0,
-                "wins": 10,
-                "losses": 11,
-                "savePercentage": 0.906
-            },
-            "url": "/api/v1/people/8478499",
             "position": "G"
         },
         {
@@ -17060,22 +16976,6 @@
             "position": "G"
         },
         {
-            "name": "Anson Thornton",
-            "team": "Arizona Coyotes",
-            "id": 8483099,
-            "stats": {
-                "games": 0,
-                "goals": 0,
-                "assists": 0,
-                "pts": 0,
-                "wins": 0,
-                "losses": 0,
-                "savePercentage": 0.0
-            },
-            "url": "/api/v1/people/8483099",
-            "position": "G"
-        },
-        {
             "name": "Laurent Brossoit",
             "team": "Vegas Golden Knights",
             "id": 8476316,
@@ -17121,6 +17021,22 @@
                 "savePercentage": 0.907
             },
             "url": "/api/v1/people/8475215",
+            "position": "G"
+        },
+        {
+            "name": "Adin Hill",
+            "team": "Vegas Golden Knights",
+            "id": 8478499,
+            "stats": {
+                "games": 25,
+                "goals": 0,
+                "assists": 0,
+                "pts": 0,
+                "wins": 10,
+                "losses": 11,
+                "savePercentage": 0.906
+            },
+            "url": "/api/v1/people/8478499",
             "position": "G"
         },
         {

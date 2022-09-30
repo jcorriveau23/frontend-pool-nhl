@@ -38,16 +38,20 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
             <td colSpan={2}>{player.name}</td>
           </tr>
         ))}
-        <tr>
-          <th>Round pick</th>
-          <th>From</th>
-        </tr>
-        {items.picks.map(pick => (
-          <tr onClick={setPicks ? () => remove_pick(items.picks, setPicks, pick) : null}>
-            <td>{pick.round + 1}</td>
-            <td>{DictUsers ? DictUsers[pick.from] : pick.from}</td>
-          </tr>
-        ))}
+        {items.picks.length > 0 ? (
+          <>
+            <tr>
+              <th>Round pick</th>
+              <th>From</th>
+            </tr>
+            {items.picks.map(pick => (
+              <tr onClick={setPicks ? () => remove_pick(items.picks, setPicks, pick) : null}>
+                <td>{pick.round + 1}</td>
+                <td>{DictUsers ? DictUsers[pick.from] : pick.from}</td>
+              </tr>
+            ))}
+          </>
+        ) : null}
       </tbody>
     </table>
   );
@@ -57,11 +61,13 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
       <table width="100%">
         <tbody>
           <tr>
-            <th>{render_trade_side(tradeInfo.from_items, tradeInfo.proposed_by, setFromPlayers, setFromPicks)}</th>
-            <th>
+            <th width="45%">
+              {render_trade_side(tradeInfo.from_items, tradeInfo.proposed_by, setFromPlayers, setFromPicks)}
+            </th>
+            <th width="10%">
               <FaExchangeAlt size={30} />
             </th>
-            <th>{render_trade_side(tradeInfo.to_items, tradeInfo.ask_to, setToPlayers, setToPicks)}</th>
+            <th width="45%">{render_trade_side(tradeInfo.to_items, tradeInfo.ask_to, setToPlayers, setToPicks)}</th>
           </tr>
         </tbody>
       </table>

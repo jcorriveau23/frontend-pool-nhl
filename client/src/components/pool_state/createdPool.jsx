@@ -69,10 +69,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
       if (i < userList.length) {
         participants.push(
           <li key={userList[i]._oid}>
-            <ParticipantItem
-              name={DictUsers ? DictUsers[userList[i]._oid] : userList[i]._oid}
-              ready={userList[i].ready}
-            />
+            <ParticipantItem id={userList[i]._oid} user={user} DictUsers={DictUsers} ready={userList[i].ready} />
           </li>
         ); // TODO: add a modal pop up to add that friend
       } else {

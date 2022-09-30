@@ -12,7 +12,6 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
   const [numberPoolerInput, setNumberPoolerInput] = useState(4);
 
   const createPool = () => {
-    console.log(Cookies.get(`token-${user._id.$oid}`));
     axios
       .post(
         '/api-rust/create-pool',

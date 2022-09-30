@@ -58,14 +58,26 @@ export default function AccountModal({
       <table ref={ref}>
         <tbody>
           <tr>
-            <td>Username:</td>
-            <td>{user ? user.name : null}</td>
             <td>
               <button className="base-button_no_border" onClick={() => navigate('/profile')} type="button">
+                <b>Profile</b>
                 <IoIosArrowForward size={30} />
               </button>
             </td>
           </tr>
+          {user
+            ? user.pool_list.map(poolName => (
+                <tr>
+                  <button
+                    className="base-button_no_border"
+                    onClick={() => navigate('/my-pools/' + poolName)}
+                    type="button"
+                  >
+                    {poolName}
+                  </button>
+                </tr>
+              ))
+            : null}
           {isWalletConnected ? (
             <>
               <tr>

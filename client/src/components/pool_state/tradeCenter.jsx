@@ -14,38 +14,45 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
   const [showCreateTradeModal, setShowCreateTradeModal] = useState(false);
 
   const respond_trade = (tradeID, isAccepted) => {
-    axios
-      .post(
-        '/api-rust/respond-trade',
-        { trade_id: tradeID, name: poolInfo.name, is_accepted: isAccepted },
-        {
-          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
-        }
-      )
-      .then(res => {
-        if (res.data.success) {
-          setPoolInfo(res.data.pool);
-        } else {
-          alert(res.data.message);
-        }
-      });
+    if (
+      window.confirm(`Do you really want to accept the trade? Players and picks will be transfered on this action.`)
+    ) {
+      axios
+        .post(
+          '/api-rust/respond-trade',
+          { trade_id: tradeID, name: poolInfo.name, is_accepted: isAccepted },
+          {
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+          }
+        )
+        .then(res => {
+          if (res.data.success) {
+            setPoolInfo(res.data.pool);
+          } else {
+            alert(res.data.message);
+          }
+        });
+    }
   };
   const cancel_trade = tradeID => {
-    axios
-      .post(
-        '/api-rust/cancel-trade',
-        { trade_id: tradeID, name: poolInfo.name },
-        {
-          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
-        }
-      )
-      .then(res => {
-        if (res.data.success) {
-          setPoolInfo(res.data.pool);
-        } else {
-          alert(res.data.message);
-        }
-      });
+    window.confirm(`Do you really want to cancel the trade?`);
+    {
+      axios
+        .post(
+          '/api-rust/cancel-trade',
+          { trade_id: tradeID, name: poolInfo.name },
+          {
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+          }
+        )
+        .then(res => {
+          if (res.data.success) {
+            setPoolInfo(res.data.pool);
+          } else {
+            alert(res.data.message);
+          }
+        });
+    }
   };
 
   if (poolInfo.trades) {
@@ -70,22 +77,32 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
                       </th>
                       <th>
                         {tradeInfo.proposed_by === user._id.$oid ? (
-                          <button onClick={() => cancel_trade(tradeInfo.id)} type="button">
+                          <button onClick={() => cancel_trade(tradeInfo.id)} type="button" className="base-button">
                             Cancel
                           </button>
                         ) : null}
-                        {tradeInfo.ask_to === user._id.$oid ? (
-                          <button onClick={() => respond_trade(tradeInfo.id, true)} type="button">
+                        {tradeInfo.ask_to === user._id.$oid ||
+                        poolInfo.owner === user._id.$oid ||
+                        poolInfo.assistants.includes(user._id.$oid) ? (
+                          <button
+                            onClick={() => respond_trade(tradeInfo.id, true)}
+                            type="button"
+                            className="base-button"
+                          >
                             Accept
                           </button>
                         ) : null}
                         {tradeInfo.ask_to === user._id.$oid ? (
-                          <button onClick={() => respond_trade(tradeInfo.id, false)} type="button">
+                          <button
+                            onClick={() => respond_trade(tradeInfo.id, false)}
+                            type="button"
+                            className="base-button"
+                          >
                             Refuse
                           </button>
                         ) : null}
                       </th>
-                      <th>{new Date(tradeInfo.date_created).toISOString().split('T')[0]}</th>
+                      <th>{new Date(tradeInfo.date_created).toLocaleString('sv-SE')}</th>
                     </tr>
                   </tbody>
                 </table>
@@ -101,7 +118,7 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
                       <th>
                         <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
                       </th>
-                      <th>{new Date(tradeInfo.date_accepted).toISOString().split('T')[0]}</th>
+                      <th>{new Date(tradeInfo.date_accepted).toLocaleString('sv-SE')}</th>
                     </tr>
                   </tbody>
                 </table>
@@ -117,7 +134,7 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
                       <th>
                         <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
                       </th>
-                      <th>{new Date(tradeInfo.date_created).toISOString().split('T')[0]}</th>
+                      <th>{new Date(tradeInfo.date_created).toLocaleString('sv-SE')}</th>
                     </tr>
                   </tbody>
                 </table>
@@ -133,6 +150,7 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
                       <th>
                         <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
                       </th>
+                      <th>{new Date(tradeInfo.date_created).toLocaleString('sv-SE')}</th>
                     </tr>
                   </tbody>
                 </table>

@@ -29,7 +29,7 @@ export default function DraftPage(injury) {
 
       setPrevYear(year);
     } else {
-      navigate('/draft/2021');
+      navigate('/draft/2022');
     }
   }, [location]);
 
@@ -70,7 +70,7 @@ export default function DraftPage(injury) {
   const SeasonOptions = () => {
     const seasonArray = [];
 
-    for (let i = 2021; i > 1979; i -= 1) seasonArray.push(i);
+    for (let i = 2022; i > 1979; i -= 1) seasonArray.push(i);
     // TODO: use this call https://api.nhle.com/stats/rest/en/draft?sort=draftYear instead of hard coded date ?
     return seasonArray.map(s => (
       <option key={s} value={s.toString()}>

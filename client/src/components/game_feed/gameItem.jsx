@@ -9,16 +9,20 @@ import liveGame from '../img/icons/live-game.png';
 export default function GameItem({ gameData }) {
   // console.log(gameData)
 
-  const render_game_state = state => {
-    if (state === 'Live') {
+  const render_game_state = status => {
+    if (status.abstractGameState === 'Live') {
       return (
         <td>
           <img src={liveGame} alt="" width="40" height="40" />
         </td>
       );
     }
-    if (state === 'Postponed') {
-      return <td>PPD</td>;
+    if (status.abstractGameState === 'Postponed' || status.detailedState === 'Postponed') {
+      return <td style={{ color: '#a20' }}>PPD</td>;
+    }
+
+    if (status.abstractGameState === 'Final') {
+      return <td style={{ color: '#a20' }}>Final</td>;
     }
 
     return null;
@@ -35,7 +39,7 @@ export default function GameItem({ gameData }) {
             })}
           </td>
           <td />
-          {render_game_state(gameData.status.abstractGameState)}
+          {render_game_state(gameData.status)}
         </tr>
       </thead>
       <tbody>

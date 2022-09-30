@@ -6,13 +6,13 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import PropTypes from 'prop-types';
 
 // Icons
-import { AiFillStar } from 'react-icons/ai';
 import { BsPenFill } from 'react-icons/bs';
 
 // components
 import PlayerList from './playerList';
 import DraftOrder from './draftOrder';
 import PlayerNoLink from '../playerNoLink';
+import DrafterTurn from './DrafterTurn';
 
 // css
 import '../react-tabs.css';
@@ -37,7 +37,6 @@ export default function DraftPool({
   const [goal_l, setGoal_l] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [selectedTeamIndex, setSelectedTeamIndex] = useState(0);
-  const [playerIdToPlayerNameDict, setPlayerIdToPlayerNameDict] = useState(null);
   const [nextDrafter, setNextDrafter] = useState('');
 
   const sort_by_player_member = (playerMember, array) => {
@@ -73,38 +72,11 @@ export default function DraftPool({
     });
   };
 
-  const setDictPlayersIdToPlayersName = poolData => {
-    const DictPlayerIdToPlayerName = {};
-
-    for (const [poolerName, poolerRoster] of Object.entries(poolData.context.pooler_roster)) {
-      console.log(poolerRoster);
-      // Forwards
-      poolerRoster.chosen_forwards.forEach(forward => {
-        DictPlayerIdToPlayerName[forward.id] = forward.name;
-      });
-      // Defenders
-      poolerRoster.chosen_defenders.forEach(defender => {
-        DictPlayerIdToPlayerName[defender.id] = defender.name;
-      });
-      // Goalies
-      poolerRoster.chosen_goalies.forEach(goaly => {
-        DictPlayerIdToPlayerName[goaly.id] = goaly.name;
-      });
-      // Reservists
-      poolerRoster.chosen_reservists.forEach(reservist => {
-        DictPlayerIdToPlayerName[reservist.id] = reservist.name;
-      });
-    }
-
-    setPlayerIdToPlayerNameDict(DictPlayerIdToPlayerName);
-  };
-
   useEffect(() => {
     if (socket && poolName && user._id) {
       socket.emit('joinRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
       fetchPlayerDraft();
       setInRoom(true);
-      setDictPlayersIdToPlayersName(poolInfo); // Create the dictionary mapping players id to players name
     }
     return () => {
       if (socket && poolName) {
@@ -119,7 +91,6 @@ export default function DraftPool({
     if (socket) {
       socket.on('poolInfo', data => {
         setPoolInfo(data);
-        setDictPlayersIdToPlayersName(data); // Create the dictionary mapping players id to players name
       });
     }
   }, [socket]);
@@ -198,23 +169,8 @@ export default function DraftPool({
 
   const isUser = participant => participant === user._id.$oid;
 
-  const draft_turn = () => nextDrafter;
-
-  const render_pooler_turn = pooler => {
-    if (draft_turn() === pooler) {
-      return (
-        <Tab key={pooler} style={{ color: 'green' }}>
-          <AiFillStar size={30} />
-          <b>{DictUsers ? DictUsers[pooler] : pooler}</b>
-        </Tab>
-      );
-    }
-
-    return <Tab key={pooler}>{DictUsers ? DictUsers[pooler] : pooler}</Tab>;
-  };
-
-  const render_tabs_choice = () => {
-    const poolers = poolInfo.participants;
+  const render_tabs_choice = _nextDrafter => {
+    const poolers = [...poolInfo.participants];
 
     // replace pooler user name to be first
     if (isUserParticipant) {
@@ -224,7 +180,7 @@ export default function DraftPool({
     }
 
     return (
-      <Tabs>
+      <Tabs forceRenderTabPanel>
         <TabList>
           <Tab>
             <BsPenFill size={30} />
@@ -239,6 +195,7 @@ export default function DraftPool({
             </button>
           ) : null}
           <DraftOrder
+            poolInfo={poolInfo}
             players_name_drafted={poolInfo.context.players_name_drafted}
             participants={poolInfo.participants}
             final_rank={poolInfo.final_rank}
@@ -251,17 +208,21 @@ export default function DraftPool({
             }
             nb_protected_players={poolInfo.next_season_number_players_protected}
             injury={injury}
-            playerIdToPlayerNameDict={playerIdToPlayerNameDict}
             DictUsers={DictUsers}
             setNextDrafter={setNextDrafter}
+            user={user}
           />
         </TabPanel>
         <TabPanel>
           <Tabs selectedIndex={selectedTeamIndex} onSelect={index => setSelectedTeamIndex(index)}>
-            <TabList>{poolers.map(pooler => render_pooler_turn(pooler))}</TabList>
-            {poolers.map(pooler => (
-              <TabPanel key={pooler}>
-                <PlayerList poolerContext={poolInfo.context.pooler_roster[pooler]} injury={injury} />
+            <TabList>
+              {poolers.map(participant => (
+                <DrafterTurn nextDrafter={_nextDrafter} participant={participant} user={user} DictUsers={DictUsers} />
+              ))}
+            </TabList>
+            {poolers.map(participant => (
+              <TabPanel key={participant}>
+                <PlayerList poolerContext={poolInfo.context.pooler_roster[participant]} injury={injury} />
               </TabPanel>
             ))}
           </Tabs>
@@ -383,7 +344,8 @@ export default function DraftPool({
             </div>
           </div>
           <div className="float-right">
-            <div className="half-cont">{render_tabs_choice()}</div>
+            <div className="half-cont">{render_tabs_choice(nextDrafter)}</div>
+            <h1>{nextDrafter}</h1>
           </div>
         </div>
       </div>

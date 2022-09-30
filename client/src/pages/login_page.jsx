@@ -85,7 +85,6 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
     axios
       .post('/api-rust/login', { name, password })
       .then(res => {
-        console.log(res);
         if (res.status === 200) {
           Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
           localStorage.setItem('persist-account', JSON.stringify(res.data.user));

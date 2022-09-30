@@ -105,6 +105,12 @@ export default function MyPoolsPage({ user, DictUsers }) {
         <div>
           <Tabs>
             <TabList>
+              {poolInProgress.length > 0 ? (
+                <Tab>
+                  <FaRunning size={30} />
+                  in Progress
+                </Tab>
+              ) : null}
               <Tab>
                 <FaTools size={30} />
                 Created
@@ -121,13 +127,18 @@ export default function MyPoolsPage({ user, DictUsers }) {
                   Dynastie
                 </Tab>
               ) : null}
-              {poolInProgress.length > 0 ? (
-                <Tab>
-                  <FaRunning size={30} />
-                  in Progress
-                </Tab>
-              ) : null}
             </TabList>
+            {poolInProgress.length > 0 ? (
+              <TabPanel>
+                <div className="pool_item">
+                  <ul>
+                    {poolInProgress.map(pool => (
+                      <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
+                    ))}
+                  </ul>
+                </div>
+              </TabPanel>
+            ) : null}
             <TabPanel>
               <div className="pool_item">
                 <ul>
@@ -160,17 +171,6 @@ export default function MyPoolsPage({ user, DictUsers }) {
                 <div className="pool_item">
                   <ul>
                     {poolDynastie.map(pool => (
-                      <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
-                    ))}
-                  </ul>
-                </div>
-              </TabPanel>
-            ) : null}
-            {poolInProgress.length > 0 ? (
-              <TabPanel>
-                <div className="pool_item">
-                  <ul>
-                    {poolInProgress.map(pool => (
                       <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
                     ))}
                   </ul>

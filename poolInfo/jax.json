@@ -1,8 +1,8 @@
 [{
   "_id": {
-    "$oid": "62bed6134fb504ee8c306d70"
+    "$oid": "62bed6134fb504ee8c306d71"
   },
-  "name": "jax",
+  "name": "jax-test",
   "owner": "62b8bc22dc6fe2de9e2f9cdc",
   "number_poolers": 6,
   "participants": [

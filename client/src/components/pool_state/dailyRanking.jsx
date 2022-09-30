@@ -5,6 +5,8 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 // Components
 import PlayerLink from '../playerLink';
+import NaviguateToday from './naviguateToday';
+import User from '../user';
 
 // images
 import { logos } from '../img/logos';
@@ -19,24 +21,28 @@ export default function DailyRanking({
   poolInfo,
   isUserParticipant,
   playerIdToPlayersDataMap,
+  selectedParticipantIndex,
+  setSelectedParticipantIndex,
   injury,
   user,
   DictUsers,
+  gameStatus,
+  DictTeamAgainst,
 }) {
   const [forwDailyStats, setForwDailyStats] = useState(null);
   const [defDailyStats, setDefDailyStats] = useState(null);
   const [goalDailyStats, setGoalDailyStats] = useState(null);
   const [dailyRank, setDailyRank] = useState(null);
-  const [isNoGameInDay, setIsNoGameInDay] = useState(false);
+  const [dailyPreview, setDailyPreview] = useState(null);
 
-  useEffect(() => {
+  const calculate_daily_stats = () => {
     const forwDailyStatsTemp = {};
     const defDailyStatsTemp = {};
     const goalDailyStatsTemp = {};
 
     const score_by_day = poolInfo.context.score_by_day;
 
-    if (score_by_day[formatDate]) {
+    if (score_by_day && score_by_day[formatDate]) {
       const dailyRankTemp = [];
 
       for (let i = 0; i < poolInfo.participants.length; i += 1) {
@@ -68,6 +74,9 @@ export default function DailyRanking({
             };
             if (player.G >= 3) {
               player.pts += poolInfo.forward_pts_hattricks;
+            }
+            if (player.SOG) {
+              player.pts += player.SOG * poolInfo.forward_pts_shootout_goals;
             }
           } else {
             player = {
@@ -102,6 +111,9 @@ export default function DailyRanking({
             };
             if (player.G >= 3) {
               player.pts += poolInfo.defender_pts_hattricks;
+            }
+            if (player.SOG) {
+              player.pts += player.SOG * poolInfo.forward_pts_shootout_goals;
             }
           } else {
             player = {
@@ -157,26 +169,28 @@ export default function DailyRanking({
           participant,
           // Forwards total daily points
           F_games: forwardDailyGames,
-          G_F: score_by_day[formatDate][participant].F_tot.G,
-          A_F: score_by_day[formatDate][participant].F_tot.A,
-          HT_F: score_by_day[formatDate][participant].F_tot.HT,
-          P_F: score_by_day[formatDate][participant].F_tot.pts,
+          G_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.G : 0,
+          A_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.A : 0,
+          HT_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.HT : 0,
+          SOG_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.SOG : 0,
+          P_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.pts : 0,
           // Defenders total daily points
           D_games: defendersDailyGames,
-          G_D: score_by_day[formatDate][participant].D_tot.G,
-          A_D: score_by_day[formatDate][participant].D_tot.A,
-          HT_D: score_by_day[formatDate][participant].D_tot.HT,
-          P_D: score_by_day[formatDate][participant].D_tot.pts,
+          G_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.G : 0,
+          A_D: score_by_day[formatDate][participant].D_tots ? core_by_day[formatDate][participant].D_tot.A : 0,
+          HT_D: score_by_day[formatDate][participant].D_tots ? core_by_day[formatDate][participant].D_tot.HT : 0,
+          SOG_D: score_by_day[formatDate][participant].D_tots ? core_by_day[formatDate][participant].D_tot.SOG : 0,
+          P_D: score_by_day[formatDate][participant].D_tots ? core_by_day[formatDate][participant].D_tot.pts : 0,
           // Goalies total daily points
           G_games: goaliesDailyGames,
-          G_G: score_by_day[formatDate][participant].G_tot.G,
-          A_G: score_by_day[formatDate][participant].G_tot.A,
-          W_G: score_by_day[formatDate][participant].G_tot.W,
-          SO_G: score_by_day[formatDate][participant].G_tot.SO,
-          P_G: score_by_day[formatDate][participant].G_tot.pts,
+          G_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.G : 0,
+          A_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.A : 0,
+          W_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.W : 0,
+          SO_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.SO : 0,
+          P_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.pts : 0,
           // Total daily points
           total_games: forwardDailyGames + defendersDailyGames + goaliesDailyGames,
-          P: score_by_day[formatDate][participant].tot_pts,
+          P: score_by_day[formatDate][participant].tot_pts ? score_by_day[formatDate][participant].tot_pts : 0,
         });
       }
 
@@ -184,31 +198,184 @@ export default function DailyRanking({
       setDefDailyStats(defDailyStatsTemp);
       setGoalDailyStats(goalDailyStatsTemp);
       setDailyRank(dailyRankTemp);
-      setIsNoGameInDay(false);
-    } else {
-      setIsNoGameInDay(true);
     }
-  }, [formatDate]);
+  };
+
+  const calculate_daily_preview = () => {
+    const poolerRoster = poolInfo.context.pooler_roster;
+
+    const dailyPreviewTemp = [];
+
+    if (poolerRoster) {
+      for (let i = 0; i < poolInfo.participants.length; i += 1) {
+        const participant = poolInfo.participants[i];
+
+        const participantPreview = { name: participant };
+
+        let forwardsCount = 0;
+        let defendersCount = 0;
+        let goaliesCount = 0;
+
+        // Count the forwards that plays on that day.
+        if (poolInfo.context.score_by_day && poolInfo.context.score_by_day[formatDate]) {
+          // TODO: After 12PM the roster has been locked so use the lock roster to count
+          for (let j = 0; j < poolerRoster[participant].chosen_forwards.length; j += 1) {
+            if (poolerRoster[participant].chosen_forwards[j].team in DictTeamAgainst) forwardsCount += 1;
+          }
+
+          for (let j = 0; j < poolerRoster[participant].chosen_defenders.length; j += 1) {
+            if (poolerRoster[participant].chosen_defenders[j].team in DictTeamAgainst) defendersCount += 1;
+          }
+
+          for (let j = 0; j < poolerRoster[participant].chosen_goalies.length; j += 1) {
+            if (poolerRoster[participant].chosen_goalies[j].team in DictTeamAgainst) goaliesCount += 1;
+          }
+        } else {
+          for (let j = 0; j < poolerRoster[participant].chosen_forwards.length; j += 1) {
+            if (poolerRoster[participant].chosen_forwards[j].team in DictTeamAgainst) forwardsCount += 1;
+          }
+
+          for (let j = 0; j < poolerRoster[participant].chosen_defenders.length; j += 1) {
+            if (poolerRoster[participant].chosen_defenders[j].team in DictTeamAgainst) defendersCount += 1;
+          }
+
+          for (let j = 0; j < poolerRoster[participant].chosen_goalies.length; j += 1) {
+            if (poolerRoster[participant].chosen_goalies[j].team in DictTeamAgainst) goaliesCount += 1;
+          }
+        }
+
+        participantPreview.F = forwardsCount;
+        participantPreview.D = defendersCount;
+        participantPreview.G = goaliesCount;
+        participantPreview.T = forwardsCount + defendersCount + goaliesCount;
+
+        dailyPreviewTemp.push(participantPreview);
+      }
+
+      setDailyPreview(dailyPreviewTemp);
+    }
+  };
+
+  useEffect(() => {
+    if (gameStatus === 'Preview') calculate_daily_preview();
+    else if (gameStatus !== 'N/A') calculate_daily_stats();
+  }, [formatDate, gameStatus, DictTeamAgainst]);
+
+  const render_table_preview_header = () => (
+    <>
+      <NaviguateToday
+        formatDate={formatDate}
+        setDate={setDate}
+        gameStatus={gameStatus}
+        msg="Games Planned"
+        colSpan={5}
+      />
+      <tr>
+        <th>Pooler</th>
+        <th>Forwards</th>
+        <th>Defenders</th>
+        <th>Goalies</th>
+        <th>Total</th>
+      </tr>
+    </>
+  );
+
+  const render_table_preview_content = () =>
+    dailyPreview
+      .sort((p1, p2) => p2.T - p1.T)
+      .map(p => (
+        <tr>
+          <td>
+            <User id={p.name} user={user} DictUsers={DictUsers} />
+          </td>
+          <td>{p.F}</td>
+          <td>{p.D}</td>
+          <td>{p.G}</td>
+          <td>
+            <b>{p.T}</b>
+          </td>
+        </tr>
+      ));
+
+  const render_table_roster_preview = (players, position) => (
+    <>
+      <tr>
+        <th colSpan={3}>{position}</th>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <th>Team</th>
+        <th>Playing Against</th>
+      </tr>
+      {players
+        .sort((p1, p2) => (p2.team in DictTeamAgainst) - (p1.team in DictTeamAgainst))
+        .map(player => (
+          <tr>
+            <td>
+              <PlayerLink name={player.name} id={player.id} injury={injury} />
+            </td>
+            <td>
+              <img src={logos[player.team]} alt="" width="40" height="40" />
+            </td>
+            {player.team in DictTeamAgainst ? (
+              <td>
+                <img src={logos[DictTeamAgainst[player.team]]} alt="" width="40" height="40" />
+              </td>
+            ) : (
+              <td>Not playing</td>
+            )}
+          </tr>
+        ))}
+    </>
+  );
+
+  const render_table_roster_preview_locked = (players, position) => (
+    //TODO: After 12PM the roster was locked so we need  to use score_by_day to display the locked roster instead of the pooler_roster
+    <>
+      <tr>
+        <th colSpan={3}>{position}</th>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <th>Team</th>
+        <th>Playing Against</th>
+      </tr>
+      {players
+        .sort((p1, p2) => (p2.team in DictTeamAgainst) - (p1.team in DictTeamAgainst))
+        .map(player => (
+          <tr>
+            <td>
+              <PlayerLink name={player.name} id={player.id} injury={injury} />
+            </td>
+            <td>
+              <img src={logos[player.team]} alt="" width="40" height="40" />
+            </td>
+            {player.team in DictTeamAgainst ? (
+              <td>
+                <img src={logos[DictTeamAgainst[player.team]]} alt="" width="40" height="40" />
+              </td>
+            ) : (
+              <td>Not playing</td>
+            )}
+          </tr>
+        ))}
+    </>
+  );
 
   const render_table_rank_header = () => (
     <>
-      <tr>
-        {formatDate === todayFormatDate ? (
-          <th colSpan={22}>Today daily ranking</th>
-        ) : (
-          <th colSpan={22}>
-            Daily ranking ({formatDate})
-            <button className="base-button" onClick={() => setDate(new Date())} type="button">
-              See today&apos;s stats
-            </button>
-          </th>
-        )}
-      </tr>
+      <NaviguateToday
+        formatDate={formatDate}
+        setDate={setDate}
+        gameStatus={gameStatus}
+        msg="Daily Ranking"
+        colSpan={24}
+      />
       <tr>
         <th rowSpan={2}>Rank</th>
         <th rowSpan={2}>Pooler</th>
-        <th colSpan={5}>Forwards</th>
-        <th colSpan={5}>Defenders</th>
+        <th colSpan={6}>Forwards</th>
+        <th colSpan={6}>Defenders</th>
         <th colSpan={6}>Goalies</th>
         <th colSpan={2}>Total</th>
       </tr>
@@ -217,11 +384,13 @@ export default function DailyRanking({
         <th>G</th>
         <th>A</th>
         <th>HT</th>
+        <th>G*</th>
         <th>PTS</th>
         <th>GP</th>
         <th>G</th>
         <th>A</th>
         <th>HT</th>
+        <th>G*</th>
         <th>PTS</th>
         <th>GP</th>
         <th>G</th>
@@ -237,54 +406,43 @@ export default function DailyRanking({
 
   const render_table_rank_body = () =>
     dailyRank
-      .sort((val1, val2) => val2.P - val1.P)
-      .map((val, i) => (
+      .sort((p1, p2) => p2.P - p1.P)
+      .map((p, i) => (
         <tr>
           <td>{i + 1}</td>
-          <td>{DictUsers ? DictUsers[val.participant] : val.participant}</td>
-          <td>{val.F_games}</td>
-          <td>{val.G_F}</td>
-          <td>{val.A_F}</td>
-          <td>{val.HT_F}</td>
           <td>
-            <b>{val.P_F}</b>
+            <User id={p.participant} user={user} DictUsers={DictUsers} />
           </td>
-          <td>{val.D_games}</td>
-          <td>{val.G_D}</td>
-          <td>{val.A_D}</td>
-          <td>{val.HT_D}</td>
+          <td>{p.F_games}</td>
+          <td>{p.G_F}</td>
+          <td>{p.A_F}</td>
+          <td>{p.HT_F}</td>
+          <td>{p.SOG_F}</td>
           <td>
-            <b>{val.P_D}</b>
+            <b>{p.P_F}</b>
           </td>
-          <td>{val.G_games}</td>
-          <td>{val.G_G}</td>
-          <td>{val.A_G}</td>
-          <td>{val.W_G}</td>
-          <td>{val.SO_G}</td>
+          <td>{p.D_games}</td>
+          <td>{p.G_D}</td>
+          <td>{p.A_D}</td>
+          <td>{p.HT_D}</td>
+          <td>{p.SOG_D}</td>
           <td>
-            <b>{val.P_G}</b>
+            <b>{p.P_D}</b>
           </td>
-          <td>{val.total_games}</td>
+          <td>{p.G_games}</td>
+          <td>{p.G_G}</td>
+          <td>{p.A_G}</td>
+          <td>{p.W_G}</td>
+          <td>{p.SO_G}</td>
           <td>
-            <b>{val.P}</b>
+            <b>{p.P_G}</b>
+          </td>
+          <td>{p.total_games}</td>
+          <td>
+            <b>{p.P}</b>
           </td>
         </tr>
       ));
-
-  const render_table_roster_header = participant => (
-    <tr>
-      {formatDate === todayFormatDate ? (
-        <th colSpan={7}>Today&apos;s {DictUsers ? DictUsers[participant] : participant}&apos;s pointers</th>
-      ) : (
-        <th colSpan={7}>
-          {DictUsers ? DictUsers[participant] : participant}&apos;s pointers ({formatDate})
-          <button className="base-button" onClick={() => setDate(new Date())} type="button">
-            See today&apos;s stats
-          </button>
-        </th>
-      )}
-    </tr>
-  );
 
   const render_skaters_headers_stats = (participant, position, maxPosition, skaterDailyStats) => (
     <>
@@ -309,7 +467,7 @@ export default function DailyRanking({
       .map(player => (
         <tr>
           <td colSpan={2}>
-            <PlayerLink name={player.name} id={player.id} />
+            <PlayerLink name={player.name} id={player.id} injury={injury} />
           </td>
           <td colSpan={2}>
             <img src={logos[player.team]} alt="" width="40" height="40" />
@@ -323,7 +481,7 @@ export default function DailyRanking({
               </td>
             </>
           ) : (
-            <td colSpan={3}>Did not played</td>
+            <td colSpan={3}>Have not played</td>
           )}
         </tr>
       ));
@@ -333,9 +491,9 @@ export default function DailyRanking({
       return (
         <tr>
           <th colSpan={4}>Total</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant][position_key].G}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant][position_key].A}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant][position_key].pts}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant][position_key]?.G}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant][position_key]?.A}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant][position_key]?.pts}</th>
         </tr>
       );
     }
@@ -347,11 +505,11 @@ export default function DailyRanking({
       return (
         <tr>
           <th colSpan={2}>Total</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot.G}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot.A}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot.W}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot.SO}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot.pts}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.G}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.A}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.W}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.SO}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.pts}</th>
         </tr>
       );
     }
@@ -399,12 +557,12 @@ export default function DailyRanking({
               </td>
             </>
           ) : (
-            <td colSpan={5}>Did not played</td>
+            <td colSpan={5}>Have not played</td>
           )}
         </tr>
       ));
 
-  const poolers = poolInfo.participants;
+  const poolers = [...poolInfo.participants];
 
   if (isUserParticipant) {
     // replace pooler user name to be first
@@ -413,62 +571,89 @@ export default function DailyRanking({
     poolers.splice(0, 0, user._id.$oid);
   }
 
-  console.log(isNoGameInDay);
-
-  if (isNoGameInDay || (forwDailyStats && defDailyStats && goalDailyStats)) {
+  if (gameStatus === 'Preview' && dailyPreview && DictTeamAgainst) {
     return (
       <>
         <table className="content-table-no-min">
-          <thead>{render_table_rank_header()}</thead>
-          <tbody>
-            {isNoGameInDay ? (
-              <tr>
-                <td colSpan={22}>No games started yet ({formatDate})</td>
-              </tr>
-            ) : (
-              render_table_rank_body()
-            )}
-          </tbody>
+          {render_table_preview_header()}
+          {render_table_preview_content()}
         </table>
-        <Tabs>
+        <Tabs selectedIndex={selectedParticipantIndex} onSelect={setSelectedParticipantIndex} forceRenderTabPanel>
           <TabList>
             {poolers.map(participant => (
-              <Tab key={participant}>{DictUsers ? DictUsers[participant] : participant}</Tab>
+              <Tab key={participant}>
+                <User id={participant} user={user} DictUsers={DictUsers} />
+              </Tab>
             ))}
           </TabList>
           {poolers.map(participant => (
             <TabPanel>
               <div className="half-cont">
                 <table className="content-table-no-min">
-                  <thead>{render_table_roster_header(participant)}</thead>
+                  <NaviguateToday
+                    formatDate={formatDate}
+                    setDate={setDate}
+                    gameStatus={gameStatus}
+                    msg="Roster"
+                    colSpan={4}
+                  />
+                  {render_table_roster_preview(poolInfo.context.pooler_roster[participant].chosen_forwards, 'Forwards')}
+                  {render_table_roster_preview(
+                    poolInfo.context.pooler_roster[participant].chosen_defenders,
+                    'Defenders'
+                  )}
+                  {render_table_roster_preview(poolInfo.context.pooler_roster[participant].chosen_goalies, 'Goalies')}
+                </table>
+              </div>
+            </TabPanel>
+          ))}
+        </Tabs>
+      </>
+    );
+  }
+
+  if (gameStatus === 'N/A') {
+    return <h1>No game on that day...</h1>;
+  }
+
+  if (forwDailyStats && defDailyStats && goalDailyStats) {
+    return (
+      <>
+        <table className="content-table-no-min">
+          <thead>{render_table_rank_header()}</thead>
+          <tbody>{render_table_rank_body()}</tbody>
+        </table>
+        <Tabs selectedIndex={selectedParticipantIndex} onSelect={setSelectedParticipantIndex} forceRenderTabPanel>
+          <TabList>
+            {poolers.map(participant => (
+              <Tab key={participant}>
+                <User id={participant} user={user} DictUsers={DictUsers} />
+              </Tab>
+            ))}
+          </TabList>
+          {poolers.map(participant => (
+            <TabPanel>
+              <div className="half-cont">
+                <table className="content-table-no-min">
+                  <thead>
+                    <NaviguateToday
+                      formatDate={formatDate}
+                      setDate={setDate}
+                      gameStatus={gameStatus}
+                      msg="Pointers"
+                      colSpan={7}
+                    />
+                  </thead>
                   <tbody>
-                    {isNoGameInDay ? (
-                      <tr>
-                        <td colSpan={6}>No games started yet ({formatDate})</td>
-                      </tr>
-                    ) : (
-                      <>
-                        {render_skaters_headers_stats(
-                          participant,
-                          'Forwards',
-                          poolInfo.number_forwards,
-                          forwDailyStats
-                        )}
-                        {render_skaters_stats(participant, forwDailyStats)}
-                        {render_skaters_total(participant, 'F_tot')}
-                        {render_skaters_headers_stats(
-                          participant,
-                          'Defenders',
-                          poolInfo.number_defenders,
-                          defDailyStats
-                        )}
-                        {render_skaters_stats(participant, defDailyStats)}
-                        {render_skaters_total(participant, 'D_tot')}
-                        {render_goalies_headers_stats(participant)}
-                        {render_goalies_stats(participant)}
-                        {render_goalies_total(participant)}
-                      </>
-                    )}
+                    {render_skaters_headers_stats(participant, 'Forwards', poolInfo.number_forwards, forwDailyStats)}
+                    {render_skaters_stats(participant, forwDailyStats)}
+                    {render_skaters_total(participant, 'F_tot')}
+                    {render_skaters_headers_stats(participant, 'Defenders', poolInfo.number_defenders, defDailyStats)}
+                    {render_skaters_stats(participant, defDailyStats)}
+                    {render_skaters_total(participant, 'D_tot')}
+                    {render_goalies_headers_stats(participant)}
+                    {render_goalies_stats(participant)}
+                    {render_goalies_total(participant)}
                   </tbody>
                 </table>
               </div>

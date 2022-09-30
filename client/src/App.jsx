@@ -46,6 +46,8 @@ function App() {
   const [showMenuModal, setShowMenuModal] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [injury, setInjury] = useState(null);
+  const [gameStatus, setGameStatus] = useState(null); // Live, Preview, N/A, Final
+  const [DictTeamAgainst, setDictTeamAgainst] = useState(null);
   const refMenu = useRef(null);
   const refAccount = useRef(null);
 
@@ -84,82 +86,96 @@ function App() {
 
   return (
     <Router>
-      <div className="header">
+      <div className="main-div">
         <meta name="viewport" content="width=device-width" />
-        <li className="menu" ref={refMenu}>
-          <button onClick={() => setShowMenuModal(!showMenuModal)} type="button">
-            <CgMenuRound size={80} />
-          </button>
-        </li>
-        <li className="search-players">
-          <SearchPlayer />
-        </li>
-        <li className="walle-card" ref={refAccount}>
-          <WalletCard
+        <div className="header">
+          <li className="menu" ref={refMenu}>
+            <button onClick={() => setShowMenuModal(!showMenuModal)} type="button">
+              <CgMenuRound size={80} />
+            </button>
+          </li>
+          <li className="search-players">
+            <SearchPlayer />
+          </li>
+          <li className="walle-card" ref={refAccount}>
+            <WalletCard
+              user={user}
+              setContract={setContract}
+              isWalletConnected={isWalletConnected}
+              setIsWalletConnected={setIsWalletConnected}
+              setIsWrongNetwork={setIsWrongNetwork}
+              showAccountModal={showAccountModal}
+              setShowAccountModal={setShowAccountModal}
+              currentAddr={currentAddr}
+              setCurrentAddr={setCurrentAddr}
+            />
+          </li>
+        </div>
+        <div className="cont">
+          <TodayGamesFeed
+            formatDate={formatDate}
+            setFormatDate={setFormatDate}
+            date={date}
+            setDate={setDate}
+            setGameStatus={setGameStatus}
+            setDictTeamAgainst={setDictTeamAgainst}
+          />
+        </div>
+        <div>
+          <MenuModal
             user={user}
-            setContract={setContract}
             isWalletConnected={isWalletConnected}
-            setIsWalletConnected={setIsWalletConnected}
-            setIsWrongNetwork={setIsWrongNetwork}
+            showMenuModal={showMenuModal}
+            setShowMenuModal={setShowMenuModal}
+            buttonMenuRef={refMenu}
+          />
+          <AccountModal
+            user={user}
+            isWalletConnected={isWalletConnected}
             showAccountModal={showAccountModal}
             setShowAccountModal={setShowAccountModal}
-            currentAddr={currentAddr}
-            setCurrentAddr={setCurrentAddr}
+            buttonAccountRef={refAccount}
           />
-        </li>
-      </div>
-      <div className="cont">
-        <TodayGamesFeed formatDate={formatDate} setFormatDate={setFormatDate} date={date} setDate={setDate} />
-      </div>
-      <div>
-        <MenuModal
-          user={user}
-          isWalletConnected={isWalletConnected}
-          showMenuModal={showMenuModal}
-          setShowMenuModal={setShowMenuModal}
-          buttonMenuRef={refMenu}
-        />
-        <AccountModal
-          user={user}
-          isWalletConnected={isWalletConnected}
-          showAccountModal={showAccountModal}
-          setShowAccountModal={setShowAccountModal}
-          buttonAccountRef={refAccount}
-        />
-        <WrongNetworkModal isWalletConnected={isWalletConnected} isWrongNetwork={isWrongNetwork} />
-        <Routes>
-          <Route path="/" element={<HomePage formatDate={formatDate} injury={injury} />} />
-          <Route
-            path="/login"
-            element={
-              <LoginPage user={user} setUser={setUser} setCurrentAddr={setCurrentAddr} setDictUsers={setDictUsers} />
-            }
-          />
-          <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
-          <Route path="/my-pools" element={<MyPoolsPage user={user} DictUsers={DictUsers} />} />
-          <Route path="/my-bets" element={<MyGameBetsPage user={user} contract={contract} />} />
-          <Route
-            path="/my-pools/:name"
-            element={
-              <PoolPage
-                user={user}
-                DictUsers={DictUsers}
-                injury={injury}
-                formatDate={formatDate}
-                date={date}
-                setDate={setDate}
-              />
-            }
-          />
-          <Route path="/standing" element={<StandingPage />} />
-          <Route path="/game/:id" element={<GameFeedPage user={user} contract={contract} injury={injury} />} />
-          <Route path="/player-info" element={<PlayerPage />} />
-          <Route path="/player-info/:id" element={<PlayerPage />} />
-          <Route path="/team-roster/:teamID/:season" element={<TeamRosterBySeasonPage injury={injury} />} />
-          <Route path="/draft" element={<DraftPage injury={injury} />} />
-          <Route path="/draft/:year" element={<DraftPage />} />
-          <Route path="/leaders" element={<LeagueLeadersPage injury={injury} />} />
-        </Routes>
+          <WrongNetworkModal isWalletConnected={isWalletConnected} isWrongNetwork={isWrongNetwork} />
+          <Routes>
+            <Route
+              path="/"
+              element={<HomePage formatDate={formatDate} setDate={setDate} gameStatus={gameStatus} injury={injury} />}
+            />
+            <Route
+              path="/login"
+              element={
+                <LoginPage user={user} setUser={setUser} setCurrentAddr={setCurrentAddr} setDictUsers={setDictUsers} />
+              }
+            />
+            <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
+            <Route path="/my-pools" element={<MyPoolsPage user={user} DictUsers={DictUsers} />} />
+            <Route path="/my-bets" element={<MyGameBetsPage user={user} contract={contract} />} />
+            <Route
+              path="/my-pools/:name"
+              element={
+                <PoolPage
+                  user={user}
+                  DictUsers={DictUsers}
+                  injury={injury}
+                  formatDate={formatDate}
+                  date={date}
+                  setDate={setDate}
+                  gameStatus={gameStatus}
+                  DictTeamAgainst={DictTeamAgainst}
+                />
+              }
+            />
+            <Route path="/standing" element={<StandingPage />} />
+            <Route path="/game/:id" element={<GameFeedPage user={user} contract={contract} injury={injury} />} />
+            <Route path="/player-info" element={<PlayerPage />} />
+            <Route path="/player-info/:id" element={<PlayerPage />} />
+            <Route path="/team-roster/:teamID/:season" element={<TeamRosterBySeasonPage injury={injury} />} />
+            <Route path="/draft" element={<DraftPage injury={injury} />} />
+            <Route path="/draft/:year" element={<DraftPage />} />
+            <Route path="/leaders" element={<LeagueLeadersPage injury={injury} />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );

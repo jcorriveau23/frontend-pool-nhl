@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+// Component
+import User from '../user';
+
 export default function PickList({ tradablePicks, participant, add_pick, side, filterPicks, DictUsers }) {
   const render_pick = rounds =>
     rounds.map((picks, i) =>

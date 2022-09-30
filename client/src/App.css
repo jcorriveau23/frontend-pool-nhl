@@ -1,3 +1,6 @@
+.main-div {
+  min-width: 1100px;
+}
 .float-left {
   width: 50%;
   float: left;
@@ -126,7 +129,9 @@ input {
 }
 
 .base-button_no_border {
-  background-color: #444;
+  text-align: left;
+  background-color: inherit;
+  min-width: 200px;
   border: none;
   color: #000;
   display: inline-block;
@@ -136,6 +141,7 @@ input {
 }
 
 .base-button_no_border:hover:enabled {
+  background-color: #444;
   border-color: #fff;
   cursor: pointer;
   color: #fff;

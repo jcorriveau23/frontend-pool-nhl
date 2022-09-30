@@ -4,7 +4,7 @@
 import requests
 import json
 
-SEASON = '20212022'
+PAST_SEASON = '20212022'
 API_URL = 'https://statsapi.web.nhl.com'
 
 TEAM_LIST_URL = API_URL + '/api/v1/teams'
@@ -38,7 +38,7 @@ for team in team_list_response_json["teams"]:
     else:
         for player in roaster_list_response_json["roster"]:
 
-            player_url = API_URL + player["person"]["link"] + '/stats?stats=statsSingleSeason&season=' + SEASON
+            player_url = API_URL + player["person"]["link"] + '/stats?stats=statsSingleSeason&season=' + PAST_SEASON
             response = requests.request('GET', player_url)
             player_stats_json = json.loads(response.text)
             #print(player)

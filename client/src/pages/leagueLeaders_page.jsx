@@ -108,7 +108,7 @@ export default function LeagueLeadersPage({ injury }) {
   const SeasonOptions = () => {
     const seasonArray = [];
 
-    for (let i = 2021; i > 1916; i -= 1) seasonArray.push(i);
+    for (let i = 2022; i > 1916; i -= 1) seasonArray.push(i);
 
     return seasonArray.map(s => (
       <option
