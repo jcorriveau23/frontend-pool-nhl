@@ -1,67 +1,85 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 // images
 import { logos } from '../img/logos';
 
-import liveGame from '../img/icons/live-game.png';
-
-export default function GameItem({ gameData }) {
-  // console.log(gameData)
-
+export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
+  console.log(liveGameInfo);
   const render_game_state = status => {
-    if (status.abstractGameState === 'Live') {
-      return (
-        <td>
-          <img src={liveGame} alt="" width="40" height="40" />
-        </td>
-      );
-    }
-    if (status.abstractGameState === 'Postponed' || status.detailedState === 'Postponed') {
-      return <td style={{ color: '#a20' }}>PPD</td>;
-    }
-
-    if (status.abstractGameState === 'Final') {
-      return <td style={{ color: '#a20' }}>Final</td>;
-    }
-
-    return null;
-  };
-
-  return (
-    <table>
-      <thead>
-        <tr>
-          <td>
+    switch (status.abstractGameState) {
+      case 'Live': {
+        return liveGameInfo && Number(gameData.gamePk) in liveGameInfo ? (
+          <td colSpan={2} style={{ color: '#a20' }}>
+            {liveGameInfo[Number(gameData.gamePk)].period} | {liveGameInfo[Number(gameData.gamePk)].time}
+          </td>
+        ) : (
+          <td colSpan={2}>
             {new Date(Date.parse(gameData.gameDate)).toLocaleString(navigator.language, {
               hour: '2-digit',
               minute: '2-digit',
             })}
           </td>
-          <td />
-          {render_game_state(gameData.status)}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <img src={logos[gameData.teams.away.team.name]} alt="" width="50" height="50" />
+        );
+      }
+      case 'Postponed': {
+        return (
+          <td colSpan={2} style={{ color: '#a20' }}>
+            PPD
           </td>
-          <td>{gameData.teams.away.score}</td>
-        </tr>
-        <tr>
-          <td>
-            <img src={logos[gameData.teams.home.team.name]} alt="" width="50" height="50" />
+        );
+      }
+      case 'Final': {
+        return (
+          <td colSpan={2} style={{ color: '#a20' }}>
+            Final
           </td>
-          <td>{gameData.teams.home.score}</td>
-        </tr>
-      </tbody>
-    </table>
+        );
+      }
+      default: {
+        return (
+          <td colSpan={2}>
+            {new Date(Date.parse(gameData.gameDate)).toLocaleString(navigator.language, {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </td>
+        );
+      }
+    }
+  };
+
+  return (
+    <Link to={`/game/${gameData.gamePk}`} key={gameData.gamePk}>
+      <li style={Number(selectedGamePk) === Number(gameData.gamePk) ? { borderColor: '#fff' } : null}>
+        <table style={{ width: '100px' }}>
+          <thead>
+            <tr>{render_game_state(gameData.status)}</tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">
+                <img src={logos[gameData.teams.away.team.name]} alt="" width="50" height="50" />
+              </td>
+              <td>{gameData.teams.away.score}</td>
+            </tr>
+            <tr>
+              <td align="left">
+                <img src={logos[gameData.teams.home.team.name]} alt="" width="50" height="50" />
+              </td>
+              <td>{gameData.teams.home.score}</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    </Link>
   );
 }
 
 GameItem.propTypes = {
   gameData: PropTypes.shape({
+    gamePk: PropTypes.string.isRequired,
     gameDate: PropTypes.string.isRequired,
     status: PropTypes.shape({ abstractGameState: PropTypes.string.isRequired }).isRequired,
     teams: PropTypes.shape({
@@ -75,4 +93,5 @@ GameItem.propTypes = {
       }).isRequired,
     }).isRequired,
   }).isRequired,
+  selectedGamePk: PropTypes.string.isRequired,
 };

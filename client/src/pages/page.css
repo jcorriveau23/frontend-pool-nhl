@@ -1,13 +1,13 @@
-.login_content {
+.form-content {
   text-align: center;
 }
 
-.login_content form {
+.form-content form {
   text-align: center;
   padding: 10px 20px;
 }
 
-.login_content input {
+.form-content input {
   width: 51%;
   padding: 8px 20px;
   margin: 8px 0;

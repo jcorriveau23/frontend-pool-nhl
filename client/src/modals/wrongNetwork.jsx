@@ -20,8 +20,8 @@ export default function WrongNetworkModal({ isWalletConnected, isWrongNetwork })
 
   return (
     <Modal
-      className="baseModal"
-      overlayClassName="baseOverlay"
+      className="base-modal"
+      overlayClassName="base-overlay"
       isOpen={isWalletConnected && isWrongNetwork}
       appElement={document.getElementById('root')}
     >

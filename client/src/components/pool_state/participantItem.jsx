@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 // Component
 import User from '../user';
@@ -20,5 +19,3 @@ export default function ParticipantItem({ id, user, DictUsers, ready }) {
     </table>
   );
 }
-
-ParticipantItem.propTypes = { name: PropTypes.string.isRequired, ready: PropTypes.bool.isRequired };

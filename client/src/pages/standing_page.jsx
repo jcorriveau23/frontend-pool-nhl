@@ -25,7 +25,7 @@ export default function StandingPage() {
     );
   }
   return (
-    <div>
+    <div className="cont">
       <h1>Trying to fetch teams data from nhl api...</h1>
       <ClipLoader color="#fff" loading size={75} />
     </div>

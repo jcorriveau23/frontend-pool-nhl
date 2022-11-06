@@ -1,34 +1,30 @@
-.baseModal {
+.big-base-modal,
+.base-modal {
   position: absolute;
+  border: 5px solid #000;
+  background: #888888;
+  overflow: auto;
+  -webkit-overflow-scrolling: auto;
+  border-radius: 30px;
+  outline: none;
+  padding: 4%;
+}
+
+.base-modal {
   top: 20%;
   left: 20%;
   right: 20%;
   bottom: 20%;
-  border: 5px solid #000;
-  background: #888888;
-  overflow: auto;
-  -webkit-overflow-scrolling: auto;
-  border-radius: 30px;
-  outline: none;
-  padding: 4%;
 }
 
 .big-base-modal {
-  position: absolute;
   top: 5%;
   left: 5%;
   right: 5%;
   bottom: 5%;
-  border: 5px solid #000;
-  background: #888888;
-  overflow: auto;
-  -webkit-overflow-scrolling: auto;
-  border-radius: 30px;
-  outline: none;
-  padding: 4%;
 }
 
-.baseOverlay {
+.base-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -37,47 +33,50 @@
   background-color: rgba(255, 255, 255, 0.75);
 }
 
-.menuModal {
-  position: absolute;
-  top: 120px;
-  left: 1%;
+.menuModal,
+.accountModal {
   background-color: #888888;
-
-  font-size: 30px;
+  font-size: 28px;
   width: auto;
   height: auto;
   border: 5px solid #000;
   overflow: auto;
   border-radius: 5px;
   outline: none;
-  padding: 10px;
+  padding: 20px;
+  margin: 20px;
 }
 
-.menuModal table {
-  width: 100%;
+.menuModal tr,
+.accountModal tr {
+  height: 75px;
 }
 
-.menuModal tr:hover {
-  background-color: #757575;
-  cursor: pointer;
-  color: #fff;
-}
-
-.noOverlay {
+.menuModal {
+  position: absolute;
+  top: 120px;
+  left: 1%;
 }
 
 .accountModal {
   position: fixed;
   top: 120px;
   right: 1%;
-  background-color: #888888;
+}
 
-  width: auto;
-  height: auto;
-  border: 5px solid #000;
-  overflow: auto;
-  border-radius: 5px;
-  outline: none;
+.menuModal table,
+.accountModal table {
+  width: 100%;
+}
+
+.menuModal tr:hover,
+.accountModal tr:hover {
+  background-color: #757575;
+  cursor: pointer;
+  color: #fff;
+}
+
+.noOverlay {
 }
 
 .modal_content {

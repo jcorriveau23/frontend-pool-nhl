@@ -80,8 +80,8 @@ export default function SendPredictionModal({
   if (gameInfo)
     return (
       <Modal
-        className="baseModal"
-        overlayClassName="baseOverlay"
+        className="base-modal"
+        overlayClassName="base-overlay"
         appElement={document.getElementById('root')}
         isOpen={showSendPredictionModal}
         onRequestClose={() => setShowSendPredictionModal(false)}

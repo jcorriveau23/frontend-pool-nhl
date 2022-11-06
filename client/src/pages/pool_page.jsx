@@ -20,11 +20,20 @@ const socket = io.connect('https://hockeypool.live', {
   path: '/mysocket',
 });
 
-export default function PoolPage({ user, DictUsers, injury, formatDate, date, setDate, gameStatus, DictTeamAgainst }) {
+export default function PoolPage({
+  user,
+  DictUsers,
+  injury,
+  formatDate,
+  todayFormatDate,
+  gameStatus,
+  DictTeamAgainst,
+}) {
   const [poolInfo, setPoolInfo] = useState(null);
   const url = useParams(); // get the name of the pool using the param url
   const [poolName, setPoolName] = useState('');
   const [isUserParticipant, setIsUserParticipant] = useState(false);
+  const [poolUpdate, setPoolUpdate] = useState(false);
 
   const find_last_date_in_db = pool => {
     if (!pool || !pool.context || !pool.context.score_by_day) {
@@ -48,22 +57,29 @@ export default function PoolPage({ user, DictUsers, injury, formatDate, date, se
     return null;
   };
 
-  useEffect(async () => {
+  const fetch_pool_info = async forceUpdate => {
     const poolName_temp = url.name;
-
-    if (user && poolName_temp) {
+    if (user && (poolName_temp !== poolName || forceUpdate)) {
+      console.log('fetching pool');
       setPoolName(poolName_temp);
+      setPoolUpdate(false);
 
       const pool = await db.pools.get({ name: poolName_temp });
       const lastFormatDate = find_last_date_in_db(pool);
 
       // console.log(lastFormatDate);
-      let res = await axios.get(
-        lastFormatDate ? `/api-rust/pool/${poolName_temp}/${lastFormatDate}` : `/api-rust/pool/${poolName_temp}`,
-        {
-          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
-        }
-      );
+      let res;
+
+      try {
+        res = await axios.get(
+          lastFormatDate ? `/api-rust/pool/${poolName_temp}/${lastFormatDate}` : `/api-rust/pool/${poolName_temp}`,
+          {
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+          }
+        );
+      } catch (e) {
+        console.log(e.message);
+      }
 
       if (res.status === 200) {
         // [TODO] display a page or notification to show that the pool was not found
@@ -77,7 +93,7 @@ export default function PoolPage({ user, DictUsers, injury, formatDate, date, se
                 headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
               });
             } catch (e) {
-              console.log(e);
+              console.log(e.message);
             }
           } else if (lastFormatDate) {
             // This is in the case we called the pool information for only a ranges of date since the rest of the date were already stored in the client database.
@@ -95,71 +111,79 @@ export default function PoolPage({ user, DictUsers, injury, formatDate, date, se
           setIsUserParticipant(res.data.participants.findIndex(participant => participant === user._id.$oid) > -1);
       }
     }
-  }, [user, url]);
+  };
 
-  if (user && poolInfo && gameStatus) {
-    switch (poolInfo.status) {
-      case 'Created':
-        return (
-          <CreatedPool
-            user={user}
-            DictUsers={DictUsers}
-            poolName={poolName}
-            poolInfo={poolInfo}
-            setPoolInfo={setPoolInfo}
-            socket={socket}
-          />
-        );
-      case 'Draft':
-        return (
-          <DraftPool
-            user={user}
-            DictUsers={DictUsers}
-            poolName={poolName}
-            poolInfo={poolInfo}
-            setPoolInfo={setPoolInfo}
-            injury={injury}
-            socket={socket}
-            isUserParticipant={isUserParticipant}
-          />
-        );
-      case 'InProgress':
-        return (
-          <InProgressPool
-            user={user}
-            DictUsers={DictUsers}
-            poolInfo={poolInfo}
-            setPoolInfo={setPoolInfo}
-            injury={injury}
-            isUserParticipant={isUserParticipant}
-            formatDate={formatDate}
-            date={date}
-            setDate={setDate}
-            gameStatus={gameStatus}
-            DictTeamAgainst={DictTeamAgainst}
-          />
-        );
-      case 'Dynastie':
-        return (
-          <DynastiePool
-            user={user}
-            DictUsers={DictUsers}
-            poolName={poolName}
-            poolInfo={poolInfo}
-            setPoolInfo={setPoolInfo}
-            injury={injury}
-            socket={socket}
-            isUserParticipant={isUserParticipant}
-          />
-        );
-      default:
-        return (
-          <div>
-            <h1>Trying to fetch pool data info...</h1>
-            <ClipLoader color="#fff" loading size={75} />
-          </div>
-        );
+  useEffect(() => {
+    fetch_pool_info(poolUpdate);
+  }, [user, url, poolUpdate]);
+
+  if (user) {
+    if (poolInfo) {
+      switch (poolInfo.status) {
+        case 'Created':
+          return (
+            <CreatedPool
+              user={user}
+              DictUsers={DictUsers}
+              poolName={poolName}
+              poolInfo={poolInfo}
+              setPoolInfo={setPoolInfo}
+              socket={socket}
+            />
+          );
+        case 'Draft':
+          return (
+            <DraftPool
+              user={user}
+              DictUsers={DictUsers}
+              poolName={poolName}
+              poolInfo={poolInfo}
+              setPoolInfo={setPoolInfo}
+              injury={injury}
+              socket={socket}
+              isUserParticipant={isUserParticipant}
+            />
+          );
+        case 'InProgress':
+          return (
+            <InProgressPool
+              user={user}
+              DictUsers={DictUsers}
+              poolInfo={poolInfo}
+              injury={injury}
+              isUserParticipant={isUserParticipant}
+              formatDate={formatDate}
+              todayFormatDate={todayFormatDate}
+              gameStatus={gameStatus}
+              setPoolUpdate={setPoolUpdate}
+              DictTeamAgainst={DictTeamAgainst}
+            />
+          );
+        case 'Dynastie':
+          return (
+            <DynastiePool
+              user={user}
+              DictUsers={DictUsers}
+              poolInfo={poolInfo}
+              setPoolUpdate={setPoolUpdate}
+              injury={injury}
+            />
+          );
+        default:
+          return (
+            <div className="cont">
+              <h1>Not a valid pool status</h1>
+            </div>
+          );
+      }
     }
+
+    return (
+      <div className="cont">
+        <h1>Trying to fetch pool data info...</h1>
+        <ClipLoader color="#fff" loading size={75} />
+      </div>
+    );
   }
   return <h1>You are not connected.</h1>;
 }

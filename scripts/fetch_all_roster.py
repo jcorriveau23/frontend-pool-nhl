@@ -132,6 +132,16 @@ for team in team_list_response_json["teams"]:
             else:
                 print("not added to the dict: {}".format(player["person"]["fullName"]))
 
+# dump the json in the static file folder
+
+# debug
+
 file = open("./client/public/players.json", "w+")
+json.dump(players_dict, file, indent=4)
+file.close()
+
+# release
+
+file = open("./client/build/players.json", "w+")
 json.dump(players_dict, file, indent=4)
 file.close()

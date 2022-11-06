@@ -16,7 +16,7 @@ import { logos } from '../components/img/logos';
 export default function LeagueLeadersPage({ injury }) {
   const [leagueLeaders, setLeagueLeaders] = useState(null);
   const [statsType, setStatsType] = useState('points');
-  const [season, setSeason] = useState('20212022');
+  const [season, setSeason] = useState('20222023');
   const [leagueLeaderTypes, setLeagueLeaderTypes] = useState();
   const [noDataFoThisYear, setNoDataFoThisYear] = useState(false);
 

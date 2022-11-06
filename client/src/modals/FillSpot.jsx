@@ -3,7 +3,6 @@
 
 import React from 'react';
 import Modal from 'react-modal';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -17,7 +16,7 @@ export default function FillSpot({
   showFillSpotModal,
   setShowFillSpotModal,
   poolInfo,
-  setPoolInfo,
+  setPoolUpdate,
   user,
   fillSpotPosition,
 }) {
@@ -33,7 +32,7 @@ export default function FillSpot({
           console.log(res.data);
           if (res.data.success) {
             setShowFillSpotModal(false);
-            setPoolInfo(res.data.pool);
+            setPoolUpdate(true);
           } else {
             alert(res.data.message);
           }
@@ -69,8 +68,8 @@ export default function FillSpot({
 
   return (
     <Modal
-      className="baseModal"
-      overlayClassName="baseOverlay"
+      className="base-modal"
+      overlayClassName="base-overlay"
       isOpen={showFillSpotModal}
       onRequestClose={() => setShowFillSpotModal(false)}
       appElement={document.getElementById('root')}

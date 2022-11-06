@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { ImArrowRight } from 'react-icons/im';
 
 // Components
 import PlayerNoLink from '../playerNoLink';
 import User from '../user';
-
-// Icons
-import { ImArrowRight } from 'react-icons/im';
 
 export default function DraftOrder({
   poolInfo,

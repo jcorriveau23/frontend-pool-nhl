@@ -81,8 +81,8 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
 
   return (
     <Modal
-      className="baseModal"
-      overlayClassName="baseOverlay"
+      className="base-modal"
+      overlayClassName="base-overlay"
       appElement={document.getElementById('root')}
       isOpen={showCreatePoolModal}
       onRequestClose={() => setShowCreatePoolModal(false)}

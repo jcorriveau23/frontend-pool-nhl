@@ -1,0 +1,2259 @@
+[{
+  "_id": {
+    "$oid": "62bed6134fb504ee8c306d69"
+  },
+  "name": "jax-test",
+  "owner": "62b8bc22dc6fe2de9e2f9cdc",
+  "number_poolers": 6,
+  "participants": [
+    "62b8bb0bdc6fe2de9e2f9cd8",
+    "62b8bb1edc6fe2de9e2f9cd9",
+    "62b8bc22dc6fe2de9e2f9cdc",
+    "62b8bc07dc6fe2de9e2f9cdb",
+    "62b8badddc6fe2de9e2f9cd7",
+    "62b8bbf8dc6fe2de9e2f9cda"
+  ],
+  "number_forwards": 12,
+  "number_defenders": 6,
+  "number_goalies": 2,
+  "number_reservists": 4,
+  "forward_pts_goals": 1,
+  "forward_pts_assists": 1,
+  "forward_pts_hattricks": 1,
+  "defender_pts_goals": 1,
+  "defender_pts_assists": 1,
+  "defender_pts_hattricks": 1,
+  "goalies_pts_wins": 2,
+  "goalies_pts_shutouts": 1,
+  "goalies_pts_goals": 5,
+  "goalies_pts_assists": 1,
+  "next_season_number_players_protected": 10,
+  "tradable_picks": 5,
+  "status": "InProgress",
+  "final_rank": [
+    "62b8bb0bdc6fe2de9e2f9cd8",
+    "62b8badddc6fe2de9e2f9cd7",
+    "62b8bc07dc6fe2de9e2f9cdb",
+    "62b8bb1edc6fe2de9e2f9cd9",
+    "62b8bbf8dc6fe2de9e2f9cda",
+    "62b8bc22dc6fe2de9e2f9cdc"
+  ],
+  "nb_player_drafted": 0,
+  "nb_trade": 1,
+  "trades": [
+    {
+      "proposed_by": "62b8bbf8dc6fe2de9e2f9cda",
+      "ask_to": "62b8bc22dc6fe2de9e2f9cdc",
+      "from_items": {
+        "players": [
+          8479343
+        ],
+        "picks": [
+          {
+            "round": 2,
+            "from": "62b8bbf8dc6fe2de9e2f9cda"
+          }
+        ]
+      },
+      "to_items": {
+        "players": [
+          8477939
+        ],
+        "picks": []
+      },
+      "status": "ACCEPTED",
+      "id": 0,
+      "date_created": {
+        "$numberLong": "1664410095617"
+      },
+      "date_accepted": {
+        "$numberLong": "1664495436205"
+      }
+    }
+  ],
+  "context": {
+    "pooler_roster": {
+      "62b8badddc6fe2de9e2f9cd7": {
+        "chosen_forwards": [
+          {
+            "id": 8476346,
+            "name": "Johnny Gaudreau",
+            "team": "Columbus Blue Jackets",
+            "position": "F"
+          },
+          {
+            "id": 8479318,
+            "name": "Auston Matthews",
+            "team": "Toronto Maple Leafs",
+            "position": "F"
+          },
+          {
+            "id": 8471214,
+            "name": "Alex Ovechkin",
+            "team": "Washington Capitals",
+            "position": "F"
+          },
+          {
+            "id": 8474141,
+            "name": "Patrick Kane",
+            "team": "Chicago Blackhawks",
+            "position": "F"
+          },
+          {
+            "id": 8476453,
+            "name": "Nikita Kucherov",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          },
+          {
+            "id": 8479339,
+            "name": "Patrik Laine",
+            "team": "Columbus Blue Jackets",
+            "position": "F"
+          },
+          {
+            "id": 8480801,
+            "name": "Brady Tkachuk",
+            "team": "Ottawa Senators",
+            "position": "F"
+          },
+          {
+            "id": 8480027,
+            "name": "Jason Robertson",
+            "team": "Dallas Stars",
+            "position": "F"
+          },
+          {
+            "id": 8475172,
+            "name": "Nazem Kadri",
+            "team": "Calgary Flames",
+            "position": "F"
+          },
+          {
+            "id": 8478047,
+            "name": "Michael Bunting",
+            "team": "Toronto Maple Leafs",
+            "position": "F"
+          },
+          {
+            "id": 8475913,
+            "name": "Mark Stone",
+            "team": "Vegas Golden Knights",
+            "position": "F"
+          },
+          {
+            "id": 8470638,
+            "name": "Patrice Bergeron",
+            "team": "Boston Bruins",
+            "position": "F"
+          }
+        ],
+        "chosen_defenders": [
+          {
+            "id": 8474590,
+            "name": "John Carlson",
+            "team": "Washington Capitals",
+            "position": "D"
+          },
+          {
+            "id": 8476853,
+            "name": "Morgan Rielly",
+            "team": "Toronto Maple Leafs",
+            "position": "D"
+          },
+          {
+            "id": 8478396,
+            "name": "Noah Hanifin",
+            "team": "Calgary Flames",
+            "position": "D"
+          },
+          {
+            "id": 8476792,
+            "name": "Torey Krug",
+            "team": "St. Louis Blues",
+            "position": "D"
+          },
+          {
+            "id": 8476906,
+            "name": "Shayne Gostisbehere",
+            "team": "Arizona Coyotes",
+            "position": "D"
+          },
+          {
+            "id": 8479345,
+            "name": "Jakob Chychrun",
+            "team": "Arizona Coyotes",
+            "position": "D"
+          }
+        ],
+        "chosen_goalies": [
+          {
+            "id": 8476883,
+            "name": "Andrei Vasilevskiy",
+            "team": "Tampa Bay Lightning",
+            "position": "G"
+          },
+          {
+            "id": 8476945,
+            "name": "Connor Hellebuyck",
+            "team": "Winnipeg Jets",
+            "position": "G"
+          }
+        ],
+        "chosen_reservists": [
+          {
+            "id": 8480382,
+            "name": "Alexandar Georgiev",
+            "team": "Colorado Avalanche",
+            "position": "G"
+          },
+          {
+            "id": 8475784,
+            "name": "Jeff Skinner",
+            "team": "Buffalo Sabres",
+            "position": "F"
+          },
+          {
+            "id": 8476885,
+            "name": "Jacob Trouba",
+            "team": "New York Rangers",
+            "position": "D"
+          },
+          {
+            "id": 8483524,
+            "name": "Shane Wright",
+            "team": "Seattle Kraken",
+            "position": "F"
+          }
+        ]
+      },
+      "62b8bb0bdc6fe2de9e2f9cd8": {
+        "chosen_forwards": [
+          {
+            "id": 8474564,
+            "name": "Steven Stamkos",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          },
+          {
+            "id": 8478483,
+            "name": "Mitchell Marner",
+            "team": "Toronto Maple Leafs",
+            "position": "F"
+          },
+          {
+            "id": 8478420,
+            "name": "Mikko Rantanen",
+            "team": "Colorado Avalanche",
+            "position": "F"
+          },
+          {
+            "id": 8471675,
+            "name": "Sidney Crosby",
+            "team": "Pittsburgh Penguins",
+            "position": "F"
+          },
+          {
+            "id": 8471215,
+            "name": "Evgeni Malkin",
+            "team": "Pittsburgh Penguins",
+            "position": "F"
+          },
+          {
+            "id": 8478010,
+            "name": "Brayden Point",
+            "team": "Tampa Bay Lightning",
+            "position": "F"
+          },
+          {
+            "id": 8475765,
+            "name": "Vladimir Tarasenko",
+            "team": "St. Louis Blues",
+            "position": "F"
+          },
+          {
+            "id": 8476460,
+            "name": "Mark Scheifele",
+            "team": "Winnipeg Jets",
+            "position": "F"
+          },
+          {
+            "id": 8480012,
+            "name": "Elias Pettersson",
+            "team": "Vancouver Canucks",
+            "position": "F"
+          },
+          {
+            "id": 8480208,
+            "name": "Drake Batherson",
+            "team": "Ottawa Senators",
+            "position": "F"
+          },
+          {
+            "id": 8473512,
+            "name": "Claude Giroux",
+            "team": "Ottawa Senators",
+            "position": "F"
+          },
+          {
+            "id": 8475692,
+            "name": "Mats Zuccarello",
+            "team": "Minnesota Wild",
+            "position": "F"
+          }
+        ],
+        "chosen_defenders": [
+          {
+            "id": 8479323,
+            "name": "Adam Fox",
+            "team": "New York Rangers",
+            "position": "D"
+          },
+          {
+            "id": 8480800,
+            "name": "Quinn Hughes",
+            "team": "Vancouver Canucks",
+            "position": "D"
+          },
+          {
+            "id": 8470613,
+            "name": "Brent Burns",
+            "team": "Carolina Hurricanes",
+            "position": "D"
+          },
+          {
+            "id": 8475197,
+            "name": "Tyson Barrie",
+            "team": "Edmonton Oilers",
+            "position": "D"
+          },
+          {
+            "id": 8474578,
+            "name": "Erik Karlsson",
+            "team": "San Jose Sharks",
+            "position": "D"
+          },
+          {
+            "id": 8477498,
+            "name": "Darnell Nurse",
+            "team": "Edmonton Oilers",
+            "position": "D"
+          }
+        ],
+        "chosen_goalies": [
+          {
+            "id": 8474593,
+            "name": "Jacob Markstrom",
+            "team": "Calgary Flames",
+            "position": "G"
+          },
+          {
+            "id": 8477465,
+            "name": "Tristan Jarry",
+            "team": "Pittsburgh Penguins",
+            "position": "G"
+          }
+        ],
+        "chosen_reservists": [
+          {
+            "id": 8474716,
+            "name": "Jared Spurgeon",
+            "team": "Minnesota Wild",
+            "position": "D"
+          },
+          {
+            "id": 8471218,
+            "name": "Blake Wheeler",
+            "team": "Winnipeg Jets",
+            "position": "F"
+          },
+          {
+            "id": 8473419,
+            "name": "Brad Marchand",
+            "team": "Boston Bruins",
+            "position": "F"
+          },
+          {
+            "id": 8470794,
+            "name": "Joe Pavelski",
+            "team": "Dallas Stars",
+            "position": "F"
+          }
+        ]
+      },
+      "62b8bbf8dc6fe2de9e2f9cda": {
+        "chosen_forwards": [
+          {
+            "id": 8479314,
+            "name": "Matthew Tkachuk",
+            "team": "Florida Panthers",
+            "position": "F"
+          },
+          {
+            "id": 8478398,
+            "name": "Kyle Connor",
+            "team": "Winnipeg Jets",
+            "position": "F"
+          },
+          {
+            "id": 8476468,
+            "name": "J.T. Miller",
+            "team": "Vancouver Canucks",
+            "position": "F"
+          },
+          {
+            "id": 8476887,
+            "name": "Filip Forsberg",
+            "team": "Nashville Predators",
+            "position": "F"
+          },
+          {
+            "id": 8477496,
+            "name": "Elias Lindholm",
+            "team": "Calgary Flames",
+            "position": "F"
+          },
+          {
+            "id": 8481540,
+            "name": "Cole Caufield",
+            "team": "Montréal Canadiens",
+            "position": "F"
+          },
+          {
+            "id": 8480023,
+            "name": "Robert Thomas",
+            "team": "St. Louis Blues",
+            "position": "F"
+          },
+          {
+            "id": 8477946,
+            "name": "Dylan Larkin",
+            "team": "Detroit Red Wings",
+            "position": "F"
+          },
+          {
+            "id": 8480064,
+            "name": "Josh Norris",
+            "team": "Ottawa Senators",
+            "position": "F"
+          },
+          {
+            "id": 8482078,
+            "name": "Lucas Raymond",
+            "team": "Detroit Red Wings",
+            "position": "F"
+          },
+          {
+            "id": 8477444,
+            "name": "Andre Burakovsky",
+            "team": "Seattle Kraken",
+            "position": "F"
+          },
+          {
+            "id": 8477939,
+            "name": "William Nylander",
+            "team": "Toronto Maple Leafs",
+            "position": "F"
+          }
+        ],
+        "chosen_defenders": [
+          {
+            "id": 8477932,
+            "name": "Aaron Ekblad",
+            "team": "Florida Panthers",
+            "position": "D"
+          },
+          {
+            "id": 8480839,
+            "name": "Rasmus Dahlin",
+            "team": "Buffalo Sabres",
+            "position": "D"
+          },
+          {
+            "id": 8478469,
+            "name": "Thomas Chabot",
+            "team": "Ottawa Senators",
+            "position": "D"
+          },
+          {
+            "id": 8480865,
+            "name": "Noah Dobson",
+            "team": "New York Islanders",
+            "position": "D"
+          },
+          {
+            "id": 8477495,
+            "name": "Seth Jones",
+            "team": "Chicago Blackhawks",
+            "position": "D"
+          },
+          {
+            "id": 8480803,
+            "name": "Evan Bouchard",
+            "team": "Edmonton Oilers",
+            "position": "D"
+          }
+        ],
+        "chosen_goalies": [
+          {
+            "id": 8478048,
+            "name": "Igor Shesterkin",
+            "team": "New York Rangers",
+            "position": "G"
+          },
+          {
+            "id": 8479979,
+            "name": "Jake Oettinger",
+            "team": "Dallas Stars",
+            "position": "G"
+          }
+        ],
+        "chosen_reservists": [
+          {
+            "id": 8479400,
+            "name": "Pierre-Luc Dubois",
+            "team": "Winnipeg Jets",
+            "position": "F"
+          },
+          {
+            "id": 8478024,
+            "name": "Ville Husso",
+            "team": "Detroit Red Wings",
+            "position": "G"
+          },
+          {
+            "id": 8477479,
+            "name": "Tyler Bertuzzi",
+            "team": "Detroit Red Wings",
+            "position": "F"
+          },
+          {
+            "id": 8483515,
+            "name": "Juraj Slafkovsky",
+            "team": "Montréal Canadiens",
+            "position": "F"
+          }
+        ]
+      },
+      "62b8bb1edc6fe2de9e2f9cd9": {
+        "chosen_forwards": [
+          {
+            "id": 8478402,
+            "name": "Connor McDavid",
+            "team": "Edmonton Oilers",
+            "position": "F"
+          },
+          {
+            "id": 8475744,
+            "name": "Evgeny Kuznetsov",
+            "team": "Washington Capitals",
+            "position": "F"
+          },
+          {
+            "id": 8477934,
+            "name": "Leon Draisaitl",
+            "team": "Edmonton Oilers",
+            "position": "F"
+          },
+          {
+            "id": 8481533,
+            "name": "Trevor Zegras",
+            "team": "Anaheim Ducks",
+            "position": "F"
+          },
+          {
+            "id": 8478449,
+            "name": "Roope Hintz",
+            "team": "Dallas Stars",
+            "position": "F"
+          },
+          {
+            "id": 8482116,
+            "name": "Tim Stützle",
+            "team": "Ottawa Senators",
+            "position": "F"
+          },
+          {
+            "id": 8478403,
+            "name": "Jack Eichel",
+            "team": "Vegas Golden Knights",
+            "position": "F"
+          },
+          {
+            "id": 8477933,
+            "name": "Sam Reinhart",
+            "team": "Florida Panthers",
+            "position": "F"
+          },
+          {
+            "id": 8477402,
+            "name": "Pavel Buchnevich",
+            "team": "St. Louis Blues",
+            "position": "F"
+          },
+          {
+            "id": 8475184,
+            "name": "Chris Kreider",
+            "team": "New York Rangers",
+            "position": "F"
+          },
+          {
+            "id": 8478873,
+            "name": "Troy Terry",
+            "team": "Anaheim Ducks",
+            "position": "F"
+          },
+          {
+            "id": 8476539,
+            "name": "Jonathan Marchessault",
+            "team": "Vegas Golden Knights",
+            "position": "F"
+          }
+        ],
+        "chosen_defenders": [
+          {
+            "id": 8474600,
+            "name": "Roman Josi",
+            "team": "Nashville Predators",
+            "position": "D"
+          },
+          {
+            "id": 8477950,
+            "name": "Tony DeAngelo",
+            "team": "Philadelphia Flyers",
+            "position": "D"
+          },
+          {
+            "id": 8477447,
+            "name": "Shea Theodore",
+            "team": "Vegas Golden Knights",
+            "position": "D"
+          },
+          {
+            "id": 8471724,
+            "name": "Kris Letang",
+            "team": "Pittsburgh Penguins",
+            "position": "D"
+          },
+          {
+            "id": 8477346,
+            "name": "MacKenzie Weegar",
+            "team": "Calgary Flames",
+            "position": "D"
+          },
+          {
+            "id": 8474565,
+            "name": "Alex Pietrangelo",
+            "team": "Vegas Golden Knights",
+            "position": "D"
+          }
+        ],
+        "chosen_goalies": [
+          {
+            "id": 8477424,
+            "name": "Juuse Saros",
+            "team": "Nashville Predators",
+            "position": "G"
+          },
+          {
+            "id": 8475311,
+            "name": "Darcy Kuemper",
+            "team": "Washington Capitals",
+            "position": "G"
+          }
+        ],
+        "chosen_reservists": [
+          {
+            "id": 8471685,
+            "name": "Anze Kopitar",
+            "team": "Los Angeles Kings",
+            "position": "F"
+          },
+          {
+            "id": 8479325,
+            "name": "Charlie McAvoy",
+            "team": "Boston Bruins",
+            "position": "D"
+          },
+          {
+            "id": 8477967,
+            "name": "Thatcher Demko",
+            "team": "Vancouver Canucks",
+            "position": "G"
+          },
+          {
+            "id": 8475791,
+            "name": "Taylor Hall",
+            "team": "Boston Bruins",
+            "position": "F"
+          }
+        ]
+      },
+      "62b8bc22dc6fe2de9e2f9cdc": {
+        "chosen_forwards": [
+          {
+            "id": 8478550,
+            "name": "Artemi Panarin",
+            "team": "New York Rangers",
+            "position": "F"
+          },
+          {
+            "id": 8477493,
+            "name": "Aleksander Barkov",
+            "team": "Florida Panthers",
+            "position": "F"
+          },
+          {
+            "id": 8477956,
+            "name": "David Pastrnak",
+            "team": "Boston Bruins",
+            "position": "F"
+          },
+          {
+            "id": 8478414,
+            "name": "Timo Meier",
+            "team": "San Jose Sharks",
+            "position": "F"
+          },
+          {
+            "id": 8480830,
+            "name": "Andrei Svechnikov",
+            "team": "Carolina Hurricanes",
+            "position": "F"
+          },
+          {
+            "id": 8479407,
+            "name": "Jesper Bratt",
+            "team": "New Jersey Devils",
+            "position": "F"
+          },
+          {
+            "id": 8476881,
+            "name": "Tomas Hertl",
+            "team": "San Jose Sharks",
+            "position": "F"
+          },
+          {
+            "id": 8482665,
+            "name": "Matty Beniers",
+            "team": "Seattle Kraken",
+            "position": "F"
+          },
+          {
+            "id": 8477940,
+            "name": "Nikolaj Ehlers",
+            "team": "Winnipeg Jets",
+            "position": "F"
+          },
+          {
+            "id": 8478864,
+            "name": "Kirill Kaprizov",
+            "team": "Minnesota Wild",
+            "position": "F"
+          },
+          {
+            "id": 8475168,
+            "name": "Matt Duchene",
+            "team": "Nashville Predators",
+            "position": "F"
+          },
+          {
+            "id": 8476882,
+            "name": "Teuvo Teravainen",
+            "team": "Carolina Hurricanes",
+            "position": "F"
+          }
+        ],
+        "chosen_defenders": [
+          {
+            "id": 8474563,
+            "name": "Drew Doughty",
+            "team": "Los Angeles Kings",
+            "position": "D"
+          },
+          {
+            "id": 8480069,
+            "name": "Cale Makar",
+            "team": "Colorado Avalanche",
+            "position": "D"
+          },
+          {
+            "id": 8480036,
+            "name": "Miro Heiskanen",
+            "team": "Dallas Stars",
+            "position": "D"
+          },
+          {
+            "id": 8478038,
+            "name": "Devon Toews",
+            "team": "Colorado Avalanche",
+            "position": "D"
+          },
+          {
+            "id": 8476958,
+            "name": "Jaccob Slavin",
+            "team": "Carolina Hurricanes",
+            "position": "D"
+          },
+          {
+            "id": 8475753,
+            "name": "Justin Faulk",
+            "team": "St. Louis Blues",
+            "position": "D"
+          }
+        ],
+        "chosen_goalies": [
+          {
+            "id": 8475683,
+            "name": "Sergei Bobrovsky",
+            "team": "Florida Panthers",
+            "position": "G"
+          },
+          {
+            "id": 8475789,
+            "name": "Jack Campbell",
+            "team": "Edmonton Oilers",
+            "position": "G"
+          }
+        ],
+        "chosen_reservists": [
+          {
+            "id": 8479343,
+            "name": "Clayton Keller",
+            "team": "Arizona Coyotes",
+            "position": "F"
+          },
+          {
+            "id": 8476455,
+            "name": "Gabriel Landeskog",
+            "team": "Colorado Avalanche",
+            "position": "F"
+          },
+          {
+            "id": 8475906,
+            "name": "John Klingberg",
+            "team": "Anaheim Ducks",
+            "position": "D"
+          },
+          {
+            "id": 8480018,
+            "name": "Nick Suzuki",
+            "team": "Montréal Canadiens",
+            "position": "F"
+          }
+        ]
+      },
+      "62b8bc07dc6fe2de9e2f9cdb": {
+        "chosen_forwards": [
+          {
+            "id": 8476456,
+            "name": "Jonathan Huberdeau",
+            "team": "Calgary Flames",
+            "position": "F"
+          },
+          {
+            "id": 8477942,
+            "name": "Kevin Fiala",
+            "team": "Los Angeles Kings",
+            "position": "F"
+          },
+          {
+            "id": 8476459,
+            "name": "Mika Zibanejad",
+            "team": "New York Rangers",
+            "position": "F"
+          },
+          {
+            "id": 8479337,
+            "name": "Alex DeBrincat",
+            "team": "Ottawa Senators",
+            "position": "F"
+          },
+          {
+            "id": 8478427,
+            "name": "Sebastian Aho",
+            "team": "Carolina Hurricanes",
+            "position": "F"
+          },
+          {
+            "id": 8477492,
+            "name": "Nathan MacKinnon",
+            "team": "Colorado Avalanche",
+            "position": "F"
+          },
+          {
+            "id": 8477404,
+            "name": "Jake Guentzel",
+            "team": "Pittsburgh Penguins",
+            "position": "F"
+          },
+          {
+            "id": 8481559,
+            "name": "Jack Hughes",
+            "team": "New Jersey Devils",
+            "position": "F"
+          },
+          {
+            "id": 8475166,
+            "name": "John Tavares",
+            "team": "Toronto Maple Leafs",
+            "position": "F"
+          },
+          {
+            "id": 8479385,
+            "name": "Jordan Kyrou",
+            "team": "St. Louis Blues",
+            "position": "F"
+          },
+          {
+            "id": 8479420,
+            "name": "Tage Thompson",
+            "team": "Buffalo Sabres",
+            "position": "F"
+          },
+          {
+            "id": 8478445,
+            "name": "Mathew Barzal",
+            "team": "New York Islanders",
+            "position": "F"
+          }
+        ],
+        "chosen_defenders": [
+          {
+            "id": 8475167,
+            "name": "Victor Hedman",
+            "team": "Tampa Bay Lightning",
+            "position": "D"
+          },
+          {
+            "id": 8481542,
+            "name": "Moritz Seider",
+            "team": "Detroit Red Wings",
+            "position": "D"
+          },
+          {
+            "id": 8478460,
+            "name": "Zach Werenski",
+            "team": "Columbus Blue Jackets",
+            "position": "D"
+          },
+          {
+            "id": 8479410,
+            "name": "Mikhail Sergachev",
+            "team": "Tampa Bay Lightning",
+            "position": "D"
+          },
+          {
+            "id": 8478397,
+            "name": "Rasmus Andersson",
+            "team": "Calgary Flames",
+            "position": "D"
+          },
+          {
+            "id": 8482142,
+            "name": "Jamie Drysdale",
+            "team": "Anaheim Ducks",
+            "position": "D"
+          }
+        ],
+        "chosen_goalies": [
+          {
+            "id": 8475883,
+            "name": "Frederik Andersen",
+            "team": "Carolina Hurricanes",
+            "position": "G"
+          },
+          {
+            "id": 8476412,
+            "name": "Jordan Binnington",
+            "team": "St. Louis Blues",
+            "position": "G"
+          }
+        ],
+        "chosen_reservists": [
+          {
+            "id": 8470594,
+            "name": "Marc-Andre Fleury",
+            "team": "Minnesota Wild",
+            "position": "G"
+          },
+          {
+            "id": 8482113,
+            "name": "Anton Lundell",
+            "team": "Florida Panthers",
+            "position": "F"
+          },
+          {
+            "id": 8476923,
+            "name": "Damon Severson",
+            "team": "New Jersey Devils",
+            "position": "D"
+          },
+          {
+            "id": 8476905,
+            "name": "Chandler Stephenson",
+            "team": "Vegas Golden Knights",
+            "position": "F"
+          }
+        ]
+      }
+    },
+    "players_name_drafted": [
+      8475168,
+      8480023,
+      8477933,
+      8479385,
+      8478038,
+      8476460,
+      8479407,
+      8477939,
+      8477402,
+      8481542,
+      8480865,
+      8475172,
+      8475683,
+      8475184,
+      8476539,
+      8479420,
+      8476853,
+      8480012,
+      8476881,
+      8477946,
+      8477447,
+      8478460,
+      8475311,
+      8470613,
+      8476882,
+      8479343,
+      8475791,
+      8475883,
+      8478047,
+      8474593,
+      8475789,
+      8479979,
+      8471724,
+      8478445,
+      8475913,
+      8470794,
+      8477940,
+      8480064,
+      8477346,
+      8479410,
+      8476945,
+      8475197,
+      8475906,
+      8477495,
+      8474565,
+      8478397,
+      8478396,
+      8475692,
+      8474563,
+      8482078,
+      8471685,
+      8482142,
+      8476792,
+      8474578,
+      8476958,
+      8480803,
+      8478873,
+      8476412,
+      8476906,
+      8473512,
+      8482665,
+      8477444,
+      8479325,
+      8470594,
+      8470638,
+      8480208,
+      8475753,
+      8479400,
+      8477967,
+      8482113,
+      8479345,
+      8477498,
+      0,
+      8478024,
+      0,
+      8476923,
+      8480382,
+      8474716,
+      0,
+      8477479,
+      0,
+      8476905,
+      8475784,
+      8471218,
+      0,
+      8483515,
+      0,
+      0,
+      8476885,
+      8477465,
+      0,
+      0,
+      0,
+      0,
+      8483524
+    ],
+    "score_by_day": {
+      "2022-10-07": {
+        "62b8bb0bdc6fe2de9e2f9cd8": {
+          "roster": {
+            "F": {
+              "8471215": null,
+              "8471675": null,
+              "8473512": null,
+              "8474564": null,
+              "8475692": null,
+              "8475765": null,
+              "8476460": null,
+              "8478010": null,
+              "8478420": null,
+              "8478483": null,
+              "8480012": null,
+              "8480208": null
+            },
+            "D": {
+              "8470613": null,
+              "8474578": {
+                "G": 0,
+                "A": 0
+              },
+              "8475197": null,
+              "8477498": null,
+              "8479323": null,
+              "8480800": null
+            },
+            "G": {
+              "8474593": null,
+              "8477465": null
+            }
+          },
+          "F_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "D_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "G_tot": {
+            "G": 0,
+            "A": 0,
+            "W": 0,
+            "SO": 0,
+            "pts": 0
+          },
+          "tot_pts": 0,
+          "cumulate": {
+            "A_F": 0,
+            "HT_F": 0,
+            "G_F": 0,
+            "SOG_F": 0,
+            "P_F": 0,
+            "G_D": 0,
+            "SOG_D": 0,
+            "A_D": 0,
+            "HT_D": 0,
+            "P_D": 0,
+            "G_G": 0,
+            "A_G": 0,
+            "W_G": 0,
+            "SO_G": 0,
+            "P_G": 0,
+            "P": 0
+          }
+        },
+        "62b8bb1edc6fe2de9e2f9cd9": {
+          "roster": {
+            "F": {
+              "8475184": null,
+              "8475744": null,
+              "8476539": null,
+              "8477402": null,
+              "8477933": null,
+              "8477934": null,
+              "8478402": null,
+              "8478403": null,
+              "8478449": null,
+              "8478873": null,
+              "8481533": null,
+              "8482116": null
+            },
+            "D": {
+              "8471724": null,
+              "8474565": null,
+              "8474600": {
+                "G": 0,
+                "A": 0
+              },
+              "8477346": null,
+              "8477447": null,
+              "8477950": null
+            },
+            "G": {
+              "8475311": null,
+              "8477424": {
+                "G": 0,
+                "A": 0,
+                "W": true,
+                "SO": false
+              }
+            }
+          },
+          "F_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "D_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "G_tot": {
+            "G": 0,
+            "A": 0,
+            "W": 1,
+            "SO": 0,
+            "pts": 2
+          },
+          "tot_pts": 2,
+          "cumulate": {
+            "A_F": 0,
+            "HT_F": 0,
+            "G_F": 0,
+            "SOG_F": 0,
+            "P_F": 0,
+            "G_D": 0,
+            "SOG_D": 0,
+            "A_D": 0,
+            "HT_D": 0,
+            "P_D": 0,
+            "G_G": 0,
+            "A_G": 0,
+            "W_G": 1,
+            "SO_G": 0,
+            "P_G": 2,
+            "P": 2
+          }
+        },
+        "62b8bc22dc6fe2de9e2f9cdc": {
+          "roster": {
+            "F": {
+              "8475168": {
+                "G": 1,
+                "A": 0
+              },
+              "8476881": {
+                "G": 1,
+                "A": 0
+              },
+              "8477493": null,
+              "8477940": null,
+              "8477956": null,
+              "8478414": {
+                "G": 0,
+                "A": 1
+              },
+              "8478550": null,
+              "8478864": null,
+              "8479407": null,
+              "8480018": null,
+              "8480830": null,
+              "8482665": null
+            },
+            "D": {
+              "8474563": null,
+              "8475753": null,
+              "8476958": null,
+              "8478038": null,
+              "8480036": null,
+              "8480069": null
+            },
+            "G": {
+              "8475683": null,
+              "8475789": null
+            }
+          },
+          "F_tot": {
+            "G": 2,
+            "A": 1,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 3
+          },
+          "D_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "G_tot": {
+            "G": 0,
+            "A": 0,
+            "W": 0,
+            "SO": 0,
+            "pts": 0
+          },
+          "tot_pts": 3,
+          "cumulate": {
+            "A_F": 1,
+            "HT_F": 0,
+            "G_F": 2,
+            "SOG_F": 0,
+            "P_F": 3,
+            "G_D": 0,
+            "SOG_D": 0,
+            "A_D": 0,
+            "HT_D": 0,
+            "P_D": 0,
+            "G_G": 0,
+            "A_G": 0,
+            "W_G": 0,
+            "SO_G": 0,
+            "P_G": 0,
+            "P": 3
+          }
+        },
+        "62b8bc07dc6fe2de9e2f9cdb": {
+          "roster": {
+            "F": {
+              "8475166": null,
+              "8476456": null,
+              "8476459": null,
+              "8477404": null,
+              "8477492": null,
+              "8477942": null,
+              "8478427": null,
+              "8478445": null,
+              "8479337": null,
+              "8479385": null,
+              "8479420": null,
+              "8481559": null
+            },
+            "D": {
+              "8475167": null,
+              "8478397": null,
+              "8478460": null,
+              "8479410": null,
+              "8481542": null,
+              "8482142": null
+            },
+            "G": {
+              "8475883": null,
+              "8476412": null
+            }
+          },
+          "F_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "D_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "G_tot": {
+            "G": 0,
+            "A": 0,
+            "W": 0,
+            "SO": 0,
+            "pts": 0
+          },
+          "tot_pts": 0,
+          "cumulate": {
+            "A_F": 0,
+            "HT_F": 0,
+            "G_F": 0,
+            "SOG_F": 0,
+            "P_F": 0,
+            "G_D": 0,
+            "SOG_D": 0,
+            "A_D": 0,
+            "HT_D": 0,
+            "P_D": 0,
+            "G_G": 0,
+            "A_G": 0,
+            "W_G": 0,
+            "SO_G": 0,
+            "P_G": 0,
+            "P": 0
+          }
+        },
+        "62b8badddc6fe2de9e2f9cd7": {
+          "roster": {
+            "F": {
+              "8470638": null,
+              "8471214": null,
+              "8474141": null,
+              "8475172": null,
+              "8475913": null,
+              "8476346": null,
+              "8476453": null,
+              "8478047": null,
+              "8479318": null,
+              "8479339": null,
+              "8480027": null,
+              "8480801": null
+            },
+            "D": {
+              "8474590": null,
+              "8476792": null,
+              "8476853": null,
+              "8476906": null,
+              "8478396": null,
+              "8479345": null
+            },
+            "G": {
+              "8476883": null,
+              "8476945": null
+            }
+          },
+          "F_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "D_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "G_tot": {
+            "G": 0,
+            "A": 0,
+            "W": 0,
+            "SO": 0,
+            "pts": 0
+          },
+          "tot_pts": 0,
+          "cumulate": {
+            "A_F": 0,
+            "HT_F": 0,
+            "G_F": 0,
+            "SOG_F": 0,
+            "P_F": 0,
+            "G_D": 0,
+            "SOG_D": 0,
+            "A_D": 0,
+            "HT_D": 0,
+            "P_D": 0,
+            "G_G": 0,
+            "A_G": 0,
+            "W_G": 0,
+            "SO_G": 0,
+            "P_G": 0,
+            "P": 0
+          }
+        },
+        "62b8bbf8dc6fe2de9e2f9cda": {
+          "roster": {
+            "F": {
+              "8476468": null,
+              "8476887": {
+                "G": 0,
+                "A": 1
+              },
+              "8477444": null,
+              "8477496": null,
+              "8477939": null,
+              "8477946": null,
+              "8478398": null,
+              "8479314": null,
+              "8480023": null,
+              "8480064": null,
+              "8481540": null,
+              "8482078": null
+            },
+            "D": {
+              "8477495": null,
+              "8477932": null,
+              "8478469": null,
+              "8480803": null,
+              "8480839": null,
+              "8480865": null
+            },
+            "G": {
+              "8478048": null,
+              "8479979": null
+            }
+          },
+          "F_tot": {
+            "G": 0,
+            "A": 1,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 1
+          },
+          "D_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "G_tot": {
+            "G": 0,
+            "A": 0,
+            "W": 0,
+            "SO": 0,
+            "pts": 0
+          },
+          "tot_pts": 1,
+          "cumulate": {
+            "A_F": 1,
+            "HT_F": 0,
+            "G_F": 0,
+            "SOG_F": 0,
+            "P_F": 1,
+            "G_D": 0,
+            "SOG_D": 0,
+            "A_D": 0,
+            "HT_D": 0,
+            "P_D": 0,
+            "G_G": 0,
+            "A_G": 0,
+            "W_G": 0,
+            "SO_G": 0,
+            "P_G": 0,
+            "P": 1
+          }
+        }
+      },
+      "2022-10-08": {
+        "62b8bb0bdc6fe2de9e2f9cd8": {
+          "roster": {
+            "F": {
+              "8471215": null,
+              "8471675": null,
+              "8473512": null,
+              "8474564": null,
+              "8475692": null,
+              "8475765": null,
+              "8476460": null,
+              "8478010": null,
+              "8478420": null,
+              "8478483": null,
+              "8480012": null,
+              "8480208": null
+            },
+            "D": {
+              "8470613": null,
+              "8474578": {
+                "G": 0,
+                "A": 0
+              },
+              "8475197": null,
+              "8477498": null,
+              "8479323": null,
+              "8480800": null
+            },
+            "G": {
+              "8474593": null,
+              "8477465": null
+            }
+          },
+          "F_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "D_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "G_tot": {
+            "G": 0,
+            "A": 0,
+            "W": 0,
+            "SO": 0,
+            "pts": 0
+          },
+          "tot_pts": 0,
+          "cumulate": {
+            "A_F": 0,
+            "HT_F": 0,
+            "G_F": 0,
+            "SOG_F": 0,
+            "P_F": 0,
+            "G_D": 0,
+            "SOG_D": 0,
+            "A_D": 0,
+            "HT_D": 0,
+            "P_D": 0,
+            "G_G": 0,
+            "A_G": 0,
+            "W_G": 0,
+            "SO_G": 0,
+            "P_G": 0,
+            "P": 0
+          }
+        },
+        "62b8bb1edc6fe2de9e2f9cd9": {
+          "roster": {
+            "F": {
+              "8475184": null,
+              "8475744": null,
+              "8476539": null,
+              "8477402": null,
+              "8477933": null,
+              "8477934": null,
+              "8478402": null,
+              "8478403": null,
+              "8478449": null,
+              "8478873": null,
+              "8481533": null,
+              "8482116": null
+            },
+            "D": {
+              "8471724": null,
+              "8474565": null,
+              "8474600": {
+                "G": 0,
+                "A": 1
+              },
+              "8477346": null,
+              "8477447": null,
+              "8477950": null
+            },
+            "G": {
+              "8475311": null,
+              "8477424": null
+            }
+          },
+          "F_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "D_tot": {
+            "G": 0,
+            "A": 1,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 1
+          },
+          "G_tot": {
+            "G": 0,
+            "A": 0,
+            "W": 0,
+            "SO": 0,
+            "pts": 0
+          },
+          "tot_pts": 1,
+          "cumulate": {
+            "A_F": 0,
+            "HT_F": 0,
+            "G_F": 0,
+            "SOG_F": 0,
+            "P_F": 0,
+            "G_D": 0,
+            "SOG_D": 0,
+            "A_D": 1,
+            "HT_D": 0,
+            "P_D": 1,
+            "G_G": 0,
+            "A_G": 0,
+            "W_G": 1,
+            "SO_G": 0,
+            "P_G": 2,
+            "P": 3
+          }
+        },
+        "62b8bc22dc6fe2de9e2f9cdc": {
+          "roster": {
+            "F": {
+              "8475168": {
+                "G": 0,
+                "A": 1
+              },
+              "8476881": {
+                "G": 0,
+                "A": 0
+              },
+              "8477493": null,
+              "8477940": null,
+              "8477956": null,
+              "8478414": {
+                "G": 0,
+                "A": 0
+              },
+              "8478550": null,
+              "8478864": null,
+              "8479407": null,
+              "8480018": null,
+              "8480830": null,
+              "8482665": null
+            },
+            "D": {
+              "8474563": null,
+              "8475753": null,
+              "8476958": null,
+              "8478038": null,
+              "8480036": null,
+              "8480069": null
+            },
+            "G": {
+              "8475683": null,
+              "8475789": null
+            }
+          },
+          "F_tot": {
+            "G": 0,
+            "A": 1,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 1
+          },
+          "D_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "G_tot": {
+            "G": 0,
+            "A": 0,
+            "W": 0,
+            "SO": 0,
+            "pts": 0
+          },
+          "tot_pts": 1,
+          "cumulate": {
+            "A_F": 2,
+            "HT_F": 0,
+            "G_F": 2,
+            "SOG_F": 0,
+            "P_F": 4,
+            "G_D": 0,
+            "SOG_D": 0,
+            "A_D": 0,
+            "HT_D": 0,
+            "P_D": 0,
+            "G_G": 0,
+            "A_G": 0,
+            "W_G": 0,
+            "SO_G": 0,
+            "P_G": 0,
+            "P": 4
+          }
+        },
+        "62b8bc07dc6fe2de9e2f9cdb": {
+          "roster": {
+            "F": {
+              "8475166": null,
+              "8476456": null,
+              "8476459": null,
+              "8477404": null,
+              "8477492": null,
+              "8477942": null,
+              "8478427": null,
+              "8478445": null,
+              "8479337": null,
+              "8479385": null,
+              "8479420": null,
+              "8481559": null
+            },
+            "D": {
+              "8475167": null,
+              "8478397": null,
+              "8478460": null,
+              "8479410": null,
+              "8481542": null,
+              "8482142": null
+            },
+            "G": {
+              "8475883": null,
+              "8476412": null
+            }
+          },
+          "F_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "D_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "G_tot": {
+            "G": 0,
+            "A": 0,
+            "W": 0,
+            "SO": 0,
+            "pts": 0
+          },
+          "tot_pts": 0,
+          "cumulate": {
+            "A_F": 0,
+            "HT_F": 0,
+            "G_F": 0,
+            "SOG_F": 0,
+            "P_F": 0,
+            "G_D": 0,
+            "SOG_D": 0,
+            "A_D": 0,
+            "HT_D": 0,
+            "P_D": 0,
+            "G_G": 0,
+            "A_G": 0,
+            "W_G": 0,
+            "SO_G": 0,
+            "P_G": 0,
+            "P": 0
+          }
+        },
+        "62b8badddc6fe2de9e2f9cd7": {
+          "roster": {
+            "F": {
+              "8470638": null,
+              "8471214": null,
+              "8474141": null,
+              "8475172": null,
+              "8475913": null,
+              "8476346": null,
+              "8476453": null,
+              "8478047": null,
+              "8479318": null,
+              "8479339": null,
+              "8480027": null,
+              "8480801": null
+            },
+            "D": {
+              "8474590": null,
+              "8476792": null,
+              "8476853": null,
+              "8476906": null,
+              "8478396": null,
+              "8479345": null
+            },
+            "G": {
+              "8476883": null,
+              "8476945": null
+            }
+          },
+          "F_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "D_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "G_tot": {
+            "G": 0,
+            "A": 0,
+            "W": 0,
+            "SO": 0,
+            "pts": 0
+          },
+          "tot_pts": 0,
+          "cumulate": {
+            "A_F": 0,
+            "HT_F": 0,
+            "G_F": 0,
+            "SOG_F": 0,
+            "P_F": 0,
+            "G_D": 0,
+            "SOG_D": 0,
+            "A_D": 0,
+            "HT_D": 0,
+            "P_D": 0,
+            "G_G": 0,
+            "A_G": 0,
+            "W_G": 0,
+            "SO_G": 0,
+            "P_G": 0,
+            "P": 0
+          }
+        },
+        "62b8bbf8dc6fe2de9e2f9cda": {
+          "roster": {
+            "F": {
+              "8476468": null,
+              "8476887": {
+                "G": 1,
+                "A": 0
+              },
+              "8477444": null,
+              "8477496": null,
+              "8477939": null,
+              "8477946": null,
+              "8478398": null,
+              "8479314": null,
+              "8480023": null,
+              "8480064": null,
+              "8481540": null,
+              "8482078": null
+            },
+            "D": {
+              "8477495": null,
+              "8477932": null,
+              "8478469": null,
+              "8480803": null,
+              "8480839": null,
+              "8480865": null
+            },
+            "G": {
+              "8478048": null,
+              "8479979": null
+            }
+          },
+          "F_tot": {
+            "G": 1,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 1
+          },
+          "D_tot": {
+            "G": 0,
+            "A": 0,
+            "HT": 0,
+            "SOG": 0,
+            "pts": 0
+          },
+          "G_tot": {
+            "G": 0,
+            "A": 0,
+            "W": 0,
+            "SO": 0,
+            "pts": 0
+          },
+          "tot_pts": 1,
+          "cumulate": {
+            "A_F": 1,
+            "HT_F": 0,
+            "G_F": 1,
+            "SOG_F": 0,
+            "P_F": 2,
+            "G_D": 0,
+            "SOG_D": 0,
+            "A_D": 0,
+            "HT_D": 0,
+            "P_D": 0,
+            "G_G": 0,
+            "A_G": 0,
+            "W_G": 0,
+            "SO_G": 0,
+            "P_G": 0,
+            "P": 2
+          }
+        }
+      },
+      "2022-10-09": {
+        "62b8bb0bdc6fe2de9e2f9cd8": {
+          "roster": {
+            "F": {
+              "8471215": null,
+              "8471675": null,
+              "8473512": null,
+              "8474564": null,
+              "8475692": null,
+              "8475765": null,
+              "8476460": null,
+              "8478010": null,
+              "8478420": null,
+              "8478483": null,
+              "8480012": null,
+              "8480208": null
+            },
+            "D": {
+              "8470613": null,
+              "8474578": null,
+              "8475197": null,
+              "8477498": null,
+              "8479323": null,
+              "8480800": null
+            },
+            "G": {
+              "8474593": null,
+              "8477465": null
+            }
+          }
+        },
+        "62b8bb1edc6fe2de9e2f9cd9": {
+          "roster": {
+            "F": {
+              "8475184": null,
+              "8475744": null,
+              "8476539": null,
+              "8477402": null,
+              "8477933": null,
+              "8477934": null,
+              "8478402": null,
+              "8478403": null,
+              "8478449": null,
+              "8478873": null,
+              "8481533": null,
+              "8482116": null
+            },
+            "D": {
+              "8471724": null,
+              "8474565": null,
+              "8474600": null,
+              "8477346": null,
+              "8477447": null,
+              "8477950": null
+            },
+            "G": {
+              "8475311": null,
+              "8477424": null
+            }
+          }
+        },
+        "62b8bc22dc6fe2de9e2f9cdc": {
+          "roster": {
+            "F": {
+              "8475168": null,
+              "8476881": null,
+              "8477493": null,
+              "8477940": null,
+              "8477956": null,
+              "8478414": null,
+              "8478550": null,
+              "8478864": null,
+              "8479407": null,
+              "8480018": null,
+              "8480830": null,
+              "8482665": null
+            },
+            "D": {
+              "8474563": null,
+              "8475753": null,
+              "8476958": null,
+              "8478038": null,
+              "8480036": null,
+              "8480069": null
+            },
+            "G": {
+              "8475683": null,
+              "8475789": null
+            }
+          }
+        },
+        "62b8bc07dc6fe2de9e2f9cdb": {
+          "roster": {
+            "F": {
+              "8475166": null,
+              "8476456": null,
+              "8476459": null,
+              "8477404": null,
+              "8477492": null,
+              "8477942": null,
+              "8478427": null,
+              "8478445": null,
+              "8479337": null,
+              "8479385": null,
+              "8479420": null,
+              "8481559": null
+            },
+            "D": {
+              "8475167": null,
+              "8478397": null,
+              "8478460": null,
+              "8479410": null,
+              "8481542": null,
+              "8482142": null
+            },
+            "G": {
+              "8475883": null,
+              "8476412": null
+            }
+          }
+        },
+        "62b8badddc6fe2de9e2f9cd7": {
+          "roster": {
+            "F": {
+              "8470638": null,
+              "8471214": null,
+              "8474141": null,
+              "8475172": null,
+              "8475913": null,
+              "8476346": null,
+              "8476453": null,
+              "8478047": null,
+              "8479318": null,
+              "8479339": null,
+              "8480027": null,
+              "8480801": null
+            },
+            "D": {
+              "8474590": null,
+              "8476792": null,
+              "8476853": null,
+              "8476906": null,
+              "8478396": null,
+              "8479345": null
+            },
+            "G": {
+              "8476883": null,
+              "8476945": null
+            }
+          }
+        },
+        "62b8bbf8dc6fe2de9e2f9cda": {
+          "roster": {
+            "F": {
+              "8476468": null,
+              "8476887": null,
+              "8477444": null,
+              "8477496": null,
+              "8477939": null,
+              "8477946": null,
+              "8478398": null,
+              "8479314": null,
+              "8480023": null,
+              "8480064": null,
+              "8481540": null,
+              "8482078": null
+            },
+            "D": {
+              "8477495": null,
+              "8477932": null,
+              "8478469": null,
+              "8480803": null,
+              "8480839": null,
+              "8480865": null
+            },
+            "G": {
+              "8478048": null,
+              "8479979": null
+            }
+          }
+        }
+      }
+    },
+    "tradable_picks": [
+      {
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
+        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8badddc6fe2de9e2f9cd7": "62b8badddc6fe2de9e2f9cd7",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda"
+      },
+      {
+        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8badddc6fe2de9e2f9cd7": "62b8badddc6fe2de9e2f9cd7",
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda",
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc"
+      },
+      {
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8badddc6fe2de9e2f9cd7": "62b8badddc6fe2de9e2f9cd7",
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb"
+      },
+      {
+        "62b8badddc6fe2de9e2f9cd7": "62b8badddc6fe2de9e2f9cd7",
+        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda"
+      },
+      {
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8badddc6fe2de9e2f9cd7": "62b8badddc6fe2de9e2f9cd7",
+        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda"
+      }
+    ],
+    "past_tradable_picks": [
+      {
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda",
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
+        "62b8badddc6fe2de9e2f9cd7": "62b8bc22dc6fe2de9e2f9cdc"
+      },
+      {
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8badddc6fe2de9e2f9cd7",
+        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8badddc6fe2de9e2f9cd7": "62b8bbf8dc6fe2de9e2f9cda",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bc22dc6fe2de9e2f9cdc"
+      },
+      {
+        "62b8badddc6fe2de9e2f9cd7": "62b8badddc6fe2de9e2f9cd7",
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb",
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bb1edc6fe2de9e2f9cd9"
+      },
+      {
+        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda",
+        "62b8badddc6fe2de9e2f9cd7": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb"
+      },
+      {
+        "62b8bbf8dc6fe2de9e2f9cda": "62b8bbf8dc6fe2de9e2f9cda",
+        "62b8bb1edc6fe2de9e2f9cd9": "62b8bb1edc6fe2de9e2f9cd9",
+        "62b8badddc6fe2de9e2f9cd7": "62b8badddc6fe2de9e2f9cd7",
+        "62b8bb0bdc6fe2de9e2f9cd8": "62b8bb0bdc6fe2de9e2f9cd8",
+        "62b8bc22dc6fe2de9e2f9cdc": "62b8bc22dc6fe2de9e2f9cdc",
+        "62b8bc07dc6fe2de9e2f9cdb": "62b8bc07dc6fe2de9e2f9cdb"
+      }
+    ]
+  },
+  "date_updated": 3,
+  "assistants": [
+    "62b8badddc6fe2de9e2f9cd7"
+  ],
+  "forward_pts_shootout_goals": 1,
+  "defender_pts_shootout_goals": 1,
+  "season_start": "2022-10-07"
+}]

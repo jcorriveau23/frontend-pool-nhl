@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import ClipLoader from 'react-spinners/ClipLoader';
 import PropTypes from 'prop-types';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+
+// Logos
 import { AiFillCheckCircle } from 'react-icons/ai';
+import { BsPenFill } from 'react-icons/bs';
+import { GiDirectionSigns } from 'react-icons/gi';
 
 // Components
 import PlayerLink from '../playerLink';
@@ -14,55 +17,14 @@ import User from '../user';
 // Images
 import { logos } from '../img/logos';
 
-// Logos
-import { BsPenFill } from 'react-icons/bs';
-import { GiDirectionSigns } from 'react-icons/gi';
-
-export default function DynastiePool({
-  user,
-  DictUsers,
-  poolName,
-  poolInfo,
-  setPoolInfo,
-  socket,
-  isUserParticipant,
-  injury,
-}) {
-  const [inRoom, setInRoom] = useState(false);
-
+export default function DynastiePool({ user, DictUsers, poolInfo, setPoolUpdate, injury }) {
   const [forwProtected, setForwProtected] = useState([]);
   const [defProtected, setDefProtected] = useState([]);
   const [goalProtected, setGoalProtected] = useState([]);
   const [reservProtected, setReservProtected] = useState([]);
-  const [tabIndex, setTabIndex] = useState(0);
-
-  useEffect(() => {
-    if (socket && poolName) {
-      console.log('trying to join the room');
-      // TODO: add some validation server socket side to prevent someone joining the pool
-      // when there is already the maximum poolers in the room
-      socket.emit('joinRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
-      setInRoom(true);
-    }
-
-    setTabIndex(poolInfo.participants.findIndex(participant => participant === user._id.$oid));
-
-    return () => {
-      if (socket && poolName) {
-        socket.emit('leaveRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
-        socket.off('roomData');
-        setInRoom(false);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('poolInfo', data => {
-        setPoolInfo(data);
-      });
-    }
-  }, [socket]);
+  const [tabIndex, setTabIndex] = useState(
+    poolInfo.participants.findIndex(participant => participant === user._id.$oid)
+  );
 
   const protect_player = (player, isUser) => {
     if (!isUser) {
@@ -188,7 +150,7 @@ export default function DynastiePool({
         )
         .then(res => {
           if (res.data.success === true) {
-            setPoolInfo(res.data.pool);
+            setPoolUpdate(true);
             setForwProtected([]);
             setDefProtected([]);
             setGoalProtected([]);
@@ -265,153 +227,143 @@ export default function DynastiePool({
     return nb_player <= poolInfo.next_season_number_players_protected;
   };
 
-  if (inRoom) {
-    const nb_player_protected =
-      forwProtected.length + defProtected.length + goalProtected.length + reservProtected.length;
-
-    return (
-      <div className="cont">
-        <Tabs>
-          <TabList>
-            <Tab>
-              <GiDirectionSigns size={40} />
-              Protection
-            </Tab>
-            <Tab>
-              <BsPenFill size={30} />
-              Preview Draft Order
-            </Tab>
-          </TabList>
-          <TabPanel>
-            <div className="float-left">
-              <div className="half-cont">
-                <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
-                  <TabList>
-                    {poolInfo.participants.map(participant => (
-                      <Tab>
-                        {isParticipantDone(participant) ? <AiFillCheckCircle size={30} color="green" /> : null}
-                        <User id={participant} user={user} DictUsers={DictUsers} />
-                      </Tab>
-                    ))}
-                  </TabList>
-                  {poolInfo.participants.map(participant => (
-                    <TabPanel>
-                      <h2>
-                        {participant === user._id.$oid
-                          ? `Protect ${poolInfo.next_season_number_players_protected} players.`
-                          : null}
-                      </h2>
-                      <table className="content-table-no-min">
-                        {render_position_header('Forward')}
-                        <tbody>
-                          {render_not_protected_players(
-                            poolInfo.context.pooler_roster[participant].chosen_forwards,
-                            participant === user._id.$oid,
-                            isParticipantDone(user._id.$oid)
-                          )}
-                        </tbody>
-                        {render_position_header('Defenders')}
-                        <tbody>
-                          {render_not_protected_players(
-                            poolInfo.context.pooler_roster[participant].chosen_defenders,
-                            participant === user._id.$oid,
-                            isParticipantDone(user._id.$oid)
-                          )}
-                        </tbody>
-                        {render_position_header('Goalies')}
-                        <tbody>
-                          {render_not_protected_players(
-                            poolInfo.context.pooler_roster[participant].chosen_goalies,
-                            participant === user._id.$oid,
-                            isParticipantDone(user._id.$oid)
-                          )}
-                        </tbody>
-                        {render_position_header('Reservists')}
-                        <tbody>
-                          {render_not_protected_players(
-                            poolInfo.context.pooler_roster[participant].chosen_reservists,
-                            participant === user._id.$oid,
-                            isParticipantDone(user._id.$oid)
-                          )}
-                        </tbody>
-                      </table>
-                    </TabPanel>
-                  ))}
-                </Tabs>
-              </div>
-            </div>
-            <div className="float-right">
-              <div className="half-cont">
-                {!isParticipantDone(user._id.$oid) ? (
-                  <>
-                    <h2>
-                      My Protected players ({nb_player_protected}/{poolInfo.next_season_number_players_protected})
-                    </h2>
-                    <table className="content-table-no-min">
-                      {render_position_header('Forwards')}
-                      {render_protected_players(forwProtected)}
-                      {render_position_header('Defenders')}
-                      {render_protected_players(defProtected)}
-                      {render_position_header('Goalies')}
-                      {render_protected_players(goalProtected)}
-                      {render_position_header('Reservists')}
-                      {render_protected_players(reservProtected)}
-                    </table>
-                    <button
-                      className="base-button"
-                      onClick={() => send_protected_player()}
-                      disabled={nb_player_protected !== poolInfo.next_season_number_players_protected}
-                      type="button"
-                    >
-                      Send Protection list
-                    </button>
-                  </>
-                ) : (
-                  <h2>
-                    You have already protected your {poolInfo.next_season_number_players_protected} players. Waiting for
-                    {poolInfo.participants.map(participant =>
-                      !isParticipantDone(participant) ? (DictUsers ? ` ${DictUsers[participant]}, ` : null) : null
-                    )}
-                    to complete the process...
-                  </h2>
-                )}
-              </div>
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <DraftOrder
-              players_name_drafted={poolInfo.context.players_name_drafted}
-              participants={poolInfo.participants}
-              final_rank={poolInfo.final_rank}
-              tradable_picks={poolInfo.context.tradable_picks}
-              nb_players={
-                poolInfo.number_forwards +
-                poolInfo.number_defenders +
-                poolInfo.number_goalies +
-                poolInfo.number_reservists
-              }
-              nb_protected_players={poolInfo.next_season_number_players_protected}
-              injury={injury}
-              DictUsers={DictUsers}
-              user={user}
-            />
-          </TabPanel>
-        </Tabs>
-      </div>
-    );
-  }
+  const nb_player_protected =
+    forwProtected.length + defProtected.length + goalProtected.length + reservProtected.length;
 
   return (
-    <div>
-      <h1>Joining the room...</h1>
-      <ClipLoader color="#fff" loading size={75} />
+    <div className="cont">
+      <Tabs>
+        <TabList>
+          <Tab>
+            <GiDirectionSigns size={40} />
+            Protection
+          </Tab>
+          <Tab>
+            <BsPenFill size={30} />
+            Preview Draft Order
+          </Tab>
+        </TabList>
+        <TabPanel>
+          <div className="float-left">
+            <div className="half-cont">
+              <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
+                <TabList>
+                  {poolInfo.participants.map(participant => (
+                    <Tab>
+                      {isParticipantDone(participant) ? <AiFillCheckCircle size={30} color="green" /> : null}
+                      <User id={participant} user={user} DictUsers={DictUsers} />
+                    </Tab>
+                  ))}
+                </TabList>
+                {poolInfo.participants.map(participant => (
+                  <TabPanel>
+                    <h2>
+                      {participant === user._id.$oid
+                        ? `Protect ${poolInfo.next_season_number_players_protected} players.`
+                        : null}
+                    </h2>
+                    <table className="content-table-no-min">
+                      {render_position_header('Forward')}
+                      <tbody>
+                        {render_not_protected_players(
+                          poolInfo.context.pooler_roster[participant].chosen_forwards,
+                          participant === user._id.$oid,
+                          isParticipantDone(user._id.$oid)
+                        )}
+                      </tbody>
+                      {render_position_header('Defenders')}
+                      <tbody>
+                        {render_not_protected_players(
+                          poolInfo.context.pooler_roster[participant].chosen_defenders,
+                          participant === user._id.$oid,
+                          isParticipantDone(user._id.$oid)
+                        )}
+                      </tbody>
+                      {render_position_header('Goalies')}
+                      <tbody>
+                        {render_not_protected_players(
+                          poolInfo.context.pooler_roster[participant].chosen_goalies,
+                          participant === user._id.$oid,
+                          isParticipantDone(user._id.$oid)
+                        )}
+                      </tbody>
+                      {render_position_header('Reservists')}
+                      <tbody>
+                        {render_not_protected_players(
+                          poolInfo.context.pooler_roster[participant].chosen_reservists,
+                          participant === user._id.$oid,
+                          isParticipantDone(user._id.$oid)
+                        )}
+                      </tbody>
+                    </table>
+                  </TabPanel>
+                ))}
+              </Tabs>
+            </div>
+          </div>
+          <div className="float-right">
+            <div className="half-cont">
+              {!isParticipantDone(user._id.$oid) ? (
+                <>
+                  <h2>
+                    My Protected players ({nb_player_protected}/{poolInfo.next_season_number_players_protected})
+                  </h2>
+                  <table className="content-table-no-min">
+                    {render_position_header('Forwards')}
+                    {render_protected_players(forwProtected)}
+                    {render_position_header('Defenders')}
+                    {render_protected_players(defProtected)}
+                    {render_position_header('Goalies')}
+                    {render_protected_players(goalProtected)}
+                    {render_position_header('Reservists')}
+                    {render_protected_players(reservProtected)}
+                  </table>
+                  <button
+                    className="base-button"
+                    onClick={() => send_protected_player()}
+                    disabled={nb_player_protected !== poolInfo.next_season_number_players_protected}
+                    type="button"
+                  >
+                    Send Protection list
+                  </button>
+                </>
+              ) : (
+                <h2>
+                  You have already protected your {poolInfo.next_season_number_players_protected} players. Waiting for
+                  {poolInfo.participants.map(participant =>
+                    !isParticipantDone(participant) ? (DictUsers ? ` ${DictUsers[participant]}, ` : null) : null
+                  )}
+                  to complete the process...
+                </h2>
+              )}
+            </div>
+          </div>
+        </TabPanel>
+        <TabPanel>
+          <DraftOrder
+            players_name_drafted={poolInfo.context.players_name_drafted}
+            participants={poolInfo.participants}
+            final_rank={poolInfo.final_rank}
+            tradable_picks={poolInfo.context.tradable_picks}
+            nb_players={
+              poolInfo.number_forwards +
+              poolInfo.number_defenders +
+              poolInfo.number_goalies +
+              poolInfo.number_reservists
+            }
+            nb_protected_players={poolInfo.next_season_number_players_protected}
+            injury={injury}
+            DictUsers={DictUsers}
+            user={user}
+          />
+        </TabPanel>
+      </Tabs>
     </div>
   );
 }
 
 DynastiePool.propTypes = {
   user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
-  poolName: PropTypes.string.isRequired,
   poolInfo: PropTypes.shape({
     name: PropTypes.string.isRequired,
     participants: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
@@ -437,7 +389,7 @@ DynastiePool.propTypes = {
     ).isRequired,
     next_season_number_players_protected: PropTypes.number.isRequired,
   }).isRequired,
-  setPoolInfo: PropTypes.func.isRequired,
+  setPoolUpdate: PropTypes.func.isRequired,
   socket: PropTypes.shape({
     emit: PropTypes.func.isRequired,
     on: PropTypes.func.isRequired,

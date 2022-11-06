@@ -56,9 +56,11 @@ export default function TeamsStanding({ data }) {
         <td>{team.leagueRecord.losses}</td>
         <td>{team.leagueRecord.ot}</td>
         <td>
-          <b style={team.streak.streakType === 'wins' ? { color: '#080' } : { color: '#b00' }}>
-            {team.streak.streakCode}
-          </b>
+          {team.streak ? (
+            <b style={team.streak.streakType === 'wins' ? { color: '#080' } : { color: '#b00' }}>
+              {team.streak.streakCode}
+            </b>
+          ) : null}
         </td>
         <td>{team.regulationWins}</td>
         <td>{team.goalsAgainst}</td>
@@ -67,9 +69,9 @@ export default function TeamsStanding({ data }) {
           <b>{team.points}</b>
         </td>
       </tr>
-      {isWildCard && i == 2 ? (
+      {isWildCard && i === 2 ? (
         <tr>
-          <th colSpan={12}></th>
+          <th colSpan={12}> </th>
         </tr>
       ) : null}
     </>

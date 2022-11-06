@@ -46,6 +46,7 @@ select {
   min-width: 1000px;
 }
 
+.cont-max-width,
 .half-cont {
   text-align: center;
   border-color: #000;
@@ -55,6 +56,15 @@ select {
   padding: 10px;
   margin: 10px;
   color: #ddd;
+}
+
+.cont-max-width {
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-width: 1000px;
 }
 
 .center-content {
@@ -69,6 +79,17 @@ select {
 
 .menu {
   display: inline-block;
+}
+
+input[type='checkbox'] {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  transform: scale(2);
+  padding: 10px;
+  margin: 20px;
 }
 
 input {
@@ -101,13 +122,16 @@ input {
   border: 3px solid #000;
 }
 
-.walle-card {
+.inline-block {
+  display: inline-block;
+}
+.wallet-card {
   display: inline-block;
   position: fixed;
   right: 2%;
 }
 
-.walle-card button {
+.wallet-card button {
   font-size: 30px;
   text-align: center;
   min-height: 85px;
@@ -157,7 +181,7 @@ input {
 
 .draft-button,
 .search-players button,
-.walle-card button,
+.wallet-card button,
 .base-button {
   background-color: #888;
   border-radius: 3px;
@@ -166,7 +190,7 @@ input {
 
 .draft-button:hover:enabled,
 .search-players button:hover:enabled,
-.walle-card button:hover:enabled,
+.wallet-card button:hover:enabled,
 .base-button:hover:enabled {
   border-color: #fff;
   background-color: #888;

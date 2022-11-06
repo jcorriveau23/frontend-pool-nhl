@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // component
 import DayLeaders from '../components/home_page/dailyLeaders';
 
-export default function HomePage({ formatDate, setDate, gameStatus, injury }) {
+export default function HomePage({ formatDate, todayFormatDate, gameStatus, injury }) {
   return (
     <div className="cont">
       <h1>Welcome to hockeypool.live.</h1>
@@ -14,7 +14,7 @@ export default function HomePage({ formatDate, setDate, gameStatus, injury }) {
         with your friends.
       </h3>
       <div>
-        <DayLeaders formatDate={formatDate} setDate={setDate} gameStatus={gameStatus} injury={injury} />
+        <DayLeaders formatDate={formatDate} todayFormatDate={todayFormatDate} gameStatus={gameStatus} injury={injury} />
       </div>
     </div>
   );

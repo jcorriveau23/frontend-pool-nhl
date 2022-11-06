@@ -3,7 +3,6 @@
 
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -20,7 +19,7 @@ export default function RosterModificationModal({
   showRosterModificationModal,
   setShowRosterModificationModal,
   poolInfo,
-  setPoolInfo,
+  setPoolUpdate,
   injury,
   user,
 }) {
@@ -53,8 +52,9 @@ export default function RosterModificationModal({
         )
         .then(res => {
           if (res.data.success) {
+            console.log(res.data);
+            setPoolUpdate(true);
             setShowRosterModificationModal(false);
-            setPoolInfo(res.data.pool);
             alert('You have successfully modify your roster.');
           } else {
             alert(res.data.message);
@@ -149,7 +149,7 @@ export default function RosterModificationModal({
   return (
     <Modal
       className="big-base-modal"
-      overlayClassName="baseOverlay"
+      overlayClassName="base-overlay"
       isOpen={showRosterModificationModal}
       onRequestClose={() => reset_selection(true)}
       appElement={document.getElementById('root')}
@@ -181,7 +181,7 @@ export default function RosterModificationModal({
           <div className="half-cont">
             <table className="content-table-no-min">
               <thead>
-                {(render_tabs_choice_headers('Reservists'), reservSelected.length, poolInfo.number_reservists)}
+                {render_tabs_choice_headers('Reservists', reservSelected.length, poolInfo.number_reservists)}
               </thead>
               <tbody>{render_players(reservSelected, true)}</tbody>
             </table>

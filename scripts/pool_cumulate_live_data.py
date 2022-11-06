@@ -37,7 +37,8 @@ def get_goalies_stats(id, today_pointers):
                     "G": goaly["stats"]["goals"], 
                     "A": goaly["stats"]["assists"], 
                     "W": "decision" in goaly["stats"] and goaly["stats"]["decision"] == "W", 
-                    "SO": goaly["stats"]["shots"] == goaly["stats"]["saves"] and "decision" in goaly["stats"] and goaly["stats"]["decision"] == "W"
+                    "SO": goaly["stats"]["shots"] == goaly["stats"]["saves"] and "decision" in goaly["stats"] and goaly["stats"]["decision"] == "W",
+                    "OT": "decision" in goaly["stats"] and goaly["stats"]["decision"] == "L" and "OT" in goaly["stats"] and goaly["stats"]["OT"], 
                     }
 
 def init_cumulate_dict():
@@ -59,6 +60,7 @@ def init_cumulate_dict():
         "A_G": 0,
         "W_G": 0,
         "SO_G": 0,
+        "OT_G": 0,
         "P_G": 0,
         # Total pts cumulate
         "P": 0
@@ -81,8 +83,15 @@ def cumulate_daily_roster_pts(day = None):
     today_pointers, played, day = get_db_infos(day)
 
     if today_pointers is None or played is None:
-       print("skip this day.")
+       print(f"There is no data available for the {str(day)}, no db update will be applied this itteration!")
        return
+
+    if cumulate_daily_roster_pts.last_today_pointers == today_pointers and cumulate_daily_roster_pts.last_played == played:
+       print("nothing as changed since the last update, no db update will be applied this itteration!")
+       return
+
+    cumulate_daily_roster_pts.last_today_pointers = today_pointers
+    cumulate_daily_roster_pts.last_played = played
 
     for pool in db.pools.find({"status": "InProgress"}):
         if pool["context"]["score_by_day"] is None:
@@ -180,6 +189,7 @@ def cumulate_daily_roster_pts(day = None):
             tot_assist = 0
             tot_Win = 0
             tot_SO = 0
+            tot_OT = 0
 
             for key_goaly in score_by_day[participant]["roster"]["G"]:
                 score_by_day[participant]["roster"]["G"][key_goaly] = get_goalies_stats(int(key_goaly), today_pointers)
@@ -190,15 +200,18 @@ def cumulate_daily_roster_pts(day = None):
                         tot_Win += 1
                     if score_by_day[participant]["roster"]["G"][key_goaly]["SO"]:                    
                         tot_SO += 1
+                    if score_by_day[participant]["roster"]["G"][key_goaly]["OT"]:                    
+                        tot_OT += 1
 
-            tot_goaly_pool_pts = tot_goal * pool["goalies_pts_goals"] + tot_assist * pool["goalies_pts_assists"] + tot_Win * pool["goalies_pts_wins"] + tot_SO * pool["goalies_pts_shutouts"] 
-            score_by_day[participant]["G_tot"] = {"G": tot_goal, "A": tot_assist, "W": tot_Win, "SO": tot_SO, "pts": tot_goaly_pool_pts}
+            tot_goaly_pool_pts = tot_goal * pool["goalies_pts_goals"] + tot_assist * pool["goalies_pts_assists"] + tot_Win * pool["goalies_pts_wins"] + tot_SO * pool["goalies_pts_shutouts"] + tot_OT * pool["goalies_pts_overtimes"] 
+            score_by_day[participant]["G_tot"] = {"G": tot_goal, "A": tot_assist, "W": tot_Win, "SO": tot_SO, "OT": tot_OT, "pts": tot_goaly_pool_pts}
             score_by_day[participant]["tot_pts"] = tot_forward_pool_pts + tot_defender_pool_pts + tot_goaly_pool_pts
 
             dict_cumulate[participant]["G_G"] = last_day_cumulate["G_G"] + tot_goal
             dict_cumulate[participant]["A_G"] = last_day_cumulate["A_G"] + tot_assist
             dict_cumulate[participant]["W_G"] = last_day_cumulate["W_G"] + tot_Win
-            dict_cumulate[participant]["SO_G"] = last_day_cumulate["SO_G"] + tot_SO
+            dict_cumulate[participant]["SO_G"] = last_day_cumulate["SO_G"] + tot_SO 
+            dict_cumulate[participant]["OT_G"] = last_day_cumulate["OT_G"] + tot_OT
             dict_cumulate[participant]["P_G"] = last_day_cumulate["P_G"] + tot_goaly_pool_pts
 
 
@@ -208,6 +221,9 @@ def cumulate_daily_roster_pts(day = None):
 
         db.pools.update_one({"name": pool["name"]}, {"$set": {f"context.score_by_day.{str(day)}": score_by_day}}, upsert=True)
         # print(score_by_day)
+
+cumulate_daily_roster_pts.last_today_pointers = {}
+cumulate_daily_roster_pts.last_played = {}
 
 def lock_daily_roster(day = None):
     if day is None:
@@ -251,15 +267,11 @@ def lock_daily_roster(day = None):
 
 
 if __name__ == "__main__":
-    start_date = date(2022, 9, 24)     # beginning of the 2021-2022 season
-    end_date = date.today()
+    start_date = date(2022, 10, 7)     # beginning of the 2021-2022 season
+    end_date = date(2022, 10, 31)
     delta = timedelta(days=1)
     while start_date <= end_date:
-        print(start_date)
-        lock_daily_roster(start_date)
+    #     print(start_date)
+    #     lock_daily_roster(start_date)
         cumulate_daily_roster_pts(start_date)
         start_date += delta
-    
-    # start_date = date(2022, 9, 26) 
-    # lock_daily_roster(start_date)   # At 12PM
-    # cumulate_daily_roster_pts(start_date)

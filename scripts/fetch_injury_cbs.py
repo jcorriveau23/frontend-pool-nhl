@@ -25,7 +25,17 @@ def fetch_injured_players_cbs():
             }
         # print("end of team")
 
+    # dump the json static folder
+
+    # debug
+
     file = open("./client/public/injury.json", "w+")
+    json.dump(injured_players, file, indent=4)
+    file.close()
+
+    # release
+
+    file = open("./client/build/injury.json", "w+")
     json.dump(injured_players, file, indent=4)
     file.close()
 

@@ -4,7 +4,6 @@
 
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import PropTypes from 'prop-types';
 import { Tabs, TabList, TabPanel, Tab } from 'react-tabs';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -24,7 +23,8 @@ export default function CreateTradeModal({
   showCreateTradeModal,
   setShowCreateTradeModal,
   poolInfo,
-  setPoolInfo,
+  setPoolUpdate,
+  playerIdToPlayersDataMap,
   injury,
   user,
   DictUsers,
@@ -87,7 +87,7 @@ export default function CreateTradeModal({
           // user will be able to make a reservists switch (only add player to roster to fill hole, not remove players from roster) on that day, and the players can receive points on that day
 
           setShowCreateTradeModal(false);
-          setPoolInfo(res.data.pool);
+          setPoolUpdate(true);
         } else {
           alert(res.data.message);
         }
@@ -124,13 +124,13 @@ export default function CreateTradeModal({
     switch (side) {
       case 'to': {
         if (validate_trade_size(toPlayers, toPicks) && validate_double_player(toPlayers, player)) {
-          setToPlayers(oldToPlayers => [...oldToPlayers, player]);
+          setToPlayers(oldToPlayers => [...oldToPlayers, player.id]);
         }
         break;
       }
       case 'from': {
         if (validate_trade_size(fromPlayers, fromPicks) && validate_double_player(fromPlayers, player)) {
-          setFromPlayers(oldFromPlayers => [...oldFromPlayers, player]);
+          setFromPlayers(oldFromPlayers => [...oldFromPlayers, player.id]);
         }
         break;
       }
@@ -160,7 +160,7 @@ export default function CreateTradeModal({
 
   const render_players = (side, players, playersTraded) =>
     players
-      .filter(player => playersTraded.findIndex(p => p.id === player.id) === -1)
+      .filter(player => playersTraded.findIndex(p => p === player.id) === -1)
       .map((player, i) => (
         <tr onClick={() => add_player(side, player)} key={player}>
           <td>{i + 1}</td>
@@ -224,7 +224,7 @@ export default function CreateTradeModal({
   return (
     <Modal
       className="big-base-modal"
-      overlayClassName="baseOverlay"
+      overlayClassName="base-overlay"
       isOpen={showCreateTradeModal}
       appElement={document.getElementById('root')}
       onRequestClose={() => complete_reset(true)}
@@ -239,6 +239,7 @@ export default function CreateTradeModal({
               from_items: { players: fromPlayers, picks: fromPicks },
               to_items: { players: toPlayers, picks: toPicks },
             }}
+            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
             setFromPlayers={setFromPlayers}
             setFromPicks={setFromPicks}
             setToPlayers={setToPlayers}
@@ -262,7 +263,7 @@ export default function CreateTradeModal({
         </div>
         <div className="float-right">
           <div className="half-cont">
-            <select onChange={() => on_change_to_selection(event.target.value)} defaultValue={selectedPooler}>
+            <select onChange={event => on_change_to_selection(event.target.value)} defaultValue={selectedPooler}>
               {poolInfo.participants
                 .filter(pooler => pooler !== user._id.$oid)
                 .map(pooler => (

@@ -111,7 +111,7 @@ export default function DraftPage(injury) {
   }
   if (!Number.isNaN(Number(year)) && year !== '') {
     return (
-      <div>
+      <div className="cont">
         <h1>Trying to fetch draft picks data from nhl api...</h1>
         <ClipLoader color="#fff" loading size={75} />
       </div>

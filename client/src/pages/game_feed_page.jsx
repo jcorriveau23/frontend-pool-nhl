@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // Loader
@@ -21,31 +21,33 @@ import PlayerLink from '../components/playerLink';
 import '../components/react-tabs.css';
 import '../components/game_feed_page/goalItem.css';
 
-export default function GameFeedPage({ user, contract, injury }) {
+export default function GameFeedPage({ user, contract, injury, setSelectedGamePk }) {
   const [gameInfo, setGameInfo] = useState(null);
   const [gameContent, setGameContent] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
   const [homeRosterPreview, setHomeRosterPreview] = useState(null);
   const [awayRosterPreview, setAwayRosterPreview] = useState(null);
-  const [prevGameID, setPrevGameID] = useState('');
   const [homeTeamSkaters, setHomeTeamSkaters] = useState([]);
   const [awayTeamSkaters, setAwayTeamSkaters] = useState([]);
-  const location = useLocation();
-
-  const gameID = window.location.pathname.split('/').pop();
+  const { id } = useParams();
 
   useEffect(() => {
-    if (prevGameID !== gameID) {
+    if (id) {
+      setSelectedGamePk(id);
       setHomeTeamSkaters(null);
       setAwayTeamSkaters(null);
 
       axios
-        .get(`https://statsapi.web.nhl.com/api/v1/game/${gameID}/feed/live`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
+        .get(`https://statsapi.web.nhl.com/api/v1/game/${id}/feed/live`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
         .then(res => {
+          console.log(res.data);
           const gInfo = res.data;
           setGameInfo(gInfo);
 
-          if (gInfo.gameData.status.abstractGameState === 'Preview') {
+          if (
+            gInfo.liveData.boxscore.teams.home.skaters.length === 0 ||
+            gInfo.liveData.boxscore.teams.away.skaters.length === 0
+          ) {
             axios
               .get(`https://statsapi.web.nhl.com/api/v1/teams/${gInfo.gameData.teams.away.id}/roster`) // https://statsapi.web.nhl.com/api/v1/teams/22/roster
               .then(res1 => {
@@ -72,14 +74,17 @@ export default function GameFeedPage({ user, contract, injury }) {
         });
 
       axios
-        .get(`https://statsapi.web.nhl.com/api/v1/game/${gameID}/content`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/content
+        .get(`https://statsapi.web.nhl.com/api/v1/game/${id}/content`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/content
         .then(res => {
           setGameContent(res.data);
         });
     }
 
-    setPrevGameID(gameID);
-  }, [location]);
+    return () => {
+      console.log('Leaving game page.');
+      setSelectedGamePk(null);
+    };
+  }, [id]);
 
   const sort_by_int = (isHome, stat) => {
     let array = [];
@@ -281,6 +286,11 @@ export default function GameFeedPage({ user, contract, injury }) {
         <table className="goal-item">
           <thead>
             <tr>
+              <th colSpan={3}>
+                {linescores.currentPeriodOrdinal} | {linescores.currentPeriodTimeRemaining}
+              </th>
+            </tr>
+            <tr>
               <th>
                 <img src={logos[teams.away.team.name]} alt="" width="40" height="40" />
               </th>
@@ -412,9 +422,8 @@ export default function GameFeedPage({ user, contract, injury }) {
   );
 
   const render_roster = (teamRosterPreview, teamRosterStats, isHome) => {
-    if (gameInfo.gameData.status.abstractGameState === 'Preview') {
-      if (teamRosterPreview) return render_team_roster(teamRosterPreview);
-    } else if (teamRosterStats) {
+    if (teamRosterPreview) return render_team_roster(teamRosterPreview);
+    if (teamRosterStats) {
       if (isHome) {
         return render_team_stats(gameInfo.liveData.boxscore.teams.home, isHome);
       }
@@ -470,7 +479,7 @@ export default function GameFeedPage({ user, contract, injury }) {
             {contract ? (
               <TabPanel>
                 <div>
-                  <GamePrediction gameID={gameID} gameInfo={gameInfo} user={user} contract={contract} />
+                  <GamePrediction gameID={id} gameInfo={gameInfo} user={user} contract={contract} />
                 </div>
               </TabPanel>
             ) : null}
@@ -496,7 +505,7 @@ export default function GameFeedPage({ user, contract, injury }) {
     );
   }
   return (
-    <div>
+    <div className="cont">
       <h1>Trying to fetch game data from nhl api...</h1>
       <ClipLoader color="#fff" loading size={75} />
     </div>

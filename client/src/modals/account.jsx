@@ -48,6 +48,11 @@ export default function AccountModal({
     };
   }, []);
 
+  const link_to = dest => {
+    setShowAccountModal(false);
+    navigate(dest);
+  };
+
   return (
     <Modal
       className="accountModal"
@@ -57,24 +62,16 @@ export default function AccountModal({
     >
       <table ref={ref}>
         <tbody>
-          <tr>
+          <tr onClick={() => link_to('/profile')}>
+            <td>Profile</td>
             <td>
-              <button className="base-button_no_border" onClick={() => navigate('/profile')} type="button">
-                <b>Profile</b>
-                <IoIosArrowForward size={30} />
-              </button>
+              <IoIosArrowForward size={30} />
             </td>
           </tr>
           {user
             ? user.pool_list.map(poolName => (
-                <tr>
-                  <button
-                    className="base-button_no_border"
-                    onClick={() => navigate('/my-pools/' + poolName)}
-                    type="button"
-                  >
-                    {poolName}
-                  </button>
+                <tr onClick={() => link_to(`/my-pools/${poolName}`)}>
+                  <td colSpan={2}>{poolName}</td>
                 </tr>
               ))
             : null}
@@ -97,7 +94,7 @@ export default function AccountModal({
                 <td>
                   <button
                     className="base-button_no_border"
-                    onClick={() => navigator.clipboard.writeText(user.addr)}
+                    onClick={() => navigator.clipboard.writeText(user.addr)} // copy address to clipboard.
                     type="button"
                   >
                     <BiCopy size={30} />

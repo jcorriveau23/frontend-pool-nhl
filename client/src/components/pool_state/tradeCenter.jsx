@@ -10,7 +10,15 @@ import TradeItem from './tradeItem';
 // modal
 import CreateTradeModal from '../../modals/createTrade';
 
-export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictUsers, isUserParticipant }) {
+export default function TradeCenter({
+  poolInfo,
+  setPoolUpdate,
+  playerIdToPlayersDataMap,
+  injury,
+  user,
+  DictUsers,
+  isUserParticipant,
+}) {
   const [showCreateTradeModal, setShowCreateTradeModal] = useState(false);
 
   const respond_trade = (tradeID, isAccepted) => {
@@ -27,7 +35,7 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
         )
         .then(res => {
           if (res.data.success) {
-            setPoolInfo(res.data.pool);
+            setPoolUpdate(true);
           } else {
             alert(res.data.message);
           }
@@ -35,8 +43,7 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
     }
   };
   const cancel_trade = tradeID => {
-    window.confirm(`Do you really want to cancel the trade?`);
-    {
+    if (window.confirm(`Do you really want to cancel the trade?`)) {
       axios
         .post(
           '/api-rust/cancel-trade',
@@ -47,7 +54,7 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
         )
         .then(res => {
           if (res.data.success) {
-            setPoolInfo(res.data.pool);
+            setPoolUpdate(true);
           } else {
             alert(res.data.message);
           }
@@ -73,7 +80,11 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
                   <tbody>
                     <tr>
                       <th>
-                        <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
+                        <TradeItem
+                          tradeInfo={tradeInfo}
+                          playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+                          DictUsers={DictUsers}
+                        />
                       </th>
                       <th>
                         {tradeInfo.proposed_by === user._id.$oid ? (
@@ -116,7 +127,11 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
                   <tbody>
                     <tr>
                       <th>
-                        <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
+                        <TradeItem
+                          tradeInfo={tradeInfo}
+                          playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+                          DictUsers={DictUsers}
+                        />
                       </th>
                       <th>{new Date(tradeInfo.date_accepted).toLocaleString('sv-SE')}</th>
                     </tr>
@@ -132,7 +147,11 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
                   <tbody>
                     <tr>
                       <th>
-                        <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
+                        <TradeItem
+                          tradeInfo={tradeInfo}
+                          playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+                          DictUsers={DictUsers}
+                        />
                       </th>
                       <th>{new Date(tradeInfo.date_created).toLocaleString('sv-SE')}</th>
                     </tr>
@@ -148,7 +167,11 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
                   <tbody>
                     <tr>
                       <th>
-                        <TradeItem tradeInfo={tradeInfo} DictUsers={DictUsers} />
+                        <TradeItem
+                          tradeInfo={tradeInfo}
+                          playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+                          DictUsers={DictUsers}
+                        />
                       </th>
                       <th>{new Date(tradeInfo.date_created).toLocaleString('sv-SE')}</th>
                     </tr>
@@ -166,7 +189,8 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
               showCreateTradeModal={showCreateTradeModal}
               setShowCreateTradeModal={setShowCreateTradeModal}
               poolInfo={poolInfo}
-              setPoolInfo={setPoolInfo}
+              setPoolUpdate={setPoolUpdate}
+              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
               injury={injury}
               user={user}
               DictUsers={DictUsers}
@@ -189,7 +213,8 @@ export default function TradeCenter({ poolInfo, setPoolInfo, injury, user, DictU
             showCreateTradeModal={showCreateTradeModal}
             setShowCreateTradeModal={setShowCreateTradeModal}
             poolInfo={poolInfo}
-            setPoolInfo={setPoolInfo}
+            setPoolUpdate={setPoolUpdate}
+            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
             user={user}
             DictUsers={DictUsers}
           />

@@ -2,11 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FaExchangeAlt } from 'react-icons/fa';
 
-export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFromPicks, setToPlayers, setToPicks }) {
+export default function TradeItem({
+  tradeInfo,
+  playerIdToPlayersDataMap,
+  DictUsers,
+  setFromPlayers,
+  setFromPicks,
+  setToPlayers,
+  setToPicks,
+}) {
   const remove_player = (players, setPlayers, player) => {
     const playersTmp = players;
 
-    const index = playersTmp.findIndex(p => p.id === player.id);
+    const index = playersTmp.findIndex(p => p === player);
 
     if (index > -1) {
       playersTmp.splice(index, 1);
@@ -35,7 +43,7 @@ export default function TradeItem({ tradeInfo, DictUsers, setFromPlayers, setFro
       <tbody>
         {items.players.map(player => (
           <tr onClick={setPlayers ? () => remove_player(items.players, setPlayers, player) : null}>
-            <td colSpan={2}>{player.name}</td>
+            <td colSpan={2}>{playerIdToPlayersDataMap[player].name}</td>
           </tr>
         ))}
         {items.picks.length > 0 ? (

@@ -1,8 +1,4 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-
-// Component
-import User from '../user';
+import React from 'react';
 
 export default function PickList({ tradablePicks, participant, add_pick, side, filterPicks, DictUsers }) {
   const render_pick = rounds =>
@@ -12,6 +8,7 @@ export default function PickList({ tradablePicks, participant, add_pick, side, f
           if (picks[from] === participant) {
             return filterPicks ? filterPicks.findIndex(pick => pick.round === i && pick.from === from) === -1 : true;
           }
+          return null;
         })
         .map(from => (
           <tr onClick={add_pick ? () => add_pick(side, i, from) : () => null}>

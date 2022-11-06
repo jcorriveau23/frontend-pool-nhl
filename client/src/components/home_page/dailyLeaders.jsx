@@ -11,7 +11,15 @@ import NaviguateToday from '../pool_state/naviguateToday';
 // images
 import { logos } from '../img/logos';
 
-export default function DayLeaders({ formatDate, playersIdToPoolerMap, setDate, gameStatus, user, DictUsers, injury }) {
+export default function DayLeaders({
+  formatDate,
+  todayFormatDate,
+  playersIdToPoolerMap,
+  user,
+  DictUsers,
+  injury,
+  isPoolContext, // Owner column added in pool Context to gives the information of the pooler who owns the player
+}) {
   const [prevFormatDate, setPrevFormatDate] = useState('');
   const [dayLeaders, setDayLeaders] = useState(null);
 
@@ -35,6 +43,13 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, setDate, 
     }
   }, [formatDate]);
 
+  const render_owner = playerId =>
+    playersIdToPoolerMap && playersIdToPoolerMap[playerId] ? (
+      <User id={playersIdToPoolerMap[playerId]} user={user} DictUsers={DictUsers} />
+    ) : (
+      <td />
+    );
+
   return (
     <Tabs>
       <TabList>
@@ -46,10 +61,9 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, setDate, 
           <thead>
             <NaviguateToday
               formatDate={formatDate}
-              setDate={setDate}
-              gameStatus={gameStatus}
+              todayFormatDate={todayFormatDate}
               msg="Daily Leaders"
-              colSpan={5}
+              colSpan={isPoolContext ? 6 : 5}
             />
           </thead>
           <tbody>
@@ -58,6 +72,7 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, setDate, 
                 <tr>
                   <th>Team</th>
                   <th>Name</th>
+                  {isPoolContext ? <th>Owner</th> : null}
                   <th>G</th>
                   <th>A</th>
                   <th>PTS</th>
@@ -71,18 +86,13 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, setDate, 
                       </td>
                       <td>
                         <PlayerLink name={skater.name} id={skater.id} injury={injury} />
-                        {playersIdToPoolerMap && playersIdToPoolerMap[skater.id] ? (
-                          <User
-                            id={playersIdToPoolerMap[skater.id]}
-                            user={user}
-                            DictUsers={DictUsers}
-                            parenthesis={true}
-                          />
-                        ) : null}
                       </td>
+                      {isPoolContext ? render_owner(skater.id) : null}
                       <td>{skater.stats.goals}</td>
                       <td>{skater.stats.assists}</td>
-                      <td>{skater.stats.goals + skater.stats.assists}</td>
+                      <td>
+                        <b style={{ color: '#a20' }}>{skater.stats.goals + skater.stats.assists}</b>
+                      </td>
                     </tr>
                   ))}
               </>
@@ -97,13 +107,7 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, setDate, 
       <TabPanel>
         <table className="content-table-no-min">
           <thead>
-            <NaviguateToday
-              formatDate={formatDate}
-              setDate={setDate}
-              gameStatus={gameStatus}
-              msg="Daily Leaders"
-              colSpan={5}
-            />
+            <NaviguateToday formatDate={formatDate} todayFormatDate={todayFormatDate} msg="Daily Leaders" colSpan={6} />
           </thead>
           <tbody>
             {dayLeaders ? (
@@ -111,6 +115,7 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, setDate, 
                 <tr>
                   <th>Team</th>
                   <th>Name</th>
+                  {isPoolContext ? <th>Owner</th> : null}
                   <th>Shot</th>
                   <th>Saves</th>
                   <th>Save (%)</th>
@@ -124,15 +129,8 @@ export default function DayLeaders({ formatDate, playersIdToPoolerMap, setDate, 
                       </td>
                       <td>
                         <PlayerLink name={goalie.name} id={goalie.id} injury={injury} />
-                        {playersIdToPoolerMap && playersIdToPoolerMap[goalie.id] ? (
-                          <User
-                            id={playersIdToPoolerMap[goalie.id]}
-                            user={user}
-                            DictUsers={DictUsers}
-                            parenthesis={true}
-                          />
-                        ) : null}
                       </td>
+                      {isPoolContext ? render_owner(goalie.id) : null}
                       <td>{goalie.stats.shots}</td>
                       <td>{goalie.stats.saves}</td>
                       <td>{Math.round((goalie.stats.savePercentage + Number.EPSILON) * 100) / 100}</td>

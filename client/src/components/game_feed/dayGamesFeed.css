@@ -41,6 +41,10 @@
   color: #000;
 }
 
+.dateSelector {
+  display: inline-block;
+}
+
 .dateSelector button {
   background-color: transparent;
   border: none;

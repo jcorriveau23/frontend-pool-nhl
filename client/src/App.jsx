@@ -39,7 +39,8 @@ function App() {
   const [currentAddr, setCurrentAddr] = useState('');
   const [contract, setContract] = useState(null);
   const [formatDate, setFormatDate] = useState(null);
-  const [date, setDate] = useState(new Date());
+  const [todayFormatDate, setTodayFormatDate] = useState(null);
+  const [date, setDate] = useState(null);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [isWrongNetwork, setIsWrongNetwork] = useState(false);
   const [DictUsers, setDictUsers] = useState(null);
@@ -48,6 +49,7 @@ function App() {
   const [injury, setInjury] = useState(null);
   const [gameStatus, setGameStatus] = useState(null); // Live, Preview, N/A, Final
   const [DictTeamAgainst, setDictTeamAgainst] = useState(null);
+  const [selectedGamePk, setSelectedGamePk] = useState(null);
   const refMenu = useRef(null);
   const refAccount = useRef(null);
 
@@ -70,10 +72,11 @@ function App() {
           if (res.status === 200) {
             const DictUsersTmp = {};
             res.data.forEach(u => {
+              if (u._id.$oid === userTmp._id.$oid) setUser(u);
               DictUsersTmp[u._id.$oid] = u.name;
             });
+
             setDictUsers(DictUsersTmp);
-            setUser(userTmp);
           }
         })
         .catch(err => {
@@ -97,7 +100,7 @@ function App() {
           <li className="search-players">
             <SearchPlayer />
           </li>
-          <li className="walle-card" ref={refAccount}>
+          <li className="wallet-card" ref={refAccount}>
             <WalletCard
               user={user}
               setContract={setContract}
@@ -115,10 +118,13 @@ function App() {
           <TodayGamesFeed
             formatDate={formatDate}
             setFormatDate={setFormatDate}
+            todayFormatDate={todayFormatDate}
+            setTodayFormatDate={setTodayFormatDate}
             date={date}
             setDate={setDate}
             setGameStatus={setGameStatus}
             setDictTeamAgainst={setDictTeamAgainst}
+            selectedGamePk={selectedGamePk}
           />
         </div>
         <div>
@@ -140,7 +146,14 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={<HomePage formatDate={formatDate} setDate={setDate} gameStatus={gameStatus} injury={injury} />}
+              element={
+                <HomePage
+                  formatDate={formatDate}
+                  todayFormatDate={todayFormatDate}
+                  gameStatus={gameStatus}
+                  injury={injury}
+                />
+              }
             />
             <Route
               path="/login"
@@ -159,15 +172,20 @@ function App() {
                   DictUsers={DictUsers}
                   injury={injury}
                   formatDate={formatDate}
+                  todayFormatDate={todayFormatDate}
                   date={date}
-                  setDate={setDate}
                   gameStatus={gameStatus}
                   DictTeamAgainst={DictTeamAgainst}
                 />
               }
             />
             <Route path="/standing" element={<StandingPage />} />
-            <Route path="/game/:id" element={<GameFeedPage user={user} contract={contract} injury={injury} />} />
+            <Route
+              path="/game/:id"
+              element={
+                <GameFeedPage user={user} contract={contract} injury={injury} setSelectedGamePk={setSelectedGamePk} />
+              }
+            />
             <Route path="/player-info" element={<PlayerPage />} />
             <Route path="/player-info/:id" element={<PlayerPage />} />
             <Route path="/team-roster/:teamID/:season" element={<TeamRosterBySeasonPage injury={injury} />} />

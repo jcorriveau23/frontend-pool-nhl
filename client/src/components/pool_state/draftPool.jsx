@@ -119,7 +119,7 @@ export default function DraftPool({
     });
   };
 
-  const undo = player => {
+  const undo = () => {
     if (window.confirm(`Do you really want to undo the last selection?`)) {
       socket.emit('undo', Cookies.get(`token-${user._id.$oid}`), poolInfo.name, ack => {
         if (ack.success === false) {
@@ -353,7 +353,7 @@ export default function DraftPool({
   }
 
   return (
-    <div>
+    <div className="cont">
       <h1>trying to join the pool draft...</h1>
       <ClipLoader color="#fff" loading size={75} />
     </div>

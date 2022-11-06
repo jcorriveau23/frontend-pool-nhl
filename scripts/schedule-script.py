@@ -2,7 +2,7 @@
 import time
 import schedule
 
-from pool_cumulate_yesterday_roster_points import lock_daily_roster, cumulate_daily_roster_pts
+from pool_cumulate_live_data import lock_daily_roster, cumulate_daily_roster_pts
 from day_points_leaders import fetch_pointers_day
 from fetch_injury import fetch_injured_players
 from fetch_injury_cbs import fetch_injured_players_cbs
@@ -12,10 +12,10 @@ from update_pool_players_team import update_pool_players_team
 # After every 3mins get_live_day_points_leaders() is called.
 schedule.every(3).minutes.do(fetch_pointers_day)
 schedule.every(3).minutes.do(cumulate_daily_roster_pts)
+schedule.every(1).hours.do(fetch_injured_players_cbs)
  
 # Every day at 05:00 time close_accepted_trade() is called.
 schedule.every().day.at("12:00").do(lock_daily_roster)
-schedule.every().day.at("11:59").do(fetch_injured_players_cbs)
 schedule.every().day.at("05:00").do(update_pool_players_team)
 
 print("start the scheduling!")

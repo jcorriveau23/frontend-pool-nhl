@@ -154,7 +154,7 @@ export default function GamePrediction({ gameID, gameInfo, user, contract }) {
   }
 
   return (
-    <div>
+    <div className="cont">
       <h1>Trying to fetch Prediction game info from the smart contract.</h1>
       <ClipLoader color="#fff" loading size={75} />
     </div>

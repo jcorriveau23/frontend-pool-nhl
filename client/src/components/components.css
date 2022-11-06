@@ -45,7 +45,7 @@ content-table-no-hover {
 
 table.content-table tr:hover td,
 table.content-table-no-min tr:hover td {
-  background-color: #757575;
+  background-color: #eee;
 }
 
 table.content-table tr th:hover,

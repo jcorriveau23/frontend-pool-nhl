@@ -82,9 +82,11 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
   };
 
   const login = () => {
+    console.log('Trying to login.');
     axios
       .post('/api-rust/login', { name, password })
       .then(res => {
+        console.log(res);
         if (res.status === 200) {
           Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
           localStorage.setItem('persist-account', JSON.stringify(res.data.user));
@@ -143,7 +145,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
       <div className="float-left">
         <div className="half-cont">
           {isRegister ? (
-            <div className="login_content">
+            <div className="form-content">
               <h2>Register an account</h2>
               <form>
                 <p>Please fill in this form to create an account.</p>
@@ -180,7 +182,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
               </button>
             </div>
           ) : (
-            <div className="login_content">
+            <div className="form-content">
               <h2>Login using a username and password</h2>
               <form>
                 <p>Please fill in this form to login.</p>
@@ -209,7 +211,7 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
       </div>
       <div className="float-right">
         <div className="half-cont">
-          <div className="login_content">
+          <div className="form-content">
             <h2>Login using a wallet</h2>
             <button className="connect_metamask_button" onClick={() => wallet_login()} type="button">
               <table>

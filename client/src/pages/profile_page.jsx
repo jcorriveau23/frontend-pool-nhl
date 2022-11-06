@@ -17,6 +17,7 @@ import { AiOutlineEdit } from 'react-icons/ai';
 export default function ProfilePage({ user, setUser }) {
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [newPasswordRepeat, setNewPasswordRepeat] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {}, []);
@@ -29,43 +30,50 @@ export default function ProfilePage({ user, setUser }) {
   };
 
   const set_username = () => {
-    axios
-      .post(
-        '/api-rust/set-username',
-        { new_username: newUsername },
-        {
-          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
-        }
-      )
-      .then(res => {
-        if (res.data.user) {
-          localStorage.setItem('persist-account', JSON.stringify(res.data.user));
-          setUser(res.data.user);
-          alert("You have successfullly change you're username.");
-        } else {
-          alert(res.data.message);
-        }
-      });
+    if (newUsername === '') alert(`The new username provided cannot be empty!`);
+    else if (window.confirm(`Are you sure you want to set your new username to be ${newUsername}`)) {
+      axios
+        .post(
+          '/api-rust/set-username',
+          { new_username: newUsername },
+          {
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+          }
+        )
+        .then(res => {
+          if (res.data.user) {
+            localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+            setUser(res.data.user);
+            alert("You have successfullly change you're username.");
+          } else {
+            alert(res.data.message);
+          }
+        });
+    }
   };
 
   const set_password = () => {
-    axios
-      .post(
-        '/api-rust/set-password',
-        { password: newPassword },
-        {
-          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
-        }
-      )
-      .then(res => {
-        if (res.data.user) {
-          localStorage.setItem('persist-account', JSON.stringify(res.data.user));
-          setUser(res.data.user);
-          alert("You have successfullly change you're password.");
-        } else {
-          alert(res.data.message);
-        }
-      });
+    if (newPassword === '') alert(`The password provided cannot be empty!`);
+    else if (newPassword !== newPasswordRepeat) alert(`The 2 passwords entered does not match!`);
+    else if (window.confirm(`Are you sure you want to change your password?`)) {
+      axios
+        .post(
+          '/api-rust/set-password',
+          { password: newPassword },
+          {
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+          }
+        )
+        .then(res => {
+          if (res.data.user) {
+            localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+            setUser(res.data.user);
+            alert("You have successfullly change you're password.");
+          } else {
+            alert(res.data.message);
+          }
+        });
+    }
   };
 
   if (user) {
@@ -87,7 +95,7 @@ export default function ProfilePage({ user, setUser }) {
             </tr>
           </tbody>
         </table>
-        <div>
+        <div className="form-content">
           <form>
             <input
               type="text"
@@ -95,16 +103,31 @@ export default function ProfilePage({ user, setUser }) {
               onChange={event => setNewUsername(event.target.value)}
               required
             />
-            <button className="base-button_no_border" onClick={set_username} type="button">
-              <AiOutlineEdit size={30} />
-              edit username
-            </button>
-            <input type="password" onChange={event => setNewPassword(event.target.value)} required />
-            <button className="base-button_no_border" onClick={set_password} type="button">
-              <AiOutlineEdit size={30} />
-              Change password
-            </button>
+            <form>
+              <button className="base-button_no_border" onClick={set_username} type="button">
+                <AiOutlineEdit size={30} />
+                edit username
+              </button>
+            </form>
+            <input
+              type="password"
+              placeholder="new password"
+              onChange={event => setNewPassword(event.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="repeat password"
+              onChange={event => setNewPasswordRepeat(event.target.value)}
+              required
+            />
           </form>
+          <button className="base-button_no_border" onClick={set_password} type="button">
+            <AiOutlineEdit size={30} />
+            Change password
+          </button>
+        </div>
+        <div>
           <button className="base-button" onClick={logout} type="button">
             Logout
           </button>

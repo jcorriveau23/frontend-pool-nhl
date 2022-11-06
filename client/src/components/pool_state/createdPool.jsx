@@ -413,7 +413,7 @@ export default function CreatedPool({ user, DictUsers, poolName, poolInfo, setPo
   }
 
   return (
-    <div>
+    <div className="cont">
       <h1>Trying to join the room...</h1>
       <ClipLoader color="#fff" loading size={75} />
     </div>
