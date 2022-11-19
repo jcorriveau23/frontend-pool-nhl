@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createSearchParams, useSearchParams } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClipLoader from 'react-spinners/ClipLoader';
 import PropTypes from 'prop-types';
@@ -55,14 +56,11 @@ export default function InProgressPool({
   const [showRosterModificationModal, setShowRosterModificationModal] = useState(false);
   const [showGraphStatsModal, setShowGraphStatsModal] = useState(false);
   const [selectedRosterPickIndex, setSelectedRosterPickIndex] = useState(0);
-  const [cumulativeDailyTabIndex, setCumulativeDailyTabIndex] = useState(gameStatus === 'Live' ? 1 : 0);
+  const [cumulativeDailyTabIndex, setCumulativeDailyTabIndex] = useState(0);
   const [selectedParticipantIndex, setSelectedParticipantIndex] = useState(
     poolInfo.participants.findIndex(participant => participant === user._id.$oid)
   );
-
-  const select_participant = _participant => {
-    setSelectedParticipantIndex(poolInfo.participants.findIndex(participant => participant === _participant));
-  };
+  const [tabSelectionParams, setTabSelectionParams] = useSearchParams();
 
   const find_last_cumulate = async fDate => {
     let daily_stats = null;
@@ -91,9 +89,8 @@ export default function InProgressPool({
 
     if (poolInfo.context.score_by_day && Object.keys(poolInfo.context.score_by_day).length > 0) {
       daily_stats = await find_last_cumulate(fDate);
-    } // TODO make this date variable
+    }
 
-    console.log(daily_stats);
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
       const participant = poolInfo.participants[i];
 
@@ -199,6 +196,7 @@ export default function InProgressPool({
 
     const startDate = new Date(poolInfo.season_start);
     const endDate = new Date(formatDate);
+    endDate.setMinutes(endDate.getMinutes() + endDate.getTimezoneOffset());
 
     for (let j = startDate; j <= endDate; j.setDate(j.getDate() + 1)) {
       const jDate = j.toISOString().slice(0, 10);
@@ -406,9 +404,15 @@ export default function InProgressPool({
   };
 
   useEffect(() => {
-    if (formatDate && poolInfo) {
+    console.log('in progress');
+    if (formatDate) {
       calculate_pool_stats(formatDate);
     }
+    const mainTab = tabSelectionParams.get('mainTab');
+    const userTab = tabSelectionParams.get('userTab');
+
+    if (mainTab) setCumulativeDailyTabIndex(Number(mainTab));
+    if (userTab) setSelectedParticipantIndex(Number(userTab));
   }, [formatDate, poolInfo.context.score_by_day]);
 
   const download_csv = pool => {
@@ -582,7 +586,7 @@ export default function InProgressPool({
             >
               <td>{i + 1}</td>
               <td>{player.own ? <RiTeamFill size={25} /> : render_inactive_players_tooltip(player)}</td>
-              <td>
+              <td colSpan={2}>
                 <PlayerLink name={playerIdToPlayersDataMap[player.id].name} id={player.id} injury={injury} />
               </td>
               <td>
@@ -591,7 +595,6 @@ export default function InProgressPool({
               <td>{player.nb_game}</td>
               <td>{player.G}</td>
               <td>{player.A}</td>
-              <td>{player.G + player.A}</td>
               <td>{player.W}</td>
               <td>{player.SO}</td>
               <td>{player.OT}</td>
@@ -607,12 +610,11 @@ export default function InProgressPool({
         <tr>
           <th>total</th>
           <th> - </th>
-          <th> - </th>
+          <th colSpan={2}> - </th>
           <th> - </th>
           <th>{playersStats[pooler].goalies_total_game}</th>
           <th>{playersStats[pooler].goalies_total_goal}</th>
           <th>{playersStats[pooler].goalies_total_assist}</th>
-          <th>{playersStats[pooler].goalies_total_goal + playersStats[pooler].goalies_total_assist}</th>
           <th>{playersStats[pooler].goalies_total_win}</th>
           <th>{playersStats[pooler].goalies_total_shutout}</th>
           <th>{playersStats[pooler].goalies_total_OT}</th>
@@ -670,12 +672,11 @@ export default function InProgressPool({
     <tr>
       <th>#</th>
       <th>Status</th>
-      <th>Name</th>
+      <th colSpan={2}>Name</th>
       <th>Team</th>
       <th>GP</th>
       <th>G</th>
       <th>A</th>
-      <th>P</th>
       <th>W</th>
       <th>SO</th>
       <th>OT</th>
@@ -694,8 +695,19 @@ export default function InProgressPool({
     </tr>
   );
 
+  const setUserTab = index => {
+    setTabSelectionParams({ mainTab: cumulativeDailyTabIndex, userTab: index });
+
+    setSelectedParticipantIndex(index);
+  };
+
+  const select_participant = _participant => {
+    const index = poolInfo.participants.findIndex(participant => participant === _participant);
+    setUserTab(index);
+  };
+
   const render_tabs_roster_stats = () => (
-    <Tabs selectedIndex={selectedParticipantIndex} onSelect={setSelectedParticipantIndex} forceRenderTabPanel>
+    <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)} forceRenderTabPanel>
       <TabList>
         {poolInfo.participants.map(pooler => (
           <Tab key={pooler}>
@@ -802,6 +814,12 @@ export default function InProgressPool({
     </Tabs>
   );
 
+  const setMainTab = index => {
+    setTabSelectionParams({ mainTab: index, userTab: selectedParticipantIndex });
+
+    setCumulativeDailyTabIndex(index);
+  };
+
   const render_tabs_pool_rank = () =>
     ranking
       .sort((p1, p2) => {
@@ -864,11 +882,7 @@ export default function InProgressPool({
     return (
       <div className="min-width">
         <div className="cont">
-          <Tabs
-            selectedIndex={cumulativeDailyTabIndex}
-            onSelect={index => setCumulativeDailyTabIndex(index)}
-            forceRenderTabPanel
-          >
+          <Tabs selectedIndex={cumulativeDailyTabIndex} onSelect={index => setMainTab(index)}>
             <TabList>
               <Tab>
                 <BsFillCalculatorFill size={30} />
@@ -963,13 +977,6 @@ export default function InProgressPool({
                 <button className="base-button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
                   Download CSV
                 </button>
-                <TopSeasonPlayers
-                  user={user}
-                  injury={injury}
-                  playersIdToPoolerMap={playersIdToPoolerMap}
-                  playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-                  DictUsers={DictUsers}
-                />
               </div>
             </TabPanel>
             <TabPanel>
@@ -980,7 +987,8 @@ export default function InProgressPool({
                   poolInfo={poolInfo}
                   playerIdToPlayersDataMap={playerIdToPlayersDataMap}
                   selectedParticipantIndex={selectedParticipantIndex}
-                  setSelectedParticipantIndex={setSelectedParticipantIndex}
+                  setUserTab={setUserTab}
+                  select_participant={select_participant}
                   injury={injury}
                   user={user}
                   DictUsers={DictUsers}
@@ -1003,7 +1011,8 @@ export default function InProgressPool({
               <RosterCapHit
                 poolInfo={poolInfo}
                 selectedParticipantIndex={selectedParticipantIndex}
-                setSelectedParticipantIndex={setSelectedParticipantIndex}
+                setUserTab={setUserTab}
+                select_participant={select_participant}
                 injury={injury}
                 user={user}
                 DictUsers={DictUsers}
@@ -1040,6 +1049,13 @@ export default function InProgressPool({
               />
             </TabPanel>
           </Tabs>
+          <TopSeasonPlayers
+            user={user}
+            injury={injury}
+            playersIdToPoolerMap={playersIdToPoolerMap}
+            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+            DictUsers={DictUsers}
+          />
         </div>
         {isUserParticipant ? (
           <>

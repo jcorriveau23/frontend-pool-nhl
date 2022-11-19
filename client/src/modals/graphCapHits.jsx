@@ -47,8 +47,6 @@ export default function GraphCapHits({ poolInfo, totalCapHitsByYears, DictUsers 
       };
       datasets.push(dataset);
     }
-    console.log(labels);
-    console.log(datasets);
 
     setChartData({
       labels,
@@ -119,7 +117,6 @@ export default function GraphCapHits({ poolInfo, totalCapHitsByYears, DictUsers 
   }, []);
 
   const on_stats_selection = event => {
-    console.log(event.target.value);
     update_graph_stats(event.target.value);
   };
 

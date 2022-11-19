@@ -11,7 +11,8 @@ import GraphCapHits from '../../modals/graphCapHits';
 export default function RosterCapHit({
   poolInfo,
   selectedParticipantIndex,
-  setSelectedParticipantIndex,
+  setUserTab,
+  select_participant,
   injury,
   user,
   DictUsers,
@@ -19,10 +20,6 @@ export default function RosterCapHit({
   const [totalCapHitsByYears, setTotalCapHitsByYears] = useState(null);
   const [indexYear, setIndexYear] = useState(0);
   const [showGraphCapHits, setShowGraphCapHits] = useState(false);
-
-  const select_participant = _participant => {
-    setSelectedParticipantIndex(poolInfo.participants.findIndex(participant => participant === _participant));
-  };
 
   useEffect(() => {
     const totalCapHitsByYears_temp = [];
@@ -270,7 +267,7 @@ export default function RosterCapHit({
             </table>
           </TabPanel>
         </Tabs>
-        <Tabs selectedIndex={selectedParticipantIndex} onSelect={setSelectedParticipantIndex} forceRenderTabPanel>
+        <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)} forceRenderTabPanel>
           <TabList>
             {poolInfo.participants.map(pooler => (
               <Tab key={pooler}>

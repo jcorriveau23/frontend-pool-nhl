@@ -52,7 +52,6 @@ export default function RosterModificationModal({
         )
         .then(res => {
           if (res.data.success) {
-            console.log(res.data);
             setPoolUpdate(true);
             setShowRosterModificationModal(false);
             alert('You have successfully modify your roster.');

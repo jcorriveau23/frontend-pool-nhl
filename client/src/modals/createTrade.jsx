@@ -79,7 +79,6 @@ export default function CreateTradeModal({
         }
       )
       .then(res => {
-        console.log(res.data);
         if (res.data.success) {
           // the trade will need to be confirmed by the user that was selected by the trader.
           // if the trade is accepted, people have 24h to create a counter offer. They can directly get out of the trade.

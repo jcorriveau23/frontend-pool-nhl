@@ -24,8 +24,6 @@ export default function TopSeasonPlayers({ user, injury, playersIdToPoolerMap, D
     let statsSorting;
     let type;
 
-    console.log(r);
-
     switch (r) {
       case 'F': {
         type = 'skater';
@@ -58,7 +56,6 @@ export default function TopSeasonPlayers({ user, injury, playersIdToPoolerMap, D
         `https://nhl-pool-ethereum.herokuapp.com/https://api.nhle.com/stats/rest/en/${type}/summary?isAggregate=false&isGame=false&sort=${statsSorting}&start=${s}&limit=${limit}&factCayenneExp=gamesPlayed>=1&cayenneExp=${positionCode} and gameTypeId=2 and seasonId<=20222023 and seasonId>=20222023`
       )
       .then(l => {
-        console.log(l.data.data);
         if (reset) setLeaders(l.data.data);
         else setLeaders(prevList => [...prevList, ...l.data.data]);
       });

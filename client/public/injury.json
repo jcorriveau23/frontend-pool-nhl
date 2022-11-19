@@ -1,15 +1,27 @@
 {
     "Derek Grant": {
         "position": "C",
-        "date": "Sat, Nov 5",
+        "date": "Thu, Nov 17",
         "type": "Upper Body",
-        "recovery": "Expected to be out until at least Nov 6"
+        "recovery": "IR. Expected to be out until at least Nov 19"
+    },
+    "Nathan Beaulieu": {
+        "position": "D",
+        "date": "Thu, Nov 17",
+        "type": "Undisclosed",
+        "recovery": "IR. Expected to be out until at least Nov 19"
+    },
+    "Kevin Shattenkirk": {
+        "position": "D",
+        "date": "Thu, Nov 17",
+        "type": "Lower Body",
+        "recovery": "IR. Expected to be out until at least Nov 19"
     },
     "Urho Vaakanainen": {
         "position": "D",
-        "date": "Tue, Nov 1",
+        "date": "Tue, Nov 15",
         "type": "Undisclosed",
-        "recovery": "IR. Expected to be out until at least Nov 9"
+        "recovery": "IR. Expected to be out until at least Nov 23"
     },
     "Jamie Drysdale": {
         "position": "D",
@@ -17,35 +29,29 @@
         "type": "Shoulder",
         "recovery": "IR. Expected to be out until at least Mar 1"
     },
-    "Sam Carrick": {
-        "position": "C",
-        "date": "Mon, Oct 31",
-        "type": "Hip",
-        "recovery": "IR. Expected to be out until at least Nov 6"
-    },
-    "Nick Schmaltz": {
-        "position": "C",
-        "date": "Sat, Nov 5",
+    "Conor Timmins": {
+        "position": "D",
+        "date": "Fri, Nov 18",
         "type": "Upper Body",
-        "recovery": "IR. Expected to be out until at least Dec 1"
+        "recovery": "Day-to-Day"
     },
     "Zack Kassian": {
         "position": "RW",
-        "date": "Thu, Nov 3",
+        "date": "Fri, Nov 18",
         "type": "Lower Body",
-        "recovery": "Expected to be out until at least Nov 17"
+        "recovery": "Day-to-Day"
     },
-    "Conor Timmins": {
-        "position": "D",
-        "date": "Thu, Nov 3",
-        "type": "Upper Body",
-        "recovery": "Expected to be out until at least Nov 8"
+    "Nick Schmaltz": {
+        "position": "C",
+        "date": "Mon, Nov 14",
+        "type": "Ribs",
+        "recovery": "IR. Expected to be out until at least Nov 21"
     },
     "Jakob Chychrun": {
         "position": "D",
-        "date": "Sat, Oct 22",
+        "date": "Mon, Nov 14",
         "type": "Wrist",
-        "recovery": "IR. Expected to be out until at least Nov 12"
+        "recovery": "IR. Expected to be out until at least Nov 21"
     },
     "Andrew Ladd": {
         "position": "LW",
@@ -53,53 +59,53 @@
         "type": "Knee",
         "recovery": "IR. Expected to be out until at least Jan 17"
     },
-    "Jeremy Swayman": {
-        "position": "G",
-        "date": "Sat, Nov 5",
-        "type": "Lower Body",
-        "recovery": "IR. Expected to be out until at least Nov 17"
-    },
-    "Craig Smith": {
-        "position": "C",
-        "date": "Sat, Nov 5",
-        "type": "Upper Body",
-        "recovery": "Expected to be out until at least Nov 7"
-    },
-    "Derek Forbort": {
+    "Jakub Zboril": {
         "position": "D",
-        "date": "Fri, Nov 4",
-        "type": "Finger",
-        "recovery": "IR. Expected to be out until at least Dec 7"
+        "date": "Fri, Nov 18",
+        "type": "Illness",
+        "recovery": "Day-to-Day"
     },
     "Matt Filipe": {
         "position": "LW",
-        "date": "Tue, Nov 1",
+        "date": "Thu, Nov 17",
         "type": "Undisclosed",
-        "recovery": "IR. Expected to be out until at least Nov 17"
+        "recovery": "IR. Expected to be out until at least Nov 23"
     },
-    "Charlie McAvoy": {
+    "Derek Forbort": {
         "position": "D",
-        "date": "Mon, Oct 31",
-        "type": "Shoulder",
-        "recovery": "IR. Expected to be out until at least Nov 7"
+        "date": "Thu, Nov 10",
+        "type": "Finger",
+        "recovery": "IR. Expected to be out until at least Dec 7"
     },
-    "Rasmus Dahlin": {
-        "position": "D",
-        "date": "Sat, Nov 5",
+    "Eric Comrie": {
+        "position": "G",
+        "date": "Fri, Nov 18",
+        "type": "Undisclosed",
+        "recovery": "IR. Expected to be out until at least Dec 7"
+    },
+    "Jack Quinn": {
+        "position": "RW",
+        "date": "Fri, Nov 18",
         "type": "Upper Body",
         "recovery": "Day-to-Day"
     },
-    "Henri Jokiharju": {
-        "position": "D",
-        "date": "Mon, Oct 31",
-        "type": "Face",
-        "recovery": "IR. Expected to be out until at least Nov 8"
+    "Zemgus Girgensons": {
+        "position": "C",
+        "date": "Wed, Nov 16",
+        "type": "Undisclosed",
+        "recovery": "Expected to be out until at least Nov 23"
     },
     "Mattias Samuelsson": {
         "position": "D",
-        "date": "Thu, Oct 27",
-        "type": "Lower Body",
+        "date": "Tue, Nov 15",
+        "type": "Knee",
         "recovery": "IR. Expected to be out until at least Nov 30"
+    },
+    "Kyle Okposo": {
+        "position": "RW",
+        "date": "Tue, Nov 15",
+        "type": "Lower Body",
+        "recovery": "IR. Expected to be out until at least Nov 19"
     },
     "Ben Bishop": {
         "position": "G",
@@ -107,29 +113,35 @@
         "type": "Knee",
         "recovery": "IR. Expected to be out until at least Aug 1"
     },
-    "Michael Stone": {
-        "position": "D",
-        "date": "Sun, Nov 6",
-        "type": "Undisclosed",
-        "recovery": "Day-to-Day"
-    },
-    "Christopher Tanev": {
-        "position": "D",
-        "date": "Sat, Nov 5",
-        "type": "Upper Body",
-        "recovery": "Expected to be out until at least Nov 7"
-    },
     "Oliver Kylington": {
         "position": "D",
-        "date": "Thu, Nov 3",
+        "date": "Thu, Nov 17",
         "type": "Personal",
-        "recovery": "IR. Expected to be out until at least Nov 8"
+        "recovery": "IR. Expected to be out until at least Nov 29"
+    },
+    "Michael Stone": {
+        "position": "D",
+        "date": "Thu, Nov 17",
+        "type": "Undisclosed",
+        "recovery": "IR. Expected to be out until at least Nov 23"
     },
     "Ondrej Kase": {
         "position": "RW",
-        "date": "Sat, Nov 5",
+        "date": "Wed, Nov 16",
         "type": "Concussion",
-        "recovery": "Day-to-Day"
+        "recovery": "IR. Expected to be out until at least Nov 23"
+    },
+    "Frederik Andersen": {
+        "position": "G",
+        "date": "Wed, Nov 16",
+        "type": "Lower Body",
+        "recovery": "IR. Expected to be out until at least Nov 23"
+    },
+    "Teuvo Teravainen": {
+        "position": "LW",
+        "date": "Wed, Nov 16",
+        "type": "Upper Body",
+        "recovery": "IR. Expected to be out until at least Nov 21"
     },
     "Max Pacioretty": {
         "position": "LW",
@@ -143,29 +155,17 @@
         "type": "Hip",
         "recovery": "IR. Expected to be out until at least Jul 1"
     },
-    "Alex Stalock": {
-        "position": "G",
-        "date": "Sat, Nov 5",
-        "type": "Concussion",
-        "recovery": "Expected to be out until at least Nov 10"
-    },
-    "Arvid Soderblom": {
-        "position": "G",
-        "date": "Sat, Nov 5",
-        "type": "Undisclosed",
-        "recovery": "Day-to-Day"
-    },
     "Tyler Johnson": {
         "position": "C",
-        "date": "Thu, Nov 3",
+        "date": "Fri, Nov 18",
         "type": "Ankle",
-        "recovery": "IR. Expected to be out until at least Nov 10"
+        "recovery": "IR. Expected to be out until at least Nov 20"
     },
-    "Petr Mrazek": {
+    "Alex Stalock": {
         "position": "G",
-        "date": "Tue, Nov 1",
-        "type": "Groin",
-        "recovery": "IR. Expected to be out until at least Nov 10"
+        "date": "Wed, Nov 16",
+        "type": "Concussion",
+        "recovery": "IR. Expected to be out until at least Nov 19"
     },
     "Seth Jones": {
         "position": "D",
@@ -173,51 +173,87 @@
         "type": "Thumb",
         "recovery": "IR. Expected to be out until at least Nov 27"
     },
-    "Valeri Nichushkin": {
-        "position": "RW",
-        "date": "Sat, Nov 5",
+    "Samuel Girard": {
+        "position": "D",
+        "date": "Fri, Nov 18",
         "type": "Lower Body",
-        "recovery": "Expected to be out until at least Nov 10"
+        "recovery": "Day-to-Day"
     },
     "Bowen Byram": {
         "position": "D",
-        "date": "Sat, Nov 5",
+        "date": "Fri, Nov 18",
         "type": "Lower Body",
-        "recovery": "Expected to be out until at least Nov 10"
+        "recovery": "Day-to-Day"
     },
-    "Darren Helm": {
+    "Shane Bowers": {
         "position": "C",
-        "date": "Thu, Nov 3",
-        "type": "Undisclosed",
-        "recovery": "IR. Expected to be out until at least Nov 23"
+        "date": "Mon, Nov 14",
+        "type": "Upper Body",
+        "recovery": "IR. Expected to be out until at least Dec 23"
+    },
+    "Kurtis MacDermid": {
+        "position": "D",
+        "date": "Mon, Nov 14",
+        "type": "Lower Body",
+        "recovery": "Expected to be out until at least Dec 27"
     },
     "Gabriel Landeskog": {
         "position": "LW",
-        "date": "Wed, Oct 19",
+        "date": "Sat, Nov 12",
         "type": "Knee",
         "recovery": "IR. Expected to be out until at least Jan 12"
     },
-    "Sean Kuraly": {
+    "Darren Helm": {
         "position": "C",
-        "date": "Sat, Nov 5",
-        "type": "Undisclosed",
-        "recovery": "Day-to-Day"
+        "date": "Fri, Nov 11",
+        "type": "Hip",
+        "recovery": "IR. Expected to be out until at least Dec 13"
+    },
+    "Valeri Nichushkin": {
+        "position": "RW",
+        "date": "Wed, Nov 9",
+        "type": "Ankle",
+        "recovery": "IR. Expected to be out until at least Dec 7"
+    },
+    "Jake Bean": {
+        "position": "D",
+        "date": "Thu, Nov 17",
+        "type": "Shoulder",
+        "recovery": "IR. Expected to be out until at least Nov 23"
+    },
+    "Elvis Merzlikins": {
+        "position": "G",
+        "date": "Thu, Nov 17",
+        "type": "Lower Body",
+        "recovery": "Expected to be out until at least Nov 23"
+    },
+    "Patrik Laine": {
+        "position": "RW",
+        "date": "Wed, Nov 16",
+        "type": "Ankle",
+        "recovery": "IR. Expected to be out until at least Dec 13"
+    },
+    "Zach Werenski": {
+        "position": "D",
+        "date": "Tue, Nov 15",
+        "type": "Shoulder",
+        "recovery": "IR. Expected to be out until at least Apr 14"
+    },
+    "Nick Blankenburg": {
+        "position": "D",
+        "date": "Fri, Nov 11",
+        "type": "Ankle",
+        "recovery": "IR. Expected to be out until at least Dec 23"
     },
     "Jakub Voracek": {
         "position": "RW",
-        "date": "Sat, Nov 5",
+        "date": "Fri, Nov 11",
         "type": "Upper Body",
-        "recovery": "Expected to be out until at least Nov 10"
-    },
-    "Joona Luoto": {
-        "position": "LW",
-        "date": "Fri, Nov 4",
-        "type": "Lower Body",
-        "recovery": "IR. Expected to be out until at least Nov 10"
+        "recovery": "IR. Expected to be out until at least Nov 19"
     },
     "Adam Boqvist": {
         "position": "D",
-        "date": "Wed, Oct 26",
+        "date": "Fri, Nov 11",
         "type": "Foot",
         "recovery": "IR. Expected to be out until at least Dec 6"
     },
@@ -227,23 +263,41 @@
         "type": "Shoulder",
         "recovery": "IR. Expected to be out until at least May 1"
     },
-    "Jake Oettinger": {
-        "position": "G",
-        "date": "Mon, Oct 31",
-        "type": "Lower Body",
-        "recovery": "Expected to be out until at least Nov 8"
-    },
-    "Oskar Sundqvist": {
-        "position": "C",
-        "date": "Sat, Nov 5",
+    "Denis Gurianov": {
+        "position": "RW",
+        "date": "Fri, Nov 18",
         "type": "Upper Body",
-        "recovery": "Expected to be out until at least Nov 6"
+        "recovery": "Day-to-Day"
+    },
+    "Scott Wedgewood": {
+        "position": "G",
+        "date": "Thu, Nov 17",
+        "type": "Upper Body",
+        "recovery": "Day-to-Day"
+    },
+    "Gustav Lindstrom": {
+        "position": "D",
+        "date": "Fri, Nov 18",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
+    "Elmer Soderblom": {
+        "position": "RW",
+        "date": "Thu, Nov 17",
+        "type": "Undisclosed",
+        "recovery": "IR. Expected to be out until at least Nov 23"
+    },
+    "Matt Luff": {
+        "position": "RW",
+        "date": "Wed, Nov 9",
+        "type": "Wrist",
+        "recovery": "IR. Expected to be out until at least Jan 19"
     },
     "Filip Zadina": {
         "position": "RW",
-        "date": "Sat, Nov 5",
+        "date": "Tue, Nov 8",
         "type": "Lower Body",
-        "recovery": "IR. Expected to be out until at least Nov 15"
+        "recovery": "IR. Expected to be out until at least Dec 31"
     },
     "Jakub Vrana": {
         "position": "C",
@@ -257,29 +311,29 @@
         "type": "Knee",
         "recovery": "IR. Expected to be out until at least Jan 4"
     },
-    "Tyler Bertuzzi": {
-        "position": "LW",
-        "date": "Mon, Oct 17",
-        "type": "Upper Body",
-        "recovery": "IR. Expected to be out until at least Nov 19"
-    },
-    "Jake Walman": {
-        "position": "D",
-        "date": "Wed, Sep 21",
-        "type": "Shoulder",
-        "recovery": "IR. Expected to be out until at least Nov 15"
-    },
     "Mark Pysyk": {
         "position": "D",
         "date": "Wed, Sep 21",
         "type": "Achilles",
         "recovery": "IR. Expected to be out until at least Jan 4"
     },
+    "Kailer Yamamoto": {
+        "position": "RW",
+        "date": "Thu, Nov 17",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
     "Tyler Benson": {
         "position": "LW",
-        "date": "Thu, Nov 3",
+        "date": "Wed, Nov 16",
         "type": "Knee",
-        "recovery": "IR. Expected to be out until at least Nov 8"
+        "recovery": "IR. Expected to be out until at least Nov 19"
+    },
+    "Evander Kane": {
+        "position": "LW",
+        "date": "Wed, Nov 9",
+        "type": "Wrist",
+        "recovery": "IR. Expected to be out until at least Feb 27"
     },
     "Mike Smith": {
         "position": "G",
@@ -293,11 +347,11 @@
         "type": "Shoulder",
         "recovery": "IR. Expected to be out until at least Jul 1"
     },
-    "Patric Hornqvist": {
-        "position": "RW",
-        "date": "Sat, Nov 5",
-        "type": "Upper Body",
-        "recovery": "Expected to be out until at least Nov 6"
+    "Aleksander Barkov": {
+        "position": "C",
+        "date": "Fri, Nov 18",
+        "type": "Illness",
+        "recovery": "Day-to-Day"
     },
     "Anthony Duclair": {
         "position": "LW",
@@ -305,23 +359,17 @@
         "type": "Achilles",
         "recovery": "IR. Expected to be out until at least Dec 1"
     },
-    "Aaron Ekblad": {
-        "position": "D",
-        "date": "Wed, Oct 19",
-        "type": "Lower Body",
-        "recovery": "IR. Expected to be out until at least Nov 12"
-    },
-    "Quinton Byfield": {
-        "position": "C",
-        "date": "Sat, Nov 5",
-        "type": "Illness",
-        "recovery": "Expected to be out until at least Nov 8"
-    },
     "Alex Iafallo": {
         "position": "C",
-        "date": "Sun, Oct 23",
+        "date": "Mon, Nov 14",
         "type": "Lower Body",
-        "recovery": "IR. Expected to be out until at least Nov 12"
+        "recovery": "IR. Expected to be out until at least Nov 22"
+    },
+    "Brendan Lemieux": {
+        "position": "LW",
+        "date": "Sun, Nov 13",
+        "type": "Lower Body",
+        "recovery": "IR. Expected to be out until at least Nov 22"
     },
     "Jacob Ingham": {
         "position": "G",
@@ -331,27 +379,45 @@
     },
     "Jordan Greenway": {
         "position": "LW",
-        "date": "Wed, Nov 2",
+        "date": "Sat, Nov 19",
         "type": "Upper Body",
-        "recovery": "IR. Expected to be out until at least Nov 8"
+        "recovery": "Day-to-Day"
     },
-    "Brandon Duhaime": {
-        "position": "RW",
-        "date": "Wed, Nov 2",
+    "Marc-Andre Fleury": {
+        "position": "G",
+        "date": "Wed, Nov 16",
         "type": "Upper Body",
-        "recovery": "Expected to be out until at least Nov 9"
-    },
-    "Marcus Foligno": {
-        "position": "LW",
-        "date": "Wed, Nov 2",
-        "type": "Upper Body",
-        "recovery": "Expected to be out until at least Nov 9"
+        "recovery": "IR. Expected to be out until at least Nov 25"
     },
     "Ryan Hartman": {
         "position": "RW",
-        "date": "Wed, Nov 2",
+        "date": "Tue, Nov 15",
         "type": "Upper Body",
-        "recovery": "IR. Expected to be out until at least Nov 9"
+        "recovery": "IR. Expected to be out until at least Nov 23"
+    },
+    "Joel Armia": {
+        "position": "RW",
+        "date": "Fri, Nov 18",
+        "type": "Upper Body",
+        "recovery": "Day-to-Day"
+    },
+    "Mike Matheson": {
+        "position": "D",
+        "date": "Thu, Nov 17",
+        "type": "Abdomen",
+        "recovery": "IR. Expected to be out until at least Nov 19"
+    },
+    "Jonathan Drouin": {
+        "position": "C",
+        "date": "Wed, Nov 16",
+        "type": "Upper Body",
+        "recovery": "IR. Expected to be out until at least Dec 14"
+    },
+    "Paul Byron": {
+        "position": "C",
+        "date": "Tue, Nov 15",
+        "type": "Hip",
+        "recovery": "IR. Expected to be out until at least Nov 22"
     },
     "Carey Price": {
         "position": "G",
@@ -359,71 +425,41 @@
         "type": "Knee",
         "recovery": "IR. Expected to be out until at least Nov 29"
     },
-    "Paul Byron": {
-        "position": "C",
-        "date": "Thu, Nov 3",
-        "type": "Hip",
-        "recovery": "IR. Expected to be out until at least Nov 8"
-    },
-    "Evgenii Dadonov": {
-        "position": "RW",
-        "date": "Thu, Nov 3",
-        "type": "Undisclosed",
-        "recovery": "IR. Expected to be out until at least Nov 8"
-    },
-    "Mike Matheson": {
-        "position": "D",
-        "date": "Thu, Oct 13",
-        "type": "Abdomen",
-        "recovery": "IR. Expected to be out until at least Dec 6"
-    },
     "Mark Borowiecki": {
         "position": "D",
-        "date": "Thu, Nov 3",
+        "date": "Tue, Nov 15",
         "type": "Upper Body",
-        "recovery": "IR. Expected to be out until at least Nov 10"
-    },
-    "MacKenzie Blackwood": {
-        "position": "G",
-        "date": "Sat, Nov 5",
-        "type": "Undisclosed",
-        "recovery": "Expected to be out until at least Nov 8"
+        "recovery": "IR. Expected to be out until at least Nov 23"
     },
     "Jonathan Bernier": {
         "position": "G",
-        "date": "Sat, Nov 5",
+        "date": "Tue, Nov 15",
         "type": "Hip",
-        "recovery": "IR. Expected to be out until at least Nov 8"
+        "recovery": "IR. Expected to be out until at least Nov 23"
+    },
+    "MacKenzie Blackwood": {
+        "position": "G",
+        "date": "Sat, Nov 12",
+        "type": "Knee",
+        "recovery": "IR. Expected to be out until at least Dec 1"
     },
     "Ondrej Palat": {
         "position": "LW",
-        "date": "Tue, Nov 1",
+        "date": "Tue, Nov 8",
         "type": "Groin",
-        "recovery": "IR. Expected to be out until at least Dec 1"
-    },
-    "Filip Chytil": {
-        "position": "C",
-        "date": "Sat, Nov 5",
-        "type": "Upper Body",
-        "recovery": "Day-to-Day"
-    },
-    "Ryan Lindgren": {
-        "position": "D",
-        "date": "Thu, Nov 3",
-        "type": "Upper Body",
-        "recovery": "Day-to-Day"
+        "recovery": "IR. Expected to be out until at least Jan 10"
     },
     "Vitali Kravtsov": {
         "position": "RW",
-        "date": "Tue, Nov 1",
-        "type": "Upper Body",
-        "recovery": "Expected to be out until at least Nov 8"
+        "date": "Fri, Nov 18",
+        "type": "Illness",
+        "recovery": "Day-to-Day"
     },
-    "Artem Zub": {
+    "Thomas Chabot": {
         "position": "D",
-        "date": "Thu, Nov 3",
-        "type": "Upper Body",
-        "recovery": "IR. Expected to be out until at least Nov 8"
+        "date": "Sun, Nov 13",
+        "type": "Concussion",
+        "recovery": "IR. Expected to be out until at least Nov 21"
     },
     "Josh Norris": {
         "position": "C",
@@ -431,11 +467,23 @@
         "type": "Shoulder",
         "recovery": "IR. Expected to be out until at least Feb 11"
     },
-    "Lukas Sedlak": {
+    "Travis Konecny": {
         "position": "C",
-        "date": "Sat, Nov 5",
+        "date": "Fri, Nov 18",
         "type": "Undisclosed",
         "recovery": "Day-to-Day"
+    },
+    "Cam Atkinson": {
+        "position": "RW",
+        "date": "Thu, Nov 17",
+        "type": "Upper Body",
+        "recovery": "Expected to be out until at least Nov 23"
+    },
+    "Wade Allison": {
+        "position": "RW",
+        "date": "Tue, Nov 15",
+        "type": "Oblique",
+        "recovery": "IR. Expected to be out until at least Dec 7"
     },
     "Sean Couturier": {
         "position": "C",
@@ -449,23 +497,11 @@
         "type": "Finger",
         "recovery": "IR. Expected to be out until at least Dec 11"
     },
-    "Cam Atkinson": {
-        "position": "RW",
-        "date": "Thu, Oct 27",
-        "type": "Upper Body",
-        "recovery": "Expected to be out until at least Nov 19"
-    },
     "Bobby Brink": {
         "position": "RW",
         "date": "Tue, Oct 11",
         "type": "Hip",
         "recovery": "IR. Expected to be out until at least Dec 29"
-    },
-    "Patrick Brown": {
-        "position": "C",
-        "date": "Mon, Oct 10",
-        "type": "Back",
-        "recovery": "IR. Expected to be out until at least Nov 12"
     },
     "Ryan Ellis": {
         "position": "D",
@@ -473,29 +509,11 @@
         "type": "Back",
         "recovery": "IR. Expected to be out until at least Jul 19"
     },
-    "Josh Archibald": {
-        "position": "RW",
-        "date": "Sat, Nov 5",
-        "type": "Undisclosed",
-        "recovery": "Expected to be out until at least Nov 9"
-    },
-    "Teddy Blueger": {
-        "position": "C",
-        "date": "Sat, Nov 5",
-        "type": "Upper Body",
-        "recovery": "IR. Expected to be out until at least Nov 9"
-    },
-    "Jeff Carter": {
-        "position": "C",
-        "date": "Sat, Nov 5",
-        "type": "Lower Body",
-        "recovery": "Expected to be out until at least Nov 9"
-    },
-    "Mario Ferraro": {
+    "Radim Simek": {
         "position": "D",
-        "date": "Sun, Nov 6",
-        "type": "Face",
-        "recovery": "Day-to-Day"
+        "date": "Mon, Nov 14",
+        "type": "Undisclosed",
+        "recovery": "IR. Expected to be out until at least Nov 21"
     },
     "Markus Nutivaara": {
         "position": "D",
@@ -503,23 +521,17 @@
         "type": "Lower Body",
         "recovery": "IR. Expected to be out until at least Dec 10"
     },
-    "Philipp Grubauer": {
-        "position": "G",
-        "date": "Sat, Nov 5",
-        "type": "Lower Body",
-        "recovery": "IR. Expected to be out until at least Nov 8"
-    },
-    "Jared McCann": {
-        "position": "C",
-        "date": "Sat, Nov 5",
-        "type": "Lower Body",
-        "recovery": "Expected to be out until at least Nov 8"
-    },
     "Joonas Donskoi": {
         "position": "RW",
-        "date": "Thu, Nov 3",
+        "date": "Thu, Nov 17",
         "type": "Upper Body",
-        "recovery": "IR. Expected to be out until at least Nov 8"
+        "recovery": "IR. Expected to be out until at least Nov 19"
+    },
+    "Jamie Oleksiak": {
+        "position": "D",
+        "date": "Thu, Nov 17",
+        "type": "Lower Body",
+        "recovery": "IR. Expected to be out until at least Nov 19"
     },
     "Chris Driedger": {
         "position": "G",
@@ -533,11 +545,23 @@
         "type": "Shoulder",
         "recovery": "IR. Expected to be out until at least Dec 28"
     },
-    "Brandon Saad": {
-        "position": "LW",
-        "date": "Thu, Nov 3",
+    "Colton Parayko": {
+        "position": "D",
+        "date": "Fri, Nov 18",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
+    "Logan Brown": {
+        "position": "C",
+        "date": "Thu, Nov 17",
         "type": "Upper Body",
-        "recovery": "Expected to be out until at least Nov 7"
+        "recovery": "IR. Expected to be out until at least Nov 21"
+    },
+    "Robert Bortuzzo": {
+        "position": "D",
+        "date": "Wed, Nov 16",
+        "type": "Upper Body",
+        "recovery": "IR. Expected to be out until at least Nov 21"
     },
     "Scott Perunovich": {
         "position": "D",
@@ -551,47 +575,59 @@
         "type": "Hip",
         "recovery": "IR. Expected to be out until at least Mar 21"
     },
+    "Cal Foote": {
+        "position": "D",
+        "date": "Fri, Nov 18",
+        "type": "Upper Body",
+        "recovery": "IR. Expected to be out until at least Nov 19"
+    },
+    "Erik Cernak": {
+        "position": "D",
+        "date": "Fri, Nov 18",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
+    "Nicklaus Perbix": {
+        "position": "D",
+        "date": "Thu, Nov 17",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
+    "Cole Koepke": {
+        "position": "LW",
+        "date": "Thu, Nov 17",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
+    "Zach Bogosian": {
+        "position": "D",
+        "date": "Thu, Nov 17",
+        "type": "Shoulder",
+        "recovery": "IR. Expected to be out until at least Nov 19"
+    },
     "Anthony Cirelli": {
         "position": "C",
         "date": "Tue, Oct 11",
         "type": "Shoulder",
         "recovery": "IR. Expected to be out until at least Nov 25"
     },
-    "Zach Bogosian": {
-        "position": "D",
-        "date": "Wed, Sep 21",
-        "type": "Shoulder",
-        "recovery": "IR. Expected to be out until at least Nov 25"
-    },
     "Ilya Samsonov": {
         "position": "G",
-        "date": "Sat, Nov 5",
+        "date": "Thu, Nov 17",
         "type": "Knee",
-        "recovery": "Expected to be out until at least Nov 8"
-    },
-    "Matt Murray": {
-        "position": "G",
-        "date": "Wed, Nov 2",
-        "type": "Groin",
         "recovery": "IR. Expected to be out until at least Nov 21"
     },
-    "Kyle Clifford": {
-        "position": "LW",
-        "date": "Wed, Nov 2",
-        "type": "Shoulder",
-        "recovery": "IR. Expected to be out until at least Nov 8"
+    "T.J. Brodie": {
+        "position": "D",
+        "date": "Mon, Nov 14",
+        "type": "Oblique",
+        "recovery": "IR. Expected to be out until at least Nov 28"
     },
     "Jake Muzzin": {
         "position": "D",
-        "date": "Tue, Oct 25",
+        "date": "Mon, Nov 14",
         "type": "Neck",
-        "recovery": "IR. Expected to be out until at least Nov 12"
-    },
-    "Jordie Benn": {
-        "position": "D",
-        "date": "Sat, Oct 22",
-        "type": "Groin",
-        "recovery": "IR. Expected to be out until at least Nov 8"
+        "recovery": "IR. Expected to be out until at least Feb 26"
     },
     "Carl Dahlstrom": {
         "position": "D",
@@ -599,29 +635,35 @@
         "type": "Shoulder",
         "recovery": "IR. Expected to be out until at least Apr 1"
     },
-    "Brock Boeser": {
+    "Vasily Podkolzin": {
         "position": "RW",
-        "date": "Sat, Nov 5",
-        "type": "Hand",
-        "recovery": "IR. Expected to be out until at least Nov 8"
-    },
-    "Travis Dermott": {
-        "position": "D",
-        "date": "Tue, Nov 1",
-        "type": "Concussion",
-        "recovery": "IR. Expected to be out until at least Nov 8"
-    },
-    "Curtis Lazar": {
-        "position": "RW",
-        "date": "Wed, Oct 26",
-        "type": "Undisclosed",
-        "recovery": "IR. Expected to be out until at least Nov 18"
+        "date": "Fri, Nov 18",
+        "type": "Face",
+        "recovery": "Expected to be out until at least Nov 21"
     },
     "Tucker Poolman": {
         "position": "D",
-        "date": "Mon, Oct 24",
+        "date": "Fri, Nov 18",
         "type": "Undisclosed",
-        "recovery": "IR. Expected to be out until at least Nov 12"
+        "recovery": "IR. Expected to be out until at least Nov 21"
+    },
+    "Travis Dermott": {
+        "position": "D",
+        "date": "Tue, Nov 15",
+        "type": "Concussion",
+        "recovery": "IR. Expected to be out until at least Nov 23"
+    },
+    "Jack Studnicka": {
+        "position": "C",
+        "date": "Tue, Nov 15",
+        "type": "Lower Body",
+        "recovery": "IR. Expected to be out until at least Nov 23"
+    },
+    "Tanner Pearson": {
+        "position": "LW",
+        "date": "Thu, Nov 10",
+        "type": "Hand",
+        "recovery": "IR. Expected to be out until at least Dec 10"
     },
     "Micheal Ferland": {
         "position": "LW",
@@ -629,11 +671,11 @@
         "type": "Head",
         "recovery": "IR. Expected to be out until at least Jul 1"
     },
-    "Laurent Brossoit": {
-        "position": "G",
-        "date": "Tue, Oct 25",
-        "type": "Hip",
-        "recovery": "IR. Expected to be out until at least Nov 8"
+    "Nicolas Roy": {
+        "position": "C",
+        "date": "Fri, Nov 18",
+        "type": "Lower Body",
+        "recovery": "Expected to be out until at least Nov 21"
     },
     "Robin Lehner": {
         "position": "G",
@@ -655,21 +697,21 @@
     },
     "Dmitry Orlov": {
         "position": "D",
-        "date": "Sat, Nov 5",
+        "date": "Thu, Nov 17",
         "type": "Lower Body",
-        "recovery": "Day-to-Day"
+        "recovery": "IR. Expected to be out until at least Nov 19"
+    },
+    "Carl Hagelin": {
+        "position": "LW",
+        "date": "Tue, Nov 15",
+        "type": "Hip",
+        "recovery": "IR. Expected to be out until at least Nov 23"
     },
     "T.J. Oshie": {
         "position": "RW",
-        "date": "Sat, Nov 5",
+        "date": "Sat, Nov 12",
         "type": "Lower Body",
-        "recovery": "IR. Expected to be out until at least Nov 7"
-    },
-    "John Carlson": {
-        "position": "D",
-        "date": "Sat, Nov 5",
-        "type": "Lower Body",
-        "recovery": "IR. Expected to be out until at least Nov 7"
+        "recovery": "IR. Expected to be out until at least Nov 19"
     },
     "Beck Malenstyn": {
         "position": "LW",
@@ -683,11 +725,11 @@
         "type": "Knee",
         "recovery": "IR. Expected to be out until at least May 1"
     },
-    "Carl Hagelin": {
-        "position": "LW",
-        "date": "Wed, Oct 19",
+    "Nicklas Backstrom": {
+        "position": "C",
+        "date": "Mon, Oct 10",
         "type": "Hip",
-        "recovery": "IR. Expected to be out until at least Nov 15"
+        "recovery": "IR. Expected to be out until at least Jan 1"
     },
     "Tom Wilson": {
         "position": "RW",
@@ -695,28 +737,34 @@
         "type": "Knee",
         "recovery": "IR. Expected to be out until at least Dec 7"
     },
-    "Nicklas Backstrom": {
+    "Dylan DeMelo": {
+        "position": "D",
+        "date": "Fri, Nov 18",
+        "type": "Undisclosed",
+        "recovery": "Day-to-Day"
+    },
+    "Logan Stanley": {
+        "position": "D",
+        "date": "Thu, Nov 17",
+        "type": "Foot",
+        "recovery": "IR. Expected to be out until at least Nov 23"
+    },
+    "Mason Appleton": {
         "position": "C",
-        "date": "Mon, Oct 10",
-        "type": "Hip",
-        "recovery": "IR. Expected to be out until at least Jan 1"
+        "date": "Wed, Nov 16",
+        "type": "Wrist",
+        "recovery": "IR. Expected to be out until at least Jan 26"
     },
     "Nikolaj Ehlers": {
         "position": "LW",
-        "date": "Sat, Nov 5",
+        "date": "Wed, Nov 16",
         "type": "Lower Body",
-        "recovery": "IR. Expected to be out until at least Nov 12"
+        "recovery": "IR. Expected to be out until at least Nov 21"
     },
     "Morgan Barron": {
         "position": "C",
         "date": "Fri, Nov 4",
         "type": "Wrist",
         "recovery": "IR. Expected to be out until at least Dec 6"
-    },
-    "Logan Stanley": {
-        "position": "D",
-        "date": "Wed, Nov 2",
-        "type": "Foot",
-        "recovery": "IR. Expected to be out until at least Nov 17"
     }
 }

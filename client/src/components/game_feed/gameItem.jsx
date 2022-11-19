@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { logos } from '../img/logos';
 
 export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
-  console.log(liveGameInfo);
   const render_game_state = status => {
     switch (status.abstractGameState) {
       case 'Live': {

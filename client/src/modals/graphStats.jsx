@@ -30,8 +30,7 @@ export default function GraphStatsModal({ poolInfo, DictUsers }) {
   const update_graph_stats = keyStats => {
     const startDate = new Date(poolInfo.season_start);
     const endDate = new Date();
-
-    endDate.setDate(endDate.getDate() + 1);
+    endDate.setMinutes(endDate.getMinutes() + endDate.getTimezoneOffset());
 
     const labels = [];
 
@@ -63,9 +62,6 @@ export default function GraphStatsModal({ poolInfo, DictUsers }) {
       };
       datasets.push(dataset);
     }
-
-    console.log(labels);
-    console.log(datasets);
 
     setChartData({
       labels,
@@ -136,7 +132,6 @@ export default function GraphStatsModal({ poolInfo, DictUsers }) {
   }, []);
 
   const on_stats_selection = event => {
-    console.log(event.target.value);
     update_graph_stats(event.target.value);
   };
   if (chartData && chartOptions) {

@@ -24,13 +24,13 @@ export default function PeriodRecap({ gameInfo, gameContent, period }) {
           </thead>
           <tbody>
             {gameInfo.liveData.plays.scoringPlays
-              .filter(i => gameInfo.liveData.plays.allPlays[i].about.period === parseInt(period, 10))
-              .map(i => {
+              .filter(playIndex => gameInfo.liveData.plays.allPlays[playIndex].about.period === parseInt(period, 10))
+              .map(playIndex => {
                 if (isItem === false) setIsItem(true);
                 return (
-                  <tr key={i}>
+                  <tr key={playIndex}>
                     <td>
-                      <GoalItem goalData={gameInfo.liveData.plays.allPlays[i]} gameContent={gameContent} />
+                      <GoalItem goalData={gameInfo.liveData.plays.allPlays[playIndex]} gameContent={gameContent} />
                     </td>
                   </tr>
                 );

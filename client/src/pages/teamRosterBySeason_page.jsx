@@ -162,7 +162,7 @@ export default function TeamRosterBySeasonPage(injury) {
             <tr key={goalie.playerId}>
               <td>-</td>
               <td>
-                <PlayerLink name={goalie.skaterFullName} id={goalie.playerId} injury={injury} />
+                <PlayerLink name={goalie.goalieFullName} id={goalie.playerId} injury={injury} />
               </td>
               <td>G</td>
               <td>{goalie.gamesPlayed}</td>

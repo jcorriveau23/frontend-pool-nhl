@@ -22,7 +22,6 @@ export default function MenuModal({ user, isWalletConnected, showMenuModal, setS
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(window.location.pathname);
     // Since we disabled the overlay we need to add a custom way of closing the modal when clicking outside of the modal.
     const handleClickOutside = event => {
       if (

@@ -67,7 +67,6 @@ export default function PoolPage({
       const pool = await db.pools.get({ name: poolName_temp });
       const lastFormatDate = find_last_date_in_db(pool);
 
-      // console.log(lastFormatDate);
       let res;
 
       try {
@@ -82,8 +81,6 @@ export default function PoolPage({
       }
 
       if (res.status === 200) {
-        // [TODO] display a page or notification to show that the pool was not found
-
         if (pool) {
           if (res.data.date_updated !== pool.date_updated) {
             // In the case we want to force a complete pool update we check that field if an updated happened to request the complete pool information instead.

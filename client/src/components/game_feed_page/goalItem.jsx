@@ -13,50 +13,39 @@ import { logos } from '../img/logos';
 export default function GoalItem({ goalData, gameContent }) {
   const videoRef = useRef();
   const [goalContent, setGoalContent] = useState(null);
-  const [scorer, setScorer] = useState('');
-  const [firstAssist, setFirstAssist] = useState(null);
-  const [secondAssist, setSecondAssist] = useState(null);
+  const [scorer, setScorer] = useState([]);
+  const [assists, setAssists] = useState([]);
+
   const [rowSpan, setRowSpan] = useState(2);
 
   // const previousUrl = useRef(goalContent.playbacks[3].url) // TODO: validate if we can use a previous Ref to make  bether in the useEffect
 
   useEffect(() => {
-    // console.log(goalData)
-    // console.log(gameContent)
+    // Try to find the video related to the goal.
 
-    if (gameContent && gameContent.media.milestones.items) {
-      for (let i = 0; i < gameContent.media.milestones.items.length; i += 1) {
-        if (parseInt(gameContent.media.milestones.items[i].statsEventId, 10) === goalData.about.eventId)
-          if (
-            gameContent.media.milestones.items[i].highlight &&
-            gameContent.media.milestones.items[i].highlight.playbacks?.length > 3
-          ) {
-            // console.log('found the video');
-            setGoalContent({
-              ...gameContent.media.milestones.items[i].highlight,
-            });
+    if (gameContent) {
+      const goalVid = gameContent.highlights.scoreboard.items.find(item => {
+        for (let i = 0; i < item.keywords.length; i += 1) {
+          if (item.keywords[i].type === 'statsEventId') {
+            return Number(item.keywords[i].value) === goalData.about.eventId;
           }
-      }
-    }
-
-    let bFirstAssist = false;
-
-    for (let i = 0; i < goalData.players.length; i += 1) {
-      if (goalData.players[i].playerType === 'Scorer') {
-        setScorer(goalData.players[i]);
-      }
-
-      if (goalData.players[i].playerType === 'Assist') {
-        if (bFirstAssist === false) {
-          bFirstAssist = true;
-          setFirstAssist(goalData.players[i]);
-          setRowSpan(3);
-        } else {
-          setSecondAssist(goalData.players[i]);
-          setRowSpan(4);
         }
+        return false;
+      });
+
+      if (goalVid && goalVid.playbacks?.length > 3) {
+        // console.log('found the video');
+        setGoalContent(goalVid);
       }
     }
+
+    // Set goal and assist players related to the goal
+
+    setScorer(goalData.players.filter(p => p.playerType === 'Scorer'));
+    const a = goalData.players.filter(p => p.playerType === 'Assist');
+    setAssists(a);
+
+    setRowSpan(a.length + 2);
   }, [goalData, gameContent]);
 
   useEffect(() => {
@@ -106,34 +95,34 @@ export default function GoalItem({ goalData, gameContent }) {
               )}
             </td>
           </tr>
-          {scorer ? (
+          {scorer.length > 0 ? (
             <tr>
               <th>Scorer:</th>
               <td>
-                <PlayerLink name={scorer.player.fullName} id={scorer.player.id} number={scorer.seasonTotal} />
+                <PlayerLink name={scorer[0].player.fullName} id={scorer[0].player.id} number={scorer[0].seasonTotal} />
               </td>
             </tr>
           ) : null}
-          {firstAssist ? (
+          {assists.length > 0 ? (
             <tr>
               <th>1st Assists:</th>
               <td>
                 <PlayerLink
-                  name={firstAssist.player.fullName}
-                  id={firstAssist.player.id}
-                  number={firstAssist.seasonTotal}
+                  name={assists[0].player.fullName}
+                  id={assists[0].player.id}
+                  number={assists[0].seasonTotal}
                 />
               </td>
             </tr>
           ) : null}
-          {secondAssist ? (
+          {assists.length > 1 ? (
             <tr>
               <th>2nd Assists:</th>
               <td>
                 <PlayerLink
-                  name={secondAssist.player.fullName}
-                  id={secondAssist.player.id}
-                  number={secondAssist.seasonTotal}
+                  name={assists[1].player.fullName}
+                  id={assists[1].player.id}
+                  number={assists[1].seasonTotal}
                 />
               </td>
             </tr>

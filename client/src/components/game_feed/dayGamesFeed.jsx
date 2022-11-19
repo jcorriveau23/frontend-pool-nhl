@@ -39,14 +39,12 @@ export default function TodayGamesFeed({
     setGamesStats(null);
   };
 
-  useEffect(() => {
+  const get_day_game_info = async () => {
     if (!date) {
       // this case is when we do a refresh on the site we always display the past date before 12 PM
       const newDate = new Date();
-      newDate.setHours(newDate.getHours() - 12);
-      newDate.setHours(0);
-      newDate.setMinutes(0);
-      newDate.setSeconds(0);
+
+      newDate.setHours(newDate.getHours() - newDate.getTimezoneOffset() / 60 - 12); // minus 12 hours
 
       setDate(newDate);
       setTodayFormatDate(newDate.toISOString().slice(0, 10));
@@ -113,6 +111,10 @@ export default function TodayGamesFeed({
         }
       });
     }
+  };
+
+  useEffect(() => {
+    get_day_game_info();
   }, [date]); // fetch all todays games info from nhl api on this component mount.
 
   const prevDate = () => {
@@ -138,10 +140,7 @@ export default function TodayGamesFeed({
 
   const currentDate = () => {
     const newDate = new Date();
-    newDate.setHours(newDate.getHours() - 12);
-    newDate.setHours(0);
-    newDate.setMinutes(0);
-    newDate.setSeconds(0);
+    newDate.setHours(newDate.getHours() - newDate.getTimezoneOffset() / 60 - 12); // minus 12 hours
 
     setDate(newDate);
     reset_state();

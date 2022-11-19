@@ -40,8 +40,8 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
       axios
         .get(`https://statsapi.web.nhl.com/api/v1/game/${id}/feed/live`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
         .then(res => {
-          console.log(res.data);
           const gInfo = res.data;
+
           setGameInfo(gInfo);
 
           if (

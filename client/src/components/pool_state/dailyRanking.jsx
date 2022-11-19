@@ -20,7 +20,8 @@ export default function DailyRanking({
   poolInfo,
   playerIdToPlayersDataMap,
   selectedParticipantIndex,
-  setSelectedParticipantIndex,
+  setUserTab,
+  select_participant,
   injury,
   user,
   DictUsers,
@@ -32,10 +33,6 @@ export default function DailyRanking({
   const [goalDailyStats, setGoalDailyStats] = useState(null);
   const [dailyRank, setDailyRank] = useState(null);
   const [dailyPreview, setDailyPreview] = useState(null);
-
-  const select_participant = _participant => {
-    setSelectedParticipantIndex(poolInfo.participants.findIndex(participant => participant === _participant));
-  };
 
   const calculate_daily_stats = () => {
     const forwDailyStatsTemp = {};
@@ -68,14 +65,17 @@ export default function DailyRanking({
               id: key,
               G: score_by_day[formatDate][participant].roster.F[key].G,
               A: score_by_day[formatDate][participant].roster.F[key].A,
+              SOG: score_by_day[formatDate][participant].roster.F[key].SOG,
               pts:
                 score_by_day[formatDate][participant].roster.F[key].G * poolInfo.forward_pts_goals +
                 score_by_day[formatDate][participant].roster.F[key].A * poolInfo.forward_pts_assists,
               played: true,
             };
+
             if (player.G >= 3) {
               player.pts += poolInfo.forward_pts_hattricks;
             }
+
             if (player.SOG) {
               player.pts += player.SOG * poolInfo.forward_pts_shootout_goals;
             }
@@ -104,6 +104,7 @@ export default function DailyRanking({
               id: key,
               G: score_by_day[formatDate][participant].roster.D[key].G,
               A: score_by_day[formatDate][participant].roster.D[key].A,
+              SOG: score_by_day[formatDate][participant].roster.D[key].SOG,
               pts:
                 score_by_day[formatDate][participant].roster.D[key].G * poolInfo.defender_pts_goals +
                 score_by_day[formatDate][participant].roster.D[key].A * poolInfo.defender_pts_assists,
@@ -113,7 +114,7 @@ export default function DailyRanking({
               player.pts += poolInfo.defender_pts_hattricks;
             }
             if (player.SOG) {
-              player.pts += player.SOG * poolInfo.forward_pts_shootout_goals;
+              player.pts += player.SOG * poolInfo.defender_pts_shootout_goals;
             }
           } else {
             player = {
@@ -170,7 +171,6 @@ export default function DailyRanking({
           return player;
         });
 
-        console.log(score_by_day[formatDate][participant]);
         dailyRankTemp.push({
           participant,
           // Forwards total daily points
@@ -510,7 +510,7 @@ export default function DailyRanking({
             <>
               <td>{player.G}</td>
               <td>{player.A}</td>
-              <td>{player.G >= 3 ? <b style={{ color: '#070' }}>Yes</b> : <b style={{ color: '#a20' }}>No</b>}</td>
+              <td>{player.G >= 3 ? <b style={{ color: '#070' }}>Yes</b> : null}</td>
               <td>{player.SOG ? player.SOG : 0}</td>
               <td>
                 <b style={{ color: '#a20' }}>{player.pts}</b>
@@ -532,23 +532,6 @@ export default function DailyRanking({
           <th>{poolInfo.context.score_by_day[formatDate][participant][position_key]?.HT}</th>
           <th>{poolInfo.context.score_by_day[formatDate][participant][position_key]?.SOG}</th>
           <th>{poolInfo.context.score_by_day[formatDate][participant][position_key]?.pts}</th>
-        </tr>
-      );
-    }
-    return null;
-  };
-
-  const render_goalies_total = participant => {
-    if (poolInfo.context.score_by_day[formatDate]) {
-      return (
-        <tr>
-          <th colSpan={3}>Total</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.G}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.A}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.W}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.SO}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.OT}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.pts}</th>
         </tr>
       );
     }
@@ -603,6 +586,23 @@ export default function DailyRanking({
         </tr>
       ));
 
+  const render_goalies_total = participant => {
+    if (poolInfo.context.score_by_day[formatDate]) {
+      return (
+        <tr>
+          <th colSpan={3}>Total</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.G}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.A}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.W}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.SO}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.OT}</th>
+          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.pts}</th>
+        </tr>
+      );
+    }
+    return null;
+  };
+
   if (gameStatus === 'Preview' && dailyPreview && DictTeamAgainst) {
     return (
       <>
@@ -610,7 +610,7 @@ export default function DailyRanking({
           {render_table_preview_header()}
           {render_table_preview_content()}
         </table>
-        <Tabs selectedIndex={selectedParticipantIndex} onSelect={setSelectedParticipantIndex} forceRenderTabPanel>
+        <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)} forceRenderTabPanel>
           <TabList>
             {poolInfo.participants.map(participant => (
               <Tab key={participant}>
@@ -679,7 +679,7 @@ export default function DailyRanking({
           <thead>{render_table_rank_header()}</thead>
           <tbody>{render_table_rank_body()}</tbody>
         </table>
-        <Tabs selectedIndex={selectedParticipantIndex} onSelect={setSelectedParticipantIndex} forceRenderTabPanel>
+        <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)} forceRenderTabPanel>
           <TabList>
             {poolInfo.participants.map(participant => (
               <Tab key={participant}>
