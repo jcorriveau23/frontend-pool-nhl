@@ -9,7 +9,7 @@ import json
 # create an client instance of the MongoDB class
 
 mo_c = MongoClient()
-db = mo_c.pooljdope
+db = mo_c.hockeypool
 
 #1) parse the list of pools
 #2) parse the list of participants into the pool context

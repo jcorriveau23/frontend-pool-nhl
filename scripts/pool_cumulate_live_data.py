@@ -6,7 +6,7 @@ from datetime import date, datetime, timedelta
 # create an client instance of the MongoDB class
 
 mo_c = MongoClient()
-db = mo_c.pooljdope
+db = mo_c.hockeypool
 
 def get_skaters_stats(id, today_pointers, played_today):
     for skater in today_pointers["skaters"]:
@@ -267,11 +267,13 @@ def lock_daily_roster(day = None):
 
 
 if __name__ == "__main__":
-    start_date = date(2022, 10, 7)     # beginning of the 2021-2022 season
-    end_date = date(2022, 10, 31)
-    delta = timedelta(days=1)
-    while start_date <= end_date:
-    #     print(start_date)
-    #     lock_daily_roster(start_date)
-        cumulate_daily_roster_pts(start_date)
-        start_date += delta
+    # start_date = date(2022, 10, 7)     # beginning of the 2021-2022 season
+    # end_date = date(2022, 10, 31)
+    # delta = timedelta(days=1)
+    # while start_date <= end_date:
+    # #     print(start_date)
+    # #     lock_daily_roster(start_date)
+    #     cumulate_daily_roster_pts(start_date)
+    #     start_date += delta
+
+    cumulate_daily_roster_pts(date.today())

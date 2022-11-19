@@ -53,7 +53,7 @@ CF_team = ['ducks',
 # create an client instance of the MongoDB class
 
 mo_c = MongoClient()
-db = mo_c.pooljdope
+db = mo_c.hockeypool
 
 def parse_roster_table(table, dict_players_salary):
     for row in table:
