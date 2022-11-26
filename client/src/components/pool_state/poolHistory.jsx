@@ -8,7 +8,7 @@ import { BsCalendarDay } from 'react-icons/bs';
 // Components
 import User from '../user';
 import PlayerLink from '../playerLink';
-import logos from '../img/logos';
+import { logos } from '../img/logos';
 
 export default function PoolHistory({
   poolInfo,
