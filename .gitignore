@@ -8,3 +8,6 @@ contract/build
 contract/pool-prediction-idea.txt
 client/public/.well-known
 scripts/__pycache__/
+client/yarn.lock
+client/package.json
+client/package-lock.json

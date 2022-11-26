@@ -8,7 +8,7 @@ import ReactTooltip from 'react-tooltip';
 // icons
 import { RiTeamFill, RiInformationFill } from 'react-icons/ri';
 import { BsCalendarDay, BsFillCalculatorFill, BsCashCoin, BsGraphUp } from 'react-icons/bs';
-import { ImHammer } from 'react-icons/im';
+import { ImHammer, ImHistory } from 'react-icons/im';
 import { FaExchangeAlt } from 'react-icons/fa';
 
 // component
@@ -22,6 +22,7 @@ import NaviguateToday from './naviguateToday';
 import User from '../user';
 import RosterCapHit from './roster';
 import TopSeasonPlayers from './topSeasonPlayers';
+import PoolHistory from './poolHistory';
 
 // modals
 import FillSpot from '../../modals/FillSpot';
@@ -905,6 +906,10 @@ export default function InProgressPool({
                 Trade Center
               </Tab>
               <Tab>
+                <ImHistory size={30} />
+                History
+              </Tab>
+              <Tab>
                 <ImHammer size={30} />
                 Draft
               </Tab>
@@ -1022,6 +1027,16 @@ export default function InProgressPool({
               <TradeCenter
                 poolInfo={poolInfo}
                 setPoolUpdate={setPoolUpdate}
+                playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+                injury={injury}
+                user={user}
+                DictUsers={DictUsers}
+                isUserParticipant={isUserParticipant}
+              />
+            </TabPanel>
+            <TabPanel>
+              <PoolHistory
+                poolInfo={poolInfo}
                 playerIdToPlayersDataMap={playerIdToPlayersDataMap}
                 injury={injury}
                 user={user}
