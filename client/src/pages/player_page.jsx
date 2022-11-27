@@ -36,8 +36,10 @@ export default function PlayerPage() {
             setPlayerInfo(res.data);
             setPlayerStats(res.data.people[0].stats[0]);
             setPlayerPlayoffStats(res.data.people[0].stats[1]);
-            setTotalCareer(res.data.people[0].stats[2].splits[0].stat);
-            setTotalCareerPlayoffs(res.data.people[0].stats[3].splits[0].stat);
+            if (res.data.people[0].stats[2].splits.length > 0)
+              setTotalCareer(res.data.people[0].stats[2].splits[0].stat);
+            if (res.data.people[0].stats[3].splits.length > 0)
+              setTotalCareerPlayoffs(res.data.people[0].stats[3].splits[0].stat);
           });
       } else {
         // console.log("fetching prospect")
@@ -195,18 +197,18 @@ export default function PlayerPage() {
           <th>Total nhl</th>
           <th>-</th>
           <th>-</th>
-          <th>{totalCareer.games}</th>
-          <th>{totalCareer.goals}</th>
-          <th>{totalCareer.assists}</th>
-          <th>{totalCareer.points}</th>
-          <th>{totalCareer.plusMinus}</th>
-          <th>{totalCareer.penaltyMinutes}</th>
-          <th>{totalCareerPlayoffs.games}</th>
-          <th>{totalCareerPlayoffs.goals}</th>
-          <th>{totalCareerPlayoffs.assists}</th>
-          <th>{totalCareerPlayoffs.points}</th>
-          <th>{totalCareerPlayoffs.plusMinus}</th>
-          <th>{totalCareerPlayoffs.penaltyMinutes}</th>
+          <th>{totalCareer?.games}</th>
+          <th>{totalCareer?.goals}</th>
+          <th>{totalCareer?.assists}</th>
+          <th>{totalCareer?.points}</th>
+          <th>{totalCareer?.plusMinus}</th>
+          <th>{totalCareer?.penaltyMinutes}</th>
+          <th>{totalCareerPlayoffs?.games}</th>
+          <th>{totalCareerPlayoffs?.goals}</th>
+          <th>{totalCareerPlayoffs?.assists}</th>
+          <th>{totalCareerPlayoffs?.points}</th>
+          <th>{totalCareerPlayoffs?.plusMinus}</th>
+          <th>{totalCareerPlayoffs?.penaltyMinutes}</th>
         </tr>
       </tbody>
     </table>
@@ -288,17 +290,17 @@ export default function PlayerPage() {
           <th>total nhl</th>
           <th>-</th>
           <th>-</th>
-          <th>{totalCareer.games}</th>
-          <th>{totalCareer.gameStarted}</th>
+          <th>{totalCareer?.games}</th>
+          <th>{totalCareer?.gameStarted}</th>
           <th>-</th>
-          <th>{totalCareer.goalsAgainst}</th>
-          <th>{totalCareer.wins}</th>
-          <th>{totalCareer.losses}</th>
-          <th>{totalCareer.ot}</th>
+          <th>{totalCareer?.goalsAgainst}</th>
+          <th>{totalCareer?.wins}</th>
+          <th>{totalCareer?.losses}</th>
+          <th>{totalCareer?.ot}</th>
           <th>-</th>
-          <th>{totalCareer.saves}</th>
-          <th>{totalCareer.shotAgainst}</th>
-          <th>{totalCareer.shutouts}</th>
+          <th>{totalCareer?.saves}</th>
+          <th>{totalCareer?.shotAgainst}</th>
+          <th>{totalCareer?.shutouts}</th>
         </tr>
       </tbody>
     </table>
@@ -364,7 +366,7 @@ export default function PlayerPage() {
     </div>
   );
 
-  if (playerStats && playerPlayoffStats && playerInfo && totalCareer && totalCareerPlayoffs) {
+  if (playerStats && playerPlayoffStats && playerInfo) {
     return render_player_info_stats(playerStats.splits, playerInfo.people[0]);
   }
 
