@@ -4,6 +4,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
+import { AiFillCheckCircle } from 'react-icons/ai';
+
 // components
 import TradeItem from './tradeItem';
 
@@ -67,11 +69,27 @@ export default function TradeCenter({
       <div className="half-cont">
         <Tabs>
           <TabList>
-            <Tab>Open Trades</Tab>
-            <Tab>Accepted Trades</Tab>
+            <Tab>Trades</Tab>
             <Tab>Refused Trades</Tab>
             <Tab>Cancelled Trades</Tab>
           </TabList>
+          {isUserParticipant ? (
+            <>
+              <button className="base-button" type="button" onClick={() => setShowCreateTradeModal(true)}>
+                Create a trade
+              </button>
+              <CreateTradeModal
+                showCreateTradeModal={showCreateTradeModal}
+                setShowCreateTradeModal={setShowCreateTradeModal}
+                poolInfo={poolInfo}
+                setPoolUpdate={setPoolUpdate}
+                playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+                injury={injury}
+                user={user}
+                DictUsers={DictUsers}
+              />
+            </>
+          ) : null}
           <TabPanel>
             {poolInfo.trades
               .filter(trade => trade.status === 'NEW')
@@ -113,19 +131,20 @@ export default function TradeCenter({
                           </button>
                         ) : null}
                       </th>
-                      <th>{new Date(tradeInfo.date_created).toLocaleString('sv-SE')}</th>
+                      <th width="300px">{new Date(tradeInfo.date_created).toLocaleString('sv-SE')}</th>
                     </tr>
                   </tbody>
                 </table>
-              ))}
-          </TabPanel>
-          <TabPanel>
+              ))}{' '}
             {poolInfo.trades
               .filter(trade => trade.status === 'ACCEPTED')
               .map(tradeInfo => (
                 <table className="content-table-no-hover">
                   <tbody>
                     <tr>
+                      <th width="75px">
+                        <AiFillCheckCircle size={50} color="green" />
+                      </th>
                       <th>
                         <TradeItem
                           tradeInfo={tradeInfo}
@@ -133,7 +152,7 @@ export default function TradeCenter({
                           DictUsers={DictUsers}
                         />
                       </th>
-                      <th>{new Date(tradeInfo.date_accepted).toLocaleString('sv-SE')}</th>
+                      <th width="300px">{new Date(tradeInfo.date_accepted).toLocaleString('sv-SE')}</th>
                     </tr>
                   </tbody>
                 </table>
@@ -153,7 +172,7 @@ export default function TradeCenter({
                           DictUsers={DictUsers}
                         />
                       </th>
-                      <th>{new Date(tradeInfo.date_created).toLocaleString('sv-SE')}</th>
+                      <th width="300px">{new Date(tradeInfo.date_created).toLocaleString('sv-SE')}</th>
                     </tr>
                   </tbody>
                 </table>
@@ -173,30 +192,13 @@ export default function TradeCenter({
                           DictUsers={DictUsers}
                         />
                       </th>
-                      <th>{new Date(tradeInfo.date_created).toLocaleString('sv-SE')}</th>
+                      <th width="300px">{new Date(tradeInfo.date_created).toLocaleString('sv-SE')}</th>
                     </tr>
                   </tbody>
                 </table>
               ))}
           </TabPanel>
         </Tabs>
-        {isUserParticipant ? (
-          <>
-            <button className="base-button" type="button" onClick={() => setShowCreateTradeModal(true)}>
-              Create a trade
-            </button>
-            <CreateTradeModal
-              showCreateTradeModal={showCreateTradeModal}
-              setShowCreateTradeModal={setShowCreateTradeModal}
-              poolInfo={poolInfo}
-              setPoolUpdate={setPoolUpdate}
-              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-              injury={injury}
-              user={user}
-              DictUsers={DictUsers}
-            />
-          </>
-        ) : null}
       </div>
     );
   }

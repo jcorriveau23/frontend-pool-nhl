@@ -56,7 +56,6 @@ export default function InProgressPool({
   const [fillSpotPosition, setFillSpotPosition] = useState('');
   const [showRosterModificationModal, setShowRosterModificationModal] = useState(false);
   const [showGraphStatsModal, setShowGraphStatsModal] = useState(false);
-  const [selectedRosterPickIndex, setSelectedRosterPickIndex] = useState(0);
   const [cumulativeDailyTabIndex, setCumulativeDailyTabIndex] = useState(0);
   const [selectedParticipantIndex, setSelectedParticipantIndex] = useState(
     poolInfo.participants.findIndex(participant => participant === user._id.$oid)
@@ -719,96 +718,82 @@ export default function InProgressPool({
       {poolInfo.participants.map(pooler => (
         <TabPanel key={pooler}>
           <div className="half-cont">
-            <Tabs
-              selectedIndex={selectedRosterPickIndex}
-              onSelect={index => setSelectedRosterPickIndex(index)}
-              forceRenderTabPanel
-            >
-              <TabList>
-                <Tab>Roster</Tab>
-                <Tab>Picks</Tab>
-              </TabList>
-              <TabPanel>
-                {pooler === user._id.$oid ? (
-                  <button className="base-button" type="button" onClick={() => setShowRosterModificationModal(true)}>
-                    Modify Roster
-                  </button>
-                ) : (
-                  '-'
+            {pooler === user._id.$oid ? (
+              <button className="base-button" type="button" onClick={() => setShowRosterModificationModal(true)}>
+                Modify Roster
+              </button>
+            ) : (
+              '-'
+            )}
+            <table className="content-table-no-min">
+              <thead>
+                <NaviguateToday
+                  formatDate={formatDate}
+                  todayFormatDate={todayFormatDate}
+                  msg="Points Cumulate"
+                  colSpan={13}
+                />
+                <tr>
+                  <th colSpan={13}>
+                    Forwards ({playersStats[pooler].forwards_own}/{poolInfo.number_forwards})
+                  </th>
+                </tr>
+                {render_header_skaters()}
+              </thead>
+              <tbody>
+                {render_skater_stats(
+                  pooler,
+                  'forwards_own',
+                  'chosen_forwards',
+                  'forwards_total_pts',
+                  'forwards_total_goal',
+                  'forwards_total_assist',
+                  'forwards_total_hattrick',
+                  'forwards_total_shootout_goals',
+                  poolInfo.number_forwards,
+                  'F'
                 )}
-                <table className="content-table-no-min">
-                  <thead>
-                    <NaviguateToday
-                      formatDate={formatDate}
-                      todayFormatDate={todayFormatDate}
-                      msg="Points Cumulate"
-                      colSpan={13}
-                    />
-                    <tr>
-                      <th colSpan={13}>
-                        Forwards ({playersStats[pooler].forwards_own}/{poolInfo.number_forwards})
-                      </th>
-                    </tr>
-                    {render_header_skaters()}
-                  </thead>
-                  <tbody>
-                    {render_skater_stats(
-                      pooler,
-                      'forwards_own',
-                      'chosen_forwards',
-                      'forwards_total_pts',
-                      'forwards_total_goal',
-                      'forwards_total_assist',
-                      'forwards_total_hattrick',
-                      'forwards_total_shootout_goals',
-                      poolInfo.number_forwards,
-                      'F'
-                    )}
-                  </tbody>
-                  <thead>
-                    <tr>
-                      <th colSpan={13}>
-                        Defenders ({playersStats[pooler].defenders_own}/{poolInfo.number_defenders})
-                      </th>
-                    </tr>
-                    {render_header_skaters()}
-                  </thead>
-                  <tbody>
-                    {render_skater_stats(
-                      pooler,
-                      'defenders_own',
-                      'chosen_defenders',
-                      'defenders_total_pts',
-                      'defenders_total_goal',
-                      'defenders_total_assist',
-                      'defenders_total_hattrick',
-                      'defenders_total_shootout_goals',
-                      poolInfo.number_defenders,
-                      'D'
-                    )}
-                  </tbody>
-                  <thead>
-                    <tr>
-                      <th colSpan={13}>
-                        Goalies ({playersStats[pooler].goalies_own}/{poolInfo.number_goalies})
-                      </th>
-                    </tr>
-                    {render_header_goalies()}
-                  </thead>
-                  <tbody>{render_goalies_stats(pooler, poolInfo.number_goalies)}</tbody>
-                  <thead>
-                    <tr>
-                      <th colSpan={13}>Reservists</th>
-                    </tr>
-                    {render_header_reservists()}
-                  </thead>
-                  <tbody>{render_reservists(pooler)}</tbody>
-                </table>
-              </TabPanel>
-              <TabPanel>
-                <PickList tradablePicks={poolInfo.context.tradable_picks} participant={pooler} DictUsers={DictUsers} />
-              </TabPanel>
-            </Tabs>
+              </tbody>
+              <thead>
+                <tr>
+                  <th colSpan={13}>
+                    Defenders ({playersStats[pooler].defenders_own}/{poolInfo.number_defenders})
+                  </th>
+                </tr>
+                {render_header_skaters()}
+              </thead>
+              <tbody>
+                {render_skater_stats(
+                  pooler,
+                  'defenders_own',
+                  'chosen_defenders',
+                  'defenders_total_pts',
+                  'defenders_total_goal',
+                  'defenders_total_assist',
+                  'defenders_total_hattrick',
+                  'defenders_total_shootout_goals',
+                  poolInfo.number_defenders,
+                  'D'
+                )}
+              </tbody>
+              <thead>
+                <tr>
+                  <th colSpan={13}>
+                    Goalies ({playersStats[pooler].goalies_own}/{poolInfo.number_goalies})
+                  </th>
+                </tr>
+                {render_header_goalies()}
+              </thead>
+              <tbody>{render_goalies_stats(pooler, poolInfo.number_goalies)}</tbody>
+              <thead>
+                <tr>
+                  <th colSpan={13}>Reservists</th>
+                </tr>
+                {render_header_reservists()}
+              </thead>
+              <tbody>{render_reservists(pooler)}</tbody>
+            </table>
+            <PickList tradablePicks={poolInfo.context.tradable_picks} participant={pooler} DictUsers={DictUsers} />
           </div>
         </TabPanel>
       ))}
