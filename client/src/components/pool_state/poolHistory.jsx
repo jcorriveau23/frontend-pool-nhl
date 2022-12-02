@@ -66,6 +66,33 @@ export default function PoolHistory({
       }
     }
 
+    // Make sure that we count current roster (for days that roster modifications are allowed we will see them real time)
+
+    const dailyMovements = []; // Will capture all movement that happened on this date.
+
+    for (let i = 0; i < poolInfo.participants.length; i += 1) {
+      const participant = poolInfo.participants[i];
+
+      const forwards = poolInfo.context.pooler_roster[participant].chosen_forwards.map(player => player.id);
+      const defenders = poolInfo.context.pooler_roster[participant].chosen_defenders.map(player => player.id);
+      const goalies = poolInfo.context.pooler_roster[participant].chosen_goalies.map(player => player.id);
+
+      const roster = forwards.concat(defenders, goalies);
+
+      // see if a changes was made to the roster and note it in historyTmp.
+
+      const removedPlayers = currentRoster[participant].filter(player => !roster.includes(Number(player)));
+      const addedPlayers = roster.filter(player => !currentRoster[participant].includes(String(player)));
+
+      if (removedPlayers.length > 0 || addedPlayers.length > 0) {
+        const movement = { participant, removedPlayers, addedPlayers };
+        dailyMovements.push(movement);
+      }
+    }
+
+    if (dailyMovements.length > 0) {
+      historyTmp.unshift({ date: 'Today', dailyMovements });
+    }
     if (historyTmp.length > 0) setHistory(historyTmp);
   };
 
@@ -73,54 +100,51 @@ export default function PoolHistory({
     parse_all_movement();
   }, []);
 
-  const render_daily_roster_movement = dailyMovements => {
-    console.log(dailyMovements);
-    return (
-      <>
-        <tr>
-          <th colSpan={3}>
-            <BsCalendarDay size={30} />
-            {dailyMovements.date}
-          </th>
-        </tr>
-        {dailyMovements.dailyMovements.map(d => (
-          <>
+  const render_daily_roster_movement = dailyMovements => (
+    <>
+      <tr>
+        <th colSpan={3}>
+          <BsCalendarDay size={30} />
+          {dailyMovements.date}
+        </th>
+      </tr>
+      {dailyMovements.dailyMovements.map(d => (
+        <>
+          <tr>
+            <th colSpan={3}>
+              <User id={d.participant} user={user} DictUsers={DictUsers} />
+            </th>
+          </tr>
+          {d.addedPlayers.map(p => (
             <tr>
-              <th colSpan={3}>
-                <User id={d.participant} user={user} DictUsers={DictUsers} />
-              </th>
+              <td>
+                <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
+              </td>
+              <td>
+                <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
+              </td>
+              <td>
+                <GiEntryDoor color="green" size={30} />
+              </td>
             </tr>
-            {d.addedPlayers.map(p => (
-              <tr>
-                <td>
-                  <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
-                </td>
-                <td>
-                  <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
-                </td>
-                <td>
-                  <GiEntryDoor color="green" size={30} />
-                </td>
-              </tr>
-            ))}
-            {d.removedPlayers.map(p => (
-              <tr>
-                <td>
-                  <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
-                </td>
-                <td>
-                  <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
-                </td>
-                <td>
-                  <GiExitDoor color="red" size={30} />
-                </td>
-              </tr>
-            ))}
-          </>
-        ))}
-      </>
-    );
-  };
+          ))}
+          {d.removedPlayers.map(p => (
+            <tr>
+              <td>
+                <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
+              </td>
+              <td>
+                <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
+              </td>
+              <td>
+                <GiExitDoor color="red" size={30} />
+              </td>
+            </tr>
+          ))}
+        </>
+      ))}
+    </>
+  );
 
   if (history) {
     return (
