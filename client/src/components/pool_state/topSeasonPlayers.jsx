@@ -53,7 +53,7 @@ export default function TopSeasonPlayers({ user, injury, playersIdToPoolerMap, D
 
     axios
       .get(
-        `https://nhl-pool-ethereum.herokuapp.com/https://api.nhle.com/stats/rest/en/${type}/summary?isAggregate=false&isGame=false&sort=${statsSorting}&start=${s}&limit=${limit}&factCayenneExp=gamesPlayed>=1&cayenneExp=${positionCode} and gameTypeId=2 and seasonId<=20222023 and seasonId>=20222023`
+        `/cors-anywhere/https://api.nhle.com/stats/rest/en/${type}/summary?isAggregate=false&isGame=false&sort=${statsSorting}&start=${s}&limit=${limit}&factCayenneExp=gamesPlayed>=1&cayenneExp=${positionCode} and gameTypeId=2 and seasonId<=20222023 and seasonId>=20222023`
       )
       .then(l => {
         if (reset) setLeaders(l.data.data);

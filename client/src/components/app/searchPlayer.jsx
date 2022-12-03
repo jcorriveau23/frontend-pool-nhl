@@ -18,9 +18,7 @@ function SearchPlayer() {
     if (searchValue.length > 0 && !isSearching) {
       setIsSearching(true);
       axios
-        .get(
-          `https://nhl-pool-ethereum.herokuapp.com/https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/${searchValue}/10`
-        ) // https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/Crosby/10
+        .get(`/cors-anywhere/https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/${searchValue}/10`) // https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/Crosby/10
         .then(res => {
           setSearchResult({ ...res.data });
           setIsSearching(false);

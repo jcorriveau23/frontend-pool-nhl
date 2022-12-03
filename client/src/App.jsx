@@ -54,8 +54,6 @@ function App() {
   const refAccount = useRef(null);
 
   useEffect(() => {
-    axios.get('https://nhl-pool-ethereum.herokuapp.com/');
-
     axios.get('/injury.json').then(res => {
       setInjury(res.data);
     });
