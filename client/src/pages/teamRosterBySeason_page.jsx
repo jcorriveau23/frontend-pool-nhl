@@ -11,7 +11,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import PlayerLink from '../components/playerLink';
 
 // images
-import { logos, teamNameFromId } from '../components/img/logos';
+import { logos } from '../components/img/logos';
 
 export default function TeamRosterBySeasonPage(injury) {
   const [skatersStats, setSkatersStats] = useState(null);
@@ -73,7 +73,7 @@ export default function TeamRosterBySeasonPage(injury) {
           </tr>
           <tr>
             <th colSpan="12">
-              <img src={logos[teamNameFromId[teamID]]} alt="" width="40" height="40" />
+              <img src={logos[teamID]} alt="" width="40" height="40" />
             </th>
           </tr>
           <tr>

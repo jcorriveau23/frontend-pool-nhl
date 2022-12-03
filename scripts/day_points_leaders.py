@@ -170,7 +170,7 @@ def fetch_pointers_day(day = None):
                         update_skaters_stats(day_leaders_data, {
                             'name': player_name, 
                             'id': player['person']['id'],
-                            'team': teams[side]['team']['name'],
+                            'team': teams[side]['team']['id'],
                             'stats': player['stats']['skaterStats']
                         })
                     else:
@@ -194,7 +194,7 @@ def fetch_pointers_day(day = None):
                         update_goalies_stats(day_leaders_data, {
                             'name': player_name, 
                             'id': player['person']['id'],
-                            'team': teams[side]['team']['name'],
+                            'team': teams[side]['team']['id'],
                             'stats': player['stats']['goalieStats']
                         })
 

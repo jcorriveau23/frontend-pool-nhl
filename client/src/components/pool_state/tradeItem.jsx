@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FaExchangeAlt } from 'react-icons/fa';
 
+import { logos } from '../img/logos';
+
 export default function TradeItem({
   tradeInfo,
   playerIdToPlayersDataMap,
@@ -43,7 +45,10 @@ export default function TradeItem({
       <tbody>
         {items.players.map(player => (
           <tr onClick={setPlayers ? () => remove_player(items.players, setPlayers, player) : null}>
-            <td colSpan={2}>{playerIdToPlayersDataMap[player].name}</td>
+            <td>{playerIdToPlayersDataMap[player].name}</td>
+            <td>
+              <img src={logos[playerIdToPlayersDataMap[player].team]} alt="" width="40" height="40" />
+            </td>
           </tr>
         ))}
         {items.picks.length > 0 ? (

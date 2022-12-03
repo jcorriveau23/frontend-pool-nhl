@@ -292,11 +292,11 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
             </tr>
             <tr>
               <th>
-                <img src={logos[teams.away.team.name]} alt="" width="40" height="40" />
+                <img src={logos[teams.away.team.id]} alt="" width="40" height="40" />
               </th>
               <th>Summary</th>
               <th>
-                <img src={logos[teams.home.team.name]} alt="" width="40" height="40" />
+                <img src={logos[teams.home.team.id]} alt="" width="40" height="40" />
               </th>
             </tr>
           </thead>
@@ -402,7 +402,7 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
             return (
               <tr key={i}>
                 <td>
-                  <img src={logos[liveData.plays.allPlays[i].team.name]} alt="" width="40" height="40" />
+                  <img src={logos[liveData.plays.allPlays[i].team.id]} alt="" width="40" height="40" />
                 </td>
                 <td>
                   <PlayerLink
@@ -442,10 +442,10 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
               <Tab>Game stats</Tab>
               <Tab>Game recap</Tab>
               <Tab>
-                <img src={logos[gameInfo.liveData.boxscore.teams.home.team.name]} alt="" width="40" height="40" />
+                <img src={logos[gameInfo.liveData.boxscore.teams.home.team.id]} alt="" width="40" height="40" />
               </Tab>
               <Tab>
-                <img src={logos[gameInfo.liveData.boxscore.teams.away.team.name]} alt="" width="40" height="40" />
+                <img src={logos[gameInfo.liveData.boxscore.teams.away.team.id]} alt="" width="40" height="40" />
               </Tab>
               {contract ? <Tab>Prediction Market</Tab> : null}
             </TabList>

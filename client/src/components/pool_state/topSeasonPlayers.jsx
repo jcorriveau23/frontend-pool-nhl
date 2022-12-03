@@ -6,6 +6,8 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import PlayerLink from '../playerLink';
 import User from '../user';
 
+import { logos, abbrevToTeamId } from '../img/logos';
+
 export default function TopSeasonPlayers({ user, injury, playersIdToPoolerMap, DictUsers }) {
   const [leaders, setLeaders] = useState([]);
   const [start, setStart] = useState(0);
@@ -121,7 +123,9 @@ export default function TopSeasonPlayers({ user, injury, playersIdToPoolerMap, D
               <User id={playersIdToPoolerMap[player.playerId]} user={user} DictUsers={DictUsers} parenthesis />
             ) : null}
           </td>
-          <td>{player.teamAbbrevs}</td>
+          <td>
+            <img src={logos[abbrevToTeamId[player.teamAbbrevs]]} alt="" width="40" height="40" />
+          </td>
           <td>{player.gamesPlayed}</td>
           <td>{player.goals}</td>
           <td>{player.assists}</td>
@@ -157,7 +161,9 @@ export default function TopSeasonPlayers({ user, injury, playersIdToPoolerMap, D
               <User id={playersIdToPoolerMap[player.playerId]} user={user} DictUsers={DictUsers} parenthesis />
             ) : null}
           </td>
-          <td>{player.teamAbbrevs}</td>
+          <td>
+            <img src={logos[abbrevToTeamId[player.teamAbbrevs]]} alt="" width="40" height="40" />
+          </td>
           <td>{player.gamesPlayed}</td>
           <td>
             <b style={{ color: '#a20' }}>{player.wins}</b>
@@ -202,7 +208,7 @@ export default function TopSeasonPlayers({ user, injury, playersIdToPoolerMap, D
           </label>
         </div>
         <div>
-          <h3>Filter</h3>
+          <h3>Filter:</h3>
           <label htmlFor="All">
             <input type="checkbox" onClick={() => onClickFilter('All')} checked={filter === 'All'} />
             All

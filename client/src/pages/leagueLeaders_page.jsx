@@ -72,7 +72,7 @@ export default function LeagueLeadersPage({ injury }) {
               <PlayerLink name={player.person.fullName} id={player.person.id} injury={injury} />
             </td>
             <td>
-              <img src={logos[player.team.name]} alt="" width="40" height="40" />
+              <img src={logos[player.team.id]} alt="" width="40" height="40" />
             </td>
             {/* <td>{player.player.positionCode}</td> */}
             <td>{player.value}</td>

@@ -35,7 +35,7 @@ def update_pool_players_team():
 
                         response = requests.request('GET', player_url)
                         player_info_json = json.loads(response.text)
-                        player_current_team = player_info_json["people"][0]["currentTeam"]["name"]
+                        player_current_team = player_info_json["people"][0]["currentTeam"]["id"]
                         players_id_to_current_team_dict[player["id"]] = player_current_team
                     else:
                         player_current_team = players_id_to_current_team_dict[player["id"]]

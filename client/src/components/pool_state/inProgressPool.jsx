@@ -1049,6 +1049,9 @@ export default function InProgressPool({
               />
             </TabPanel>
           </Tabs>
+        </div>
+        <div className="cont">
+          <h1>Current League Leaders</h1>
           <TopSeasonPlayers
             user={user}
             injury={injury}
