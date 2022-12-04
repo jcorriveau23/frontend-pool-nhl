@@ -86,10 +86,10 @@ export default function TodayGamesFeed({
                 bAllFinal = false;
               }
 
-              DictTeamAgainst[res.data.dates[0].games[i].teams.away.team.name] =
-                res.data.dates[0].games[i].teams.home.team.name;
-              DictTeamAgainst[res.data.dates[0].games[i].teams.home.team.name] =
-                res.data.dates[0].games[i].teams.away.team.name;
+              DictTeamAgainst[res.data.dates[0].games[i].teams.away.team.id] =
+                res.data.dates[0].games[i].teams.home.team.id;
+              DictTeamAgainst[res.data.dates[0].games[i].teams.home.team.id] =
+                res.data.dates[0].games[i].teams.away.team.id;
             }
           }
           setDictTeamAgainst(DictTeamAgainst);
