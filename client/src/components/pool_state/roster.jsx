@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { BsGraphUp } from 'react-icons/bs';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 import User from '../user';
 import PlayerLink from '../playerLink';
@@ -316,5 +317,5 @@ export default function RosterCapHit({
     );
   }
 
-  return <h1>TODO</h1>;
+  return <ClipLoader color="#fff" loading size={75} />;
 }

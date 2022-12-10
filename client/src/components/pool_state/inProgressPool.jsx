@@ -474,7 +474,7 @@ export default function InProgressPool({
       emptyRows.push(
         <tr>
           <td>{i + 1}</td>
-          <td colSpan={2}>
+          <td colSpan={3}>
             {pooler === user._id.$oid ? (
               <button className="base-button" type="button" onClick={() => open_fill_spot_modal(position)}>
                 Fill Spot
