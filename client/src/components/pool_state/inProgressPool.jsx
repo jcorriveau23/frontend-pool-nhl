@@ -10,6 +10,7 @@ import { RiTeamFill, RiInformationFill } from 'react-icons/ri';
 import { BsCalendarDay, BsFillCalculatorFill, BsCashCoin, BsGraphUp } from 'react-icons/bs';
 import { ImHammer, ImHistory } from 'react-icons/im';
 import { FaExchangeAlt } from 'react-icons/fa';
+import christmas from '../img/jax-christmas.jpg';
 
 // component
 import DayLeaders from '../home_page/dailyLeaders';
@@ -40,6 +41,8 @@ export default function InProgressPool({
   user,
   DictUsers,
   poolInfo,
+  playersIdToPoolerMap,
+  playerIdToPlayersDataMap,
   injury,
   isUserParticipant,
   formatDate,
@@ -50,8 +53,6 @@ export default function InProgressPool({
 }) {
   const [playersStats, setPlayersStats] = useState(null);
   const [ranking, setRanking] = useState(null);
-  const [playersIdToPoolerMap, setPlayersIdToPoolerMap] = useState(null);
-  const [playerIdToPlayersDataMap, setPlayerIdToPlayersDataMap] = useState(null);
   const [showFillSpotModal, setShowFillSpotModal] = useState(false);
   const [fillSpotPosition, setFillSpotPosition] = useState('');
   const [showRosterModificationModal, setShowRosterModificationModal] = useState(false);
@@ -62,11 +63,9 @@ export default function InProgressPool({
   );
   const [tabSelectionParams, setTabSelectionParams] = useSearchParams();
 
-  const calculate_pool_stats = async fDate => {
+  const calculate_pool_stats = async () => {
     const stats = {}; // contains players list per pooler and poolers total points
     const rank = []; // contains pooler total points
-    const playersIdToPooler = {}; // 1st Player-ID -> Pooler-owner
-    const playersIdToPlayersData = {}; // 2nd Player-ID -> Player-info
 
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
       const participant = poolInfo.participants[i];
@@ -102,9 +101,6 @@ export default function InProgressPool({
       for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_forwards.length; j += 1) {
         const player = poolInfo.context.pooler_roster[participant].chosen_forwards[j];
 
-        playersIdToPooler[player.id] = participant;
-        playersIdToPlayersData[player.id] = player;
-
         player.nb_game = 0;
         player.G = 0;
         player.A = 0;
@@ -120,9 +116,6 @@ export default function InProgressPool({
       for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_defenders.length; j += 1) {
         const player = poolInfo.context.pooler_roster[participant].chosen_defenders[j];
 
-        playersIdToPooler[player.id] = participant;
-        playersIdToPlayersData[player.id] = player;
-
         player.nb_game = 0;
         player.G = 0;
         player.A = 0;
@@ -137,9 +130,6 @@ export default function InProgressPool({
 
       for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_goalies.length; j += 1) {
         const player = poolInfo.context.pooler_roster[participant].chosen_goalies[j];
-
-        playersIdToPooler[player.id] = participant;
-        playersIdToPlayersData[player.id] = player;
 
         player.nb_game = 0;
         player.G = 0;
@@ -157,9 +147,6 @@ export default function InProgressPool({
       for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_reservists.length; j += 1) {
         const player = poolInfo.context.pooler_roster[participant].chosen_reservists[j];
         player.own = false;
-
-        playersIdToPooler[player.id] = participant;
-        playersIdToPlayersData[player.id] = player;
       }
     }
 
@@ -168,6 +155,7 @@ export default function InProgressPool({
     const startDate = new Date(poolInfo.season_start);
     const endDate = new Date(formatDate);
     endDate.setMinutes(endDate.getMinutes() + endDate.getTimezoneOffset());
+    if (endDate < startDate) return;
 
     for (let j = startDate; j <= endDate; j.setDate(j.getDate() + 1)) {
       const jDate = j.toISOString().slice(0, 10);
@@ -407,14 +395,12 @@ export default function InProgressPool({
 
     setRanking(rank);
     setPlayersStats(stats);
-    setPlayersIdToPoolerMap(playersIdToPooler);
-    setPlayerIdToPlayersDataMap(playersIdToPlayersData);
   };
 
   useEffect(() => {
     console.log('in progress');
     if (formatDate) {
-      calculate_pool_stats(formatDate);
+      calculate_pool_stats();
     }
     const mainTab = tabSelectionParams.get('mainTab');
     const userTab = tabSelectionParams.get('userTab');
@@ -909,6 +895,9 @@ export default function InProgressPool({
             </TabList>
             <TabPanel>
               <div className="half-cont">
+                <div>
+                  <img src={christmas} alt="" />
+                </div>
                 <button
                   className="base-button"
                   onClick={() => setShowGraphStatsModal(!showGraphStatsModal)}
@@ -1040,17 +1029,7 @@ export default function InProgressPool({
             <TabPanel>
               <DraftOrder
                 poolInfo={poolInfo}
-                players_name_drafted={poolInfo.context.players_name_drafted}
-                participants={poolInfo.participants}
-                final_rank={poolInfo.final_rank}
-                tradable_picks={poolInfo.context.past_tradable_picks}
-                nb_players={
-                  poolInfo.number_forwards +
-                  poolInfo.number_defenders +
-                  poolInfo.number_goalies +
-                  poolInfo.number_reservists
-                }
-                nb_protected_players={poolInfo.next_season_number_players_protected}
+                playerIdToPlayersDataMap={playerIdToPlayersDataMap}
                 injury={injury}
                 DictUsers={DictUsers}
                 user={user}

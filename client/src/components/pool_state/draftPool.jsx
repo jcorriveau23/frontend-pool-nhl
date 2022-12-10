@@ -26,6 +26,8 @@ export default function DraftPool({
   poolName,
   poolInfo,
   setPoolInfo,
+  playerIdToPlayersDataMap,
+  playersIdToPoolerMap,
   injury,
   socket,
   isUserParticipant,
@@ -196,17 +198,7 @@ export default function DraftPool({
           ) : null}
           <DraftOrder
             poolInfo={poolInfo}
-            players_name_drafted={poolInfo.context.players_name_drafted}
-            participants={poolInfo.participants}
-            final_rank={poolInfo.final_rank}
-            tradable_picks={poolInfo.context.tradable_picks}
-            nb_players={
-              poolInfo.number_forwards +
-              poolInfo.number_defenders +
-              poolInfo.number_goalies +
-              poolInfo.number_reservists
-            }
-            nb_protected_players={poolInfo.next_season_number_players_protected}
+            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
             injury={injury}
             DictUsers={DictUsers}
             setNextDrafter={setNextDrafter}

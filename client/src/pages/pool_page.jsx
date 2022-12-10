@@ -30,6 +30,8 @@ export default function PoolPage({
   DictTeamAgainst,
 }) {
   const [poolInfo, setPoolInfo] = useState(null);
+  const [playersIdToPoolerMap, setPlayersIdToPoolerMap] = useState(null);
+  const [playerIdToPlayersDataMap, setPlayerIdToPlayersDataMap] = useState(null);
   const url = useParams(); // get the name of the pool using the param url
   const [poolName, setPoolName] = useState('');
   const [isUserParticipant, setIsUserParticipant] = useState(false);
@@ -114,6 +116,56 @@ export default function PoolPage({
     fetch_pool_info(poolUpdate);
   }, [user, url, poolUpdate]);
 
+  const process_pool_players_dict = async () => {
+    const playersIdToPooler = {}; // 1st Player-ID -> Pooler-owner
+    const playersIdToPlayersData = {}; // 2nd Player-ID -> Player-info
+
+    if (!poolInfo || !poolInfo.context || !poolInfo.context.pooler_roster) return;
+
+    for (let i = 0; i < poolInfo.participants.length; i += 1) {
+      const participant = poolInfo.participants[i];
+
+      // Forwards
+      for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_forwards.length; j += 1) {
+        const player = poolInfo.context.pooler_roster[participant].chosen_forwards[j];
+
+        playersIdToPooler[player.id] = participant;
+        playersIdToPlayersData[player.id] = player;
+      }
+
+      // Defenders
+      for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_defenders.length; j += 1) {
+        const player = poolInfo.context.pooler_roster[participant].chosen_defenders[j];
+
+        playersIdToPooler[player.id] = participant;
+        playersIdToPlayersData[player.id] = player;
+      }
+
+      // Goalies
+      for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_goalies.length; j += 1) {
+        const player = poolInfo.context.pooler_roster[participant].chosen_goalies[j];
+
+        playersIdToPooler[player.id] = participant;
+        playersIdToPlayersData[player.id] = player;
+      }
+
+      // Reservists
+      for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_reservists.length; j += 1) {
+        const player = poolInfo.context.pooler_roster[participant].chosen_reservists[j];
+
+        playersIdToPooler[player.id] = participant;
+        playersIdToPlayersData[player.id] = player;
+      }
+    }
+
+    setPlayersIdToPoolerMap(playersIdToPooler);
+    setPlayerIdToPlayersDataMap(playersIdToPlayersData);
+  };
+
+  useEffect(() => {
+    process_pool_players_dict();
+  }, [poolInfo]);
+
   if (user) {
     if (poolInfo) {
       switch (poolInfo.status) {
@@ -136,6 +188,8 @@ export default function PoolPage({
               poolName={poolName}
               poolInfo={poolInfo}
               setPoolInfo={setPoolInfo}
+              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+              playersIdToPoolerMap={playersIdToPoolerMap}
               injury={injury}
               socket={socket}
               isUserParticipant={isUserParticipant}
@@ -147,6 +201,8 @@ export default function PoolPage({
               user={user}
               DictUsers={DictUsers}
               poolInfo={poolInfo}
+              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+              playersIdToPoolerMap={playersIdToPoolerMap}
               injury={injury}
               isUserParticipant={isUserParticipant}
               formatDate={formatDate}
@@ -162,6 +218,8 @@ export default function PoolPage({
               user={user}
               DictUsers={DictUsers}
               poolInfo={poolInfo}
+              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+              playersIdToPoolerMap={playersIdToPoolerMap}
               setPoolUpdate={setPoolUpdate}
               injury={injury}
             />

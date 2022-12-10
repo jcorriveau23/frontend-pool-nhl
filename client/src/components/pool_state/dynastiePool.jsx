@@ -17,7 +17,15 @@ import User from '../user';
 // Images
 import { logos } from '../img/logos';
 
-export default function DynastiePool({ user, DictUsers, poolInfo, setPoolUpdate, injury }) {
+export default function DynastiePool({
+  user,
+  DictUsers,
+  poolInfo,
+  playerIdToPlayersDataMap,
+  playersIdToPoolerMap,
+  setPoolUpdate,
+  injury,
+}) {
   const [forwProtected, setForwProtected] = useState([]);
   const [defProtected, setDefProtected] = useState([]);
   const [goalProtected, setGoalProtected] = useState([]);
@@ -341,17 +349,8 @@ export default function DynastiePool({ user, DictUsers, poolInfo, setPoolUpdate,
         </TabPanel>
         <TabPanel>
           <DraftOrder
-            players_name_drafted={poolInfo.context.players_name_drafted}
-            participants={poolInfo.participants}
-            final_rank={poolInfo.final_rank}
-            tradable_picks={poolInfo.context.tradable_picks}
-            nb_players={
-              poolInfo.number_forwards +
-              poolInfo.number_defenders +
-              poolInfo.number_goalies +
-              poolInfo.number_reservists
-            }
-            nb_protected_players={poolInfo.next_season_number_players_protected}
+            poolInfo={poolInfo}
+            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
             injury={injury}
             DictUsers={DictUsers}
             user={user}
