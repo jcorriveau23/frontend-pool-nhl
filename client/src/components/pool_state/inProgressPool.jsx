@@ -62,69 +62,40 @@ export default function InProgressPool({
   );
   const [tabSelectionParams, setTabSelectionParams] = useSearchParams();
 
-  const find_last_cumulate = async fDate => {
-    let daily_stats = null;
-    const tempDate = new Date(fDate);
-
-    let i = 200; // Will look into the past 200 days to find the last date from now.
-
-    do {
-      const fTempDate = tempDate.toISOString().slice(0, 10);
-      daily_stats = poolInfo.context.score_by_day[fTempDate];
-
-      tempDate.setDate(tempDate.getDate() - 1);
-      i -= 1;
-    } while (i > 0 && (!daily_stats || !daily_stats[poolInfo.participants[0]].cumulate));
-
-    return daily_stats;
-  };
-
   const calculate_pool_stats = async fDate => {
     const stats = {}; // contains players list per pooler and poolers total points
     const rank = []; // contains pooler total points
-    const playersIdToPooler = {};
-    const playersIdToPlayersData = {};
-
-    let daily_stats = null;
-
-    if (poolInfo.context.score_by_day && Object.keys(poolInfo.context.score_by_day).length > 0) {
-      daily_stats = await find_last_cumulate(fDate);
-    }
+    const playersIdToPooler = {}; // 1st Player-ID -> Pooler-owner
+    const playersIdToPlayersData = {}; // 2nd Player-ID -> Player-info
 
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
       const participant = poolInfo.participants[i];
 
-      stats[participant] = {};
-
-      stats[participant].forwards_total_goal = daily_stats ? daily_stats[participant].cumulate.G_F : 0;
-      stats[participant].forwards_total_game = 0; // will be count during the for loop.
-      stats[participant].forwards_total_assist = daily_stats ? daily_stats[participant].cumulate.A_F : 0;
-      stats[participant].forwards_total_pts = daily_stats ? daily_stats[participant].cumulate.P_F : 0;
-      stats[participant].forwards_total_hattrick = daily_stats ? daily_stats[participant].cumulate.HT_F : 0;
-      stats[participant].forwards_total_shootout_goals = daily_stats ? daily_stats[participant].cumulate.SOG_F : 0;
-      stats[participant].defenders_total_game = 0; // will be count during the for loop.
-      stats[participant].defenders_total_goal = daily_stats ? daily_stats[participant].cumulate.G_D : 0;
-      stats[participant].defenders_total_assist = daily_stats ? daily_stats[participant].cumulate.A_D : 0;
-      stats[participant].defenders_total_hattrick = daily_stats ? daily_stats[participant].cumulate.HT_D : 0;
-      stats[participant].defenders_total_pts = daily_stats ? daily_stats[participant].cumulate.P_D : 0;
-      stats[participant].defenders_total_shootout_goals = daily_stats ? daily_stats[participant].cumulate.SOG_D : 0;
-      stats[participant].goalies_total_game = 0; // will be count during the for loop.
-      stats[participant].goalies_total_goal = daily_stats ? daily_stats[participant].cumulate.G_G : 0;
-      stats[participant].goalies_total_assist = daily_stats ? daily_stats[participant].cumulate.A_G : 0;
-      stats[participant].goalies_total_win = daily_stats ? daily_stats[participant].cumulate.W_G : 0;
-      stats[participant].goalies_total_shutout = daily_stats ? daily_stats[participant].cumulate.SO_G : 0;
-      stats[participant].goalies_total_OT = daily_stats ? daily_stats[participant].cumulate.OT_G : 0;
-      stats[participant].goalies_total_pts = daily_stats ? daily_stats[participant].cumulate.P_G : 0;
-      stats[participant].total_pts = daily_stats ? daily_stats[participant].cumulate.P : 0;
-
-      stats[participant].chosen_forwards = [];
-      stats[participant].chosen_defenders = [];
-      stats[participant].chosen_goalies = [];
-      stats[participant].chosen_reservists = [];
-
-      // Create 2 HashMaps for each players that is included in this pool.
-      // 1st Player-ID -> Pooler-owner
-      // 2nd Player-ID -> Player-info
+      stats[participant] = {
+        forwards_total_game: 0,
+        forwards_total_goal: 0,
+        forwards_total_assist: 0,
+        forwards_total_hattrick: 0,
+        forwards_total_shootout_goals: 0,
+        forwards_total_pts: 0,
+        defenders_total_game: 0,
+        defenders_total_goal: 0,
+        defenders_total_assist: 0,
+        defenders_total_hattrick: 0,
+        defenders_total_shootout_goals: 0,
+        defenders_total_pts: 0,
+        goalies_total_game: 0,
+        goalies_total_goal: 0,
+        goalies_total_assist: 0,
+        goalies_total_win: 0,
+        goalies_total_shutout: 0,
+        goalies_total_OT: 0,
+        goalies_total_pts: 0,
+        chosen_forwards: [],
+        chosen_defenders: [],
+        chosen_goalies: [],
+        chosen_reservists: [],
+      };
 
       // Forwards
 
@@ -228,7 +199,6 @@ export default function InProgressPool({
                   own: false,
                   reservist: indexReservist > -1,
                 };
-                stats[participant].forwards_total_game += 1;
                 index = stats[participant].chosen_forwards.push(newPlayer) - 1;
               } else {
                 stats[participant].chosen_forwards[index].nb_game += 1;
@@ -236,7 +206,6 @@ export default function InProgressPool({
                 stats[participant].chosen_forwards[index].A += player.A;
                 stats[participant].chosen_forwards[index].HT += player.G >= 3 ? 1 : 0; //  hattrick
                 stats[participant].chosen_forwards[index].SOG += player.SOG ? player.SOG : 0; // Shootout goals
-                stats[participant].forwards_total_game += 1;
               }
               // total pool points
               stats[participant].chosen_forwards[index].pool_points =
@@ -244,6 +213,18 @@ export default function InProgressPool({
                 stats[participant].chosen_forwards[index].A * poolInfo.forward_pts_assists +
                 stats[participant].chosen_forwards[index].HT * poolInfo.forward_pts_hattricks +
                 stats[participant].chosen_forwards[index].SOG * poolInfo.forward_pts_shootout_goals;
+
+              // cumulative info.
+              stats[participant].forwards_total_goal += player.G;
+              stats[participant].forwards_total_game += 1; // will be count during the for loop.
+              stats[participant].forwards_total_assist += player.A;
+              stats[participant].forwards_total_hattrick += player.G >= 3 ? 1 : 0;
+              stats[participant].forwards_total_shootout_goals += player.SOG ? player.SOG : 0;
+              stats[participant].forwards_total_pts +=
+                player.G * poolInfo.forward_pts_goals +
+                player.A * poolInfo.forward_pts_assists +
+                player.SOG * poolInfo.forward_pts_shootout_goals;
+              if (player.G >= 3) stats[participant].forwards_total_pts += poolInfo.forward_pts_hattricks;
             }
 
             return null;
@@ -267,12 +248,11 @@ export default function InProgressPool({
                   nb_game: 1,
                   G: player.G,
                   A: player.A,
-                  HT: player.HT >= 3 ? 1 : 0,
+                  HT: player.G >= 3 ? 1 : 0,
                   SOG: player.SOG ? player.SOG : 0,
                   own: false,
                   reservist: indexReservist > -1,
                 };
-                stats[participant].defenders_total_game += 1;
                 index = stats[participant].chosen_defenders.push(newPlayer) - 1;
               } else {
                 stats[participant].chosen_defenders[index].nb_game += 1;
@@ -280,7 +260,6 @@ export default function InProgressPool({
                 stats[participant].chosen_defenders[index].A += player.A;
                 stats[participant].chosen_defenders[index].HT += player.G >= 3 ? 1 : 0; // hattricks
                 stats[participant].chosen_defenders[index].SOG += player.SOG ? player.SOG : 0; // shootout goals
-                stats[participant].defenders_total_game += 1;
               }
               // total pool points
               stats[participant].chosen_defenders[index].pool_points =
@@ -288,6 +267,19 @@ export default function InProgressPool({
                 stats[participant].chosen_defenders[index].A * poolInfo.defender_pts_assists +
                 stats[participant].chosen_defenders[index].HT * poolInfo.defender_pts_hattricks +
                 stats[participant].chosen_defenders[index].SOG * poolInfo.defender_pts_shootout_goals;
+
+              // cumulative info.
+              stats[participant].defenders_total_goal += player.G;
+              stats[participant].defenders_total_game += 1; // will be count during the for loop.
+              stats[participant].defenders_total_assist += player.A;
+              stats[participant].defenders_total_hattrick += player.G >= 3 ? 1 : 0;
+              stats[participant].defenders_total_shootout_goals += player.SOG ? player.SOG : 0;
+              stats[participant].defenders_total_pts +=
+                player.G * poolInfo.defender_pts_goals +
+                player.A * poolInfo.defender_pts_assists +
+                player.SOG * poolInfo.defender_pts_shootout_goals;
+
+              if (player.G >= 3) stats[participant].defenders_total_pts += poolInfo.defender_pts_hattricks;
             }
 
             return null;
@@ -316,7 +308,6 @@ export default function InProgressPool({
                   own: false,
                   reservist: indexReservist > -1,
                 };
-                stats[participant].goalies_total_game += 1;
                 index = stats[participant].chosen_goalies.push(newPlayer) - 1;
               } else {
                 stats[participant].chosen_goalies[index].nb_game += 1;
@@ -325,7 +316,6 @@ export default function InProgressPool({
                 stats[participant].chosen_goalies[index].W += player.W;
                 stats[participant].chosen_goalies[index].SO += player.SO;
                 stats[participant].chosen_goalies[index].OT += player.OT;
-                stats[participant].goalies_total_game += 1;
               }
 
               // total pool points
@@ -335,6 +325,20 @@ export default function InProgressPool({
                 stats[participant].chosen_goalies[index].W * poolInfo.goalies_pts_wins +
                 stats[participant].chosen_goalies[index].SO * poolInfo.goalies_pts_shutouts +
                 stats[participant].chosen_goalies[index].OT * poolInfo.goalies_pts_overtimes;
+
+              // cumulative info.
+              stats[participant].goalies_total_goal += player.G;
+              stats[participant].goalies_total_game += 1; // will be count during the for loop.
+              stats[participant].goalies_total_assist += player.A;
+              stats[participant].goalies_total_win += player.W;
+              stats[participant].goalies_total_shutout += player.SO;
+              stats[participant].goalies_total_OT += player.OT;
+              stats[participant].goalies_total_pts +=
+                player.G * poolInfo.goalies_pts_goals +
+                player.A * poolInfo.goalies_pts_assists +
+                player.W * poolInfo.goalies_pts_wins +
+                player.SO * poolInfo.goalies_pts_shutouts +
+                player.OT * poolInfo.goalies_pts_overtimes;
             }
 
             return null;
@@ -349,6 +353,7 @@ export default function InProgressPool({
       const participant = poolInfo.participants[i];
 
       stats[participant].forwards_own = 0;
+
       for (let j = 0; j < stats[participant].chosen_forwards.length; j += 1) {
         stats[participant].forwards_own += stats[participant].chosen_forwards[j].own ? 1 : 0;
       }
@@ -391,7 +396,10 @@ export default function InProgressPool({
           stats[participant].forwards_total_game +
           stats[participant].defenders_total_game +
           stats[participant].goalies_total_game,
-        total_pts: stats[participant].total_pts,
+        total_pts:
+          stats[participant].forwards_total_pts +
+          stats[participant].defenders_total_pts +
+          stats[participant].goalies_total_pts,
       };
 
       rank.push(pooler_global_stats);
