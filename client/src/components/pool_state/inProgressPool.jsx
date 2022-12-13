@@ -884,7 +884,7 @@ export default function InProgressPool({
               </Tab>
               <Tab>
                 <FaExchangeAlt size={30} />
-                Trade Center
+                Trade
               </Tab>
               <Tab>
                 <ImHistory size={30} />
