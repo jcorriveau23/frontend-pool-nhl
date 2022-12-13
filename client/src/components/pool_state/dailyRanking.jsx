@@ -487,7 +487,21 @@ export default function DailyRanking({
           </td>
           <td style={{ backgroundColor: '#eee', cursor: 'pointer' }}>{p.total_games}</td>
           <td style={{ backgroundColor: '#eee', cursor: 'pointer' }}>
-            <b style={{ color: '#a20' }}>{p.P}</b>
+            <b style={{ color: '#a20' }}>
+              {p.G_F * poolInfo.forward_pts_goals +
+                p.A_F * poolInfo.forward_pts_assists +
+                p.HT_F * poolInfo.forward_pts_hattricks +
+                p.SOG_F * poolInfo.forward_pts_shootout_goals +
+                p.G_D * poolInfo.defender_pts_goals +
+                p.A_D * poolInfo.defender_pts_assists +
+                p.HT_D * poolInfo.defender_pts_hattricks +
+                p.SOG_D * poolInfo.defender_pts_shootout_goals +
+                p.G_G * poolInfo.goalies_pts_goals +
+                p.A_G * poolInfo.goalies_pts_assists +
+                p.W_G * poolInfo.goalies_pts_wins +
+                p.SO_G * poolInfo.goalies_pts_shutouts +
+                p.OT_G * poolInfo.goalies_pts_overtimes}
+            </b>
           </td>
         </tr>
       ));
