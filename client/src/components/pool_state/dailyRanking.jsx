@@ -179,14 +179,24 @@ export default function DailyRanking({
           A_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.A : 0,
           HT_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.HT : 0,
           SOG_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.SOG : 0,
-          P_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.pts : 0,
+          P_F: score_by_day[formatDate][participant].F_tot
+            ? score_by_day[formatDate][participant].F_tot.G * poolInfo.forward_pts_goals +
+              score_by_day[formatDate][participant].F_tot.A * poolInfo.forward_pts_assists +
+              score_by_day[formatDate][participant].F_tot.HT * poolInfo.forward_pts_hattricks +
+              score_by_day[formatDate][participant].F_tot.SOG * poolInfo.forward_pts_shootout_goals
+            : 0,
           // Defenders total daily points
           D_games: defendersDailyGames,
           G_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.G : 0,
           A_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.A : 0,
           HT_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.HT : 0,
           SOG_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.SOG : 0,
-          P_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.pts : 0,
+          P_D: score_by_day[formatDate][participant].D_tot
+            ? score_by_day[formatDate][participant].D_tot.G * poolInfo.defender_pts_goals +
+              score_by_day[formatDate][participant].D_tot.A * poolInfo.defender_pts_assists +
+              score_by_day[formatDate][participant].D_tot.HT * poolInfo.defender_pts_hattricks +
+              score_by_day[formatDate][participant].D_tot.SOG * poolInfo.defender_pts_shootout_goals
+            : 0,
           // Goalies total daily points
           G_games: goaliesDailyGames,
           G_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.G : 0,
@@ -194,10 +204,15 @@ export default function DailyRanking({
           W_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.W : 0,
           SO_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.SO : 0,
           OT_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.OT : 0,
-          P_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.pts : 0,
+          P_G: score_by_day[formatDate][participant].G_tot
+            ? score_by_day[formatDate][participant].G_tot.G * poolInfo.goalies_pts_goals +
+              score_by_day[formatDate][participant].G_tot.A * poolInfo.goalies_pts_assists +
+              score_by_day[formatDate][participant].G_tot.W * poolInfo.goalies_pts_wins +
+              score_by_day[formatDate][participant].G_tot.SO * poolInfo.goalies_pts_shutouts +
+              score_by_day[formatDate][participant].G_tot.OT * poolInfo.goalies_pts_overtimes
+            : 0,
           // Total daily points
           total_games: forwardDailyGames + defendersDailyGames + goaliesDailyGames,
-          P: score_by_day[formatDate][participant].tot_pts ? score_by_day[formatDate][participant].tot_pts : 0,
         });
       }
 
@@ -425,7 +440,7 @@ export default function DailyRanking({
   const render_table_rank_body = () =>
     dailyRank
       .sort((p1, p2) => {
-        const diff = p2.P - p1.P;
+        const diff = p2.P_F + p2.P_D + p2.P_G - (p1.P_F + p1.P_D + p1.P_G);
         if (diff === 0) {
           return p1.total_games - p2.total_games;
         }
@@ -450,12 +465,7 @@ export default function DailyRanking({
           <td>{p.HT_F}</td>
           <td>{p.SOG_F}</td>
           <td>
-            <b>
-              {p.G_F * poolInfo.forward_pts_goals +
-                p.A_F * poolInfo.forward_pts_assists +
-                p.HT_F * poolInfo.forward_pts_hattricks +
-                p.SOG_F * poolInfo.forward_pts_shootout_goals}
-            </b>
+            <b>{p.P_F}</b>
           </td>
           <td>{p.D_games}</td>
           <td>{p.G_D}</td>
@@ -463,12 +473,7 @@ export default function DailyRanking({
           <td>{p.HT_D}</td>
           <td>{p.SOG_D}</td>
           <td>
-            <b>
-              {p.G_D * poolInfo.defender_pts_goals +
-                p.A_D * poolInfo.defender_pts_assists +
-                p.HT_D * poolInfo.defender_pts_hattricks +
-                p.SOG_D * poolInfo.defender_pts_shootout_goals}
-            </b>
+            <b>{p.P_D}</b>
           </td>
           <td>{p.G_games}</td>
           <td>{p.G_G}</td>
@@ -477,31 +482,11 @@ export default function DailyRanking({
           <td>{p.SO_G}</td>
           <td>{p.OT_G}</td>
           <td>
-            <b>
-              {p.G_G * poolInfo.goalies_pts_goals +
-                p.A_G * poolInfo.goalies_pts_assists +
-                p.W_G * poolInfo.goalies_pts_wins +
-                p.SO_G * poolInfo.goalies_pts_shutouts +
-                p.OT_G * poolInfo.goalies_pts_overtimes}
-            </b>
+            <b>{p.P_G}</b>
           </td>
           <td style={{ backgroundColor: '#eee', cursor: 'pointer' }}>{p.total_games}</td>
           <td style={{ backgroundColor: '#eee', cursor: 'pointer' }}>
-            <b style={{ color: '#a20' }}>
-              {p.G_F * poolInfo.forward_pts_goals +
-                p.A_F * poolInfo.forward_pts_assists +
-                p.HT_F * poolInfo.forward_pts_hattricks +
-                p.SOG_F * poolInfo.forward_pts_shootout_goals +
-                p.G_D * poolInfo.defender_pts_goals +
-                p.A_D * poolInfo.defender_pts_assists +
-                p.HT_D * poolInfo.defender_pts_hattricks +
-                p.SOG_D * poolInfo.defender_pts_shootout_goals +
-                p.G_G * poolInfo.goalies_pts_goals +
-                p.A_G * poolInfo.goalies_pts_assists +
-                p.W_G * poolInfo.goalies_pts_wins +
-                p.SO_G * poolInfo.goalies_pts_shutouts +
-                p.OT_G * poolInfo.goalies_pts_overtimes}
-            </b>
+            <b style={{ color: '#a20' }}>{p.P_F + p.P_D + p.P_G}</b>
           </td>
         </tr>
       ));
