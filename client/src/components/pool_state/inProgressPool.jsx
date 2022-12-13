@@ -703,7 +703,7 @@ export default function InProgressPool({
   };
 
   const render_tabs_roster_stats = () => (
-    <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)} forceRenderTabPanel>
+    <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)}>
       <TabList>
         {poolInfo.participants.map(pooler => (
           <Tab key={pooler}>

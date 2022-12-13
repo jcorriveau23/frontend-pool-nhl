@@ -450,7 +450,12 @@ export default function DailyRanking({
           <td>{p.HT_F}</td>
           <td>{p.SOG_F}</td>
           <td>
-            <b>{p.P_F}</b>
+            <b>
+              {p.G_F * poolInfo.forward_pts_goals +
+                p.A_F * poolInfo.forward_pts_assists +
+                p.HT_F * poolInfo.forward_pts_hattricks +
+                p.SOG_F * poolInfo.forward_pts_shootout_goals}
+            </b>
           </td>
           <td>{p.D_games}</td>
           <td>{p.G_D}</td>
@@ -458,7 +463,12 @@ export default function DailyRanking({
           <td>{p.HT_D}</td>
           <td>{p.SOG_D}</td>
           <td>
-            <b>{p.P_D}</b>
+            <b>
+              {p.G_D * poolInfo.defender_pts_goals +
+                p.A_D * poolInfo.defender_pts_assists +
+                p.HT_D * poolInfo.defender_pts_hattricks +
+                p.SOG_D * poolInfo.defender_pts_shootout_goals}
+            </b>
           </td>
           <td>{p.G_games}</td>
           <td>{p.G_G}</td>
@@ -467,7 +477,13 @@ export default function DailyRanking({
           <td>{p.SO_G}</td>
           <td>{p.OT_G}</td>
           <td>
-            <b>{p.P_G}</b>
+            <b>
+              {p.G_G * poolInfo.goalies_pts_goals +
+                p.A_G * poolInfo.goalies_pts_assists +
+                p.W_G * poolInfo.goalies_pts_wins +
+                p.SO_G * poolInfo.goalies_pts_shutouts +
+                p.OT_G * poolInfo.goalies_pts_overtimes}
+            </b>
           </td>
           <td style={{ backgroundColor: '#eee', cursor: 'pointer' }}>{p.total_games}</td>
           <td style={{ backgroundColor: '#eee', cursor: 'pointer' }}>
