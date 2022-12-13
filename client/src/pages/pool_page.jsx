@@ -35,6 +35,7 @@ export default function PoolPage({
   const url = useParams(); // get the name of the pool using the param url
   const [poolName, setPoolName] = useState('');
   const [isUserParticipant, setIsUserParticipant] = useState(false);
+  const [hasOwnerRights, setHasOwnerRights] = useState(false);
   const [poolUpdate, setPoolUpdate] = useState(false);
 
   const find_last_date_in_db = pool => {
@@ -164,6 +165,7 @@ export default function PoolPage({
 
   useEffect(() => {
     process_pool_players_dict();
+    if (poolInfo) setHasOwnerRights(poolInfo.owner === user._id.$oid || poolInfo.assistants.includes(user._id.$oid));
   }, [poolInfo]);
 
   if (user) {
@@ -173,6 +175,7 @@ export default function PoolPage({
           return (
             <CreatedPool
               user={user}
+              hasOwnerRights={hasOwnerRights}
               DictUsers={DictUsers}
               poolName={poolName}
               poolInfo={poolInfo}
@@ -199,6 +202,7 @@ export default function PoolPage({
           return (
             <InProgressPool
               user={user}
+              hasOwnerRights={hasOwnerRights}
               DictUsers={DictUsers}
               poolInfo={poolInfo}
               playerIdToPlayersDataMap={playerIdToPlayersDataMap}

@@ -18,6 +18,7 @@ export default function TradeCenter({
   playerIdToPlayersDataMap,
   injury,
   user,
+  hasOwnerRights,
   DictUsers,
   isUserParticipant,
 }) {
@@ -110,9 +111,7 @@ export default function TradeCenter({
                             Cancel
                           </button>
                         ) : null}
-                        {tradeInfo.ask_to === user._id.$oid ||
-                        poolInfo.owner === user._id.$oid ||
-                        poolInfo.assistants.includes(user._id.$oid) ? (
+                        {tradeInfo.ask_to === user._id.$oid || hasOwnerRights ? (
                           <button
                             onClick={() => respond_trade(tradeInfo.id, true)}
                             type="button"

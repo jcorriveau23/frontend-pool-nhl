@@ -24,6 +24,7 @@ import User from '../user';
 import RosterCapHit from './roster';
 import TopSeasonPlayers from './topSeasonPlayers';
 import PoolHistory from './poolHistory';
+import PoolSettings from './poolSettings';
 
 // modals
 import FillSpot from '../../modals/FillSpot';
@@ -39,6 +40,7 @@ import '../react-tabs.css';
 
 export default function InProgressPool({
   user,
+  hasOwnerRights,
   DictUsers,
   poolInfo,
   playersIdToPoolerMap,
@@ -892,6 +894,10 @@ export default function InProgressPool({
                 <ImHammer size={30} />
                 Draft
               </Tab>
+              <Tab>
+                <ImHammer size={30} />
+                Settings
+              </Tab>
             </TabList>
             <TabPanel>
               <div className="half-cont">
@@ -1012,6 +1018,7 @@ export default function InProgressPool({
                 playerIdToPlayersDataMap={playerIdToPlayersDataMap}
                 injury={injury}
                 user={user}
+                hasOwnerRights={hasOwnerRights}
                 DictUsers={DictUsers}
                 isUserParticipant={isUserParticipant}
               />
@@ -1033,6 +1040,14 @@ export default function InProgressPool({
                 injury={injury}
                 DictUsers={DictUsers}
                 user={user}
+              />
+            </TabPanel>
+            <TabPanel>
+              <PoolSettings
+                user={user}
+                poolInfo={poolInfo}
+                hasOwnerRights={hasOwnerRights}
+                setPoolUpdate={setPoolUpdate}
               />
             </TabPanel>
           </Tabs>
