@@ -883,12 +883,8 @@ export default function InProgressPool({
                 Cap Hit
               </Tab>
               <Tab>
-                <FaExchangeAlt size={30} />
-                Trade
-              </Tab>
-              <Tab>
                 <ImHistory size={30} />
-                History
+                Trade/History
               </Tab>
               <Tab>
                 <ImHammer size={30} />
@@ -1011,22 +1007,13 @@ export default function InProgressPool({
                 DictUsers={DictUsers}
               />
             </TabPanel>
-            <TabPanel>
-              <TradeCenter
-                poolInfo={poolInfo}
-                setPoolUpdate={setPoolUpdate}
-                playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-                injury={injury}
-                user={user}
-                hasOwnerRights={hasOwnerRights}
-                DictUsers={DictUsers}
-                isUserParticipant={isUserParticipant}
-              />
-            </TabPanel>
+
             <TabPanel>
               <PoolHistory
                 poolInfo={poolInfo}
                 playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+                setPoolUpdate={setPoolUpdate}
+                hasOwnerRights={hasOwnerRights}
                 injury={injury}
                 user={user}
                 DictUsers={DictUsers}

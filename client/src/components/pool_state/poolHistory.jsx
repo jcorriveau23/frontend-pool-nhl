@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 // icons
 import { GiEntryDoor, GiExitDoor } from 'react-icons/gi';
 import { BsCalendarDay } from 'react-icons/bs';
+import { AiFillCheckCircle } from 'react-icons/ai';
 
 // Components
 import User from '../user';
 import PlayerLink from '../playerLink';
 import { logos } from '../img/logos';
+import TradeItem from './tradeItem';
+import TradeCenter from './tradeCenter';
 
 export default function PoolHistory({
   poolInfo,
   playerIdToPlayersDataMap,
+  setPoolUpdate,
+  hasOwnerRights,
   injury,
   user,
   DictUsers,
@@ -22,6 +28,7 @@ export default function PoolHistory({
 
   const parse_all_movement = async () => {
     const startDate = new Date(poolInfo.season_start);
+    console.log(poolInfo.season_start);
     const endDate = new Date();
 
     const currentRoster = {};
@@ -32,6 +39,10 @@ export default function PoolHistory({
       const jDate = j.toISOString().slice(0, 10);
 
       const dailyMovements = []; // Will capture all movement that happened on this date.
+      const dailyTrades = poolInfo.trades.filter(
+        trade =>
+          trade.status === 'ACCEPTED' && new Date(trade.date_accepted + 3600000).toISOString().slice(0, 10) === jDate
+      );
 
       if (poolInfo.context.score_by_day && poolInfo.context.score_by_day[jDate]) {
         for (let i = 0; i < poolInfo.participants.length; i += 1) {
@@ -49,7 +60,11 @@ export default function PoolHistory({
             const addedPlayers = roster.filter(player => !currentRoster[participant].includes(player));
 
             if (removedPlayers.length > 0 || addedPlayers.length > 0) {
-              const movement = { participant, removedPlayers, addedPlayers };
+              const movement = {
+                participant,
+                removedPlayers,
+                addedPlayers,
+              };
               dailyMovements.push(movement);
             }
           }
@@ -58,18 +73,19 @@ export default function PoolHistory({
           currentRoster[participant] = roster;
         }
 
-        if (dailyMovements.length > 0) {
-          historyTmp.unshift({ date: jDate, dailyMovements });
+        if (dailyMovements.length > 0 || dailyTrades.length > 0) {
+          historyTmp.unshift({ date: jDate, dailyMovements, dailyTrades });
         }
 
         if (isFirstDay) isFirstDay = false; // We will start to note changes applied to rosters after the first day.
       }
     }
 
-    // Make sure that we count current roster (for days that roster modifications are allowed we will see them real time)
+    // Make sure that we count current roster (for days that roster modifications are allowed we will see them in real time)
+    // TODO: this could be generalize by creating a function centralizing logic between this and the for loop ahead.
 
     const dailyMovements = []; // Will capture all movement that happened on this date.
-
+    const dailyTrades = poolInfo.trades.filter(trade => trade.status === 'NEW');
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
       const participant = poolInfo.participants[i];
 
@@ -85,14 +101,20 @@ export default function PoolHistory({
       const addedPlayers = roster.filter(player => !currentRoster[participant].includes(String(player)));
 
       if (removedPlayers.length > 0 || addedPlayers.length > 0) {
-        const movement = { participant, removedPlayers, addedPlayers };
+        const movement = {
+          participant,
+          removedPlayers,
+          addedPlayers,
+        };
         dailyMovements.push(movement);
       }
     }
 
-    if (dailyMovements.length > 0) {
-      historyTmp.unshift({ date: 'Today', dailyMovements });
+    if (dailyMovements.length > 0 || dailyTrades.length > 0) {
+      historyTmp.unshift({ date: 'Today', dailyMovements, dailyTrades });
     }
+
+    console.log(historyTmp);
     if (historyTmp.length > 0) setHistory(historyTmp);
   };
 
@@ -103,60 +125,106 @@ export default function PoolHistory({
   const render_daily_roster_movement = dailyMovements => (
     <>
       <tr>
-        <th colSpan={3}>
+        <th>
           <BsCalendarDay size={30} />
           {dailyMovements.date}
         </th>
       </tr>
-      {dailyMovements.dailyMovements.map(d => (
-        <>
-          <tr>
-            <th colSpan={3}>
-              <User id={d.participant} user={user} DictUsers={DictUsers} />
-            </th>
-          </tr>
-          {d.addedPlayers.map(p => (
+      <tr>
+        <td>
+          <table className="content-table">
+            {dailyMovements.dailyMovements.map(d => (
+              <>
+                <tr>
+                  <th colSpan={3}>
+                    <User id={d.participant} user={user} DictUsers={DictUsers} />
+                  </th>
+                </tr>
+                {d.addedPlayers.map(p => (
+                  <tr>
+                    <td>
+                      <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
+                    </td>
+                    <td>
+                      <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
+                    </td>
+                    <td>
+                      <GiEntryDoor color="green" size={30} />
+                    </td>
+                  </tr>
+                ))}
+                {d.removedPlayers.map(p => (
+                  <tr>
+                    <td>
+                      <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
+                    </td>
+                    <td>
+                      <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
+                    </td>
+                    <td>
+                      <GiExitDoor color="red" size={30} />
+                    </td>
+                  </tr>
+                ))}
+              </>
+            ))}
             <tr>
-              <td>
-                <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
-              </td>
-              <td>
-                <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
-              </td>
-              <td>
-                <GiEntryDoor color="green" size={30} />
+              <td colSpan={3}>
+                {dailyMovements.dailyTrades
+                  .slice(0)
+                  .reverse()
+                  .map(tradeInfo => (
+                    <table className="content-table-no-hover">
+                      <tbody>
+                        <tr>
+                          <th width="75px">
+                            <AiFillCheckCircle size={50} color="green" />
+                          </th>
+                          <th>
+                            <TradeItem
+                              tradeInfo={tradeInfo}
+                              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+                              DictUsers={DictUsers}
+                            />
+                          </th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  ))}
               </td>
             </tr>
-          ))}
-          {d.removedPlayers.map(p => (
-            <tr>
-              <td>
-                <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
-              </td>
-              <td>
-                <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
-              </td>
-              <td>
-                <GiExitDoor color="red" size={30} />
-              </td>
-            </tr>
-          ))}
-        </>
-      ))}
+          </table>
+        </td>
+      </tr>
     </>
   );
 
   if (history) {
     return (
       <div>
-        <table className="content-table">
-          <thead>
-            <tr>
-              <th colSpan={3}>Season Movements</th>
-            </tr>
-          </thead>
-          <tbody>{history.map(dailyMovements => render_daily_roster_movement(dailyMovements))}</tbody>
-        </table>
+        <Tabs>
+          <TabList>
+            <Tab>History</Tab>
+            <Tab>Trade Center</Tab>
+          </TabList>
+          <TabPanel>
+            <table className="content-table">
+              <tbody>{history.map(dailyMovements => render_daily_roster_movement(dailyMovements))}</tbody>
+            </table>
+          </TabPanel>
+          <TabPanel>
+            <TradeCenter
+              poolInfo={poolInfo}
+              setPoolUpdate={setPoolUpdate}
+              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+              injury={injury}
+              user={user}
+              hasOwnerRights={hasOwnerRights}
+              DictUsers={DictUsers}
+              isUserParticipant={isUserParticipant}
+            />
+          </TabPanel>
+        </Tabs>
       </div>
     );
   }
