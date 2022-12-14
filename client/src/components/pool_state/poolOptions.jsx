@@ -36,7 +36,7 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
       <table className="content-table-no-min">
         <tbody>
           <tr>
-            <th colSpan={2}>Rule</th>
+            <th colSpan={2}>General Rules</th>
           </tr>
           <tr>
             <td>Number of poolers</td>
@@ -53,30 +53,27 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
       <table className="content-table-no-min">
         <tbody>
           <tr>
-            <th colSpan={2}>Points</th>
+            <th colSpan={2}>Points for forwards</th>
           </tr>
+          {render_options('Goal:', 'forward_pts_goals', 1, 3)}
+          {render_options('Assist', 'forward_pts_assists', 1, 3)}
+          {render_options('Hat Trick:', 'forward_pts_hattricks', 1, 3)}
+          {render_options('Shootout Goal:', 'forward_pts_shootout_goals', 1, 3)}
           <tr>
-            <th colSpan={2}>forwards</th>
+            <th colSpan={2}>Points for Defenders</th>
           </tr>
-          {render_options('points per goal:', 'forward_pts_goals', 1, 3)}
-          {render_options('points per assist:', 'forward_pts_assists', 1, 3)}
-          {render_options('points per hat trick:', 'forward_pts_hattricks', 1, 3)}
-          {render_options('points per shootout goal:', 'forward_pts_shootout_goals', 1, 3)}
+          {render_options('Goal:', 'defender_pts_goals', 1, 3)}
+          {render_options('Assist:', 'defender_pts_assists', 1, 3)}
+          {render_options('Hat Trick:', 'defender_pts_hattricks', 1, 3)}
+          {render_options('Shootout Goal:', 'defender_pts_shootout_goals', 1, 3)}
           <tr>
-            <th colSpan={2}>Defenders</th>
+            <th colSpan={2}>Points for Goalies</th>
           </tr>
-          {render_options('points per goal:', 'defender_pts_goals', 1, 3)}
-          {render_options('points per assist:', 'defender_pts_assists', 1, 3)}
-          {render_options('points per hat trick:', 'defender_pts_hattricks', 1, 3)}
-          {render_options('points per shootout goal:', 'defender_pts_shootout_goals', 1, 3)}
-          <tr>
-            <th colSpan={2}>Goalies</th>
-          </tr>
-          {render_options('points per win:', 'goalies_pts_wins', 1, 3)}
-          {render_options('points per overtimes losses:', 'goalies_pts_overtimes', 1, 3)}
-          {render_options('points per shutout:', 'goalies_pts_shutouts', 1, 3)}
-          {render_options('points per goal:', 'goalies_pts_goals', 1, 5)}
-          {render_options('points per assist:', 'goalies_pts_assists', 1, 3)}
+          {render_options('Win:', 'goalies_pts_wins', 1, 3)}
+          {render_options('Overtimes Loss:', 'goalies_pts_overtimes', 1, 3)}
+          {render_options('Shutout:', 'goalies_pts_shutouts', 1, 3)}
+          {render_options('Goal:', 'goalies_pts_goals', 1, 5)}
+          {render_options('Assist:', 'goalies_pts_assists', 1, 3)}
         </tbody>
       </table>
     </div>
