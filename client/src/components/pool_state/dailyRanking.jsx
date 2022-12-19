@@ -538,15 +538,16 @@ export default function DailyRanking({
       ));
 
   const render_skaters_total = (participant, position_key) => {
-    if (poolInfo.context.score_by_day[formatDate]) {
+    const i = dailyRank.findIndex(dailyUser => dailyUser.participant === participant);
+    if (i > -1) {
       return (
         <tr>
           <th colSpan={4}>Total</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant][position_key]?.G}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant][position_key]?.A}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant][position_key]?.HT}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant][position_key]?.SOG}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant][position_key]?.pts}</th>
+          <th>{dailyRank[i][`G_${position_key}`]}</th>
+          <th>{dailyRank[i][`A_${position_key}`]}</th>
+          <th>{dailyRank[i][`HT_${position_key}`]}</th>
+          <th>{dailyRank[i][`SOG_${position_key}`]}</th>
+          <th>{dailyRank[i][`P_${position_key}`]}</th>
         </tr>
       );
     }
@@ -602,16 +603,17 @@ export default function DailyRanking({
       ));
 
   const render_goalies_total = participant => {
-    if (poolInfo.context.score_by_day[formatDate]) {
+    const i = dailyRank.findIndex(dailyUser => dailyUser.participant === participant);
+    if (i > -1) {
       return (
         <tr>
           <th colSpan={3}>Total</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.G}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.A}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.W}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.SO}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.OT}</th>
-          <th>{poolInfo.context.score_by_day[formatDate][participant].G_tot?.pts}</th>
+          <th>{dailyRank[i].G_G}</th>
+          <th>{dailyRank[i].A_G}</th>
+          <th>{dailyRank[i].W_G}</th>
+          <th>{dailyRank[i].SO_G}</th>
+          <th>{dailyRank[i].OT_G}</th>
+          <th>{dailyRank[i].P_G}</th>
         </tr>
       );
     }
@@ -625,7 +627,7 @@ export default function DailyRanking({
           {render_table_preview_header()}
           {render_table_preview_content()}
         </table>
-        <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)} forceRenderTabPanel>
+        <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)}>
           <TabList>
             {poolInfo.participants.map(participant => (
               <Tab key={participant}>
@@ -694,7 +696,7 @@ export default function DailyRanking({
           <thead>{render_table_rank_header()}</thead>
           <tbody>{render_table_rank_body()}</tbody>
         </table>
-        <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)} forceRenderTabPanel>
+        <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)}>
           <TabList>
             {poolInfo.participants.map(participant => (
               <Tab key={participant}>
@@ -717,10 +719,10 @@ export default function DailyRanking({
                   <tbody>
                     {render_skaters_headers_stats(participant, 'Forwards', poolInfo.number_forwards, forwDailyStats)}
                     {render_skaters_stats(participant, forwDailyStats)}
-                    {render_skaters_total(participant, 'F_tot')}
+                    {render_skaters_total(participant, 'F')}
                     {render_skaters_headers_stats(participant, 'Defenders', poolInfo.number_defenders, defDailyStats)}
                     {render_skaters_stats(participant, defDailyStats)}
-                    {render_skaters_total(participant, 'D_tot')}
+                    {render_skaters_total(participant, 'D')}
                     {render_goalies_headers_stats(participant)}
                     {render_goalies_stats(participant)}
                     {render_goalies_total(participant)}

@@ -268,7 +268,7 @@ export default function RosterCapHit({
             </table>
           </TabPanel>
         </Tabs>
-        <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)} forceRenderTabPanel>
+        <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)}>
           <TabList>
             {poolInfo.participants.map(pooler => (
               <Tab key={pooler}>
