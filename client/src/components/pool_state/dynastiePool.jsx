@@ -10,7 +10,7 @@ import { BsPenFill } from 'react-icons/bs';
 import { GiDirectionSigns } from 'react-icons/gi';
 
 // Components
-import PlayerLink from '../playerLink';
+import PlayerNoLink from '../playerNoLink';
 import DraftOrder from './draftOrder';
 import User from '../user';
 
@@ -188,7 +188,7 @@ export default function DynastiePool({
         <tr onClick={isDone ? null : () => protect_player(player, isUser)} key={player.id}>
           <td>{i + 1}</td>
           <td>
-            <PlayerLink name={player.name} injury={injury} isLink={false} />
+            <PlayerNoLink name={player.name} injury={injury} isLink={false} />
           </td>
           <td>
             <img src={logos[player.team]} alt="" width="40" height="40" />
@@ -215,7 +215,7 @@ export default function DynastiePool({
         <tr onClick={() => unprotect_player(player, false)} key={player.id}>
           <td>{i + 1}</td>
           <td>
-            <PlayerLink name={player.name} injury={injury} isLink={false} />
+            <PlayerNoLink name={player.name} injury={injury} isLink={false} />
           </td>
           <td>
             <img src={logos[player.team]} alt="" width="40" height="40" />

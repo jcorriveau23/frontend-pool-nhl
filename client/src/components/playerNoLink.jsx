@@ -4,9 +4,9 @@ import InjuryTooltips from './injuryTooltips';
 
 export default function PlayerNoLink({ name, injury }) {
   return (
-    <div>
-      <b>{name}</b>
+    <>
+      <b style={{ paddingRight: '5%' }}>{name}</b>
       <InjuryTooltips name={name} injury={injury} />
-    </div>
+    </>
   );
 }

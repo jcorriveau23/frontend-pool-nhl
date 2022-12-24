@@ -126,7 +126,7 @@ export default function DraftOrder({ poolInfo, playerIdToPlayersDataMap, injury,
                       />
                     </td>
                     <td>
-                      <img src={logos[playerIdToPlayersDataMap[player_drafted].team]} alt="" width="50" height="50" />
+                      <img src={logos[playerIdToPlayersDataMap[player_drafted].team]} alt="" width="30" height="30" />
                     </td>
                   </>
                 )}
@@ -171,7 +171,7 @@ export default function DraftOrder({ poolInfo, playerIdToPlayersDataMap, injury,
                       />
                     </td>
                     <td>
-                      <img src={logos[playerIdToPlayersDataMap[player_drafted].team]} alt="" width="50" height="50" />
+                      <img src={logos[playerIdToPlayersDataMap[player_drafted].team]} alt="" width="30" height="30" />
                     </td>
                   </>
                 )}
@@ -213,7 +213,7 @@ export default function DraftOrder({ poolInfo, playerIdToPlayersDataMap, injury,
                 />
               </td>
               <td>
-                <img src={logos[playerIdToPlayersDataMap[player_drafted].team]} alt="" width="50" height="50" />
+                <img src={logos[playerIdToPlayersDataMap[player_drafted].team]} alt="" width="30" height="30" />
               </td>
             </tr>
           );

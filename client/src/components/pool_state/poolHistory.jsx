@@ -6,6 +6,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { GiEntryDoor, GiExitDoor } from 'react-icons/gi';
 import { BsCalendarDay } from 'react-icons/bs';
 import { AiFillCheckCircle } from 'react-icons/ai';
+import { MdExpandLess, MdExpandMore } from 'react-icons/md';
 
 // Components
 import User from '../user';
@@ -25,10 +26,11 @@ export default function PoolHistory({
   isUserParticipant,
 }) {
   const [history, setHistory] = useState(null);
+  const [collapsedDays, setCollapsedDays] = useState([]);
 
   const parse_all_movement = async () => {
     const startDate = new Date(poolInfo.season_start);
-    console.log(poolInfo.season_start);
+
     const endDate = new Date();
 
     const currentRoster = {};
@@ -82,7 +84,7 @@ export default function PoolHistory({
     }
 
     // Make sure that we count current roster (for days that roster modifications are allowed we will see them in real time)
-    // TODO: this could be generalize by creating a function centralizing logic between this and the for loop ahead.
+    // TODO: this could be generalize by creating a function centralizing logic between this and the for loop above.
 
     const dailyMovements = []; // Will capture all movement that happened on this date.
     const dailyTrades = poolInfo.trades.filter(trade => trade.status === 'NEW');
@@ -122,80 +124,99 @@ export default function PoolHistory({
     parse_all_movement();
   }, []);
 
+  const collapse_table = date => {
+    if (collapsedDays.includes(date)) {
+      // add the date to the list of collapsed table
+      setCollapsedDays(collapsedDays.filter(day => day !== date));
+    } else {
+      // remove the date to the list of collapsed table
+      setCollapsedDays(oldArr => [...oldArr, date]);
+    }
+  };
+
   const render_daily_roster_movement = dailyMovements => (
     <>
-      <tr>
+      <tr onClick={() => collapse_table(dailyMovements.date)}>
         <th>
-          <BsCalendarDay size={30} />
+          <BsCalendarDay size={30} style={{ paddingRight: '10px' }} />
           {dailyMovements.date}
+          {collapsedDays.includes(dailyMovements.date) ? (
+            <MdExpandMore size={30} style={{ float: 'right' }} />
+          ) : (
+            <MdExpandLess size={30} style={{ float: 'right' }} />
+          )}
         </th>
       </tr>
-      <tr>
-        <td>
-          <table className="content-table">
-            {dailyMovements.dailyMovements.map(d => (
-              <>
-                <tr>
-                  <th colSpan={3}>
-                    <User id={d.participant} user={user} DictUsers={DictUsers} />
-                  </th>
-                </tr>
-                {d.addedPlayers.map(p => (
+      {collapsedDays.includes(dailyMovements.date) ? null : (
+        <tr>
+          <td>
+            <table className="content-table-no-hover">
+              {dailyMovements.dailyMovements.map(d => (
+                <>
                   <tr>
-                    <td>
-                      <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
-                    </td>
-                    <td>
-                      <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
-                    </td>
-                    <td>
-                      <GiEntryDoor color="green" size={30} />
-                    </td>
+                    <th colSpan={3}>
+                      <User id={d.participant} user={user} DictUsers={DictUsers} />
+                    </th>
                   </tr>
-                ))}
-                {d.removedPlayers.map(p => (
-                  <tr>
-                    <td>
-                      <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
-                    </td>
-                    <td>
-                      <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
-                    </td>
-                    <td>
-                      <GiExitDoor color="red" size={30} />
-                    </td>
-                  </tr>
-                ))}
-              </>
-            ))}
-            <tr>
-              <td colSpan={3}>
-                {dailyMovements.dailyTrades
-                  .slice(0)
-                  .reverse()
-                  .map(tradeInfo => (
-                    <table className="content-table-no-hover">
-                      <tbody>
-                        <tr>
-                          <th width="75px">
-                            <AiFillCheckCircle size={50} color="green" />
-                          </th>
-                          <th>
-                            <TradeItem
-                              tradeInfo={tradeInfo}
-                              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-                              DictUsers={DictUsers}
-                            />
-                          </th>
-                        </tr>
-                      </tbody>
-                    </table>
+                  {d.addedPlayers.map(p => (
+                    <tr>
+                      <td>
+                        <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
+                      </td>
+                      <td>
+                        <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
+                      </td>
+                      <td>
+                        <GiEntryDoor color="green" size={30} />
+                      </td>
+                    </tr>
                   ))}
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
+                  {d.removedPlayers.map(p => (
+                    <tr>
+                      <td>
+                        <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
+                      </td>
+                      <td>
+                        <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
+                      </td>
+                      <td>
+                        <GiExitDoor color="red" size={30} />
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              ))}
+              {dailyMovements.dailyTrades.length > 0 ? (
+                <tr>
+                  <td colSpan={3}>
+                    {dailyMovements.dailyTrades
+                      .slice(0)
+                      .reverse()
+                      .map(tradeInfo => (
+                        <table className="content-table-no-hover">
+                          <tbody>
+                            <tr>
+                              <th width="75px">
+                                <AiFillCheckCircle size={50} color="green" />
+                              </th>
+                              <th>
+                                <TradeItem
+                                  tradeInfo={tradeInfo}
+                                  playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+                                  DictUsers={DictUsers}
+                                />
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table>
+                      ))}
+                  </td>
+                </tr>
+              ) : null}
+            </table>
+          </td>
+        </tr>
+      )}
     </>
   );
 

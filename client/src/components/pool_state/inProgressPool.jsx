@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { createSearchParams, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClipLoader from 'react-spinners/ClipLoader';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
 
 // icons
-import { RiTeamFill, RiInformationFill } from 'react-icons/ri';
+import { RiTeamFill, RiInformationFill, RiSettings2Fill } from 'react-icons/ri';
 import { BsCalendarDay, BsFillCalculatorFill, BsCashCoin, BsGraphUp } from 'react-icons/bs';
 import { ImHammer, ImHistory } from 'react-icons/im';
-import { FaExchangeAlt } from 'react-icons/fa';
-import christmas from '../img/jax-christmas.jpg';
 
 // component
 import DayLeaders from '../home_page/dailyLeaders';
-import TradeCenter from './tradeCenter';
 import PlayerLink from '../playerLink';
 import PickList from './pickList';
 import DailyRanking from './dailyRanking';
@@ -867,39 +864,36 @@ export default function InProgressPool({
           <Tabs selectedIndex={cumulativeDailyTabIndex} onSelect={index => setMainTab(index)}>
             <TabList>
               <Tab>
-                <BsFillCalculatorFill size={30} />
+                <BsFillCalculatorFill size={30} style={{ paddingRight: '5px' }} />
                 Cumulative
               </Tab>
               <Tab>
                 {gameStatus === 'Live' ? (
-                  <img src={liveGame} alt="" width="40" height="40" />
+                  <img src={liveGame} alt="" width="40" height="40" style={{ paddingRight: '5px' }} />
                 ) : (
-                  <BsCalendarDay size={30} />
+                  <BsCalendarDay size={30} style={{ paddingRight: '5px' }} />
                 )}
                 Daily
               </Tab>
               <Tab>
-                <BsCashCoin size={30} />
+                <BsCashCoin size={30} style={{ paddingRight: '5px' }} />
                 Cap Hit
               </Tab>
               <Tab>
-                <ImHistory size={30} />
+                <ImHistory size={30} style={{ paddingRight: '5px' }} />
                 Trade/History
               </Tab>
               <Tab>
-                <ImHammer size={30} />
+                <ImHammer size={30} style={{ paddingRight: '5px' }} />
                 Draft
               </Tab>
               <Tab>
-                <ImHammer size={30} />
+                <RiSettings2Fill size={30} style={{ paddingRight: '5px' }} />
                 Settings
               </Tab>
             </TabList>
             <TabPanel>
               <div className="half-cont">
-                <div>
-                  <img src={christmas} alt="" />
-                </div>
                 <button
                   className="base-button"
                   onClick={() => setShowGraphStatsModal(!showGraphStatsModal)}
