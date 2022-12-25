@@ -43,12 +43,12 @@ export default function TodayGamesFeed({
       // this case is when we do a refresh on the site we always display the past date before 12 PM
       const newDate = new Date();
 
-      newDate.setHours(newDate.getHours() - newDate.getTimezoneOffset() / 60 - 12); // minus 12 hours
-
-      console.log(newDate);
-      console.log(newDate.toISOString().slice(0, 10));
+      newDate.setHours(newDate.getHours() - 12); // minus 12 hours
       setDate(newDate);
-      setTodayFormatDate(newDate.toISOString().slice(0, 10));
+
+      const newFormatDate = new Date(newDate);
+      newFormatDate.setHours(newFormatDate.getHours() - newFormatDate.getTimezoneOffset() / 60); // minus 12 hours
+      setTodayFormatDate(newFormatDate.toISOString().slice(0, 10));
     } else {
       const newDate = new Date(date);
 
@@ -141,7 +141,7 @@ export default function TodayGamesFeed({
 
   const currentDate = () => {
     const newDate = new Date();
-    newDate.setHours(newDate.getHours() - newDate.getTimezoneOffset() / 60 - 12); // minus 12 hours
+    newDate.setHours(newDate.getHours() - 12); // minus 12 hours
 
     setDate(newDate);
     reset_state();
