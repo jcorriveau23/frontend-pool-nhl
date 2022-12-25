@@ -44,5 +44,3 @@ export default function PickList({ tradablePicks, participant, add_pick, side, f
   }
   return <h1>There is no tradable picks in this pool.</h1>;
 }
-
-PickList.propTypes = {};

@@ -267,5 +267,3 @@ export default function TopSeasonPlayers({ user, injury, playersIdToPoolerMap, D
     </div>
   );
 }
-
-TopSeasonPlayers.propTypes = {};

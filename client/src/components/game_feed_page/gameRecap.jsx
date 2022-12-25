@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
 export default function GameRecap({ gameContent, isEditorial }) {
   const videoRef = useRef();
@@ -82,26 +81,3 @@ export default function GameRecap({ gameContent, isEditorial }) {
 
   return <h1>No Recap videos available yet</h1>;
 }
-
-GameRecap.propTypes = {
-  gameContent: PropTypes.shape({
-    title: PropTypes.string,
-    description: PropTypes.string,
-    editorial: PropTypes.shape({}).isRequired,
-    media: PropTypes.shape({
-      epg: PropTypes.arrayOf(
-        PropTypes.shape({
-          items: PropTypes.arrayOf(
-            PropTypes.shape({
-              image: PropTypes.shape({
-                cuts: PropTypes.arrayOf(PropTypes.shape({ src: PropTypes.string.isRequired })),
-              }),
-              playbacks: PropTypes.arrayOf(PropTypes.shape({ url: PropTypes.string.isRequired }).isRequired),
-            }).isRequired
-          ).isRequired,
-        }).isRequired
-      ).isRequired,
-    }).isRequired,
-  }).isRequired,
-  isEditorial: PropTypes.bool.isRequired,
-};

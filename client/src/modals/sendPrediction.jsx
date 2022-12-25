@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { ethers } from 'ethers';
 import ClipLoader from 'react-spinners/ClipLoader';
-import PropTypes from 'prop-types';
 
 // images
 import { logos } from '../components/img/logos';
@@ -151,31 +150,3 @@ export default function SendPredictionModal({
       </Modal>
     );
 }
-
-SendPredictionModal.propTypes = {
-  gameID: PropTypes.string.isRequired,
-  gameInfo: PropTypes.shape({
-    gamePk: PropTypes.string.isRequired,
-    liveData: PropTypes.shape({
-      boxscore: PropTypes.shape({
-        teams: PropTypes.shape({
-          away: PropTypes.shape({ team: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired }).isRequired,
-          home: PropTypes.shape({ team: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired }).isRequired,
-        }),
-      }),
-    }).isRequired,
-  }),
-  contract: PropTypes.shape({
-    on: PropTypes.func.isRequired,
-    removeAllListeners: PropTypes.func.isRequired,
-    sendBet: PropTypes.func.isRequired,
-  }).isRequired,
-  showSendPredictionModal: PropTypes.bool.isRequired,
-  setShowSendPredictionModal: PropTypes.func.isRequired,
-  reRender: PropTypes.bool.isRequired,
-  setReRender: PropTypes.func.isRequired,
-};
-
-SendPredictionModal.defaultProps = {
-  gameInfo: null,
-};

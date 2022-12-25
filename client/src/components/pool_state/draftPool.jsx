@@ -3,7 +3,6 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClipLoader from 'react-spinners/ClipLoader';
-import PropTypes from 'prop-types';
 
 // Icons
 import { BsPenFill } from 'react-icons/bs';
@@ -351,45 +350,3 @@ export default function DraftPool({
     </div>
   );
 }
-
-DraftPool.propTypes = {
-  user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
-  DictUsers: PropTypes.shape({}).isRequired,
-  poolName: PropTypes.string.isRequired,
-  poolInfo: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    participants: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    context: PropTypes.arrayOf(
-      PropTypes.shape({
-        chosen_forward: PropTypes.arrayOf(
-          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
-        ).isRequired,
-        chosen_defender: PropTypes.arrayOf(
-          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
-        ).isRequired,
-        chosen_goalies: PropTypes.arrayOf(
-          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
-        ).isRequired,
-        chosen_reservist: PropTypes.arrayOf(
-          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
-        ).isRequired,
-        nb_defender: PropTypes.number.isRequired,
-        nb_forward: PropTypes.number.isRequired,
-        nb_goalies: PropTypes.number.isRequired,
-        nb_reservist: PropTypes.number.isRequired,
-      }).isRequired
-    ).isRequired,
-    next_season_number_players_protected: PropTypes.number.isRequired,
-    number_forward: PropTypes.number.isRequired,
-    number_defenders: PropTypes.number.isRequired,
-    number_goalies: PropTypes.number.isRequired,
-    number_reservist: PropTypes.number.isRequired,
-  }).isRequired,
-  setPoolInfo: PropTypes.func.isRequired,
-  socket: PropTypes.shape({
-    emit: PropTypes.func.isRequired,
-    on: PropTypes.func.isRequired,
-    off: PropTypes.func.isRequired,
-  }).isRequired,
-};

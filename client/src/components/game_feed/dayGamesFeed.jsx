@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import ReactTooltip from 'react-tooltip';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -46,6 +45,8 @@ export default function TodayGamesFeed({
 
       newDate.setHours(newDate.getHours() - newDate.getTimezoneOffset() / 60 - 12); // minus 12 hours
 
+      console.log(newDate);
+      console.log(newDate.toISOString().slice(0, 10));
       setDate(newDate);
       setTodayFormatDate(newDate.toISOString().slice(0, 10));
     } else {
@@ -205,5 +206,3 @@ export default function TodayGamesFeed({
     </div>
   );
 }
-
-TodayGamesFeed.propTypes = { formatDate: PropTypes.string.isRequired, setFormatDate: PropTypes.func.isRequired };

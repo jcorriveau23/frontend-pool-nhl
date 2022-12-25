@@ -6,7 +6,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
-import PropTypes from 'prop-types';
 
 import { IoIosArrowForward } from 'react-icons/io';
 import { FaEthereum } from 'react-icons/fa';
@@ -112,18 +111,3 @@ export default function AccountModal({
     </Modal>
   );
 }
-
-AccountModal.propTypes = {
-  user: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired,
-    addr: PropTypes.string.isRequired,
-    pool_list: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  }).isRequired,
-  isWalletConnected: PropTypes.bool.isRequired,
-  showAccountModal: PropTypes.string.isRequired,
-  setShowAccountModal: PropTypes.func.isRequired,
-  buttonAccountRef: PropTypes.shape({ current: PropTypes.shape({ contains: PropTypes.func.isRequired }).isRequired })
-    .isRequired,
-};

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -177,7 +176,3 @@ export default function TradeCenter({
     </div>
   );
 }
-
-TradeCenter.propTypes = {
-  poolInfo: PropTypes.shape({ trades: PropTypes.arrayOf() }).isRequired,
-};

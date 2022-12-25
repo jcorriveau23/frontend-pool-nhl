@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import PropTypes from 'prop-types';
 
 // icons
 import { IoMdAdd } from 'react-icons/io';
@@ -190,12 +189,3 @@ export default function MyPoolsPage({ user, DictUsers }) {
 
   return <h1>You are not connected.</h1>;
 }
-
-MyPoolsPage.propTypes = {
-  user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }),
-  DictUsers: PropTypes.shape({}).isRequired,
-};
-
-MyPoolsPage.defaultProps = {
-  user: null,
-};

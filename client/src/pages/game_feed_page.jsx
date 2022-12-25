@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { useParams } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -511,13 +510,3 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
     </div>
   );
 }
-
-GameFeedPage.propTypes = {
-  user: PropTypes.shape({ addr: PropTypes.string.isRequired }),
-  contract: PropTypes.shape({}),
-};
-
-GameFeedPage.defaultProps = {
-  contract: null,
-  user: null,
-};

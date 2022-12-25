@@ -4,7 +4,6 @@
 
 import React from 'react';
 import Modal from 'react-modal';
-import PropTypes from 'prop-types';
 
 // css
 import './modal.css';
@@ -35,8 +34,3 @@ export default function WrongNetworkModal({ isWalletConnected, isWrongNetwork })
     </Modal>
   );
 }
-
-WrongNetworkModal.propTypes = {
-  isWalletConnected: PropTypes.bool.isRequired,
-  isWrongNetwork: PropTypes.bool.isRequired,
-};

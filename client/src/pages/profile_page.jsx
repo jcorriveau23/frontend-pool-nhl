@@ -10,7 +10,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import PropTypes from 'prop-types';
 
 import { AiOutlineEdit } from 'react-icons/ai';
 
@@ -137,15 +136,3 @@ export default function ProfilePage({ user, setUser }) {
   }
   return <h1> </h1>;
 }
-
-ProfilePage.propTypes = {
-  user: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired,
-    addr: PropTypes.string.isRequired,
-    pool_list: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  }).isRequired,
-  setUser: PropTypes.func.isRequired,
-};

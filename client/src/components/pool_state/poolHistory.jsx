@@ -116,7 +116,6 @@ export default function PoolHistory({
       historyTmp.unshift({ date: 'Today', dailyMovements, dailyTrades });
     }
 
-    console.log(historyTmp);
     if (historyTmp.length > 0) setHistory(historyTmp);
   };
 

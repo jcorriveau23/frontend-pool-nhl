@@ -3,7 +3,6 @@ import Cookies from 'js-cookie';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { io } from 'socket.io-client';
-import PropTypes from 'prop-types';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -246,12 +245,3 @@ export default function PoolPage({
   }
   return <h1>You are not connected.</h1>;
 }
-
-PoolPage.propTypes = {
-  user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }),
-  DictUsers: PropTypes.shape({}).isRequired,
-};
-
-PoolPage.defaultProps = {
-  user: null,
-};

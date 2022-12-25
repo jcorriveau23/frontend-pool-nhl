@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 // component
 import GoalItem from './goalItem';
@@ -43,18 +42,3 @@ export default function PeriodRecap({ gameInfo, gameContent, period }) {
 
   return <h1> </h1>;
 }
-
-PeriodRecap.propTypes = {
-  gameInfo: PropTypes.shape({
-    liveData: PropTypes.shape({
-      plays: PropTypes.shape({
-        scoringPlays: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-        allPlays: PropTypes.arrayOf(
-          PropTypes.shape({ about: PropTypes.shape({ period: PropTypes.number.isRequired }).isRequired }).isRequired
-        ),
-      }).isRequired,
-    }).isRequired,
-  }).isRequired,
-  gameContent: PropTypes.shape({}).isRequired,
-  period: PropTypes.string.isRequired,
-};

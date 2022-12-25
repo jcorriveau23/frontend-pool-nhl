@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
 // components
 import PlayerLink from '../playerLink';
@@ -79,11 +78,3 @@ export default function OtherGameContent({ gameContent }) {
 
   return <h1>No video provided yet.</h1>;
 }
-
-OtherGameContent.propTypes = {
-  gameContent: PropTypes.shape({
-    media: PropTypes.shape({
-      milestones: PropTypes.shape({ items: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired }).isRequired,
-    }).isRequired,
-  }).isRequired,
-};

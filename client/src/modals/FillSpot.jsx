@@ -83,5 +83,3 @@ export default function FillSpot({
     </Modal>
   );
 }
-
-FillSpot.propTypes = {};

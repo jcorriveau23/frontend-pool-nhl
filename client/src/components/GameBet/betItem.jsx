@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -80,11 +79,3 @@ export default function BetItem({ contract, gameID }) {
 
   return <ClipLoader color="#fff" loading size={75} />;
 }
-
-BetItem.propTypes = {
-  contract: PropTypes.shape({
-    predictionGames: PropTypes.func.isRequired,
-    get_user_bet_amount: PropTypes.func.isRequired,
-  }).isRequired,
-  gameID: PropTypes.string.isRequired,
-};

@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
 // css
 import './goalItem.css';
@@ -132,26 +131,3 @@ export default function GoalItem({ goalData, gameContent }) {
     </div>
   );
 }
-
-GoalItem.propTypes = {
-  goalData: PropTypes.shape({
-    team: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
-    about: PropTypes.shape({ periodTime: PropTypes.string.isRequired, eventId: PropTypes.number.isRequired })
-      .isRequired,
-    players: PropTypes.arrayOf(PropTypes.shape({ playerType: PropTypes.string.isRequired }).isRequired).isRequired,
-  }).isRequired,
-  gameContent: PropTypes.shape({
-    media: PropTypes.shape({
-      milestones: PropTypes.shape({
-        items: PropTypes.arrayOf(
-          PropTypes.shape({
-            statsEventId: PropTypes.string.isRequired,
-            highlight: PropTypes.shape({
-              playbacks: PropTypes.arrayOf(PropTypes.shape({}).isRequired),
-            }),
-          }).isRequired
-        ).isRequired,
-      }).isRequired,
-    }).isRequired,
-  }).isRequired,
-};

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ethers } from 'ethers';
-import PropTypes from 'prop-types';
 import { CgProfile } from 'react-icons/cg';
 
 // ABI
@@ -97,19 +96,3 @@ export default function WalletCard({
     </button>
   );
 }
-
-WalletCard.propTypes = {
-  user: PropTypes.shape({ addr: PropTypes.string.isRequired, name: PropTypes.string.isRequired }),
-  setContract: PropTypes.func.isRequired,
-  isWalletConnected: PropTypes.bool.isRequired,
-  setIsWalletConnected: PropTypes.func.isRequired,
-  setIsWrongNetwork: PropTypes.func.isRequired,
-  showAccountModal: PropTypes.bool.isRequired,
-  setShowAccountModal: PropTypes.func.isRequired,
-  currentAddr: PropTypes.string.isRequired,
-  setCurrentAddr: PropTypes.func.isRequired,
-};
-
-WalletCard.defaultProps = {
-  user: null,
-};

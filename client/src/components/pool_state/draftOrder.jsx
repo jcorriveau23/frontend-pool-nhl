@@ -235,5 +235,3 @@ export default function DraftOrder({ poolInfo, playerIdToPlayersDataMap, injury,
     </table>
   );
 }
-
-DraftOrder.propTypes = {};

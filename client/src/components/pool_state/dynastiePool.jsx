@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import PropTypes from 'prop-types';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 // Logos
@@ -360,38 +359,3 @@ export default function DynastiePool({
     </div>
   );
 }
-
-DynastiePool.propTypes = {
-  user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
-  poolInfo: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    participants: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    context: PropTypes.arrayOf(
-      PropTypes.shape({
-        chosen_forwards: PropTypes.arrayOf(
-          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
-        ).isRequired,
-        chosen_defenders: PropTypes.arrayOf(
-          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
-        ).isRequired,
-        chosen_goalies: PropTypes.arrayOf(
-          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
-        ).isRequired,
-        chosen_reservists: PropTypes.arrayOf(
-          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
-        ).isRequired,
-        nb_defender: PropTypes.number.isRequired,
-        nb_forward: PropTypes.number.isRequired,
-        nb_goalies: PropTypes.number.isRequired,
-        nb_reservist: PropTypes.number.isRequired,
-      }).isRequired
-    ).isRequired,
-    next_season_number_players_protected: PropTypes.number.isRequired,
-  }).isRequired,
-  setPoolUpdate: PropTypes.func.isRequired,
-  socket: PropTypes.shape({
-    emit: PropTypes.func.isRequired,
-    on: PropTypes.func.isRequired,
-    off: PropTypes.func.isRequired,
-  }).isRequired,
-};

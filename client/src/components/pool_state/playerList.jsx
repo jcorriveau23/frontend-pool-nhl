@@ -53,5 +53,3 @@ export default function PlayerList({ poolerContext, injury }) {
     </>
   );
 }
-
-PlayerList.propTypes = {};

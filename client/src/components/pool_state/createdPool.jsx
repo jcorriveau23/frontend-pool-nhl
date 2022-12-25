@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import ClipLoader from 'react-spinners/ClipLoader';
-import PropTypes from 'prop-types';
 
 // components
 import ParticipantItem from './participantItem';
@@ -133,37 +132,3 @@ export default function CreatedPool({ user, hasOwnerRights, DictUsers, poolName,
     </div>
   );
 }
-
-CreatedPool.propTypes = {
-  user: PropTypes.shape({ _id: PropTypes.string.isRequired }).isRequired,
-  DictUsers: PropTypes.shape({}).isRequired,
-  poolName: PropTypes.string.isRequired,
-  poolInfo: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    owner: PropTypes.string.isRequired,
-    forward_pts_goals: PropTypes.number.isRequired,
-    forward_pts_assists: PropTypes.number.isRequired,
-    forward_pts_hattricks: PropTypes.number.isRequired,
-    defender_pts_goals: PropTypes.number.isRequired,
-    defender_pts_assists: PropTypes.number.isRequired,
-    defender_pts_hattricks: PropTypes.number.isRequired,
-    goalies_pts_wins: PropTypes.number.isRequired,
-    goalies_pts_shutouts: PropTypes.number.isRequired,
-    goalies_pts_goals: PropTypes.number.isRequired,
-    goalies_pts_assists: PropTypes.number.isRequired,
-    number_poolers: PropTypes.number.isRequired,
-    participants: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    next_season_number_players_protected: PropTypes.number.isRequired,
-    number_forwards: PropTypes.number.isRequired,
-    number_defenders: PropTypes.number.isRequired,
-    number_goalies: PropTypes.number.isRequired,
-    number_reservists: PropTypes.number.isRequired,
-    next_drafter: PropTypes.string.isRequired,
-  }).isRequired,
-  setPoolInfo: PropTypes.func.isRequired,
-  socket: PropTypes.shape({
-    emit: PropTypes.func.isRequired,
-    on: PropTypes.func.isRequired,
-    off: PropTypes.func.isRequired,
-  }).isRequired,
-};

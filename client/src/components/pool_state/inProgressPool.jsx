@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClipLoader from 'react-spinners/ClipLoader';
-import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
 
 // icons
@@ -1074,38 +1073,3 @@ export default function InProgressPool({
     </div>
   );
 }
-
-InProgressPool.propTypes = {
-  user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
-  DictUsers: PropTypes.shape({}).isRequired,
-  poolInfo: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    participants: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    context: PropTypes.arrayOf(
-      PropTypes.shape({
-        chosen_forwards: PropTypes.arrayOf(
-          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
-        ).isRequired,
-        chosen_defenders: PropTypes.arrayOf(
-          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
-        ).isRequired,
-        chosen_goalies: PropTypes.arrayOf(
-          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
-        ).isRequired,
-        chosen_reservists: PropTypes.arrayOf(
-          PropTypes.shape({ name: PropTypes.string.isRequired, team: PropTypes.string.isRequired }).isRequired
-        ).isRequired,
-      }).isRequired
-    ).isRequired,
-    forward_pts_goals: PropTypes.number.isRequired,
-    forward_pts_assists: PropTypes.number.isRequired,
-    forward_pts_hattricks: PropTypes.number.isRequired,
-    defender_pts_goals: PropTypes.number.isRequired,
-    defender_pts_assists: PropTypes.number.isRequired,
-    defender_pts_hattricks: PropTypes.number.isRequired,
-    goalies_pts_goals: PropTypes.number.isRequired,
-    goalies_pts_assists: PropTypes.number.isRequired,
-    goalies_pts_wins: PropTypes.number.isRequired,
-    goalies_pts_shutouts: PropTypes.number.isRequired,
-  }).isRequired,
-};

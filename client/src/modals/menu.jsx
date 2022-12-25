@@ -6,7 +6,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
-import PropTypes from 'prop-types';
 
 // icons
 import { MdLeaderboard } from 'react-icons/md';
@@ -115,21 +114,3 @@ export default function MenuModal({ user, isWalletConnected, showMenuModal, setS
     </Modal>
   );
 }
-
-MenuModal.propTypes = {
-  user: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired,
-    addr: PropTypes.string.isRequired,
-    pool_list: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  }),
-  isWalletConnected: PropTypes.bool.isRequired,
-  showMenuModal: PropTypes.bool.isRequired,
-  setShowMenuModal: PropTypes.func.isRequired,
-  buttonMenuRef: PropTypes.shape({ current: PropTypes.shape({ contains: PropTypes.func.isRequired }).isRequired })
-    .isRequired,
-};
-MenuModal.defaultProps = {
-  user: null,
-};

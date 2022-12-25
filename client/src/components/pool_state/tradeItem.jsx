@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { FaExchangeAlt } from 'react-icons/fa';
 
 import { logos } from '../img/logos';
@@ -87,32 +86,3 @@ export default function TradeItem({
     </div>
   );
 }
-
-TradeItem.propTypes = {
-  tradeInfo: PropTypes.shape({
-    proposed_by: PropTypes.string.isRequired,
-    ask_to: PropTypes.string.isRequired,
-    from_items: PropTypes.shape({
-      picks: PropTypes.arrayOf({
-        round: PropTypes.number.isRequired,
-        from: PropTypes.string.isRequired /* id of the pooler pick for next season */,
-      }).isRequired,
-      players: PropTypes.arrayOf({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        position: PropTypes.string.isRequired,
-      }).isRequired,
-    }).isRequired,
-    to_items: PropTypes.shape({
-      picks: PropTypes.arrayOf({
-        round: PropTypes.number.isRequired,
-        from: PropTypes.string.isRequired /* id of the pooler pick for next season */,
-      }).isRequired,
-      players: PropTypes.arrayOf({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        position: PropTypes.string.isRequired,
-      }).isRequired,
-    }).isRequired,
-  }).isRequired,
-};

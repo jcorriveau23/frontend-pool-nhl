@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
 import Cookies from 'js-cookie';
-import PropTypes from 'prop-types';
 
 // css
 import './modal.css';
@@ -91,9 +90,3 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
     </Modal>
   );
 }
-
-CreatePoolModal.propTypes = {
-  showCreatePoolModal: PropTypes.bool.isRequired,
-  setShowCreatePoolModal: PropTypes.func.isRequired,
-  user: PropTypes.shape({ name: PropTypes.string.isRequired, _id: PropTypes.string.isRequired }).isRequired,
-};

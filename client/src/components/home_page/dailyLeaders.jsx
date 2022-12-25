@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import PropTypes from 'prop-types';
 
 // components
 import PlayerLink from '../playerLink';
@@ -148,15 +147,3 @@ export default function DayLeaders({
     </Tabs>
   );
 }
-
-DayLeaders.propTypes = {
-  dayLeaders: PropTypes.shape({
-    skaters: PropTypes.arrayOf(PropTypes.shape({})),
-    goalies: PropTypes.arrayOf(PropTypes.shape({})),
-  }),
-  formatDate: PropTypes.string.isRequired,
-};
-
-DayLeaders.defaultProps = {
-  dayLeaders: null,
-};

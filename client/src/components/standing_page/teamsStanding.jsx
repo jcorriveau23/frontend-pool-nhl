@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import PropTypes from 'prop-types';
 
 // images
 import { logos } from '../img/logos';
@@ -195,14 +194,3 @@ export default function TeamsStanding({ data }) {
   }
   return <h1>Preparing Standings...</h1>;
 }
-
-TeamsStanding.propTypes = {
-  data: PropTypes.shape({
-    records: PropTypes.arrayOf(
-      PropTypes.shape({
-        teamRecords: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
-        conference: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
-      })
-    ).isRequired,
-  }).isRequired,
-};

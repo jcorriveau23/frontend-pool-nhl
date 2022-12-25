@@ -13,7 +13,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 import { ethers } from 'ethers';
 import Cookies from 'js-cookie';
 
@@ -230,14 +229,3 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
     </div>
   );
 }
-
-LoginPage.propTypes = {
-  user: PropTypes.shape({}),
-  setUser: PropTypes.func.isRequired,
-  setIsWalletConnected: PropTypes.bool.isRequired,
-  setCurrentAddr: PropTypes.func.isRequired,
-};
-
-LoginPage.defaultProps = {
-  user: null,
-};

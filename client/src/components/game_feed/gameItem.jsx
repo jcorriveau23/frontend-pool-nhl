@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 // images
@@ -75,22 +74,3 @@ export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
     </Link>
   );
 }
-
-GameItem.propTypes = {
-  gameData: PropTypes.shape({
-    gamePk: PropTypes.string.isRequired,
-    gameDate: PropTypes.string.isRequired,
-    status: PropTypes.shape({ abstractGameState: PropTypes.string.isRequired }).isRequired,
-    teams: PropTypes.shape({
-      away: PropTypes.shape({
-        score: PropTypes.number.isRequired,
-        team: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
-      }).isRequired,
-      home: PropTypes.shape({
-        score: PropTypes.number.isRequired,
-        team: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
-      }).isRequired,
-    }).isRequired,
-  }).isRequired,
-  selectedGamePk: PropTypes.string.isRequired,
-};

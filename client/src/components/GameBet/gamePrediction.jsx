@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
-import PropTypes from 'prop-types';
 
 // chart
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -160,25 +159,3 @@ export default function GamePrediction({ gameID, gameInfo, user, contract }) {
     </div>
   );
 }
-
-GamePrediction.propTypes = {
-  gameID: PropTypes.string.isRequired,
-  gameInfo: PropTypes.shape({
-    gamePk: PropTypes.number.isRequired,
-    liveData: PropTypes.shape({
-      boxscore: PropTypes.shape({
-        teams: PropTypes.shape({
-          away: PropTypes.shape({ team: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired }).isRequired,
-          home: PropTypes.shape({ team: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired }).isRequired,
-        }),
-      }),
-    }).isRequired,
-  }).isRequired,
-  user: PropTypes.shape({ name: PropTypes.string.isRequired, addr: PropTypes.string.isRequired }).isRequired,
-  contract: PropTypes.shape({
-    predictionGames: PropTypes.func.isRequired,
-    get_user_bet_amount: PropTypes.func.isRequired,
-    owner: PropTypes.func.isRequired,
-    createGame: PropTypes.func.isRequired,
-  }).isRequired,
-};

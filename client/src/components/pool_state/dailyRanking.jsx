@@ -742,5 +742,3 @@ export default function DailyRanking({
     </div>
   );
 }
-
-DailyRanking.propTypes = {};
