@@ -46,8 +46,8 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
           {render_options('Number of defenders:', 'number_defenders', 2, 6)}
           {render_options('Number of goalies:', 'number_goalies', 1, 3)}
           {render_options('Number of reservists:', 'number_reservists', 1, 5)}
-          {render_options('number tradable draft picks:', 'tradable_picks', 1, 5)}
-          {render_options('next season number player protected:', 'next_season_number_players_protected', 6, 12)}
+          {render_options('Number of tradable draft picks:', 'tradable_picks', 1, 5)}
+          {render_options('Next season number of player to protected:', 'next_season_number_players_protected', 6, 12)}
         </tbody>
       </table>
       <table className="content-table-no-min">
