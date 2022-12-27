@@ -32,7 +32,6 @@ export default function PlayerPage() {
             `https://statsapi.web.nhl.com/api/v1/people/${playerID}?expand=person.stats&stats=yearByYear,yearByYearPlayoffs,careerRegularSeason,careerPlayoffs&expand=stats.team&site=en_nhlCA`
           ) // https://statsapi.web.nhl.com/api/v1/people/8475726?expand=person.stats&stats=yearByYear,yearByYearPlayoffs,careerRegularSeason&expand=stats.team&site=en_nhlCA
           .then(res => {
-            console.log(res);
             setPlayerInfo(res.data);
             setPlayerStats(res.data.people[0].stats[0]);
             setPlayerPlayoffStats(res.data.people[0].stats[1]);

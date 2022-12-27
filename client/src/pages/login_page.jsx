@@ -39,7 +39,6 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
       if (!window.ethereum) throw new Error('Please install MetaMask browser extension to interact');
 
       window.ethereum.request({ method: 'eth_requestAccounts' }).then(result => {
-        console.log(result);
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 

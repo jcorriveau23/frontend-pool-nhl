@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 
 // icons
-import { MdLeaderboard } from 'react-icons/md';
+import { MdLeaderboard, MdQueryStats } from 'react-icons/md';
 import { BsPenFill } from 'react-icons/bs';
 import { FaGamepad, FaEthereum, FaHome } from 'react-icons/fa';
 import { GiPodiumWinner } from 'react-icons/gi';
@@ -99,6 +99,15 @@ export default function MenuModal({ user, isWalletConnected, showMenuModal, setS
               <GiPodiumWinner size={45} />
             </td>
             <td>League leaders</td>
+          </tr>
+          <tr
+            style={window.location.pathname.includes('/stats') ? { color: '#fff' } : null}
+            onClick={() => link_to('/stats')}
+          >
+            <td>
+              <MdQueryStats size={45} />
+            </td>
+            <td>Players Stats</td>
           </tr>
           <tr
             style={window.location.pathname.includes('/draft') ? { color: '#fff' } : null}

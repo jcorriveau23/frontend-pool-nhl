@@ -396,7 +396,6 @@ export default function InProgressPool({
   };
 
   useEffect(() => {
-    console.log('in progress');
     if (formatDate) {
       calculate_pool_stats();
     }

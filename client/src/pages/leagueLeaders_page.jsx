@@ -1,111 +1,17 @@
 // get the list of players of a team with a specific year
 // display the list of player with their overal stats with this team
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-// Loader
-import ClipLoader from 'react-spinners/ClipLoader';
+import React, { useState } from 'react';
 
 // components
-import PlayerLink from '../components/playerLink';
-
-// images
-import { logos } from '../components/img/logos';
+import SummaryLeaders from '../components/leagueLeaders_page/summaryLeaders';
 
 export default function LeagueLeadersPage({ injury }) {
-  const [leagueLeaders, setLeagueLeaders] = useState(null);
-  const [statsType, setStatsType] = useState('points');
+  // statsType: "points", "goals", assists, "wins", "gaa", "savePct"
+
   const [season, setSeason] = useState('20222023');
-  const [leagueLeaderTypes, setLeagueLeaderTypes] = useState();
-  const [noDataFoThisYear, setNoDataFoThisYear] = useState(false);
 
-  useEffect(() => {
-    // TODO: use this call instead to have more control and filtering
-    // https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=true&isGame=false
-    // &sort=[{"property":"points","direction":"DESC"},{"property":"goals","direction":"DESC"},{"property":"assists","direction":"DESC"},{"property":"playerId","direction":"ASC"}]
-    // &start=0&limit=50
-    // &factCayenneExp=gamesPlayed>=1
-    // &cayenneExp=gameTypeId=3
-    // and positionCode="C"          -> D, G, L, R
-    // and seasonId<=20212022
-    // and seasonId>=19171918
-
-    // https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{"property":"points","direction":"DESC"}]&start=0&limit=50&factCayenneExp=gamesPlayed>=1&cayenneExp=(positionCode="L" or positionCode="R" or positionCode="C") and gameTypeId=2 and seasonId<=20212022 and seasonId>=20212022
-
-    const urlLeaders = `https://statsapi.web.nhl.com/api/v1/stats/leaders?leaderCategories=${statsType}&season=${season}&limit=100`; // https://statsapi.web.nhl.com/api/v1/stats/leaders?leaderCategories=gaa&season=20212022&limit=100
-
-    axios.get(urlLeaders).then(res => {
-      // console.log(leaders.leagueLeaders[0]);
-      if (res.data.leagueLeaders[0] === undefined) setNoDataFoThisYear(true);
-
-      setLeagueLeaders({ ...res.data.leagueLeaders[0] });
-    });
-
-    const urlLeagueLeaderTypes = 'https://statsapi.web.nhl.com/api/v1/leagueLeaderTypes';
-
-    axios.get(urlLeagueLeaderTypes).then(res => {
-      // console.log(leagueLeaderTypes)
-      setLeagueLeaderTypes([...res.data]);
-    });
-  }, [statsType, season]);
-
-  const render_leaders = leaders => (
-    <table className="content-table">
-      <thead>
-        <tr>
-          <th colSpan={4}>{`${season.substring(0, 4)}-${season.substring(4)}`}</th>
-        </tr>
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Team</th>
-          {/* <th>Position</th> */}
-          <th>{statsType}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {leaders.map(player => (
-          <tr key={player.person.id}>
-            <td>{player.rank}</td>
-            <td>
-              <PlayerLink name={player.person.fullName} id={player.person.id} injury={injury} />
-            </td>
-            <td>
-              <img src={logos[player.team.id]} alt="" width="40" height="40" />
-            </td>
-            {/* <td>{player.player.positionCode}</td> */}
-            <td>{player.value}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-
-  const handleChangeStatsType = event => {
-    setLeagueLeaders(null);
-    setNoDataFoThisYear(false);
-    setStatsType(event.target.value);
-  };
-
-  const handleChangeSeason = event => {
-    setLeagueLeaders(null);
-    setNoDataFoThisYear(false);
-    setSeason(event.target.value);
-  };
-
-  const leagueLeadersTypeOptions = types =>
-    types.map(type => (
-      <option
-        key={type.displayName}
-        value={type.displayName}
-        selected={type.displayName === statsType ? 'selected' : null}
-      >
-        {type.displayName}
-      </option>
-    ));
-
-  const SeasonOptions = () => {
+  const season_options = () => {
     const seasonArray = [];
 
     for (let i = 2022; i > 1916; i -= 1) seasonArray.push(i);
@@ -121,51 +27,38 @@ export default function LeagueLeadersPage({ injury }) {
     ));
   };
 
-  const displayDropDowns = () => (
-    <table>
-      <tbody>
-        <tr>
-          <th>
-            <h3>Stats Type</h3>
-          </th>
-          <td>
-            <select onChange={handleChangeStatsType}>{leagueLeadersTypeOptions(leagueLeaderTypes)}</select>
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <h3>Season</h3>
-          </th>
-          <td>
-            <select onChange={handleChangeSeason}>{SeasonOptions()}</select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  );
-
-  if (leagueLeaders && leagueLeaderTypes && !noDataFoThisYear) {
-    return (
-      <div className="cont">
-        {displayDropDowns()}
-        {render_leaders(leagueLeaders.leaders)}
-      </div>
-    );
-  }
-
-  if (noDataFoThisYear) {
-    return (
-      <div className="cont">
-        {displayDropDowns()}
-        <h1>There is no data for this year.</h1>
-      </div>
-    );
-  }
+  const handleChangeSeason = event => {
+    setSeason(event.target.value);
+  };
 
   return (
     <div className="cont">
-      <h1>Trying to fetch league leaders for this year...</h1>
-      <ClipLoader color="#fff" loading size={75} />
+      <h3>Season:</h3>
+      <select onChange={handleChangeSeason}>{season_options()}</select>
+      <SummaryLeaders
+        injury={injury}
+        statsType="points"
+        type="skater"
+        positionCode={['L', 'R', 'C', 'D']}
+        season={season}
+      />
+      <SummaryLeaders
+        injury={injury}
+        statsType="goals"
+        type="skater"
+        positionCode={['L', 'R', 'C', 'D']}
+        season={season}
+      />
+      <SummaryLeaders
+        injury={injury}
+        statsType="assists"
+        type="skater"
+        positionCode={['L', 'R', 'C', 'D']}
+        season={season}
+      />
+      <SummaryLeaders injury={injury} statsType="wins" type="goalie" positionCode={['G']} season={season} />
+      <SummaryLeaders injury={injury} statsType="gaa" type="goalie" positionCode={['G']} season={season} />
+      <SummaryLeaders injury={injury} statsType="savePct" type="goalie" positionCode={['G']} season={season} />
     </div>
   );
 }

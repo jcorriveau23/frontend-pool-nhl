@@ -35,7 +35,6 @@ export default function PoolSettings({ user, poolInfo, hasOwnerRights, setPoolUp
           { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` } }
         )
         .then(res => {
-          console.log(res.data);
           if (res.data.success) {
             setPoolUpdate(true);
             setPoolSettingsUpdate(null);

@@ -29,6 +29,7 @@ import TeamRosterBySeasonPage from './pages/teamRosterBySeason_page';
 import MyGameBetsPage from './pages/myGameBets_page';
 import DraftPage from './pages/draft_page';
 import LeagueLeadersPage from './pages/leagueLeaders_page';
+import StatsPage from './pages/stats_page';
 
 // components
 import WalletCard from './components/web3/WalletCard';
@@ -190,6 +191,7 @@ function App() {
             <Route path="/draft" element={<DraftPage injury={injury} />} />
             <Route path="/draft/:year" element={<DraftPage />} />
             <Route path="/leaders" element={<LeagueLeadersPage injury={injury} />} />
+            <Route path="/stats" element={<StatsPage injury={injury} />} />
           </Routes>
         </div>
       </div>
