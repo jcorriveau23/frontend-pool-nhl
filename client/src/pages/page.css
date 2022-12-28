@@ -17,6 +17,12 @@
   border-radius: 10px;
 }
 
+.flex-centered {
+  display: flex;
+  padding: 8px 20px;
+  justify-content: center;
+}
+
 .login_register_button {
   background-color: #888;
   border-color: #000;

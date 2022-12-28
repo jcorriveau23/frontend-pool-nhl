@@ -14,14 +14,8 @@ export default function HomePage({ formatDate, todayFormatDate, gameStatus, inju
         type pool with your friends. Each months players are allowed to update their roster with their reservists and
         trade are allowed throught the year.
       </h3>
-      <SummaryLeaders
-        injury={injury}
-        statsType="points"
-        type="skater"
-        positionCode={['L', 'R', 'C', 'D']}
-        season="20222023"
-      />
-      <SummaryLeaders injury={injury} statsType="wins" type="goalie" positionCode={['G']} season="20222023" />
+      <SummaryLeaders injury={injury} statsType="points" type="skater" playerType="allSkaters" season="20222023" />
+      <SummaryLeaders injury={injury} statsType="wins" type="goalie" playerType="GOnly" season="20222023" />
       <div>
         <DayLeaders formatDate={formatDate} todayFormatDate={todayFormatDate} gameStatus={gameStatus} injury={injury} />
       </div>

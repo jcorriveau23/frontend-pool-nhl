@@ -35,30 +35,12 @@ export default function LeagueLeadersPage({ injury }) {
     <div className="cont">
       <h3>Season:</h3>
       <select onChange={handleChangeSeason}>{season_options()}</select>
-      <SummaryLeaders
-        injury={injury}
-        statsType="points"
-        type="skater"
-        positionCode={['L', 'R', 'C', 'D']}
-        season={season}
-      />
-      <SummaryLeaders
-        injury={injury}
-        statsType="goals"
-        type="skater"
-        positionCode={['L', 'R', 'C', 'D']}
-        season={season}
-      />
-      <SummaryLeaders
-        injury={injury}
-        statsType="assists"
-        type="skater"
-        positionCode={['L', 'R', 'C', 'D']}
-        season={season}
-      />
-      <SummaryLeaders injury={injury} statsType="wins" type="goalie" positionCode={['G']} season={season} />
-      <SummaryLeaders injury={injury} statsType="gaa" type="goalie" positionCode={['G']} season={season} />
-      <SummaryLeaders injury={injury} statsType="savePct" type="goalie" positionCode={['G']} season={season} />
+      <SummaryLeaders injury={injury} statsType="points" type="skater" playerType="allSkaters" season={season} />
+      <SummaryLeaders injury={injury} statsType="goals" type="skater" playerType="allSkaters" season={season} />
+      <SummaryLeaders injury={injury} statsType="assists" type="skater" playerType="allSkaters" season={season} />
+      <SummaryLeaders injury={injury} statsType="wins" type="goalie" playerType="GOnly" season={season} />
+      <SummaryLeaders injury={injury} statsType="gaa" type="goalie" playerType="GOnly" season={season} />
+      <SummaryLeaders injury={injury} statsType="savePct" type="goalie" playerType="GOnly" season={season} />
     </div>
   );
 }

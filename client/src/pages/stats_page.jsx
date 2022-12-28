@@ -10,20 +10,6 @@ import PlayerLink from '../components/playerLink';
 
 import { logos, abbrevToTeamId } from '../components/img/logos';
 
-export const make_positionCode_string = _positions => {
-  const positionCodes = [];
-  for (let i = 0; i < _positions.length; i += 1) {
-    positionCodes.push(`positionCode="${_positions[i]}"`);
-  }
-
-  return `(${positionCodes.join(' or ')})`;
-};
-
-export const make_sorting_string = (_property, _isAscending) => {
-  const direction = _isAscending ? 'ASC' : 'DESC';
-  return JSON.stringify([{ property: _property, direction }]);
-};
-
 export default function StatsPage({ injury }) {
   const [leaders, setLeaders] = useState([]);
   const [start, setStart] = useState(0);
@@ -31,14 +17,61 @@ export default function StatsPage({ injury }) {
   // Search Parameters
   const [searchParams, setSearchParams] = useSearchParams();
   const [type, setType] = useState(searchParams.get('type') ?? 'skater');
-  const [sorting, setSorting] = useState(searchParams.get('sorting') ?? make_sorting_string('points', false));
-  const [positionCode, setPositionCode] = useState(
-    searchParams.get('positionCode') ?? make_positionCode_string(['L', 'R', 'C', 'D'])
-  );
+  const [statsType, setStatsType] = useState(searchParams.get('statsType') ?? 'points');
+  const [playerType, setPlayerType] = useState(searchParams.get('playerType') ?? 'allSkaters'); // allSkaters, allForwards, LOnly, ROnly, COnly, DOnly, GOnly
   const [startSeason, setStartSeason] = useState(searchParams.get('startSeason') ?? '20222023');
   const [endSeason, setEndSeason] = useState(searchParams.get('endSeason') ?? '20222023');
+  const [searchMode, setSearchMode] = useState(searchParams.get('searchMode') ?? 'singleSeason'); // singleSeason, allSeasons, allSeasonsAggregate
 
-  const fetch_top_players = async (limit, reset, _type, _sorting, _positionCode, _startSeason, _endSeason) => {
+  const get_positionCode_with_playerType = _playerType => {
+    switch (_playerType) {
+      case 'allSkaters':
+        return ['L', 'C', 'R', 'D'];
+      case 'allForwards':
+        return ['L', 'C', 'R'];
+      case 'LOnly':
+        return ['L'];
+      case 'COnly':
+        return ['C'];
+      case 'ROnly':
+        return ['R'];
+      case 'DOnly':
+        return ['D'];
+      case 'GOnly':
+        return ['G'];
+      default: {
+        return ['L', 'C', 'R', 'D'];
+      }
+    }
+  };
+
+  const make_positionCode_string = _playerType => {
+    const positionCodes = get_positionCode_with_playerType(_playerType);
+
+    const positionCodeStrings = [];
+
+    for (let i = 0; i < positionCodes.length; i += 1) {
+      positionCodeStrings.push(`positionCode="${positionCodes[i]}"`);
+    }
+
+    return `(${positionCodeStrings.join(' or ')})`;
+  };
+
+  const make_sorting_string = (_property, _isAscending) => {
+    const direction = _isAscending ? 'ASC' : 'DESC';
+    return JSON.stringify([{ property: _property, direction }]);
+  };
+
+  const fetch_top_players = async (
+    limit,
+    reset,
+    _type,
+    _statsType,
+    _playerType,
+    _startSeason,
+    _endSeason,
+    _searchMode
+  ) => {
     let s = start;
     if (reset) {
       s = 0;
@@ -47,42 +80,67 @@ export default function StatsPage({ injury }) {
 
     setSearchParams({
       type: _type,
-      sorting: _sorting,
-      positionCode: _positionCode,
+      statsType: _statsType,
+      playerType: _playerType,
       startSeason: _startSeason,
       endSeason: _endSeason,
+      searchMode: _searchMode,
     });
+
+    const positionCode = make_positionCode_string(_playerType);
+    console.log(positionCode);
+    const sorting = make_sorting_string(_statsType, false);
+    console.log(sorting);
+    const isAggregate = _searchMode === 'allSeasonsAggregate';
 
     axios
       .get(
-        `/cors-anywhere/https://api.nhle.com/stats/rest/en/${_type}/summary?isAggregate=false&isGame=false&sort=${_sorting}&start=${s}&limit=${limit}&factCayenneExp=gamesPlayed>=1&cayenneExp=${_positionCode} and gameTypeId=2 and seasonId<=${_endSeason} and seasonId>=${_startSeason}`
+        `/cors-anywhere/https://api.nhle.com/stats/rest/en/${_type}/summary?isAggregate=${isAggregate}&isGame=false&sort=${sorting}&start=${s}&limit=${limit}&factCayenneExp=gamesPlayed>=1&cayenneExp=${positionCode} and gameTypeId=2 and seasonId<=${_endSeason} and seasonId>=${_startSeason}`
       )
       .then(l => {
+        console.log(l.data.data);
         if (reset) setLeaders(l.data.data);
         else setLeaders(prevList => [...prevList, ...l.data.data]);
       });
   };
 
   useEffect(() => {
-    fetch_top_players(20, true, type, sorting, positionCode, startSeason, endSeason);
+    fetch_top_players(20, true, type, statsType, playerType, startSeason, endSeason, searchMode);
   }, []);
 
-  const onClickSortingColumns = _sorting => {
-    const sortingString = make_sorting_string(_sorting);
-    setSorting(sortingString);
-    fetch_top_players(20, true, type, sortingString, positionCode, startSeason, endSeason);
+  const onClickSortingColumns = _statsType => {
+    setStatsType(_statsType);
+    fetch_top_players(20, true, type, _statsType, playerType, startSeason, endSeason, searchMode);
     setLeaders([]);
   };
 
+  const make_readable_season = season => `${season.substr(0, 4)}-${season.substr(-2)}`;
+
+  const render_mode_header_columns = () => (
+    <>
+      {searchMode === 'allSeasonsAggregate' ? null : <th>Team</th>}
+      {searchMode === 'allSeasons' ? <th>Season</th> : null}
+    </>
+  );
+
+  const render_table_title = colSpan => (
+    <tr>
+      <th colSpan={searchMode === 'allSeasons' ? colSpan + 1 : colSpan}>
+        {startSeason === endSeason
+          ? make_readable_season(endSeason)
+          : `${make_readable_season(startSeason)} to ${make_readable_season(endSeason)} `}
+        - {statsType} - Leaders
+      </th>
+    </tr>
+  );
+
   const render_skaters_leaders_header = () => (
     <>
-      <tr>
-        <th colSpan={11}>Current League Leaders</th>
-      </tr>
+      {render_table_title(11)}
       <tr>
         <th>Rank</th>
         <th>Name</th>
-        <th>Team</th>
+        {render_mode_header_columns()}
         <th>Pos</th>
         <th onClick={() => onClickSortingColumns('gamesPlayed')}>GP</th>
         <th onClick={() => onClickSortingColumns('goals')}>G</th>
@@ -97,13 +155,11 @@ export default function StatsPage({ injury }) {
 
   const render_goalies_leaders_header = () => (
     <>
-      <tr>
-        <th colSpan={13}>Current League Leaders</th>
-      </tr>
+      {render_table_title(13)}
       <tr>
         <th>Rank</th>
         <th>Name</th>
-        <th>Team</th>
+        {render_mode_header_columns()}
         <th onClick={() => onClickSortingColumns('gamesPlayed')}>GP</th>
         <th onClick={() => onClickSortingColumns('gamesStarted')}>GS</th>
         <th onClick={() => onClickSortingColumns('wins')}>W</th>
@@ -118,14 +174,25 @@ export default function StatsPage({ injury }) {
     </>
   );
 
-  const sorting_highlight = (data, property) =>
-    make_sorting_string(property) === sorting ? (
-      <td>
+  const sorting_highlight = (data, _statsType) =>
+    _statsType === statsType ? (
+      <td style={{ backgroudColor: 'white' }}>
         <b style={{ color: '#a20' }}>{data}</b>
       </td>
     ) : (
       <td>{data}</td>
     );
+
+  const render_mode_columns = player => (
+    <>
+      {searchMode === 'allSeasonsAggregate' ? null : (
+        <td>
+          <img src={logos[abbrevToTeamId[player.teamAbbrevs]]} alt="" width="40" height="40" />
+        </td>
+      )}
+      {searchMode === 'allSeasons' ? <td>{make_readable_season(`${player.seasonId}`)}</td> : null}
+    </>
+  );
 
   const render_skaters_leaders = () =>
     leaders.map((player, i) => (
@@ -134,9 +201,7 @@ export default function StatsPage({ injury }) {
         <td>
           <PlayerLink name={player.skaterFullName} id={player.playerId} injury={injury} />
         </td>
-        <td>
-          <img src={logos[abbrevToTeamId[player.teamAbbrevs]]} alt="" width="40" height="40" />
-        </td>
+        {render_mode_columns(player)}
         {sorting_highlight(player.positionCode, 'positionCode')}
         {sorting_highlight(player.gamesPlayed, 'gamesPlayed')}
         {sorting_highlight(player.goals, 'goals')}
@@ -155,9 +220,7 @@ export default function StatsPage({ injury }) {
         <td>
           <PlayerLink name={player.goalieFullName} id={player.playerId} injury={injury} />
         </td>
-        <td>
-          <img src={logos[abbrevToTeamId[player.teamAbbrevs]]} alt="" width="40" height="40" />
-        </td>
+        {render_mode_columns(player)}
         {sorting_highlight(player.gamesPlayed, 'gamesPlayed')}
         {sorting_highlight(player.gamesStarted, 'gamesStarted')}
         {sorting_highlight(player.wins, 'wins')}
@@ -174,13 +237,11 @@ export default function StatsPage({ injury }) {
       </tr>
     ));
 
-  const onClickPlayerType = (_type, _sorting, _positionCode) => {
-    const positionCodeString = make_positionCode_string(_positionCode);
-    const sortingString = make_sorting_string(_sorting);
+  const onClickPlayerType = (_type, _statsType, _playerType) => {
     setType(_type);
-    setPositionCode(positionCodeString);
-    setSorting(sortingString);
-    fetch_top_players(20, true, _type, sortingString, positionCodeString, startSeason, endSeason);
+    setPlayerType(_playerType);
+    setStatsType(_statsType);
+    fetch_top_players(20, true, _type, _statsType, _playerType, startSeason, endSeason, searchMode);
     setLeaders([]);
   };
 
@@ -194,7 +255,9 @@ export default function StatsPage({ injury }) {
             <button
               className="base-button"
               type="button"
-              onClick={() => fetch_top_players(20, false, type, sorting, positionCode, startSeason, endSeason)}
+              onClick={() =>
+                fetch_top_players(20, false, type, statsType, playerType, startSeason, endSeason, searchMode)
+              }
             >
               20 More...
             </button>
@@ -210,7 +273,9 @@ export default function StatsPage({ injury }) {
             <button
               className="base-button"
               type="button"
-              onClick={() => fetch_top_players(20, false, type, sorting, positionCode, startSeason, endSeason)}
+              onClick={() =>
+                fetch_top_players(20, false, type, statsType, playerType, startSeason, endSeason, searchMode)
+              }
             >
               20 More...
             </button>
@@ -219,12 +284,12 @@ export default function StatsPage({ injury }) {
       </table>
     );
 
-  const render_players_type_inputs = (_type, _positionCode, _sorting, _title) => (
+  const render_players_type_inputs = (_type, _statsType, _playerType, _title) => (
     <label htmlFor="default">
       <input
         type="checkbox"
-        onClick={() => onClickPlayerType(_type, _sorting, _positionCode)}
-        checked={positionCode === make_positionCode_string(_positionCode)}
+        onClick={() => onClickPlayerType(_type, _statsType, _playerType)}
+        checked={type === _type}
       />
       {_title}
     </label>
@@ -235,6 +300,7 @@ export default function StatsPage({ injury }) {
 
     for (let i = 2022; i > 1916; i -= 1) {
       if (
+        !isStart || // In Single season mode, the isStart is not being passed (we need to add all dates).
         (isStart && i < Number(endSeason.substr(endSeason.length - 4))) || // Start date cannot be higher than End date
         (!isStart && i >= Number(startSeason.substr(0, 4))) // End date cannot be lower than Start date
       ) {
@@ -253,30 +319,115 @@ export default function StatsPage({ injury }) {
     ));
   };
 
+  // Start season
   const handleChangeStartSeason = event => {
     setLeaders([]);
     setStartSeason(event.target.value);
-    fetch_top_players(20, true, type, sorting, positionCode, event.target.value, endSeason);
+    fetch_top_players(20, true, type, statsType, playerType, event.target.value, endSeason, searchMode);
   };
 
+  // End season
   const handleChangeEndSeason = event => {
     setLeaders([]);
     setEndSeason(event.target.value);
-    fetch_top_players(20, true, type, sorting, positionCode, startSeason, event.target.value);
+    fetch_top_players(20, true, type, statsType, playerType, startSeason, event.target.value, searchMode);
+  };
+
+  // Single Season
+  const handleChangesingleSeason = event => {
+    setLeaders([]);
+    setStartSeason(event.target.value);
+    setEndSeason(event.target.value);
+    fetch_top_players(20, true, type, statsType, playerType, event.target.value, event.target.value, searchMode);
+  };
+
+  const handleChangesSearchMode = event => {
+    setLeaders([]);
+    switch (event.target.value) {
+      case 'singleSeason': {
+        setStartSeason(endSeason); // make sure that when this mode is requested, start date and end date are the same.
+        setEndSeason(endSeason);
+        fetch_top_players(20, true, type, statsType, playerType, endSeason, endSeason, event.target.value);
+        setSearchMode(event.target.value);
+        break;
+      }
+      case 'allSeasons':
+      case 'allSeasonsAggregate': {
+        fetch_top_players(20, true, type, statsType, playerType, startSeason, endSeason, event.target.value);
+        setSearchMode(event.target.value);
+        break;
+      }
+      default: {
+        break; // invalid case,
+      }
+    }
+  };
+
+  const handleChangesSkaterType = event => {
+    onClickPlayerType(type, statsType, event.target.value);
   };
 
   return (
     <div className="cont">
       <div>
-        <h3>Player Type:</h3>
-        {render_players_type_inputs('skater', ['L', 'R', 'C', 'D'], 'points', 'All Skaters')}
-        {render_players_type_inputs('skater', ['L', 'R', 'C'], 'points', 'Forwards Only')}
-        {render_players_type_inputs('skater', ['D'], 'points', 'Defenders Only')}
-        {render_players_type_inputs('goalie', ['G'], 'wins', 'Goalies Only')}
-        <h3>Start Season:</h3>
-        <select onChange={handleChangeStartSeason}>{season_options(startSeason, true)}</select>
-        <h3>End Season:</h3>
-        <select onChange={handleChangeEndSeason}>{season_options(endSeason, false)}</select>
+        <div className="flex-centered">
+          <h1>Player Type:</h1>
+          {render_players_type_inputs('skater', 'points', 'allSkaters', 'Skaters')}
+          {render_players_type_inputs('goalie', 'wins', 'GOnly', 'Goalies Only')}
+        </div>
+
+        {type === 'skater' ? (
+          <div className="flex-centered">
+            <h1>Skater Type:</h1>
+            <select onChange={handleChangesSkaterType}>
+              <option value="allSkaters" selected={playerType === 'allSkaters'}>
+                All Skaters
+              </option>
+              <option value="allForwards" selected={searchMode === 'allForwards'}>
+                All Forwards
+              </option>
+              <option value="LOnly" selected={searchMode === 'LOnly'}>
+                LW Only
+              </option>
+              <option value="ROnly" selected={searchMode === 'ROnly'}>
+                RW Only
+              </option>
+              <option value="COnly" selected={searchMode === 'COnly'}>
+                Centers Only
+              </option>
+              <option value="DOnly" selected={searchMode === 'DOnly'}>
+                Defenders Only
+              </option>
+            </select>
+          </div>
+        ) : null}
+        <div className="flex-centered">
+          <h1>Search Mode:</h1>
+          <select onChange={handleChangesSearchMode}>
+            <option value="singleSeason" selected={searchMode === 'singleSeason'}>
+              Single Season
+            </option>
+            <option value="allSeasons" selected={searchMode === 'allSeasons'}>
+              All Seasons
+            </option>
+            <option value="allSeasonsAggregate" selected={searchMode === 'allSeasonsAggregate'}>
+              All Seasons Aggregate
+            </option>
+          </select>
+        </div>
+        {searchMode === 'singleSeason' ? (
+          <div className="flex-centered">
+            <h1>Season:</h1>
+            <select onChange={handleChangesingleSeason}>{season_options(startSeason, null)}</select>
+          </div>
+        ) : (
+          <div className="flex-centered">
+            <h1>Start Season:</h1>
+            <select onChange={handleChangeStartSeason}>{season_options(startSeason, true)}</select>
+            <h1>End Season:</h1>
+            <select onChange={handleChangeEndSeason}>{season_options(endSeason, false)}</select>
+          </div>
+        )}
       </div>
 
       {leaders.length > 0 ? (

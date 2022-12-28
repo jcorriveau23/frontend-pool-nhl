@@ -10,13 +10,12 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 // components
 import PlayerLink from '../playerLink';
-import { make_positionCode_string, make_sorting_string } from '../../pages/stats_page';
 
 // images
 import { logos } from '../img/logos';
 
-export default function SummaryLeaders({ injury, statsType, type, positionCode, season }) {
-  // statsType: "points", "assists", goals, "wins", "gaa", "savePct"
+export default function SummaryLeaders({ injury, statsType, type, playerType, season }) {
+  // statsType: "points", "assists", goals, "wins", "gaa", "savePct", and more defined in nhl api
   const [leagueLeaders, setLeagueLeaders] = useState([]);
   const [noData, setNoData] = useState(false);
 
@@ -75,9 +74,7 @@ export default function SummaryLeaders({ injury, statsType, type, positionCode, 
         <tr>
           <td colSpan={5}>
             <Link
-              to={`/stats?type=${type}&sorting=${make_sorting_string(
-                statsType
-              )}&positionCode=${make_positionCode_string(positionCode)}&startSeason=${season}&endSeason=${season}`}
+              to={`/stats?type=${type}&statsType=${statsType}&playerType=${playerType}&startSeason=${season}&endSeason=${season}&searchMode=singleSeason`}
             >
               More...
             </Link>
