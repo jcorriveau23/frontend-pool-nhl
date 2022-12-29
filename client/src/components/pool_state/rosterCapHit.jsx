@@ -11,7 +11,7 @@ import GraphCapHits from '../../modals/graphCapHits';
 
 export default function RosterCapHit({
   poolInfo,
-  selectedParticipantIndex,
+  userTabIndex,
   setUserTab,
   select_participant,
   injury,
@@ -21,6 +21,16 @@ export default function RosterCapHit({
   const [totalCapHitsByYears, setTotalCapHitsByYears] = useState(null);
   const [indexYear, setIndexYear] = useState(0);
   const [showGraphCapHits, setShowGraphCapHits] = useState(false);
+
+  const get_players_tot_cap = (playerList, playerType, k) => {
+    let totalCapHit = 0;
+    for (let i = 0; i < playerList.length; i += 1) {
+      if (playerList[i].caps?.length > k && playerList[i].position === playerType)
+        totalCapHit += parseInt(playerList[i].caps[k], 10);
+    }
+
+    return totalCapHit;
+  };
 
   useEffect(() => {
     const totalCapHitsByYears_temp = [];
@@ -40,45 +50,20 @@ export default function RosterCapHit({
         const pooler_roster = poolInfo.context.pooler_roster[participant];
 
         // Forward
-        for (let j = 0; j < pooler_roster.chosen_forwards.length; j += 1) {
-          if (pooler_roster.chosen_forwards[j].caps.length > k)
-            totalCapHit.F += parseInt(pooler_roster.chosen_forwards[j].caps[k], 10);
-        }
+        totalCapHit.F +=
+          get_players_tot_cap(pooler_roster.chosen_forwards, 'F', k) +
+          get_players_tot_cap(pooler_roster.chosen_reservists, 'F', k);
+
         // Defender
-        for (let j = 0; j < pooler_roster.chosen_defenders.length; j += 1) {
-          if (pooler_roster.chosen_defenders[j].caps.length > k)
-            totalCapHit.D += parseInt(pooler_roster.chosen_defenders[j].caps[k], 10);
-        }
+        totalCapHit.D +=
+          get_players_tot_cap(pooler_roster.chosen_defenders, 'D', k) +
+          get_players_tot_cap(pooler_roster.chosen_reservists, 'D', k);
+
         // Goalies
-        for (let j = 0; j < pooler_roster.chosen_goalies.length; j += 1) {
-          // console.log(
-          //   `${participant} - ${pooler_roster.chosen_goalies[j].name} - ${pooler_roster.chosen_goalies[j].caps}`
-          // );
-          if (pooler_roster.chosen_goalies[j].caps.length > k)
-            totalCapHit.G += parseInt(pooler_roster.chosen_goalies[j].caps[k], 10);
-        }
-        // Reservists
-        for (let j = 0; j < pooler_roster.chosen_reservists.length; j += 1) {
-          switch (pooler_roster.chosen_reservists[j].position) {
-            case 'F': {
-              if (pooler_roster.chosen_reservists[j].caps.length > k)
-                totalCapHit.F += parseInt(pooler_roster.chosen_reservists[j].caps[k], 10);
-              break;
-            }
-            case 'D': {
-              if (pooler_roster.chosen_reservists[j].caps.length > k)
-                totalCapHit.D += parseInt(pooler_roster.chosen_reservists[j].caps[k], 10);
-              break;
-            }
-            case 'G': {
-              if (pooler_roster.chosen_reservists[j].caps.length > k)
-                totalCapHit.G += parseInt(pooler_roster.chosen_reservists[j].caps[k], 10);
-              break;
-            }
-            default:
-              break;
-          }
-        }
+        totalCapHit.G +=
+          get_players_tot_cap(pooler_roster.chosen_goalies, 'G', k) +
+          get_players_tot_cap(pooler_roster.chosen_reservists, 'G', k);
+
         totalCapHit.tot = totalCapHit.F + totalCapHit.D + totalCapHit.G;
         totalCapHits.push(totalCapHit);
       }
@@ -96,7 +81,7 @@ export default function RosterCapHit({
   };
 
   const render_total_cap_hit_header = year => (
-    <>
+    <thead>
       <tr>
         <th colSpan={5}>Cap Hit by pooler ({year})</th>
       </tr>
@@ -107,41 +92,45 @@ export default function RosterCapHit({
         <th>Goalies</th>
         <th>Total</th>
       </tr>
-    </>
+    </thead>
   );
 
-  const render_total_cap_hit_content = year =>
+  const render_total_cap_hit_content = year => (
     // 0 = current year
     // 1 = current + 1 year
     // 2 = current + 2 year
     // 3 = current + 3 year
     // 4 = current + 4 year
 
-    totalCapHitsByYears[year]
-      .sort((cap1, cap2) => cap2.tot - cap1.tot)
-      .map(total => (
-        <tr
-          onClick={() => select_participant(total.name)}
-          style={
-            poolInfo.participants[selectedParticipantIndex] === total.name
-              ? { backgroundColor: '#eee', cursor: 'pointer' }
-              : { cursor: 'pointer' }
-          }
-        >
-          <td>
-            <User id={total.name} user={user} DictUsers={DictUsers} />
-          </td>
-          <td>{cap_hit_value(total.F)}</td>
-          <td>{cap_hit_value(total.D)}</td>
-          <td>{cap_hit_value(total.G)}</td>
-          <td>
-            <b style={{ color: '#a20' }}>{cap_hit_value(total.tot)}</b>
-          </td>
-        </tr>
-      ));
+    <tbody>
+      {totalCapHitsByYears[year]
+        .sort((cap1, cap2) => cap2.tot - cap1.tot)
+        .map(total => (
+          <tr
+            key={total.name}
+            onClick={() => select_participant(total.name)}
+            style={
+              poolInfo.participants[userTabIndex] === total.name
+                ? { backgroundColor: '#eee', cursor: 'pointer' }
+                : { cursor: 'pointer' }
+            }
+          >
+            <td>
+              <User id={total.name} user={user} DictUsers={DictUsers} />
+            </td>
+            <td>{cap_hit_value(total.F)}</td>
+            <td>{cap_hit_value(total.D)}</td>
+            <td>{cap_hit_value(total.G)}</td>
+            <td>
+              <b style={{ color: '#a20' }}>{cap_hit_value(total.tot)}</b>
+            </td>
+          </tr>
+        ))}
+    </tbody>
+  );
 
   const render_roster_with_cap_hit_header = position => (
-    <>
+    <thead>
       <tr>
         <th colSpan={8}>{position}</th>
       </tr>
@@ -155,15 +144,15 @@ export default function RosterCapHit({
         <th>2025-2026</th>
         <th>2026-2027</th>
       </tr>
-    </>
+    </thead>
   );
 
   const render_roster_with_cap_hit_content = (players, position, participant) => (
-    <>
+    <tbody>
       {players
         .filter(player => player.position === position)
         .map((player, i) => (
-          <tr>
+          <tr key={player.id}>
             <td>{i + 1}</td>
             <td>
               <PlayerLink name={player.name} id={player.id} injury={injury} />
@@ -171,11 +160,17 @@ export default function RosterCapHit({
             <td>
               <img src={logos[player.team]} alt="" width="30" height="30" />
             </td>
-            <td style={indexYear === 0 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[0])}</td>
-            <td style={indexYear === 1 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[1])}</td>
-            <td style={indexYear === 2 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[2])}</td>
-            <td style={indexYear === 3 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[3])}</td>
-            <td style={indexYear === 4 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[4])}</td>
+            {player.caps ? (
+              <>
+                <td style={indexYear === 0 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[0])}</td>
+                <td style={indexYear === 1 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[1])}</td>
+                <td style={indexYear === 2 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[2])}</td>
+                <td style={indexYear === 3 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[3])}</td>
+                <td style={indexYear === 4 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[4])}</td>
+              </>
+            ) : (
+              <td colSpan={5}>No cap hit available yet.</td>
+            )}
           </tr>
         ))}
       <tr>
@@ -206,7 +201,7 @@ export default function RosterCapHit({
           )}
         </th>
       </tr>
-    </>
+    </tbody>
   );
 
   if (totalCapHitsByYears) {
@@ -268,7 +263,7 @@ export default function RosterCapHit({
             </table>
           </TabPanel>
         </Tabs>
-        <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)}>
+        <Tabs selectedIndex={userTabIndex} onSelect={index => setUserTab(index)}>
           <TabList>
             {poolInfo.participants.map(pooler => (
               <Tab key={pooler}>

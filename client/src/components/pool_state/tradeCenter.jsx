@@ -18,7 +18,7 @@ export default function TradeCenter({
   user,
   hasOwnerRights,
   DictUsers,
-  isUserParticipant,
+  userIndex,
 }) {
   const [showCreateTradeModal, setShowCreateTradeModal] = useState(false);
 
@@ -73,7 +73,7 @@ export default function TradeCenter({
   if (poolInfo.trades) {
     return (
       <div className="half-cont">
-        {isUserParticipant ? (
+        {userIndex > -1 ? (
           <>
             <button className="base-button" type="button" onClick={() => setShowCreateTradeModal(true)}>
               Create a trade
@@ -157,7 +157,7 @@ export default function TradeCenter({
   return (
     <div className="cont">
       <h1>No trades have been created yet.</h1>
-      {isUserParticipant ? (
+      {userIndex > -1 ? (
         <>
           <button className="base-button" type="button" onClick={() => setShowCreateTradeModal(true)}>
             Create a trade

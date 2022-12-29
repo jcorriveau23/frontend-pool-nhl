@@ -18,7 +18,7 @@ import './react-datepicker.css';
 
 // Loader
 
-export default function TodayGamesFeed({
+export default function DayGamesFeed({
   formatDate,
   setFormatDate,
   todayFormatDate,
@@ -150,7 +150,9 @@ export default function TodayGamesFeed({
 
   const render_game_item = () =>
     gamesStats.length > 0 ? (
-      gamesStats.map(game => <GameItem gameData={game} selectedGamePk={selectedGamePk} liveGameInfo={liveGameInfo} />)
+      gamesStats.map(game => (
+        <GameItem key={game.gamePk} gameData={game} selectedGamePk={selectedGamePk} liveGameInfo={liveGameInfo} />
+      ))
     ) : (
       <h1>No game on {formatDate}.</h1>
     );

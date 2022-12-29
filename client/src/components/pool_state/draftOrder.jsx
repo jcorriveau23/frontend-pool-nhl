@@ -34,6 +34,56 @@ export default function DraftOrder({ poolInfo, playerIdToPlayersDataMap, injury,
     return true;
   };
 
+  const render_players_columns = player_drafted =>
+    playerIdToPlayersDataMap && playerIdToPlayersDataMap[player_drafted] ? (
+      <>
+        <td>
+          <PlayerNoLink name={playerIdToPlayersDataMap[player_drafted].name} injury={injury} />
+        </td>
+        <td>
+          <img src={logos[playerIdToPlayersDataMap[player_drafted].team]} alt="" width="30" height="30" />
+        </td>
+      </>
+    ) : (
+      <>
+        <td>{null}</td>
+        <td>{null}</td>
+      </>
+    );
+
+  const render_pick_row = (
+    _player_drafted,
+    _player_drafted_index,
+    _real_next_drafter,
+    _next_drafter,
+    _isUserDone,
+    _isUserTurn
+  ) => (
+    <tr>
+      {poolInfo.status === 'Draft' ? (
+        <td>{_isUserTurn ? <ImArrowRight size={30} style={{ color: 'green' }} /> : null}</td>
+      ) : null}
+      <td>{_player_drafted_index + 1}</td>
+      {_real_next_drafter !== _next_drafter ? (
+        <td>
+          <User id={_real_next_drafter} user={user} DictUsers={DictUsers} noColor />
+          <b style={{ color: 'red' }}> (From {DictUsers ? DictUsers[_next_drafter] : _next_drafter})</b>
+        </td>
+      ) : (
+        <td>
+          <User id={_next_drafter} user={user} DictUsers={DictUsers} noColor />
+        </td>
+      )}
+      {_isUserDone ? (
+        <td colSpan={2}>
+          <b style={{ color: 'red' }}>Done</b>
+        </td>
+      ) : (
+        render_players_columns(_player_drafted)
+      )}
+    </tr>
+  );
+
   const render_table_body = () => {
     const participantsToRosterCountDict = {};
 
@@ -80,11 +130,10 @@ export default function DraftOrder({ poolInfo, playerIdToPlayersDataMap, injury,
           if (poolInfo.context.past_tradable_picks && i < poolInfo.context.past_tradable_picks.length) {
             // we use tradable picks to find to process the next drafter
             const next_drafter = poolInfo.final_rank[poolInfo.final_rank.length - 1 - j];
-            const real_next_drafter = poolInfo.context.past_tradable_picks[i][next_drafter];
+            const real_next_drafter = poolInfo.context.past_tradable_picks[i][next_drafter] ?? next_drafter;
 
             participantsToRosterCountDict[real_next_drafter] += 1;
             const isUserDone = participantsToRosterCountDict[real_next_drafter] > nbPlayers;
-            const isPickTraded = next_drafter !== poolInfo.context.past_tradable_picks[i][next_drafter]; // was the pick traded last season ?
 
             if (
               !isUserTurnFound &&
@@ -98,39 +147,14 @@ export default function DraftOrder({ poolInfo, playerIdToPlayersDataMap, injury,
             }
 
             picks.push(
-              <tr>
-                {poolInfo.status === 'Draft' ? (
-                  <td>{isUserTurn ? <ImArrowRight size={30} style={{ color: 'green' }} /> : null}</td>
-                ) : null}
-                <td>{player_drafted_index + 1}</td>
-                {isPickTraded ? (
-                  <td>
-                    <User id={real_next_drafter} user={user} DictUsers={DictUsers} noColor />
-                    <b style={{ color: 'red' }}> (From {DictUsers ? DictUsers[next_drafter] : next_drafter})</b>
-                  </td>
-                ) : (
-                  <td>
-                    <User id={real_next_drafter} user={user} DictUsers={DictUsers} noColor />
-                  </td>
-                )}
-                {isUserDone ? (
-                  <td colSpan={2}>
-                    <b style={{ color: 'red' }}>Done</b>
-                  </td>
-                ) : (
-                  <>
-                    <td>
-                      <PlayerNoLink
-                        name={playerIdToPlayersDataMap ? playerIdToPlayersDataMap[player_drafted].name : player_drafted}
-                        injury={injury}
-                      />
-                    </td>
-                    <td>
-                      <img src={logos[playerIdToPlayersDataMap[player_drafted].team]} alt="" width="30" height="30" />
-                    </td>
-                  </>
-                )}
-              </tr>
+              render_pick_row(
+                player_drafted,
+                player_drafted_index,
+                real_next_drafter,
+                next_drafter,
+                isUserDone,
+                isUserTurn
+              )
             );
           } else {
             // the next drafter comes from final_rank
@@ -150,32 +174,7 @@ export default function DraftOrder({ poolInfo, playerIdToPlayersDataMap, injury,
             }
 
             picks.push(
-              <tr>
-                {poolInfo.status === 'Draft' ? (
-                  <td>{isUserTurn ? <ImArrowRight size={30} style={{ color: 'green' }} /> : null}</td>
-                ) : null}
-                <td>{player_drafted_index + 1}</td>
-                <td>
-                  <User id={next_drafter} user={user} DictUsers={DictUsers} noColor />
-                </td>
-                {isUserDone ? (
-                  <td colSpan={2}>
-                    <b style={{ color: 'red' }}>Done</b>
-                  </td>
-                ) : (
-                  <>
-                    <td>
-                      <PlayerNoLink
-                        name={playerIdToPlayersDataMap ? playerIdToPlayersDataMap[player_drafted].name : player_drafted}
-                        injury={injury}
-                      />
-                    </td>
-                    <td>
-                      <img src={logos[playerIdToPlayersDataMap[player_drafted].team]} alt="" width="30" height="30" />
-                    </td>
-                  </>
-                )}
-              </tr>
+              render_pick_row(player_drafted, player_drafted_index, next_drafter, next_drafter, isUserDone, isUserTurn)
             );
           }
           player_drafted_index += 1;
@@ -198,25 +197,9 @@ export default function DraftOrder({ poolInfo, playerIdToPlayersDataMap, injury,
           }
 
           picks.push(
-            <tr>
-              {poolInfo.status === 'Draft' ? (
-                <td>{isUserTurn ? <ImArrowRight size={30} style={{ color: 'green' }} /> : null}</td>
-              ) : null}
-              <td>{player_drafted_index + 1}</td>
-              <td>
-                <User id={next_drafter} user={user} DictUsers={DictUsers} noColor />
-              </td>
-              <td>
-                <PlayerNoLink
-                  name={playerIdToPlayersDataMap ? playerIdToPlayersDataMap[player_drafted].name : player_drafted}
-                  injury={injury}
-                />
-              </td>
-              <td>
-                <img src={logos[playerIdToPlayersDataMap[player_drafted].team]} alt="" width="30" height="30" />
-              </td>
-            </tr>
+            render_pick_row(player_drafted, player_drafted_index, next_drafter, next_drafter, false, isUserTurn)
           );
+
           player_drafted_index += 1;
         }
       }

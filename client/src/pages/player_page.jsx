@@ -18,7 +18,7 @@ export default function PlayerPage() {
   const [prevPlayerID, setPrevPlayerID] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
-  const [hasNavigated, setHaseNavigated] = useState(false);
+  const [hasNavigated, setHasNavigated] = useState(false);
 
   const playerID = window.location.pathname.split('/').pop();
 
@@ -48,7 +48,7 @@ export default function PlayerPage() {
             setProspectInfo({ ...res.data.prospects[0] });
             // console.log(p.prospects[0])
             if (res.data.prospects[0].nhlPlayerId > 8000000 && !hasNavigated) {
-              setHaseNavigated(true);
+              setHasNavigated(true);
               navigate(`/player-info/${res.data.prospects[0].nhlPlayerId}`);
             }
           });
@@ -149,7 +149,7 @@ export default function PlayerPage() {
           const playoffStats = get_playoff_stats(season);
 
           return (
-            <tr key={season} style={{ backgroundColor: get_league_row_color(season.league.name) }}>
+            <tr style={{ backgroundColor: get_league_row_color(season.league.name) }}>
               <td>{season.team.name}</td>
               {season.league.id === 133 ? ( // nhl league
                 <>
@@ -239,7 +239,6 @@ export default function PlayerPage() {
       <tbody>
         {stats.map(season => (
           <tr
-            key={season}
             style={{
               backgroundColor: get_league_row_color(season.league.name),
             }}
@@ -359,7 +358,7 @@ export default function PlayerPage() {
   );
 
   const render_player_info_stats = (stats, info) => (
-    <div div className="cont">
+    <div className="cont">
       {render_player_info(info)}
       {info.primaryPosition.abbreviation !== 'G' ? render_skater_stats(stats) : render_goalie_stats(stats)}
     </div>

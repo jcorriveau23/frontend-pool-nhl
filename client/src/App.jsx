@@ -9,7 +9,7 @@ import './components/components.css';
 import './App.css';
 
 // component
-import TodayGamesFeed from './components/game_feed/dayGamesFeed';
+import DayGamesFeed from './components/game_feed/dayGamesFeed';
 
 // modals
 import WrongNetworkModal from './modals/wrongNetwork';
@@ -114,7 +114,7 @@ function App() {
           </li>
         </div>
         <div className="cont">
-          <TodayGamesFeed
+          <DayGamesFeed
             formatDate={formatDate}
             setFormatDate={setFormatDate}
             todayFormatDate={todayFormatDate}

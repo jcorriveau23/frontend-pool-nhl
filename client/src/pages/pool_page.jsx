@@ -33,7 +33,7 @@ export default function PoolPage({
   const [playerIdToPlayersDataMap, setPlayerIdToPlayersDataMap] = useState(null);
   const url = useParams(); // get the name of the pool using the param url
   const [poolName, setPoolName] = useState('');
-  const [isUserParticipant, setIsUserParticipant] = useState(false);
+  const [userIndex, setUserIndex] = useState(null); // if the user is not a participant it will be -1. we will know if the user is a pool participant.
   const [hasOwnerRights, setHasOwnerRights] = useState(false);
   const [poolUpdate, setPoolUpdate] = useState(false);
 
@@ -63,6 +63,7 @@ export default function PoolPage({
     const poolName_temp = url.name;
     if (user && (poolName_temp !== poolName || forceUpdate)) {
       console.log('fetching pool');
+      setPoolInfo(null);
       setPoolName(poolName_temp);
       setPoolUpdate(false);
 
@@ -106,8 +107,9 @@ export default function PoolPage({
         setPoolInfo(res.data);
         db.pools.put(res.data, 'name');
 
-        if (res.data.participants)
-          setIsUserParticipant(res.data.participants.findIndex(participant => participant === user._id.$oid) > -1);
+        if (res.data.participants) {
+          setUserIndex(res.data.participants.findIndex(participant => participant === user._id.$oid));
+        }
       }
     }
   };
@@ -168,7 +170,7 @@ export default function PoolPage({
   }, [poolInfo]);
 
   if (user) {
-    if (poolInfo) {
+    if (poolInfo && userIndex) {
       switch (poolInfo.status) {
         case 'Created':
           return (
@@ -194,7 +196,7 @@ export default function PoolPage({
               playersIdToPoolerMap={playersIdToPoolerMap}
               injury={injury}
               socket={socket}
-              isUserParticipant={isUserParticipant}
+              userIndex={userIndex}
             />
           );
         case 'InProgress':
@@ -207,7 +209,7 @@ export default function PoolPage({
               playerIdToPlayersDataMap={playerIdToPlayersDataMap}
               playersIdToPoolerMap={playersIdToPoolerMap}
               injury={injury}
-              isUserParticipant={isUserParticipant}
+              userIndex={userIndex}
               formatDate={formatDate}
               todayFormatDate={todayFormatDate}
               gameStatus={gameStatus}
@@ -225,6 +227,7 @@ export default function PoolPage({
               playersIdToPoolerMap={playersIdToPoolerMap}
               setPoolUpdate={setPoolUpdate}
               injury={injury}
+              userIndex={userIndex}
             />
           );
         default:

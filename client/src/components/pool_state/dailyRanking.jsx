@@ -19,7 +19,7 @@ export default function DailyRanking({
   todayFormatDate,
   poolInfo,
   playerIdToPlayersDataMap,
-  selectedParticipantIndex,
+  userTabIndex,
   setUserTab,
   select_participant,
   injury,
@@ -305,9 +305,10 @@ export default function DailyRanking({
       .sort((p1, p2) => p2.T - p1.T)
       .map(p => (
         <tr
+          key={p.participant}
           onClick={() => select_participant(p.participant)}
           style={
-            poolInfo.participants[selectedParticipantIndex] === p.participant
+            poolInfo.participants[userTabIndex] === p.participant
               ? { backgroundColor: '#eee', cursor: 'pointer' }
               : { cursor: 'pointer' }
           }
@@ -337,7 +338,7 @@ export default function DailyRanking({
       {players
         .sort((p1, p2) => (p2.team in DictTeamAgainst) - (p1.team in DictTeamAgainst))
         .map(player => (
-          <tr>
+          <tr key={player.id}>
             <td>
               <PlayerLink name={player.name} id={player.id} injury={injury} />
             </td>
@@ -380,7 +381,7 @@ export default function DailyRanking({
         {players
           .sort((p1, p2) => (p2.team in DictTeamAgainst) - (p1.team in DictTeamAgainst))
           .map(player => (
-            <tr>
+            <tr key={player.id}>
               <td>
                 <PlayerLink name={player.name} id={player.id} injury={injury} />
               </td>
@@ -448,9 +449,10 @@ export default function DailyRanking({
       })
       .map((p, i) => (
         <tr
+          key={p.participant}
           onClick={() => select_participant(p.participant)}
           style={
-            poolInfo.participants[selectedParticipantIndex] === p.participant
+            poolInfo.participants[userTabIndex] === p.participant
               ? { backgroundColor: '#eee', cursor: 'pointer' }
               : { cursor: 'pointer' }
           }
@@ -514,7 +516,7 @@ export default function DailyRanking({
     skaterDailyStats[participant]
       .sort((player1, player2) => player2.pts + player2.played - player1.pts - player1.played)
       .map(player => (
-        <tr>
+        <tr key={player.id}>
           <td colSpan={2}>
             <PlayerLink name={player.name} id={player.id} injury={injury} />
           </td>
@@ -578,7 +580,7 @@ export default function DailyRanking({
     goalDailyStats[participant]
       .sort(player => player.played)
       .map(player => (
-        <tr>
+        <tr key={player.id}>
           <td colSpan={2}>
             <PlayerLink name={player.name} id={player.id} injury={injury} />
           </td>
@@ -627,7 +629,7 @@ export default function DailyRanking({
           {render_table_preview_header()}
           {render_table_preview_content()}
         </table>
-        <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)}>
+        <Tabs selectedIndex={userTabIndex} onSelect={index => setUserTab(index)}>
           <TabList>
             {poolInfo.participants.map(participant => (
               <Tab key={participant}>
@@ -636,7 +638,7 @@ export default function DailyRanking({
             ))}
           </TabList>
           {poolInfo.participants.map(participant => (
-            <TabPanel>
+            <TabPanel key={participant}>
               <div className="half-cont">
                 <table className="content-table-no-min">
                   <NaviguateToday
@@ -696,7 +698,7 @@ export default function DailyRanking({
           <thead>{render_table_rank_header()}</thead>
           <tbody>{render_table_rank_body()}</tbody>
         </table>
-        <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)}>
+        <Tabs selectedIndex={userTabIndex} onSelect={index => setUserTab(index)}>
           <TabList>
             {poolInfo.participants.map(participant => (
               <Tab key={participant}>
@@ -705,7 +707,7 @@ export default function DailyRanking({
             ))}
           </TabList>
           {poolInfo.participants.map(participant => (
-            <TabPanel>
+            <TabPanel key={participant}>
               <div className="half-cont">
                 <table className="content-table-no-min">
                   <thead>

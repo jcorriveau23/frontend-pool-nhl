@@ -24,14 +24,13 @@ export default function DynastiePool({
   playersIdToPoolerMap,
   setPoolUpdate,
   injury,
+  userIndex,
 }) {
   const [forwProtected, setForwProtected] = useState([]);
   const [defProtected, setDefProtected] = useState([]);
   const [goalProtected, setGoalProtected] = useState([]);
   const [reservProtected, setReservProtected] = useState([]);
-  const [tabIndex, setTabIndex] = useState(
-    poolInfo.participants.findIndex(participant => participant === user._id.$oid)
-  );
+  const [userTabIndex, setUSerTabIndex] = useState(poolInfo.participants.findIndex(userIndex === -1 ? 0 : userIndex));
 
   const protect_player = (player, isUser) => {
     if (!isUser) {
@@ -253,7 +252,7 @@ export default function DynastiePool({
         <TabPanel>
           <div className="float-left">
             <div className="half-cont">
-              <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
+              <Tabs selectedIndex={userTabIndex} onSelect={index => setUSerTabIndex(index)}>
                 <TabList>
                   {poolInfo.participants.map(participant => (
                     <Tab>

@@ -23,9 +23,10 @@ export default function PoolHistory({
   injury,
   user,
   DictUsers,
-  isUserParticipant,
+  userIndex,
 }) {
   const [history, setHistory] = useState(null);
+  const [doneProcessing, setDoneProcessing] = useState(false);
   const [collapsedDays, setCollapsedDays] = useState([]);
 
   const parse_all_movement = async () => {
@@ -41,7 +42,7 @@ export default function PoolHistory({
       const jDate = j.toISOString().slice(0, 10);
 
       const dailyMovements = []; // Will capture all movement that happened on this date.
-      const dailyTrades = poolInfo.trades.filter(
+      const dailyTrades = poolInfo.trades?.filter(
         trade =>
           trade.status === 'ACCEPTED' && new Date(trade.date_accepted + 3600000).toISOString().slice(0, 10) === jDate
       );
@@ -81,6 +82,8 @@ export default function PoolHistory({
 
         if (isFirstDay) isFirstDay = false; // We will start to note changes applied to rosters after the first day.
       }
+
+      setDoneProcessing(true);
     }
 
     // Make sure that we count current roster (for days that roster modifications are allowed we will see them in real time)
@@ -219,40 +222,47 @@ export default function PoolHistory({
     </>
   );
 
-  if (history) {
-    return (
-      <div>
-        <Tabs>
-          <TabList>
-            <Tab>History</Tab>
-            <Tab>Trade Center</Tab>
-          </TabList>
-          <TabPanel>
+  const render_processing = () =>
+    doneProcessing ? (
+      <div className="cont">
+        <h1>There is no history or trade to keep track of yet!</h1>
+      </div>
+    ) : (
+      <div className="cont">
+        <h1>Processing history...</h1>
+        <ClipLoader color="#fff" loading size={75} />
+      </div>
+    );
+
+  return (
+    <div>
+      <Tabs>
+        <TabList>
+          <Tab>History</Tab>
+          <Tab>Trade Center</Tab>
+        </TabList>
+        <TabPanel>
+          {history ? (
             <table className="content-table">
               <tbody>{history.map(dailyMovements => render_daily_roster_movement(dailyMovements))}</tbody>
             </table>
-          </TabPanel>
-          <TabPanel>
-            <TradeCenter
-              poolInfo={poolInfo}
-              setPoolUpdate={setPoolUpdate}
-              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-              injury={injury}
-              user={user}
-              hasOwnerRights={hasOwnerRights}
-              DictUsers={DictUsers}
-              isUserParticipant={isUserParticipant}
-            />
-          </TabPanel>
-        </Tabs>
-      </div>
-    );
-  }
-
-  return (
-    <div className="cont">
-      <h1>Processing history...</h1>
-      <ClipLoader color="#fff" loading size={75} />
+          ) : (
+            render_processing()
+          )}
+        </TabPanel>
+        <TabPanel>
+          <TradeCenter
+            poolInfo={poolInfo}
+            setPoolUpdate={setPoolUpdate}
+            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+            injury={injury}
+            user={user}
+            hasOwnerRights={hasOwnerRights}
+            DictUsers={DictUsers}
+            userIndex={userIndex}
+          />
+        </TabPanel>
+      </Tabs>
     </div>
   );
 }

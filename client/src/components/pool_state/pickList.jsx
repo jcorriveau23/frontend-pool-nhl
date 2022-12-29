@@ -11,7 +11,7 @@ export default function PickList({ tradablePicks, participant, add_pick, side, f
           return null;
         })
         .map(from => (
-          <tr onClick={add_pick ? () => add_pick(side, i, from) : () => null}>
+          <tr key={from} onClick={add_pick ? () => add_pick(side, i, from) : () => null}>
             <td>
               <b>{i + 1}</b>
             </td>

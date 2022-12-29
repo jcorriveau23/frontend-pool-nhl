@@ -77,7 +77,7 @@ function SearchPlayer() {
             {searchResult?.suggestions?.map(player => {
               const p = player.split('|');
               return (
-                <tr onClick={() => link_to(`/player-info/${p[0]}`)}>
+                <tr key={p} onClick={() => link_to(`/player-info/${p[0]}`)}>
                   <td>{`${p[2]} ${p[1]}`}</td>
                 </tr>
               );

@@ -33,25 +33,27 @@ export default function PoolItem({ name, owner, user, poolDeleted, setPoolDelete
 
   return (
     <table>
-      <tr>
-        <td>
-          <Link to={`/my-pools/${name}`} key={name}>
-            <li>
-              <div>
-                <h1>Pool: {name}</h1>
-                <User id={owner} user={user} DictUsers={DictUsers} />
-              </div>
-            </li>
-          </Link>
-        </td>
-        <td>
-          {user && user._id.$oid === owner ? (
-            <button className="base-button" onClick={delete_pool} type="button">
-              Delete
-            </button>
-          ) : null}
-        </td>
-      </tr>
+      <tbody>
+        <tr>
+          <td>
+            <Link to={`/my-pools/${name}`} key={name}>
+              <li>
+                <div>
+                  <h1>Pool: {name}</h1>
+                  <User id={owner} user={user} DictUsers={DictUsers} />
+                </div>
+              </li>
+            </Link>
+          </td>
+          <td>
+            {user && user._id.$oid === owner ? (
+              <button className="base-button" onClick={delete_pool} type="button">
+                Delete
+              </button>
+            ) : null}
+          </td>
+        </tr>
+      </tbody>
     </table>
   );
 }

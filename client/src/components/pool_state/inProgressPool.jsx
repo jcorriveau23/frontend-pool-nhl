@@ -17,7 +17,7 @@ import DailyRanking from './dailyRanking';
 import DraftOrder from './draftOrder';
 import NaviguateToday from './naviguateToday';
 import User from '../user';
-import RosterCapHit from './roster';
+import RosterCapHit from './rosterCapHit';
 import TopSeasonPlayers from './topSeasonPlayers';
 import PoolHistory from './poolHistory';
 import PoolSettings from './poolSettings';
@@ -42,7 +42,7 @@ export default function InProgressPool({
   playersIdToPoolerMap,
   playerIdToPlayersDataMap,
   injury,
-  isUserParticipant,
+  userIndex,
   formatDate,
   todayFormatDate,
   gameStatus,
@@ -55,10 +55,8 @@ export default function InProgressPool({
   const [fillSpotPosition, setFillSpotPosition] = useState('');
   const [showRosterModificationModal, setShowRosterModificationModal] = useState(false);
   const [showGraphStatsModal, setShowGraphStatsModal] = useState(false);
-  const [cumulativeDailyTabIndex, setCumulativeDailyTabIndex] = useState(0);
-  const [selectedParticipantIndex, setSelectedParticipantIndex] = useState(
-    poolInfo.participants.findIndex(participant => participant === user._id.$oid)
-  );
+  const [mainTabIndex, setMainTabIndex] = useState(0);
+  const [userTabIndex, setUserTabIndex] = useState(userIndex === -1 ? 0 : userIndex);
   const [tabSelectionParams, setTabSelectionParams] = useSearchParams();
 
   const calculate_pool_stats = async () => {
@@ -402,8 +400,8 @@ export default function InProgressPool({
     const mainTab = tabSelectionParams.get('mainTab');
     const userTab = tabSelectionParams.get('userTab');
 
-    if (mainTab) setCumulativeDailyTabIndex(Number(mainTab));
-    if (userTab) setSelectedParticipantIndex(Number(userTab));
+    if (mainTab) setMainTabIndex(Number(mainTab));
+    if (userTab) setUserTabIndex(Number(userTab));
   }, [formatDate, poolInfo.context.score_by_day]);
 
   const download_csv = pool => {
@@ -455,7 +453,7 @@ export default function InProgressPool({
     const emptyRows = [];
     for (let i = players_length; i < max; i += 1) {
       emptyRows.push(
-        <tr>
+        <tr key={i}>
           <td>{i + 1}</td>
           <td colSpan={3}>
             {pooler === user._id.$oid ? (
@@ -686,10 +684,10 @@ export default function InProgressPool({
     </tr>
   );
 
-  const setUserTab = index => {
-    setTabSelectionParams({ mainTab: cumulativeDailyTabIndex, userTab: index });
+  const setUserTab = _userTabIndex => {
+    setTabSelectionParams({ mainTab: mainTabIndex, userTab: _userTabIndex });
 
-    setSelectedParticipantIndex(index);
+    setUserTabIndex(_userTabIndex);
   };
 
   const select_participant = _participant => {
@@ -698,7 +696,7 @@ export default function InProgressPool({
   };
 
   const render_tabs_roster_stats = () => (
-    <Tabs selectedIndex={selectedParticipantIndex} onSelect={index => setUserTab(index)}>
+    <Tabs selectedIndex={userTabIndex} onSelect={index => setUserTab(index)}>
       <TabList>
         {poolInfo.participants.map(pooler => (
           <Tab key={pooler}>
@@ -745,6 +743,8 @@ export default function InProgressPool({
                   'F'
                 )}
               </tbody>
+            </table>
+            <table className="content-table-no-min">
               <thead>
                 <tr>
                   <th colSpan={13}>
@@ -767,6 +767,8 @@ export default function InProgressPool({
                   'D'
                 )}
               </tbody>
+            </table>
+            <table className="content-table-no-min">
               <thead>
                 <tr>
                   <th colSpan={13}>
@@ -776,6 +778,8 @@ export default function InProgressPool({
                 {render_header_goalies()}
               </thead>
               <tbody>{render_goalies_stats(pooler, poolInfo.number_goalies)}</tbody>
+            </table>
+            <table className="content-table-no-min">
               <thead>
                 <tr>
                   <th colSpan={13}>Reservists</th>
@@ -791,10 +795,10 @@ export default function InProgressPool({
     </Tabs>
   );
 
-  const setMainTab = index => {
-    setTabSelectionParams({ mainTab: index, userTab: selectedParticipantIndex });
+  const setMainTab = _mainTabIndex => {
+    setTabSelectionParams({ mainTab: _mainTabIndex, userTab: userTabIndex });
 
-    setCumulativeDailyTabIndex(index);
+    setMainTabIndex(_mainTabIndex);
   };
 
   const render_tabs_pool_rank = () =>
@@ -811,7 +815,7 @@ export default function InProgressPool({
           key={rank.name}
           onClick={() => select_participant(rank.participant)}
           style={
-            poolInfo.participants[selectedParticipantIndex] === rank.participant
+            poolInfo.participants[userTabIndex] === rank.participant
               ? { backgroundColor: '#eee', cursor: 'pointer' }
               : { cursor: 'pointer' }
           }
@@ -859,7 +863,7 @@ export default function InProgressPool({
     return (
       <div className="min-width">
         <div className="cont">
-          <Tabs selectedIndex={cumulativeDailyTabIndex} onSelect={index => setMainTab(index)}>
+          <Tabs selectedIndex={mainTabIndex} onSelect={index => setMainTab(index)}>
             <TabList>
               <Tab>
                 <BsFillCalculatorFill size={30} style={{ paddingRight: '5px' }} />
@@ -967,7 +971,7 @@ export default function InProgressPool({
                   todayFormatDate={todayFormatDate}
                   poolInfo={poolInfo}
                   playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-                  selectedParticipantIndex={selectedParticipantIndex}
+                  userTabIndex={userTabIndex}
                   setUserTab={setUserTab}
                   select_participant={select_participant}
                   injury={injury}
@@ -991,7 +995,7 @@ export default function InProgressPool({
             <TabPanel>
               <RosterCapHit
                 poolInfo={poolInfo}
-                selectedParticipantIndex={selectedParticipantIndex}
+                userTabIndex={userTabIndex}
                 setUserTab={setUserTab}
                 select_participant={select_participant}
                 injury={injury}
@@ -1009,7 +1013,7 @@ export default function InProgressPool({
                 injury={injury}
                 user={user}
                 DictUsers={DictUsers}
-                isUserParticipant={isUserParticipant}
+                userIndex={userIndex}
               />
             </TabPanel>
             <TabPanel>
@@ -1041,7 +1045,7 @@ export default function InProgressPool({
             DictUsers={DictUsers}
           />
         </div>
-        {isUserParticipant ? (
+        {userIndex > -1 ? (
           <>
             <FillSpot
               showFillSpotModal={showFillSpotModal}
@@ -1050,7 +1054,7 @@ export default function InProgressPool({
               setPoolUpdate={setPoolUpdate}
               user={user}
               fillSpotPosition={fillSpotPosition}
-              isUserParticipant={isUserParticipant}
+              userIndex={userIndex}
             />
             <RosterModificationModal
               showRosterModificationModal={showRosterModificationModal}

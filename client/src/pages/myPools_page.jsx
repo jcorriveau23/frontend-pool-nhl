@@ -132,7 +132,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
                 <div className="pool_item">
                   <ul>
                     {poolInProgress.map(pool => (
-                      <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
+                      <PoolItem key={pool.name} name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
                     ))}
                   </ul>
                 </div>
@@ -143,6 +143,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
                 <ul>
                   {poolCreated.map(pool => (
                     <PoolItem
+                      key={pool.name}
                       name={pool.name}
                       owner={pool.owner}
                       user={user}
@@ -159,7 +160,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
                 <div className="pool_item">
                   <ul>
                     {poolDraft.map(pool => (
-                      <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
+                      <PoolItem key={pool.name} name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
                     ))}
                   </ul>
                 </div>
@@ -170,7 +171,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
                 <div className="pool_item">
                   <ul>
                     {poolDynastie.map(pool => (
-                      <PoolItem name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
+                      <PoolItem key={pool.name} name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
                     ))}
                   </ul>
                 </div>
