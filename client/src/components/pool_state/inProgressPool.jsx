@@ -859,10 +859,10 @@ export default function InProgressPool({
         </tr>
       ));
 
-  if (playersStats && ranking && playerIdToPlayersDataMap && gameStatus) {
-    return (
-      <div className="min-width">
-        <div className="cont">
+  return (
+    <div className="min-width">
+      <div className="cont">
+        {playersStats && ranking && playerIdToPlayersDataMap && gameStatus ? (
           <Tabs selectedIndex={mainTabIndex} onSelect={index => setMainTab(index)}>
             <TabList>
               <Tab>
@@ -1003,7 +1003,6 @@ export default function InProgressPool({
                 DictUsers={DictUsers}
               />
             </TabPanel>
-
             <TabPanel>
               <PoolHistory
                 poolInfo={poolInfo}
@@ -1034,45 +1033,44 @@ export default function InProgressPool({
               />
             </TabPanel>
           </Tabs>
-        </div>
-        <div className="cont">
-          <h1>Current League Leaders</h1>
-          <TopSeasonPlayers
-            user={user}
-            injury={injury}
-            playersIdToPoolerMap={playersIdToPoolerMap}
-            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-            DictUsers={DictUsers}
-          />
-        </div>
-        {userIndex > -1 ? (
-          <>
-            <FillSpot
-              showFillSpotModal={showFillSpotModal}
-              setShowFillSpotModal={setShowFillSpotModal}
-              poolInfo={poolInfo}
-              setPoolUpdate={setPoolUpdate}
-              user={user}
-              fillSpotPosition={fillSpotPosition}
-              userIndex={userIndex}
-            />
-            <RosterModificationModal
-              showRosterModificationModal={showRosterModificationModal}
-              setShowRosterModificationModal={setShowRosterModificationModal}
-              poolInfo={poolInfo}
-              setPoolUpdate={setPoolUpdate}
-              injury={injury}
-              user={user}
-            />
-          </>
-        ) : null}
+        ) : (
+          <div className="cont">
+            <h1>Processing pool informations...</h1>
+            <ClipLoader color="#fff" loading size={75} />
+          </div>
+        )}
       </div>
-    );
-  }
-  return (
-    <div className="cont">
-      <h1>Processing pool informations...</h1>
-      <ClipLoader color="#fff" loading size={75} />
+      <div className="cont">
+        <h1>Current League Leaders</h1>
+        <TopSeasonPlayers
+          user={user}
+          injury={injury}
+          playersIdToPoolerMap={playersIdToPoolerMap}
+          playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+          DictUsers={DictUsers}
+        />
+      </div>
+      {userIndex > -1 ? (
+        <>
+          <FillSpot
+            showFillSpotModal={showFillSpotModal}
+            setShowFillSpotModal={setShowFillSpotModal}
+            poolInfo={poolInfo}
+            setPoolUpdate={setPoolUpdate}
+            user={user}
+            fillSpotPosition={fillSpotPosition}
+            userIndex={userIndex}
+          />
+          <RosterModificationModal
+            showRosterModificationModal={showRosterModificationModal}
+            setShowRosterModificationModal={setShowRosterModificationModal}
+            poolInfo={poolInfo}
+            setPoolUpdate={setPoolUpdate}
+            injury={injury}
+            user={user}
+          />
+        </>
+      ) : null}
     </div>
   );
 }
