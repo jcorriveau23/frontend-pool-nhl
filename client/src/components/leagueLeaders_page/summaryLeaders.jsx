@@ -2,7 +2,7 @@
 // display the list of player with their overal stats with this team
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // Loader
@@ -18,6 +18,7 @@ export default function SummaryLeaders({ injury, statsType, type, playerType, se
   // statsType: "points", "assists", goals, "wins", "gaa", "savePct", and more defined in nhl api
   const [leagueLeaders, setLeagueLeaders] = useState([]);
   const [noData, setNoData] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLeagueLeaders([]);
@@ -73,11 +74,17 @@ export default function SummaryLeaders({ injury, statsType, type, playerType, se
           ))}
         <tr>
           <td colSpan={5}>
-            <Link
-              to={`/stats?type=${type}&statsType=${statsType}&playerType=${playerType}&startSeason=${season}&endSeason=${season}&searchMode=singleSeason`}
+            <button
+              className="base-button"
+              type="button"
+              onClick={() =>
+                navigate(
+                  `/stats?type=${type}&statsType=${statsType}&playerType=${playerType}&startSeason=${season}&endSeason=${season}&searchMode=singleSeason`
+                )
+              }
             >
-              More...
-            </Link>
+              More Details...
+            </button>
           </td>
         </tr>
       </tbody>

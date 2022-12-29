@@ -6,5 +6,9 @@ import React from 'react';
 import SearchPlayersStats from '../components/stats_page/searchPlayersStats';
 
 export default function StatsPage({ injury }) {
-  return <SearchPlayersStats injury={injury} />;
+  return (
+    <div className="cont">
+      <SearchPlayersStats injury={injury} />
+    </div>
+  );
 }
