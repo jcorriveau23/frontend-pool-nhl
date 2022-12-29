@@ -14,7 +14,7 @@
   "plugins": ["react", "prettier"],
   "rules": {
     "camelcase": "off",
-    "no-underscore-dangle": ["error", { "allow": ["_id", "_oid"] }],
+    "no-underscore-dangle": "warn",
     "react/prop-types": "warn",
     "no-nested-ternary": "warn",
     "no-restricted-syntax": "warn",
