@@ -142,6 +142,12 @@ export default function SearchPlayersStats({
     </tr>
   );
 
+  const render_sort_column_header = (property, title) => (
+    <th className={statsType === property ? 'headerSortDown' : null} onClick={() => onClickSortingColumns(property)}>
+      {title}
+    </th>
+  );
+
   const render_skaters_leaders_header = () => (
     <>
       {render_table_title(playersIdToPoolerMap ? 9 : 11)}
@@ -150,17 +156,17 @@ export default function SearchPlayersStats({
         <th>Name</th>
         {render_mode_header_columns()}
         <th>Pos</th>
-        <th onClick={() => onClickSortingColumns('gamesPlayed')}>GP</th>
-        <th onClick={() => onClickSortingColumns('goals')}>G</th>
-        <th onClick={() => onClickSortingColumns('assists')}>A</th>
-        <th onClick={() => onClickSortingColumns('points')}>P</th>
+        {render_sort_column_header('gamesPlayed', 'GP')}
+        {render_sort_column_header('goals', 'G')}
+        {render_sort_column_header('assists', 'A')}
+        {render_sort_column_header('points', 'P')}
         {playersIdToPoolerMap ? null : ( // Don't display those columns in draft context
           <>
-            <th onClick={() => onClickSortingColumns('plusMinus')}>+/-</th>
-            <th onClick={() => onClickSortingColumns('penaltyMinutes')}>PIM</th>
+            {render_sort_column_header('plusMinus', '+/-')}
+            {render_sort_column_header('penaltyMinutes', 'PIM')}
           </>
         )}
-        <th onClick={() => onClickSortingColumns('pointsPerGame')}>P/GP</th>
+        {render_sort_column_header('pointsPerGame', 'P/GP')}
       </tr>
     </>
   );
@@ -172,20 +178,20 @@ export default function SearchPlayersStats({
         <th>#</th>
         <th>Name</th>
         {render_mode_header_columns()}
-        <th onClick={() => onClickSortingColumns('gamesPlayed')}>GP</th>
-        <th onClick={() => onClickSortingColumns('wins')}>W</th>
-        <th onClick={() => onClickSortingColumns('otLosses')}>OT</th>
+        {render_sort_column_header('gamesPlayed', 'GP')}
+        {render_sort_column_header('wins', 'W')}
+        {render_sort_column_header('otLosses', 'OT')}
         {playersIdToPoolerMap ? null : ( // Don't display those columns in draft context
           <>
-            <th onClick={() => onClickSortingColumns('gamesStarted')}>GS</th>
-            <th onClick={() => onClickSortingColumns('losses')}>L</th>
-            <th onClick={() => onClickSortingColumns('shotsAgainst')}>SA</th>
-            <th onClick={() => onClickSortingColumns('saves')}>Svs</th>
+            {render_sort_column_header('gamesStarted', 'GS')}
+            {render_sort_column_header('losses', 'L')}
+            {render_sort_column_header('shotsAgainst', 'SA')}
+            {render_sort_column_header('saves', 'Svs')}
           </>
         )}
-        <th onClick={() => onClickSortingColumns('goalsAgainst')}>GA</th>
-        <th onClick={() => onClickSortingColumns('savePct')}>Sv%</th>
-        <th onClick={() => onClickSortingColumns('goalsAgainstAverage')}>GAA</th>
+        {render_sort_column_header('goalsAgainst', 'GA')}
+        {render_sort_column_header('savePct', 'Sv%')}
+        {render_sort_column_header('goalsAgainstAverage', 'GAA')}
       </tr>
     </>
   );
@@ -363,12 +369,12 @@ export default function SearchPlayersStats({
     </label>
   );
 
-  const season_options = (season, isStart) => {
+  const season_options = (season, isStart, isSingleDate) => {
     const seasonArray = [];
 
     for (let i = 2022; i > 1916; i -= 1) {
       if (
-        !isStart || // In Single season mode, the isStart is not being passed (we need to add all dates).
+        isSingleDate || // In Single season mode, we want all date.
         (isStart && i < Number(endSeason.substr(endSeason.length - 4))) || // Start date cannot be higher than End date
         (!isStart && i >= Number(startSeason.substr(0, 4))) // End date cannot be lower than Start date
       ) {
@@ -443,56 +449,86 @@ export default function SearchPlayersStats({
 
   return (
     <div>
-      {!playersIdToPoolerMap ? ( // only display these options when not into pool context.
-        <>
-          <div className="flex-centered">
-            <h1>Search Mode:</h1>
-            <select onChange={handleChangesSearchMode} defaultValue={searchMode}>
-              {select_option('singleSeason', 'Single Season')}
-              {select_option('allSeasons', 'All Seasons')}
-              {select_option('allSeasonsAggregate', 'All Seasons Aggregate')}
-            </select>
-          </div>
-          {searchMode === 'singleSeason' ? (
-            <div className="flex-centered">
-              <h1>Season:</h1>
-              <select onChange={handleChangesingleSeason}>{season_options(startSeason, null)}</select>
-            </div>
-          ) : (
-            <div className="flex-centered">
-              <h1>Start Season:</h1>
-              <select onChange={handleChangeStartSeason}>{season_options(startSeason, true)}</select>
-              <h1>End Season:</h1>
-              <select onChange={handleChangeEndSeason}>{season_options(endSeason, false)}</select>
-            </div>
-          )}
-        </>
-      ) : null}
-      <div className="flex-centered">
-        <h1>Player Type:</h1>
-        {render_players_type_inputs('skater', 'points', 'allSkaters', 'Skaters')}
-        {render_players_type_inputs('goalie', 'wins', 'GOnly', 'Goalies Only')}
-      </div>
-
-      {type === 'skater' ? (
-        <div className="flex-centered">
-          <h1>Skater Type:</h1>
-          <select onChange={handleChangesSkaterType} defaultValue={playerType}>
-            {select_option('allSkaters', 'All Skaters')}
-            {select_option('allForwards', 'All Forwards')}
-            {select_option('LOnly', 'LW Only')}
-            {select_option('ROnly', 'RW Only')}
-            {select_option('COnly', 'Centers Only')}
-            {select_option('DOnly', 'Defenders Only')}
-          </select>
-        </div>
-      ) : null}
-
+      <table>
+        <tbody>
+          {!playersIdToPoolerMap ? ( // only display these options when not into pool context.
+            <>
+              <tr>
+                <th>
+                  <h2>Search Mode:</h2>
+                </th>
+                <td>
+                  <select onChange={handleChangesSearchMode} defaultValue={searchMode}>
+                    {select_option('singleSeason', 'Single Season')}
+                    {select_option('allSeasons', 'All Seasons')}
+                    {select_option('allSeasonsAggregate', 'All Seasons Aggregate')}
+                  </select>
+                </td>
+              </tr>
+              {searchMode === 'singleSeason' ? (
+                <tr>
+                  <th>
+                    <h2>Season:</h2>
+                  </th>
+                  <td>
+                    <select onChange={handleChangesingleSeason}>{season_options(startSeason, null, true)}</select>
+                  </td>
+                </tr>
+              ) : (
+                <>
+                  <tr>
+                    <th>
+                      <h2>Start Season:</h2>
+                    </th>
+                    <td>
+                      <select onChange={handleChangeStartSeason}>{season_options(startSeason, true, false)}</select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      <h2>End Season:</h2>
+                    </th>
+                    <td>
+                      <select onChange={handleChangeEndSeason}>{season_options(endSeason, false, false)}</select>
+                    </td>
+                  </tr>
+                </>
+              )}
+            </>
+          ) : null}
+          <tr>
+            <th>
+              <h2>Player Type:</h2>
+            </th>
+            <td>
+              {render_players_type_inputs('skater', 'points', 'allSkaters', 'Skaters')}
+              {render_players_type_inputs('goalie', 'wins', 'GOnly', 'Goalies Only')}
+            </td>
+          </tr>
+          {type === 'skater' ? (
+            <tr>
+              <th>
+                <h2>Skater Type:</h2>
+              </th>
+              <td>
+                <select onChange={handleChangesSkaterType} defaultValue={playerType}>
+                  {select_option('allSkaters', 'All Skaters')}
+                  {select_option('allForwards', 'All Forwards')}
+                  {select_option('LOnly', 'LW Only')}
+                  {select_option('ROnly', 'RW Only')}
+                  {select_option('COnly', 'Centers Only')}
+                  {select_option('DOnly', 'Defenders Only')}
+                </select>
+              </td>
+            </tr>
+          ) : null}
+        </tbody>
+      </table>
       {leaders.length > 0 ? (
         render_leaders_table()
       ) : (
         <div>
-          <h1>Fetching league leaders...</h1>
+          <h2>Fetching league leaders...</h2>
           <ClipLoader color="#fff" loading size={75} />
         </div>
       )}
