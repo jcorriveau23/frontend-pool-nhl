@@ -22,7 +22,7 @@ var server = http.createServer(app);
 const io = require('socket.io')(server, {
   path: '/mysocket',
   cors: {
-    origin: 'https://hockeypool.live',
+    origin: '192.168.0.25',
     methods: ['GET', 'POST'],
   },
 });
@@ -30,9 +30,10 @@ const io = require('socket.io')(server, {
  * Create HTTP server.
  */
 
-var pools = {};
+const pools = {};
 
 const userSocketIdMap = new Map();
+const domain = 'http://localhost:8000';
 
 io.on('connection', function (socket) {
   //console.log('Client connected with socket ID: '+ socket.client.id);
@@ -99,14 +100,16 @@ io.on('connection', function (socket) {
           }
         }
       }
-      console.log('in Room now: ' + pools[room]['listClient']);
+      console.log('in Room now: ' + pools[room]?.listClient);
     }
   });
 
   socket.on('playerReady', function (data, room) {
-    let token = jwt.decode(data, PRIVATE_KEY);
+    const token = jwt.decode(data, PRIVATE_KEY);
 
-    var index = pools[room]['listClient'].findIndex(e => e._oid === token._id.$oid);
+    if (!pools[room]) return;
+
+    const index = pools[room]['listClient'].findIndex(e => e._oid === token._id.$oid);
 
     if (index > -1) {
       // console.log('im ready: ' + token._id.$oid);
@@ -117,9 +120,11 @@ io.on('connection', function (socket) {
   });
 
   socket.on('playerNotReady', function (data, room) {
-    let token = jwt.decode(data, PRIVATE_KEY);
+    const token = jwt.decode(data, PRIVATE_KEY);
 
-    var index = pools[room]['listClient'].findIndex(e => e._oid === token._id.$oid);
+    if (!pools[room]) return;
+
+    const index = pools[room]['listClient'].findIndex(e => e._oid === token._id.$oid);
 
     if (index > -1) {
       pools[room]['listClient'][index].ready = false;
@@ -142,7 +147,7 @@ io.on('connection', function (socket) {
     poolInfo.participants = [];
     for (i = 0; i < pools[poolInfo.name]['listClient'].length; i++) {
       if (pools[poolInfo.name]['listClient'][i].ready === false) {
-        console.log('not every body is ready');
+        console.log('not every pooler is ready');
         return;
       }
       poolInfo.participants.push(pools[poolInfo.name]['listClient'][i]._oid);
@@ -152,26 +157,27 @@ io.on('connection', function (socket) {
 
     axios
       .post(
-        'https://hockeypool.live/api-rust/start-draft',
+        `${domain}/api-rust/start-draft`,
         {
           poolInfo,
         },
         { headers: { Authorization: `Bearer ${data}` } }
       )
       .then(res => {
+        console.log(res.data);
         if (res.data.success) {
           io.in(poolInfo.name).emit('poolInfo', res.data.pool);
         } else {
           console.error(res.data.message);
         }
       })
-      .catch(e => console.error(e.response));
+      .catch(e => console.error(e));
   });
 
   socket.on('pickPlayer', function (data, room, player, callback) {
     axios
       .post(
-        'https://hockeypool.live/api-rust/select-player',
+        `${domain}/api-rust/select-player`,
         { name: room, player },
         { headers: { Authorization: `Bearer ${data}` } }
       )
@@ -189,11 +195,7 @@ io.on('connection', function (socket) {
 
   socket.on('undo', function (data, room, callback) {
     axios
-      .post(
-        'https://hockeypool.live/api-rust/undo-select-player',
-        { name: room },
-        { headers: { Authorization: `Bearer ${data}` } }
-      )
+      .post(`${domain}/api-rust/undo-select-player`, { name: room }, { headers: { Authorization: `Bearer ${data}` } })
       .then(res => {
         if (res.data.success) {
           io.in(room).emit('poolInfo', res.data.pool);

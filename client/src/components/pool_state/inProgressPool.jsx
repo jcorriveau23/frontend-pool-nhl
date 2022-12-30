@@ -55,9 +55,13 @@ export default function InProgressPool({
   const [fillSpotPosition, setFillSpotPosition] = useState('');
   const [showRosterModificationModal, setShowRosterModificationModal] = useState(false);
   const [showGraphStatsModal, setShowGraphStatsModal] = useState(false);
-  const [mainTabIndex, setMainTabIndex] = useState(0);
-  const [userTabIndex, setUserTabIndex] = useState(userIndex === -1 ? 0 : userIndex);
   const [tabSelectionParams, setTabSelectionParams] = useSearchParams();
+
+  // Tab Index states. They are used in different child components.
+  const [mainTabIndex, setMainTabIndex] = useState(tabSelectionParams.get('mainTab') ?? gameStatus === 'Live' ? 1 : 0);
+  const [userTabIndex, setUserTabIndex] = useState(
+    tabSelectionParams.get('userTab') ?? userIndex === -1 ? 0 : userIndex
+  );
 
   const calculate_pool_stats = async () => {
     const stats = {}; // contains players list per pooler and poolers total points
@@ -397,11 +401,6 @@ export default function InProgressPool({
     if (formatDate) {
       calculate_pool_stats();
     }
-    const mainTab = tabSelectionParams.get('mainTab');
-    const userTab = tabSelectionParams.get('userTab');
-
-    if (mainTab) setMainTabIndex(Number(mainTab));
-    if (userTab) setUserTabIndex(Number(userTab));
   }, [formatDate, poolInfo.context.score_by_day]);
 
   const download_csv = pool => {
