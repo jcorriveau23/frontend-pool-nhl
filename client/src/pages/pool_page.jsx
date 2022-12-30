@@ -33,7 +33,7 @@ export default function PoolPage({
   const [playerIdToPlayersDataMap, setPlayerIdToPlayersDataMap] = useState(null);
   const url = useParams(); // get the name of the pool using the param url
   const [poolName, setPoolName] = useState('');
-  const [userIndex, setUserIndex] = useState(null); // if the user is not a participant it will be -1. we will know if the user is a pool participant.
+  const [userIndex, setUserIndex] = useState(-2); // while still not processed, the value will be -2. That way we will know if the user is a pool participant.
   const [hasOwnerRights, setHasOwnerRights] = useState(false);
   const [poolUpdate, setPoolUpdate] = useState(false);
 
@@ -170,7 +170,7 @@ export default function PoolPage({
   }, [poolInfo]);
 
   if (user) {
-    if (poolInfo && userIndex > -1) {
+    if (poolInfo && userIndex >= -1) {
       switch (poolInfo.status) {
         case 'Created':
           return (
