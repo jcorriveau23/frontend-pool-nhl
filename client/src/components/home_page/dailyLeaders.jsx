@@ -10,6 +10,9 @@ import NaviguateToday from '../pool_state/naviguateToday';
 // images
 import { logos } from '../img/logos';
 
+// logo
+import { MdExpandLess, MdExpandMore } from 'react-icons/md';
+
 export default function DayLeaders({
   formatDate,
   todayFormatDate,
@@ -21,6 +24,7 @@ export default function DayLeaders({
 }) {
   const [prevFormatDate, setPrevFormatDate] = useState('');
   const [dayLeaders, setDayLeaders] = useState(null);
+  const [showAllPlayers, setShowAllPlayers] = useState(false); // by default only show the 15 leaders
 
   useEffect(() => {
     if (formatDate !== prevFormatDate && formatDate) {
@@ -49,6 +53,28 @@ export default function DayLeaders({
       <td />
     );
 
+  const get_context_column_span = () => (isPoolContext ? 6 : 5);
+
+  const render_more_button = () => (
+    <tr>
+      <td colSpan={get_context_column_span()}>
+        <button className="base-button" type="button" onClick={() => setShowAllPlayers(!showAllPlayers)}>
+          {showAllPlayers ? (
+            <>
+              Show Less...
+              <MdExpandLess size={30} style={{ float: 'right' }} />
+            </>
+          ) : (
+            <>
+              Show All...
+              <MdExpandMore size={30} style={{ float: 'right' }} />
+            </>
+          )}
+        </button>
+      </td>
+    </tr>
+  );
+
   return (
     <Tabs>
       <TabList>
@@ -62,7 +88,7 @@ export default function DayLeaders({
               formatDate={formatDate}
               todayFormatDate={todayFormatDate}
               msg="Daily Leaders"
-              colSpan={isPoolContext ? 6 : 5}
+              colSpan={get_context_column_span()}
             />
           </thead>
           <tbody>
@@ -77,6 +103,7 @@ export default function DayLeaders({
                   <th>PTS</th>
                 </tr>
                 {dayLeaders.skaters
+                  .filter((p, i) => (showAllPlayers ? true : i < 15))
                   .sort((a, b) => 1.01 * b.stats.goals + b.stats.assists - (1.01 * a.stats.goals + a.stats.assists))
                   .map(skater => (
                     <tr key={skater.id}>
@@ -94,10 +121,11 @@ export default function DayLeaders({
                       </td>
                     </tr>
                   ))}
+                {render_more_button()}
               </>
             ) : (
               <tr>
-                <td colSpan={5}>No games started yet ({formatDate})</td>
+                <td colSpan={get_context_column_span()}>No games started yet ({formatDate})</td>
               </tr>
             )}
           </tbody>
@@ -106,7 +134,12 @@ export default function DayLeaders({
       <TabPanel>
         <table className="content-table-no-min">
           <thead>
-            <NaviguateToday formatDate={formatDate} todayFormatDate={todayFormatDate} msg="Daily Leaders" colSpan={6} />
+            <NaviguateToday
+              formatDate={formatDate}
+              todayFormatDate={todayFormatDate}
+              msg="Daily Leaders"
+              colSpan={get_context_column_span()}
+            />
           </thead>
           <tbody>
             {dayLeaders ? (
@@ -135,10 +168,11 @@ export default function DayLeaders({
                       <td>{Math.round((goalie.stats.savePercentage + Number.EPSILON) * 100) / 100}</td>
                     </tr>
                   ))}
+                {render_more_button()}
               </>
             ) : (
               <tr>
-                <td colSpan={5}>No games started yet ({formatDate})</td>
+                <td colSpan={get_context_column_span()}>No games started yet ({formatDate})</td>
               </tr>
             )}
           </tbody>
