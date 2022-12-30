@@ -113,12 +113,12 @@ export default function SearchPlayersStats({
   };
 
   useEffect(() => {
-    fetch_top_players(10, true, type, statsType, playerType, startSeason, endSeason, searchMode);
+    fetch_top_players(15, true, type, statsType, playerType, startSeason, endSeason, searchMode);
   }, []);
 
   const onClickSortingColumns = _statsType => {
     setStatsType(_statsType);
-    fetch_top_players(10, true, type, _statsType, playerType, startSeason, endSeason, searchMode);
+    fetch_top_players(15, true, type, _statsType, playerType, startSeason, endSeason, searchMode);
     setLeaders([]);
   };
 
@@ -321,7 +321,7 @@ export default function SearchPlayersStats({
     setType(_type);
     setPlayerType(_playerType);
     setStatsType(_statsType);
-    fetch_top_players(10, true, _type, _statsType, _playerType, startSeason, endSeason, searchMode);
+    fetch_top_players(15, true, _type, _statsType, _playerType, startSeason, endSeason, searchMode);
     setLeaders([]);
   };
 
@@ -403,14 +403,14 @@ export default function SearchPlayersStats({
   const handleChangeStartSeason = event => {
     setLeaders([]);
     setStartSeason(event.target.value);
-    fetch_top_players(10, true, type, statsType, playerType, event.target.value, endSeason, searchMode);
+    fetch_top_players(15, true, type, statsType, playerType, event.target.value, endSeason, searchMode);
   };
 
   // End season
   const handleChangeEndSeason = event => {
     setLeaders([]);
     setEndSeason(event.target.value);
-    fetch_top_players(10, true, type, statsType, playerType, startSeason, event.target.value, searchMode);
+    fetch_top_players(15, true, type, statsType, playerType, startSeason, event.target.value, searchMode);
   };
 
   // Single Season
@@ -418,7 +418,7 @@ export default function SearchPlayersStats({
     setLeaders([]);
     setStartSeason(event.target.value);
     setEndSeason(event.target.value);
-    fetch_top_players(10, true, type, statsType, playerType, event.target.value, event.target.value, searchMode);
+    fetch_top_players(15, true, type, statsType, playerType, event.target.value, event.target.value, searchMode);
   };
 
   const handleChangesSearchMode = event => {
@@ -427,13 +427,13 @@ export default function SearchPlayersStats({
       case 'singleSeason': {
         setStartSeason(endSeason); // make sure that when this mode is requested, start date and end date are the same.
         setEndSeason(endSeason);
-        fetch_top_players(10, true, type, statsType, playerType, endSeason, endSeason, event.target.value);
+        fetch_top_players(15, true, type, statsType, playerType, endSeason, endSeason, event.target.value);
         setSearchMode(event.target.value);
         break;
       }
       case 'allSeasons':
       case 'allSeasonsAggregate': {
-        fetch_top_players(10, true, type, statsType, playerType, startSeason, endSeason, event.target.value);
+        fetch_top_players(15, true, type, statsType, playerType, startSeason, endSeason, event.target.value);
         setSearchMode(event.target.value);
         break;
       }
