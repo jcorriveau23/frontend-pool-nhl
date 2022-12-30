@@ -923,7 +923,7 @@ export default function InProgressPool({
                       colSpan={26}
                     />
                     <tr>
-                      <th rowSpan={2}>Rank</th>
+                      <th rowSpan={2}>#</th>
                       <th rowSpan={2}>Pooler</th>
                       <th colSpan={6}>Forwards</th>
                       <th colSpan={6}>Defenders</th>
