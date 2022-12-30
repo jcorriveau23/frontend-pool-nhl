@@ -170,7 +170,7 @@ export default function PoolPage({
   }, [poolInfo]);
 
   if (user) {
-    if (poolInfo && userIndex) {
+    if (poolInfo && userIndex > -1) {
       switch (poolInfo.status) {
         case 'Created':
           return (
