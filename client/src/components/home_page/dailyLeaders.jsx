@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
+// logo
+import { MdExpandLess, MdExpandMore } from 'react-icons/md';
+
 // components
 import PlayerLink from '../playerLink';
 import User from '../user';
@@ -9,9 +12,6 @@ import NaviguateToday from '../pool_state/naviguateToday';
 
 // images
 import { logos } from '../img/logos';
-
-// logo
-import { MdExpandLess, MdExpandMore } from 'react-icons/md';
 
 export default function DayLeaders({
   formatDate,
