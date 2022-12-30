@@ -178,6 +178,8 @@ export default function DraftPool({
             <div className="half-cont">
               <SearchPlayersStats
                 injury={injury}
+                user={user}
+                poolInfo={poolInfo}
                 DictUsers={DictUsers}
                 playersIdToPoolerMap={playersIdToPoolerMap}
                 confirm_selection={confirm_selection}

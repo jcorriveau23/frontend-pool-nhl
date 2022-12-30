@@ -18,7 +18,7 @@ import DraftOrder from './draftOrder';
 import NaviguateToday from './naviguateToday';
 import User from '../user';
 import RosterCapHit from './rosterCapHit';
-import TopSeasonPlayers from './topSeasonPlayers';
+import SearchPlayersStats from '../stats_page/searchPlayersStats';
 import PoolHistory from './poolHistory';
 import PoolSettings from './poolSettings';
 
@@ -1041,12 +1041,12 @@ export default function InProgressPool({
       </div>
       <div className="cont">
         <h1>Current League Leaders</h1>
-        <TopSeasonPlayers
-          user={user}
+        <SearchPlayersStats
           injury={injury}
-          playersIdToPoolerMap={playersIdToPoolerMap}
-          playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+          user={user}
+          poolInfo={poolInfo}
           DictUsers={DictUsers}
+          playersIdToPoolerMap={playersIdToPoolerMap}
         />
       </div>
       {userIndex > -1 ? (

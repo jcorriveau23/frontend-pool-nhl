@@ -10,13 +10,16 @@ import { RiInformationFill } from 'react-icons/ri';
 
 // component
 import PlayerLink from '../playerLink';
+import User from '../user';
 
 import { logos, abbrevToTeamId } from '../img/logos';
 
 export default function SearchPlayersStats({
   injury,
-  DictUsers = null, // will only be passed in draft context
-  playersIdToPoolerMap = null, // will only be passed in draft context
+  user = null, // will only be passed in pool context
+  poolInfo = null, // will only be passed in pool context
+  DictUsers = null, // will only be passed in pool context
+  playersIdToPoolerMap = null, // will only be passed in pool context
   confirm_selection = null, // will only be passed in draft context
 }) {
   const [leaders, setLeaders] = useState([]);
@@ -131,12 +134,31 @@ export default function SearchPlayersStats({
     </>
   );
 
-  const render_table_title = colSpan => (
+  const get_context_column_span = isSkater => {
+    let colSpan;
+
+    switch (poolInfo?.status) {
+      case 'InProgress':
+        colSpan = isSkater ? 12 : 14;
+        break; // For skaters only we add the position columns
+      case 'Draft':
+        colSpan = 9;
+        break;
+      default:
+        // component is not in pool context.
+        colSpan = isSkater ? 11 : 13;
+        break;
+    }
+
+    return searchMode === 'allSeasons' ? colSpan + 1 : colSpan;
+  };
+
+  const render_table_title = isSkater => (
     <tr>
-      <th colSpan={searchMode === 'allSeasons' ? colSpan + 1 : colSpan}>
+      <th colSpan={get_context_column_span(isSkater)}>
         {startSeason === endSeason
           ? make_readable_season(endSeason)
-          : `${make_readable_season(startSeason)} to ${make_readable_season(endSeason)} `}
+          : `${make_readable_season(startSeason)} to ${make_readable_season(endSeason)}`}{' '}
         - {statsType} - Leaders
       </th>
     </tr>
@@ -148,19 +170,22 @@ export default function SearchPlayersStats({
     </th>
   );
 
+  const render_pool_context_header_columns = () => (poolInfo?.status === 'InProgress' ? <th>Owner</th> : null);
+
   const render_skaters_leaders_header = () => (
     <>
-      {render_table_title(playersIdToPoolerMap ? 9 : 11)}
+      {render_table_title(true)}
       <tr>
         <th>#</th>
         <th>Name</th>
+        {render_pool_context_header_columns()}
         {render_mode_header_columns()}
         <th>Pos</th>
         {render_sort_column_header('gamesPlayed', 'GP')}
         {render_sort_column_header('goals', 'G')}
         {render_sort_column_header('assists', 'A')}
         {render_sort_column_header('points', 'P')}
-        {playersIdToPoolerMap ? null : ( // Don't display those columns in draft context
+        {poolInfo?.status === 'Draft' ? null : ( // Don't display those columns in draft context
           <>
             {render_sort_column_header('plusMinus', '+/-')}
             {render_sort_column_header('penaltyMinutes', 'PIM')}
@@ -173,15 +198,16 @@ export default function SearchPlayersStats({
 
   const render_goalies_leaders_header = () => (
     <>
-      {render_table_title(playersIdToPoolerMap ? 9 : 13)}
+      {render_table_title(false)}
       <tr>
         <th>#</th>
         <th>Name</th>
+        {render_pool_context_header_columns()}
         {render_mode_header_columns()}
         {render_sort_column_header('gamesPlayed', 'GP')}
         {render_sort_column_header('wins', 'W')}
         {render_sort_column_header('otLosses', 'OT')}
-        {playersIdToPoolerMap ? null : ( // Don't display those columns in draft context
+        {poolInfo?.status === 'Draft' ? null : ( // Don't display those columns in draft context
           <>
             {render_sort_column_header('gamesStarted', 'GS')}
             {render_sort_column_header('losses', 'L')}
@@ -224,35 +250,46 @@ export default function SearchPlayersStats({
     </td>
   );
 
-  const render_already_drafted_tooltip = player => (
-    <td>
-      <a
-        data-tip={`${player.skaterFullName ?? player.goalieFullName} has already been drafted by ${
-          DictUsers ? DictUsers[playersIdToPoolerMap[player.playerId]] : playersIdToPoolerMap[player.playerId]
-        }`}
-      >
-        <RiInformationFill size={30} color="yellow" />
-      </a>
-      <ReactTooltip className="tooltip" padding="8px" />
-    </td>
-  );
+  const render_already_drafted_tooltip = (player, i) =>
+    playersIdToPoolerMap && playersIdToPoolerMap[player.playerId] ? (
+      <td>
+        <a
+          data-tip={`${player.skaterFullName ?? player.goalieFullName} has already been drafted by ${
+            DictUsers ? DictUsers[playersIdToPoolerMap[player.playerId]] : playersIdToPoolerMap[player.playerId]
+          }`}
+        >
+          <RiInformationFill size={30} color="yellow" />
+        </a>
+        <ReactTooltip className="tooltip" padding="8px" />
+      </td>
+    ) : (
+      <td>{i + 1}</td>
+    );
+
+  const get_already_drafted_bg_color = player =>
+    playersIdToPoolerMap && playersIdToPoolerMap[player.playerId] ? { backgroundColor: '#aa4a44' } : null;
+
+  const render_pool_context_columns = player =>
+    poolInfo?.status === 'InProgress' ? (
+      <td>
+        {playersIdToPoolerMap && playersIdToPoolerMap[player.playerId] ? (
+          <User id={playersIdToPoolerMap[player.playerId]} user={user} DictUsers={DictUsers} />
+        ) : null}
+      </td>
+    ) : null;
 
   const render_skaters_leaders = () =>
     leaders.map((player, i) => (
       <tr
         key={player.playerId}
         onClick={() => setSelectedPlayer(player.playerId)}
-        style={playersIdToPoolerMap && playersIdToPoolerMap[player.playerId] ? { backgroundColor: '#aa4a44' } : null}
+        style={poolInfo?.status === 'Draft' ? get_already_drafted_bg_color(player) : null}
       >
-        {playersIdToPoolerMap && playersIdToPoolerMap[player.playerId] ? (
-          render_already_drafted_tooltip(player)
-        ) : (
-          <td>{i + 1}</td>
-        )}
-
+        {poolInfo?.status === 'Draft' ? render_already_drafted_tooltip(player) : <td>{i + 1}</td>}
         <td>
           <PlayerLink name={player.skaterFullName} id={player.playerId} injury={injury} />
         </td>
+        {render_pool_context_columns(player)}
         {render_mode_columns(player)}
         {selectedPlayer === player.playerId && confirm_selection ? (
           render_draft_button(player)
@@ -263,7 +300,7 @@ export default function SearchPlayersStats({
             {sorting_highlight(player.goals, 'goals')}
             {sorting_highlight(player.assists, 'assists')}
             {sorting_highlight(player.points, 'points')}
-            {playersIdToPoolerMap ? null : ( // Don't display those columns in draft context
+            {poolInfo?.status === 'Draft' ? null : ( // Don't display those columns in draft context
               <>
                 {sorting_highlight(player.plusMinus, 'plusMinus')}
                 {sorting_highlight(player.penaltyMinutes, 'penaltyMinutes')}
@@ -280,16 +317,13 @@ export default function SearchPlayersStats({
       <tr
         key={player.playerId}
         onClick={() => setSelectedPlayer(player.playerId)}
-        style={playersIdToPoolerMap && playersIdToPoolerMap[player.playerId] ? { backgroundColor: '#aa4a44' } : null}
+        style={poolInfo?.status === 'Draft' ? get_already_drafted_bg_color(player) : null}
       >
-        {playersIdToPoolerMap && playersIdToPoolerMap[player.playerId] ? (
-          render_already_drafted_tooltip(player)
-        ) : (
-          <td>{i + 1}</td>
-        )}
+        {poolInfo?.status === 'Draft' ? render_already_drafted_tooltip(player) : <td>{i + 1}</td>}
         <td>
           <PlayerLink name={player.goalieFullName} id={player.playerId} injury={injury} />
         </td>
+        {render_pool_context_columns(player)}
         {render_mode_columns(player)}
         {selectedPlayer === player.playerId && confirm_selection ? (
           render_draft_button(player)
@@ -298,7 +332,7 @@ export default function SearchPlayersStats({
             {sorting_highlight(player.gamesPlayed, 'gamesPlayed')}
             {sorting_highlight(player.wins, 'wins')}
             {sorting_highlight(player.otLosses, 'otLosses')}
-            {playersIdToPoolerMap ? null : ( // Don't display those columns in draft context
+            {poolInfo?.status === 'Draft' ? null : ( // Don't display those columns in draft context
               <>
                 {sorting_highlight(player.gamesStarted, 'gamesStarted')}
                 {sorting_highlight(player.losses, 'losses')}
@@ -325,9 +359,9 @@ export default function SearchPlayersStats({
     setLeaders([]);
   };
 
-  const render_more_button = () => (
+  const render_more_button = isSkater => (
     <tr>
-      <td colSpan={13}>
+      <td colSpan={get_context_column_span(isSkater)}>
         <button
           className="base-button"
           type="button"
@@ -345,7 +379,7 @@ export default function SearchPlayersStats({
         <thead>{render_skaters_leaders_header()}</thead>
         <tbody>
           {render_skaters_leaders()}
-          {render_more_button()}
+          {render_more_button(true)}
         </tbody>
       </table>
     ) : (
@@ -353,7 +387,7 @@ export default function SearchPlayersStats({
         <thead>{render_goalies_leaders_header()}</thead>
         <tbody>
           {render_goalies_leaders()}
-          {render_more_button()}
+          {render_more_button(false)}
         </tbody>
       </table>
     );
