@@ -178,8 +178,8 @@ export default function SearchPlayersStats({
       <tr>
         <th>#</th>
         <th>Name</th>
-        {render_pool_context_header_columns()}
         {render_mode_header_columns()}
+        {render_pool_context_header_columns()}
         <th>Pos</th>
         {render_sort_column_header('gamesPlayed', 'GP')}
         {render_sort_column_header('goals', 'G')}
@@ -202,8 +202,8 @@ export default function SearchPlayersStats({
       <tr>
         <th>#</th>
         <th>Name</th>
-        {render_pool_context_header_columns()}
         {render_mode_header_columns()}
+        {render_pool_context_header_columns()}
         {render_sort_column_header('gamesPlayed', 'GP')}
         {render_sort_column_header('wins', 'W')}
         {render_sort_column_header('otLosses', 'OT')}
@@ -289,8 +289,8 @@ export default function SearchPlayersStats({
         <td>
           <PlayerLink name={player.skaterFullName} id={player.playerId} injury={injury} />
         </td>
-        {render_pool_context_columns(player)}
         {render_mode_columns(player)}
+        {render_pool_context_columns(player)}
         {selectedPlayer === player.playerId && confirm_selection ? (
           render_draft_button(player)
         ) : (
@@ -323,8 +323,8 @@ export default function SearchPlayersStats({
         <td>
           <PlayerLink name={player.goalieFullName} id={player.playerId} injury={injury} />
         </td>
-        {render_pool_context_columns(player)}
         {render_mode_columns(player)}
+        {render_pool_context_columns(player)}
         {selectedPlayer === player.playerId && confirm_selection ? (
           render_draft_button(player)
         ) : (
