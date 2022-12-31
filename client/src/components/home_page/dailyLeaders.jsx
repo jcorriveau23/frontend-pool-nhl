@@ -48,12 +48,14 @@ export default function DayLeaders({
 
   const render_owner = playerId =>
     playersIdToPoolerMap && playersIdToPoolerMap[playerId] ? (
-      <User id={playersIdToPoolerMap[playerId]} user={user} DictUsers={DictUsers} />
+      <td>
+        <User id={playersIdToPoolerMap[playerId]} user={user} DictUsers={DictUsers} />
+      </td>
     ) : (
       <td />
     );
 
-  const get_context_column_span = () => (isPoolContext ? 6 : 5);
+  const get_context_column_span = () => (isPoolContext ? 7 : 6);
 
   const render_more_button = () => (
     <tr>
@@ -95,23 +97,25 @@ export default function DayLeaders({
             {dayLeaders ? (
               <>
                 <tr>
-                  <th>Team</th>
+                  <th>#</th>
                   <th>Name</th>
+                  <th>Team</th>
                   {isPoolContext ? <th>Owner</th> : null}
                   <th>G</th>
                   <th>A</th>
                   <th>PTS</th>
                 </tr>
                 {dayLeaders.skaters
-                  .filter((p, i) => (showAllPlayers ? true : i < 15))
                   .sort((a, b) => 1.01 * b.stats.goals + b.stats.assists - (1.01 * a.stats.goals + a.stats.assists))
-                  .map(skater => (
+                  .filter((p, i) => (showAllPlayers ? true : i < 15))
+                  .map((skater, i) => (
                     <tr key={skater.id}>
-                      <td>
-                        <img src={logos[skater.team]} alt="" width="40" height="40" />
-                      </td>
+                      <td>{i + 1}</td>
                       <td>
                         <PlayerLink name={skater.name} id={skater.id} injury={injury} />
+                      </td>
+                      <td>
+                        <img src={logos[skater.team]} alt="" width="40" height="40" />
                       </td>
                       {isPoolContext ? render_owner(skater.id) : null}
                       <td>{skater.stats.goals}</td>
@@ -145,8 +149,9 @@ export default function DayLeaders({
             {dayLeaders ? (
               <>
                 <tr>
-                  <th>Team</th>
+                  <th>#</th>
                   <th>Name</th>
+                  <th>Team</th>
                   {isPoolContext ? <th>Owner</th> : null}
                   <th>Shot</th>
                   <th>Saves</th>
@@ -154,13 +159,14 @@ export default function DayLeaders({
                 </tr>
                 {dayLeaders.goalies
                   .sort((a, b) => b.stats.savePercentage - a.stats.savePercentage)
-                  .map(goalie => (
+                  .map((goalie, i) => (
                     <tr key={goalie.id}>
-                      <td>
-                        <img src={logos[goalie.team]} alt="" width="40" height="40" />
-                      </td>
+                      <td>{i + 1}</td>
                       <td>
                         <PlayerLink name={goalie.name} id={goalie.id} injury={injury} />
+                      </td>
+                      <td>
+                        <img src={logos[goalie.team]} alt="" width="40" height="40" />
                       </td>
                       {isPoolContext ? render_owner(goalie.id) : null}
                       <td>{goalie.stats.shots}</td>
