@@ -82,8 +82,6 @@ export default function PoolHistory({
 
         if (isFirstDay) isFirstDay = false; // We will start to note changes applied to rosters after the first day.
       }
-
-      setDoneProcessing(true);
     }
 
     // Make sure that we count current roster (for days that roster modifications are allowed we will see them in real time)
@@ -119,29 +117,44 @@ export default function PoolHistory({
       historyTmp.unshift({ date: 'Today', dailyMovements, dailyTrades });
     }
 
-    if (historyTmp.length > 0) setHistory(historyTmp);
+    if (historyTmp.length > 0) {
+      setHistory(historyTmp);
+      setCollapsedDays(historyTmp.map(d => (d.date !== historyTmp[0].date ? d.date : null))); // collapse every day except the last
+    }
+
+    setDoneProcessing(true);
   };
 
   useEffect(() => {
     parse_all_movement();
   }, []);
 
-  const collapse_table = date => {
+  const collapse_day = date => {
     if (collapsedDays.includes(date)) {
-      // add the date to the list of collapsed table
+      // remove the date to the list of collapsed table
       setCollapsedDays(collapsedDays.filter(day => day !== date));
     } else {
-      // remove the date to the list of collapsed table
+      // add the date to the list of collapsed table
       setCollapsedDays(oldArr => [...oldArr, date]);
     }
   };
 
+  const collapse_all_days = () => {
+    setCollapsedDays(history.map(dailyMovements => dailyMovements.date));
+  };
+
+  const expand_all_days = () => {
+    setCollapsedDays([]);
+  };
+
   const render_daily_roster_movement = dailyMovements => (
     <>
-      <tr onClick={() => collapse_table(dailyMovements.date)}>
+      <tr onClick={() => collapse_day(dailyMovements.date)}>
         <th>
-          <BsCalendarDay size={30} style={{ paddingRight: '10px' }} />
-          {dailyMovements.date}
+          <div style={{ float: 'left' }}>
+            <BsCalendarDay size={30} style={{ paddingRight: '10px' }} />
+            {dailyMovements.date}
+          </div>
           {collapsedDays.includes(dailyMovements.date) ? (
             <MdExpandMore size={30} style={{ float: 'right' }} />
           ) : (
@@ -238,18 +251,9 @@ export default function PoolHistory({
     <div>
       <Tabs>
         <TabList>
-          <Tab>History</Tab>
           <Tab>Trade Center</Tab>
+          <Tab>History</Tab>
         </TabList>
-        <TabPanel>
-          {history ? (
-            <table className="content-table">
-              <tbody>{history.map(dailyMovements => render_daily_roster_movement(dailyMovements))}</tbody>
-            </table>
-          ) : (
-            render_processing()
-          )}
-        </TabPanel>
         <TabPanel>
           <TradeCenter
             poolInfo={poolInfo}
@@ -261,6 +265,33 @@ export default function PoolHistory({
             DictUsers={DictUsers}
             userIndex={userIndex}
           />
+        </TabPanel>
+        <TabPanel>
+          {history ? (
+            <>
+              <button
+                className="base-button"
+                type="button"
+                onClick={() => expand_all_days()}
+                disabled={collapsedDays.length === 0}
+              >
+                Expand all
+              </button>
+              <button
+                className="base-button"
+                type="button"
+                onClick={() => collapse_all_days()}
+                disabled={collapsedDays.length === history.length}
+              >
+                Collapse all
+              </button>
+              <table className="content-table">
+                <tbody>{history.map(dailyMovements => render_daily_roster_movement(dailyMovements))}</tbody>
+              </table>
+            </>
+          ) : (
+            render_processing()
+          )}
         </TabPanel>
       </Tabs>
     </div>
