@@ -49,6 +49,9 @@ export default function InProgressPool({
   setPoolUpdate,
   DictTeamAgainst,
 }) {
+  const get_default_mainTab = () => (gameStatus === 'Live' ? 1 : 0);
+  const get_default_userTab = () => (userIndex === -1 ? 0 : userIndex);
+
   const [playersStats, setPlayersStats] = useState(null);
   const [ranking, setRanking] = useState(null);
   const [showFillSpotModal, setShowFillSpotModal] = useState(false);
@@ -58,10 +61,8 @@ export default function InProgressPool({
   const [tabSelectionParams, setTabSelectionParams] = useSearchParams();
 
   // Tab Index states. They are used in different child components.
-  const [mainTabIndex, setMainTabIndex] = useState(tabSelectionParams.get('mainTab') ?? gameStatus === 'Live' ? 1 : 0);
-  const [userTabIndex, setUserTabIndex] = useState(
-    tabSelectionParams.get('userTab') ?? userIndex === -1 ? 0 : userIndex
-  );
+  const [mainTabIndex, setMainTabIndex] = useState(Number(tabSelectionParams.get('mainTab') ?? get_default_mainTab()));
+  const [userTabIndex, setUserTabIndex] = useState(Number(tabSelectionParams.get('userTab') ?? get_default_userTab()));
 
   const calculate_pool_stats = async () => {
     const stats = {}; // contains players list per pooler and poolers total points
@@ -684,7 +685,9 @@ export default function InProgressPool({
   );
 
   const setUserTab = _userTabIndex => {
-    setTabSelectionParams({ mainTab: mainTabIndex, userTab: _userTabIndex });
+    const updatedSearchParams = new URLSearchParams(tabSelectionParams.toString());
+    updatedSearchParams.set('userTab', _userTabIndex);
+    setTabSelectionParams(updatedSearchParams.toString());
 
     setUserTabIndex(_userTabIndex);
   };
@@ -795,7 +798,9 @@ export default function InProgressPool({
   );
 
   const setMainTab = _mainTabIndex => {
-    setTabSelectionParams({ mainTab: _mainTabIndex, userTab: userTabIndex });
+    const updatedSearchParams = new URLSearchParams(tabSelectionParams.toString());
+    updatedSearchParams.set('mainTab', _mainTabIndex);
+    setTabSelectionParams(updatedSearchParams.toString());
 
     setMainTabIndex(_mainTabIndex);
   };

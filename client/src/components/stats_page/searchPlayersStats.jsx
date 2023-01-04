@@ -92,14 +92,14 @@ export default function SearchPlayersStats({
       setStart(limit);
     } else setStart(start + limit); // the next start will be the limit.
 
-    setSearchParams({
-      type: _type,
-      statsType: _statsType,
-      playerType: _playerType,
-      startSeason: _startSeason,
-      endSeason: _endSeason,
-      searchMode: _searchMode,
-    });
+    const updatedSearchParams = new URLSearchParams(searchParams.toString());
+    updatedSearchParams.set('type', _type);
+    updatedSearchParams.set('statsType', _statsType);
+    updatedSearchParams.set('playerType', _playerType);
+    updatedSearchParams.set('startSeason', _startSeason);
+    updatedSearchParams.set('endSeason', _endSeason);
+    updatedSearchParams.set('searchMode', _searchMode);
+    setSearchParams(updatedSearchParams.toString());
 
     const positionCode = make_positionCode_string(_playerType);
     const sorting = make_sorting_string(_statsType, false);
