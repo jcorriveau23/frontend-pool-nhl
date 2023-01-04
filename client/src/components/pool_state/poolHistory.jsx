@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import ReactTooltip from 'react-tooltip';
 
 // icons
 import { GiEntryDoor, GiExitDoor } from 'react-icons/gi';
 import { BsCalendarDay } from 'react-icons/bs';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import { MdExpandLess, MdExpandMore } from 'react-icons/md';
+import { RiInformationFill } from 'react-icons/ri';
 
 // Components
 import User from '../user';
@@ -17,6 +19,7 @@ import TradeCenter from './tradeCenter';
 
 export default function PoolHistory({
   poolInfo,
+  todayFormatDate,
   playerIdToPlayersDataMap,
   setPoolUpdate,
   hasOwnerRights,
@@ -154,6 +157,15 @@ export default function PoolHistory({
           <div style={{ float: 'left' }}>
             <BsCalendarDay size={30} style={{ paddingRight: '10px' }} />
             {dailyMovements.date}
+            {poolInfo.roster_modification_date.includes(dailyMovements.date) ||
+            (poolInfo.roster_modification_date.includes(todayFormatDate) && dailyMovements.date === 'Today') ? (
+              <>
+                <a data-tip={`roster modifications were allowed on this day!`}>
+                  <RiInformationFill size={40} color="yellow" style={{ paddingLeft: '10px' }} />
+                </a>
+                <ReactTooltip className="tooltip" />
+              </>
+            ) : null}
           </div>
           {collapsedDays.includes(dailyMovements.date) ? (
             <MdExpandMore size={30} style={{ float: 'right' }} />

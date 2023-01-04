@@ -1010,6 +1010,7 @@ export default function InProgressPool({
             <TabPanel>
               <PoolHistory
                 poolInfo={poolInfo}
+                todayFormatDate={todayFormatDate}
                 playerIdToPlayersDataMap={playerIdToPlayersDataMap}
                 setPoolUpdate={setPoolUpdate}
                 hasOwnerRights={hasOwnerRights}
