@@ -58,6 +58,7 @@ export default function InProgressPool({
   const [fillSpotPosition, setFillSpotPosition] = useState('');
   const [showRosterModificationModal, setShowRosterModificationModal] = useState(false);
   const [showGraphStatsModal, setShowGraphStatsModal] = useState(false);
+  const [rosterModificationAllowed, setRosterModificationAllowed] = useState(false);
   const [tabSelectionParams, setTabSelectionParams] = useSearchParams();
 
   // Tab Index states. They are used in different child components.
@@ -402,6 +403,14 @@ export default function InProgressPool({
     if (formatDate) {
       calculate_pool_stats();
     }
+
+    if (todayFormatDate) {
+      const d = new Date(todayFormatDate);
+      d.setDate(d.getDate() + 1);
+      setRosterModificationAllowed(poolInfo.roster_modification_date.includes(d.toISOString().slice(0, 10)));
+    }
+
+    console.log();
   }, [formatDate, poolInfo.context.score_by_day]);
 
   const download_csv = pool => {
@@ -709,13 +718,29 @@ export default function InProgressPool({
       {poolInfo.participants.map(pooler => (
         <TabPanel key={pooler}>
           <div className="half-cont">
-            {pooler === user._id.$oid ? (
-              <button className="base-button" type="button" onClick={() => setShowRosterModificationModal(true)}>
-                Modify Roster
-              </button>
-            ) : (
-              '-'
-            )}
+            {pooler === user._id.$oid && rosterModificationAllowed ? (
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <button
+                        className="base-button"
+                        type="button"
+                        onClick={() => setShowRosterModificationModal(true)}
+                      >
+                        Modify Roster
+                      </button>
+                    </td>
+                    <td>
+                      <a data-tip="Roster modification are allowed today!">
+                        <RiInformationFill size={45} color="yellow" />
+                      </a>
+                      <ReactTooltip className="tooltip" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            ) : null}
             <table className="content-table-no-min">
               <thead>
                 <NaviguateToday

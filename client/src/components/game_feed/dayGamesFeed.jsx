@@ -185,15 +185,15 @@ export default function DayGamesFeed({
               <tbody>
                 <tr>
                   <td>
+                    <button type="button" onClick={currentDate} className="base-button">
+                      Set Current Date...
+                    </button>
+                  </td>
+                  <td>
                     <a data-tip="The date selected is not the current date.">
                       <RiInformationFill size={45} color="yellow" />
                     </a>
                     <ReactTooltip className="tooltip" padding="8px" />
-                  </td>
-                  <td>
-                    <button type="button" onClick={currentDate} className="base-button">
-                      Set Current Date...
-                    </button>
                   </td>
                 </tr>
               </tbody>

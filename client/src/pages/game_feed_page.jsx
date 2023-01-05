@@ -291,19 +291,19 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
             </tr>
             <tr>
               <th>
-                <img src={logos[teams.away.team.id]} alt="" width="40" height="40" />
+                <img src={logos[teams.away.team.id]} alt="" width="70" height="70" />
               </th>
               <th>Summary</th>
               <th>
-                <img src={logos[teams.home.team.id]} alt="" width="40" height="40" />
+                <img src={logos[teams.home.team.id]} alt="" width="70" height="70" />
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>{linescores.teams.away.goals}</td>
+              <td style={{ fontSize: 35 }}>{linescores.teams.away.goals}</td>
               <th>Goals</th>
-              <td>{linescores.teams.home.goals}</td>
+              <td style={{ fontSize: 35 }}>{linescores.teams.home.goals}</td>
             </tr>
             <tr>
               <td>{teams.away.teamStats.teamSkaterStats.shots}</td>
