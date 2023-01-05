@@ -160,7 +160,7 @@ export default function PoolHistory({
             {poolInfo.roster_modification_date.includes(dailyMovements.date) ||
             (poolInfo.roster_modification_date.includes(todayFormatDate) && dailyMovements.date === 'Today') ? (
               <>
-                <a data-tip={`roster modifications were allowed on this day!`}>
+                <a data-tip="roster modifications were allowed on this day!">
                   <RiInformationFill size={40} color="yellow" style={{ paddingLeft: '10px' }} />
                 </a>
                 <ReactTooltip className="tooltip" />
