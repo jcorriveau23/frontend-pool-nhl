@@ -1,8 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-// components
-import PlayerLink from '../playerLink';
-
 // css
 import './goalItem.css';
 
@@ -17,6 +14,8 @@ export default function OtherGameContent({ gameContent }) {
   }, [gameContent]);
 
   const setVideoFullScreen = () => {
+    // This functions is called when clicking on a video, the video is going into full screen.
+    // (Mostly usefull for mobile users)
     const el = videoRef.current;
 
     // el.paused will detect if paused
@@ -31,42 +30,35 @@ export default function OtherGameContent({ gameContent }) {
     }
   };
 
-  if (gameContent && gameContent.media && gameContent.media.milestones.items?.length > 0) {
+  if (gameContent && gameContent.highlights.scoreboard && gameContent.highlights.scoreboard.items?.length > 0) {
     return (
       <div>
         <table className="goal-item">
           <thead>
             {isItem ? (
               <tr>
-                <th colSpan={3}>Other games content</th>
+                <th>Other games content</th>
               </tr>
             ) : null}
           </thead>
-          {gameContent.media.milestones.items
-            .filter(highlight => highlight.type !== 'GOAL' && highlight.highlight && highlight.highlight.playbacks)
+          {gameContent.highlights.scoreboard.items
+            .filter(highlight => !highlight.keywords.find(k => k.type === 'statsEventId') && highlight.playbacks) // other content video does not have statsEventId
             .map(highlight => {
               if (isItem === false) setIsItem(true);
-              // console.log(highlight)
               return (
-                <tbody key={highlight.playerId}>
+                <tbody key={highlight.id}>
                   <tr>
-                    <td colSpan={3}>
-                      <PlayerLink name={highlight.highlight.description} id={highlight.playerId} />
+                    <td>
+                      <b>{highlight.title}</b>
                     </td>
                   </tr>
                   <tr>
-                    <th>Period:</th>
-                    <td>{highlight.period}</td>
-                    <td rowSpan={2}>
+                    <td rowSpan={3}>
                       <video onPlaying={setVideoFullScreen} width="100%" height="100%" controls ref={videoRef}>
-                        <source src={highlight.highlight.playbacks[3].url} type="video/mp4" />
+                        <source src={highlight.playbacks[3].url} type="video/mp4" />
                         <track kind="captions" />
                       </video>
                     </td>
-                  </tr>
-                  <tr>
-                    <th>Period time:</th>
-                    <td>{highlight.periodTime}</td>
                   </tr>
                 </tbody>
               );
@@ -76,5 +68,5 @@ export default function OtherGameContent({ gameContent }) {
     );
   }
 
-  return <h1>No video provided yet.</h1>;
+  return null;
 }
