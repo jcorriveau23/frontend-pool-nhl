@@ -33,8 +33,6 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
   useEffect(() => {
     if (id) {
       setSelectedGamePk(id);
-      setHomeTeamSkaters(null);
-      setAwayTeamSkaters(null);
 
       axios
         .get(`https://statsapi.web.nhl.com/api/v1/game/${id}/feed/live`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
@@ -80,8 +78,14 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
     }
 
     return () => {
-      console.log('Leaving game page.');
+      // leaving game page. Reset all components state.
+      setGameInfo(null);
+      setGameContent(null);
       setSelectedGamePk(null);
+      setHomeRosterPreview(null);
+      setAwayRosterPreview(null);
+      setHomeTeamSkaters([]);
+      setAwayTeamSkaters([]);
     };
   }, [id]);
 
