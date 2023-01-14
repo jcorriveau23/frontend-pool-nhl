@@ -86,3 +86,34 @@
   cursor: pointer;
   color: #fff;
 }
+
+.information-box {
+  max-width: '1000px';
+}
+
+.information-box h1 h2 p {
+  color: #fff;
+  margin: 0 0 24px;
+}
+
+.information-box h1 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 62px;
+  font-weight: 800;
+  line-height: 72px;
+  text-transform: uppercase;
+}
+
+.information-box h2 {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 32px;
+  line-height: 32px;
+  font-weight: 800;
+}
+
+.information-box p {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 25px;
+  font-weight: 100;
+  line-height: 32px;
+}
