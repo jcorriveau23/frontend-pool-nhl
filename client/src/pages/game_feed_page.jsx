@@ -15,6 +15,7 @@ import GameRecap from '../components/game_feed_page/gameRecap';
 import PeriodRecap from '../components/game_feed_page/periodRecap';
 import OtherGameContent from '../components/game_feed_page/otherGameContent';
 import PlayerLink from '../components/playerLink';
+import Roster from '../components/game_feed_page/Roster';
 
 // css
 import '../components/react-tabs.css';
@@ -24,8 +25,6 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
   const [gameInfo, setGameInfo] = useState(null);
   const [gameContent, setGameContent] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
-  const [homeRosterPreview, setHomeRosterPreview] = useState(null);
-  const [awayRosterPreview, setAwayRosterPreview] = useState(null);
   const [homeTeamSkaters, setHomeTeamSkaters] = useState([]);
   const [awayTeamSkaters, setAwayTeamSkaters] = useState([]);
   const { id } = useParams();
@@ -37,36 +36,32 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
       axios
         .get(`https://statsapi.web.nhl.com/api/v1/game/${id}/feed/live`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
         .then(res => {
-          const gInfo = res.data;
+          setGameInfo(res.data);
 
-          setGameInfo(gInfo);
+          // home game players
 
-          if (
-            gInfo.liveData.boxscore.teams.home.skaters.length === 0 ||
-            gInfo.liveData.boxscore.teams.away.skaters.length === 0
-          ) {
-            axios
-              .get(`https://statsapi.web.nhl.com/api/v1/teams/${gInfo.gameData.teams.away.id}/roster`) // https://statsapi.web.nhl.com/api/v1/teams/22/roster
-              .then(res1 => {
-                setAwayRosterPreview(res1.data.roster);
-              });
-
-            axios
-              .get(`https://statsapi.web.nhl.com/api/v1/teams/${gInfo.gameData.teams.home.id}/roster`) // https://statsapi.web.nhl.com/api/v1/teams/22/roster
-              .then(res2 => {
-                setHomeRosterPreview(res2.data.roster);
-              });
+          if (res.data.liveData.boxscore.teams.home.skaters.length > 0) {
+            setHomeTeamSkaters(
+              res.data.liveData.boxscore.teams.home.skaters.filter(key => {
+                if (res.data.liveData.boxscore.teams.home.players[`ID${key}`].stats.skaterStats) return key;
+                return null;
+              })
+            );
           } else {
-            const homeSkaters = gInfo.liveData.boxscore.teams.home.skaters.filter(key => {
-              if (gInfo.liveData.boxscore.teams.home.players[`ID${key}`].stats.skaterStats) return key;
-              return null;
-            });
-            setHomeTeamSkaters(homeSkaters);
-            const awaySkaters = gInfo.liveData.boxscore.teams.away.skaters.filter(key => {
-              if (gInfo.liveData.boxscore.teams.away.players[`ID${key}`].stats.skaterStats) return key;
-              return null;
-            });
-            setAwayTeamSkaters(awaySkaters);
+            setHomeTeamSkaters(null);
+          }
+
+          // away game players
+
+          if (res.data.liveData.boxscore.teams.away.skaters.length > 0) {
+            setAwayTeamSkaters(
+              res.data.liveData.boxscore.teams.away.skaters.filter(key => {
+                if (res.data.liveData.boxscore.teams.away.players[`ID${key}`].stats.skaterStats) return key;
+                return null;
+              })
+            );
+          } else {
+            setAwayTeamSkaters(null);
           }
         });
 
@@ -82,8 +77,6 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
       setGameInfo(null);
       setGameContent(null);
       setSelectedGamePk(null);
-      setHomeRosterPreview(null);
-      setAwayRosterPreview(null);
       setHomeTeamSkaters([]);
       setAwayTeamSkaters([]);
     };
@@ -424,8 +417,7 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
     </table>
   );
 
-  const render_roster = (teamRosterPreview, teamRosterStats, isHome) => {
-    if (teamRosterPreview) return render_team_roster(teamRosterPreview);
+  const render_roster = (teamRosterStats, isHome) => {
     if (teamRosterStats) {
       if (isHome) {
         return render_team_stats(gameInfo.liveData.boxscore.teams.home, isHome);
@@ -474,10 +466,18 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
               </div>
             </TabPanel>
             <TabPanel>
-              <>{render_roster(homeRosterPreview, homeTeamSkaters, true)}</>
+              {homeTeamSkaters?.length > 0 ? (
+                render_roster(homeTeamSkaters, true)
+              ) : !homeTeamSkaters ? (
+                <Roster teamId={gameInfo.gameData.teams.home.id} injury={injury} />
+              ) : null}
             </TabPanel>
             <TabPanel>
-              <>{render_roster(awayRosterPreview, awayTeamSkaters, false)}</>
+              {awayTeamSkaters?.length > 0 ? (
+                render_roster(awayTeamSkaters, false)
+              ) : !awayTeamSkaters ? (
+                <Roster teamId={gameInfo.gameData.teams.away.id} injury={injury} />
+              ) : null}
             </TabPanel>
             {contract ? (
               <TabPanel>
@@ -501,8 +501,6 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
               <h1>Game not started yet.</h1>
             )}
           </div>
-          {/* <h1>{gameInfo.liveData.plays.currentPlay.about.goals.away}</h1>
-                    <h1>{gameInfo.liveData.plays.currentPlay.about.goals.home}</h1> */}
         </div>
       </div>
     );
