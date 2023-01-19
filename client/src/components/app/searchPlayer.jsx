@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 // images
 import { FiSearch } from 'react-icons/fi';
+import { abbrevToTeamId, logos } from '../img/logos';
 
 import './searchPlayer.css';
 
@@ -15,17 +17,19 @@ function SearchPlayer() {
   const refInput = useRef(null);
 
   const search_players = searchValue => {
-    if (searchValue.length > 0 && !isSearching) {
+    if (searchValue.length > 2 && !isSearching) {
       setIsSearching(true);
+      setSearchResult(null);
       axios
         .get(`/cors-anywhere/https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/${searchValue}/10`) // https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/Crosby/10
         .then(res => {
           setSearchResult({ ...res.data });
           setIsSearching(false);
+        })
+        .catch(e => {
+          console.log(e);
+          setIsSearching(false);
         });
-      // .catch(error => {
-      //   console.log(error);
-      // });
     } else {
       setSearchResult(null);
     }
@@ -47,6 +51,18 @@ function SearchPlayer() {
     setSearchResult(null);
     refInput.current.value = '';
     navigate(dest);
+  };
+
+  const get_player_info = player => {
+    const p = player.split('|');
+
+    return {
+      id: p[0],
+      lastName: p[1],
+      firstName: p[2],
+      teamAbbrevs: p[11],
+      position: p[12],
+    };
   };
 
   return (
@@ -71,20 +87,24 @@ function SearchPlayer() {
           </tbody>
         </table>
       </button>
-      {searchResult?.suggestions?.length > 0 ? (
-        <div className="results">
-          <table className="results_table">
-            {searchResult?.suggestions?.map(player => {
-              const p = player.split('|');
-              return (
-                <tr key={p} onClick={() => link_to(`/player-info/${p[0]}`)}>
-                  <td>{`${p[2]} ${p[1]}`}</td>
-                </tr>
-              );
-            })}
-          </table>
-        </div>
-      ) : null}
+      <div className="results">
+        <table className="results_table">
+          {isSearching ? <ClipLoader color="#fff" loading size={35} /> : null}
+          {searchResult?.suggestions?.length > 0
+            ? searchResult?.suggestions?.map(player => {
+                const p = get_player_info(player);
+                return (
+                  <tr key={p} onClick={() => link_to(`/player-info/${p.id}`)}>
+                    <td>{`${p.firstName} ${p.lastName} (${p.position})`}</td>
+                    <td>
+                      <img src={logos[abbrevToTeamId[p.teamAbbrevs]]} alt="" width="70" height="70" />
+                    </td>
+                  </tr>
+                );
+              })
+            : null}
+        </table>
+      </div>
     </div>
   );
 }
