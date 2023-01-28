@@ -16,20 +16,21 @@ function SearchPlayer() {
   const refDiv = useRef(null);
   const refInput = useRef(null);
 
-  const search_players = searchValue => {
+  const search_players = async searchValue => {
     if (searchValue.length > 2 && !isSearching) {
       setIsSearching(true);
       setSearchResult(null);
-      axios
-        .get(`/cors-anywhere/https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/${searchValue}/10`) // https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/Crosby/10
-        .then(res => {
-          setSearchResult({ ...res.data });
-          setIsSearching(false);
-        })
-        .catch(e => {
-          console.log(e);
-          setIsSearching(false);
-        });
+
+      try {
+        const res = await axios.get(
+          `/cors-anywhere/https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/${searchValue}/10`
+        );
+        setSearchResult({ ...res.data });
+      } catch (e) {
+        alert(e);
+      }
+
+      setIsSearching(false);
     } else {
       setSearchResult(null);
     }
@@ -57,7 +58,7 @@ function SearchPlayer() {
     const p = player.split('|');
 
     return {
-      id: p[0],
+      id: Number(p[0]),
       lastName: p[1],
       firstName: p[2],
       teamAbbrevs: p[11],

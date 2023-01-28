@@ -38,6 +38,16 @@ export default function DayGamesFeed({
     setGamesStats(null);
   };
 
+  const get_live_game_info = async () => {
+    try {
+      const res = await axios.get('/live_game_info.json');
+      // console.log(res.data);
+      setLiveGameInfo(res.data);
+    } catch (e) {
+      alert(e);
+    }
+  };
+
   const get_day_game_info = async () => {
     if (!date) {
       // this case is when we do a refresh on the site we always display the past date before 12 PM
@@ -56,14 +66,10 @@ export default function DayGamesFeed({
       const fDate = newDate.toISOString().slice(0, 10);
 
       setFormatDate(fDate);
-      axios.get(`https://statsapi.web.nhl.com/api/v1/schedule?startDate=${fDate}&endDate=${fDate}`).then(res => {
-        if (res.data.dates[0]) {
-          // console.log(res.data.dates[0]);
-          axios.get('/live_game_info.json').then(res2 => {
-            // console.log(res2.data);
-            setLiveGameInfo(res2.data);
-          });
 
+      try {
+        const res = await axios.get(`https://statsapi.web.nhl.com/api/v1/schedule?startDate=${fDate}&endDate=${fDate}`);
+        if (res.data.dates[0]) {
           let bAllFinal = true;
           let bAllPreview = true;
           let bLiveGames = false;
@@ -111,9 +117,15 @@ export default function DayGamesFeed({
           setGamesStats([]);
           setGameStatus('N/A');
         }
-      });
+      } catch (e) {
+        alert(e);
+      }
     }
   };
+
+  useEffect(() => {
+    get_live_game_info();
+  }, []);
 
   useEffect(() => {
     get_day_game_info();

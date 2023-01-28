@@ -22,7 +22,7 @@ export default function TradeCenter({
 }) {
   const [showCreateTradeModal, setShowCreateTradeModal] = useState(false);
 
-  const respond_trade = (tradeID, isAccepted) => {
+  const respond_trade = async (tradeID, isAccepted) => {
     if (
       window.confirm(
         `Do you really want to ${
@@ -32,41 +32,35 @@ export default function TradeCenter({
         }`
       )
     ) {
-      axios
-        .post(
+      try {
+        await axios.post(
           '/api-rust/respond-trade',
           { trade_id: tradeID, name: poolInfo.name, is_accepted: isAccepted },
           {
             headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
           }
-        )
-        .then(res => {
-          if (res.data.success) {
-            setPoolUpdate(true);
-          } else {
-            alert(res.data.message);
-          }
-        });
+        );
+        setPoolUpdate(true);
+      } catch (e) {
+        alert(e.response.data);
+      }
     }
   };
 
-  const cancel_trade = tradeID => {
+  const cancel_trade = async tradeID => {
     if (window.confirm(`Do you really want to cancel the trade?`)) {
-      axios
-        .post(
+      try {
+        await axios.post(
           '/api-rust/cancel-trade',
           { trade_id: tradeID, name: poolInfo.name },
           {
             headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
           }
-        )
-        .then(res => {
-          if (res.data.success) {
-            setPoolUpdate(true);
-          } else {
-            alert(res.data.message);
-          }
-        });
+        );
+        setPoolUpdate(true);
+      } catch (e) {
+        alert(e.response.data);
+      }
     }
   };
 

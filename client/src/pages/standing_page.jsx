@@ -10,11 +10,17 @@ import TeamsStanding from '../components/standing_page/teamsStanding';
 export default function StandingPage() {
   const [teamsStats, setTeamsStats] = useState(null);
 
-  useEffect(() => {
-    axios.get('https://statsapi.web.nhl.com/api/v1/standings').then(res => {
-      // console.log(data)
+  const get_standing = async () => {
+    try {
+      const res = await axios.get('https://statsapi.web.nhl.com/api/v1/standings');
       setTeamsStats(res.data);
-    });
+    } catch (e) {
+      alert(e);
+    }
+  };
+
+  useEffect(() => {
+    get_standing();
   }, []); // fetch team standing stats from nhl api.
 
   if (teamsStats != null) {

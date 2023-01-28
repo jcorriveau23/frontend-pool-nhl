@@ -105,14 +105,15 @@ export default function SearchPlayersStats({
     const sorting = make_sorting_string(_statsType, false);
     const isAggregate = _searchMode === 'allSeasonsAggregate';
 
-    axios
-      .get(
+    try {
+      const res = await axios.get(
         `/cors-anywhere/https://api.nhle.com/stats/rest/en/${_type}/summary?isAggregate=${isAggregate}&isGame=false&sort=${sorting}&start=${s}&limit=${limit}&factCayenneExp=gamesPlayed>=1&cayenneExp=${positionCode} and gameTypeId=2 and seasonId<=${_endSeason} and seasonId>=${_startSeason}`
-      )
-      .then(l => {
-        if (reset) setLeaders(l.data.data);
-        else setLeaders(prevList => [...prevList, ...l.data.data]);
-      });
+      );
+      if (reset) setLeaders(res.data.data);
+      else setLeaders(prevList => [...prevList, ...res.data.data]);
+    } catch (e) {
+      alert(e);
+    }
   };
 
   useEffect(() => {

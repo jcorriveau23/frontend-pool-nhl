@@ -10,14 +10,17 @@ import PlayerLink from '../playerLink';
 export default function Roster({ teamId, injury }) {
   const [roster, setRoster] = useState(null);
 
+  const get_team_roster = async () => {
+    try {
+      const res = await axios.get(`https://statsapi.web.nhl.com/api/v1/teams/${teamId}/roster`); // https://statsapi.web.nhl.com/api/v1/teams/22/roster
+      setRoster(res.data.roster);
+    } catch (e) {
+      alert(e);
+    }
+  };
+
   useEffect(() => {
-    console.log('Rosters');
-    axios
-      .get(`https://statsapi.web.nhl.com/api/v1/teams/${teamId}/roster`) // https://statsapi.web.nhl.com/api/v1/teams/22/roster
-      .then(res => {
-        console.log(res);
-        setRoster(res.data.roster);
-      });
+    get_team_roster();
   }, []);
 
   const render_team_roster = () => (

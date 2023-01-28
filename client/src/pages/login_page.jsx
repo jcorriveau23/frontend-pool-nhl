@@ -34,104 +34,74 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
     }
   }, [user]);
 
-  const wallet_login = () => {
+  const wallet_login = async () => {
+    if (!window.ethereum) throw new Error('Please install MetaMask browser extension to interact');
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+
+    const sig = await signer.signMessage('Unlock wallet to access nhl-pool-ethereum.');
+    const addr = await signer.getAddress();
     try {
-      if (!window.ethereum) throw new Error('Please install MetaMask browser extension to interact');
-
-      window.ethereum.request({ method: 'eth_requestAccounts' }).then(result => {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-
-        signer.signMessage('Unlock wallet to access nhl-pool-ethereum.').then(sig => {
-          signer.getAddress().then(addr => {
-            axios.post('/api-rust/wallet-login', { addr, sig }).then(res => {
-              if (res.data.user) {
-                Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
-                localStorage.setItem('persist-account', JSON.stringify(res.data.user));
-                setUser(res.data.user);
-                setIsWalletConnected(true);
-                setCurrentAddr(addr);
-                axios
-                  .get('/api-rust/users', {
-                    headers: { Authorization: `Bearer ${Cookies.get(`token-${res.data.user._id.$oid}`)}` },
-                  })
-                  .then(res2 => {
-                    if (res.status === 200) {
-                      const DictUsersTmp = {};
-                      res2.data.forEach(u => {
-                        DictUsersTmp[u._id.$oid] = u.name;
-                      });
-
-                      setDictUsers(DictUsersTmp);
-                    }
-                  });
-                navigate('/');
-              } else {
-                setUser(null);
-                setIsWalletConnected(false);
-              }
-            });
-          });
-        });
+      const res = await axios.post('/api-rust/wallet-login', { addr, sig });
+      Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
+      localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+      setUser(res.data.user);
+      setIsWalletConnected(true);
+      setCurrentAddr(addr);
+      const res2 = await axios.get('/api-rust/users', {
+        headers: { Authorization: `Bearer ${Cookies.get(`token-${res.data.user._id.$oid}`)}` },
       });
-    } catch (err) {
-      alert(err);
+      const DictUsersTmp = {};
+      res2.data.forEach(u => {
+        DictUsersTmp[u._id.$oid] = u.name;
+      });
+
+      setDictUsers(DictUsersTmp);
+      navigate('/');
+    } catch (e) {
+      alert(e.response.data);
     }
   };
 
-  const login = () => {
-    console.log('Trying to login.');
-    axios
-      .post('/api-rust/login', { name, password })
-      .then(res => {
-        if (res.status === 200) {
-          Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
-          localStorage.setItem('persist-account', JSON.stringify(res.data.user));
-          setUser(res.data.user);
-          axios
-            .get('/api-rust/users', {
-              headers: { Authorization: `Bearer ${Cookies.get(`token-${res.data.user._id.$oid}`)}` },
-            })
-            .then(res2 => {
-              if (res.status === 200) {
-                const DictUsersTmp = {};
-                res2.data.forEach(u => {
-                  DictUsersTmp[u._id.$oid] = u.name;
-                });
-
-                setDictUsers(DictUsersTmp);
-              }
-            });
-          navigate('/');
-        }
-      })
-      .catch(e => {
-        setUser(null);
-        alert(e.response.data.error.description);
+  const login = async () => {
+    try {
+      const res = await axios.post('/api-rust/login', { name, password });
+      Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
+      localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+      setUser(res.data.user);
+      const res2 = await axios.get('/api-rust/users', {
+        headers: { Authorization: `Bearer ${Cookies.get(`token-${res.data.user._id.$oid}`)}` },
       });
+      const DictUsersTmp = {};
+      res2.data.forEach(u => {
+        DictUsersTmp[u._id.$oid] = u.name;
+      });
+
+      setDictUsers(DictUsersTmp);
+      navigate('/');
+    } catch (e) {
+      alert(e.response.data);
+    }
   };
 
-  const register = () => {
+  const register = async () => {
     if (password === repeatPassword) {
-      axios
-        .post('/api-rust/register', {
+      try {
+        const res = await axios.post('/api-rust/register', {
           name,
           email,
           password,
           phone: 'TODO',
-        })
-        .then(res => {
-          if (res.status === 200) {
-            Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
-            localStorage.setItem('persist-account', JSON.stringify(res.data.user));
-            setUser(res.data.user);
-            navigate('/');
-          }
-        })
-        .catch(e => {
-          setUser(null);
-          alert(e.response.data.error.description);
         });
+        Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
+        localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+        setUser(res.data.user);
+        navigate('/');
+      } catch (e) {
+        alert(e.response.datas);
+      }
     } else {
       alert('password and repeated password does not correspond!');
     }

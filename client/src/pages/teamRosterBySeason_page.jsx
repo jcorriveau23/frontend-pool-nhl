@@ -22,34 +22,44 @@ export default function TeamRosterBySeasonPage(injury) {
   const season = url.pop();
   const teamID = url.pop();
 
-  useEffect(() => {
-    const urlSkaters = `/cors-anywhere/https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=
-      ${teamID}
-      %20and%20gameTypeId=2%20and%20seasonId%3C=
-      ${season}
-      %20and%20seasonId%3E=
-      ${season}`; // https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=8%20and%20gameTypeId=2%20and%20seasonId%3C=20172018%20and%20seasonId%3E=20172018
-    const urlgoalies = `/cors-anywhere/https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=
-      ${teamID}
-      %20and%20gameTypeId=2%20and%20seasonId%3C=
-      ${season}
-      %20and%20seasonId%3E=
-      ${season}`; // https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=8%20and%20gameTypeId=2%20and%20seasonId%3C=20172018%20and%20seasonId%3E=20172018
+  const get_skaters_stats = async () => {
+    try {
+      const urlSkaters = `/cors-anywhere/https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=
+    ${teamID}
+    %20and%20gameTypeId=2%20and%20seasonId%3C=
+    ${season}
+    %20and%20seasonId%3E=
+    ${season}`;
+      // https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=8%20and%20gameTypeId=2%20and%20seasonId%3C=20172018%20and%20seasonId%3E=20172018
 
-    axios.get(urlSkaters).then(res => {
-      // console.log(playersStats)
+      const res = await axios.get(urlSkaters);
+      console.log(res.data.data);
       setSkatersStats([...res.data.data]);
-    });
-    // .catch(error => {
-    //   alert(`Error 1! ${error}`);
-    // });
+    } catch (e) {
+      alert(e.response);
+    }
+  };
 
-    axios.get(urlgoalies).then(res => {
+  const get_goalies_stats = async () => {
+    try {
+      const urlgoalies = `/cors-anywhere/https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22wins%22,%22direction%22:%22DESC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=
+    ${teamID}
+    %20and%20gameTypeId=2%20and%20seasonId%3C=
+    ${season}
+    %20and%20seasonId%3E=
+    ${season}`;
+      // https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=8%20and%20gameTypeId=2%20and%20seasonId%3C=20172018%20and%20seasonId%3E=20172018
+      const res = await axios.get(urlgoalies);
+      // console.log(res.data.data);
       setGoaliesStats([...res.data.data]);
-    });
-    // .catch(error => {
-    //   alert(`Error 2! ${error}`);
-    // });
+    } catch (e) {
+      alert(e.response);
+    }
+  };
+
+  useEffect(() => {
+    get_skaters_stats();
+    get_goalies_stats();
   }, []);
 
   const sort_by_int = (isSkater, stat) => {
@@ -73,7 +83,7 @@ export default function TeamRosterBySeasonPage(injury) {
           </tr>
           <tr>
             <th colSpan="12">
-              <img src={logos[teamID]} alt="" width="40" height="40" />
+              <img src={logos[teamID]} alt="" width="70" height="70" />
             </th>
           </tr>
           <tr>

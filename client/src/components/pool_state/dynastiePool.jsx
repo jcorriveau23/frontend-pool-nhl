@@ -127,7 +127,7 @@ export default function DynastiePool({
     }
   };
 
-  const send_protected_player = () => {
+  const send_protected_player = async () => {
     if (
       !window.confirm(
         `Are you sure you want to send this list of protected players? This action is not reversible, Make sure you are confortable with your choices before confirming.`
@@ -140,8 +140,8 @@ export default function DynastiePool({
       defProtected.length + forwProtected.length + goalProtected.length + reservProtected.length;
 
     if (number_protected_player === poolInfo.next_season_number_players_protected) {
-      axios
-        .post(
+      try {
+        await axios.post(
           '/api-rust/protect-players',
           {
             name: poolInfo.name,
@@ -153,19 +153,16 @@ export default function DynastiePool({
           {
             headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
           }
-        )
-        .then(res => {
-          if (res.data.success === true) {
-            setPoolUpdate(true);
-            setForwProtected([]);
-            setDefProtected([]);
-            setGoalProtected([]);
-            setReservProtected([]);
-            alert('You have successfully sent your protection player list.');
-          } else {
-            alert(res.data.message);
-          }
-        });
+        );
+        setPoolUpdate(true);
+        setForwProtected([]);
+        setDefProtected([]);
+        setGoalProtected([]);
+        setReservProtected([]);
+        alert('You have successfully sent your protection player list.');
+      } catch (e) {
+        alert(e.response.data);
+      }
     } else alert(`You need to protect ${poolInfo.next_season_number_players_protected} players`);
   };
 

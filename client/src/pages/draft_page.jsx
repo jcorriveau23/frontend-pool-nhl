@@ -19,14 +19,18 @@ export default function DraftPage(injury) {
 
   const year = window.location.pathname.split('/').pop();
 
+  const get_draft = async () => {
+    try {
+      const res = await axios.get(`https://statsapi.web.nhl.com/api/v1/draft/${year}`); // https://statsapi.web.nhl.com/api/v1/draft/2021
+      setDraftInfo(res.data);
+    } catch (e) {
+      alert(e);
+    }
+  };
+
   useEffect(() => {
     if (prevYear !== year && !Number.isNaN(Number(year))) {
-      axios
-        .get(`https://statsapi.web.nhl.com/api/v1/draft/${year}`) // https://statsapi.web.nhl.com/api/v1/draft/2021
-        .then(res => {
-          setDraftInfo(res.data);
-        });
-
+      get_draft();
       setPrevYear(year);
     } else {
       navigate('/draft/2022');

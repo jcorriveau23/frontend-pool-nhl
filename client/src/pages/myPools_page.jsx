@@ -26,56 +26,56 @@ export default function MyPoolsPage({ user, DictUsers }) {
   const [poolDraft, setPoolDraft] = useState([]);
   const [poolDynastie, setPoolDynastie] = useState([]);
 
+  const get_pools = async () => {
+    try {
+      const res = await axios.get('/api-rust/pools', {
+        headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+      });
+      const pDraft = [];
+      const pInProgress = [];
+      const pDynastie = [];
+      const pCreated = [];
+
+      for (let i = 0; i < res.data.length; i += 1) {
+        switch (res.data[i].status) {
+          case 'Draft':
+            pDraft.push({
+              name: res.data[i].name,
+              owner: res.data[i].owner,
+            });
+            break;
+          case 'InProgress':
+            pInProgress.push({
+              name: res.data[i].name,
+              owner: res.data[i].owner,
+            });
+            break;
+          case 'Dynastie':
+            pDynastie.push({
+              name: res.data[i].name,
+              owner: res.data[i].owner,
+            });
+            break;
+          default:
+            pCreated.push({
+              name: res.data[i].name,
+              owner: res.data[i].owner,
+            });
+            break;
+        }
+      }
+      setPoolDraft(pDraft);
+      setPoolInProgress(pInProgress);
+      setPoolDynastie(pDynastie);
+      setPoolCreated(pCreated);
+    } catch (e) {
+      alert(e.response.data);
+    }
+  };
+
   useEffect(() => {
     if (user && showCreatePoolModal === false) {
-      axios
-        .get('/api-rust/pools', {
-          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
-        })
-        .then(res => {
-          if (res.status === 200) {
-            const pDraft = [];
-            const pInProgress = [];
-            const pDynastie = [];
-            const pCreated = [];
-
-            for (let i = 0; i < res.data.length; i += 1) {
-              switch (res.data[i].status) {
-                case 'Draft':
-                  pDraft.push({
-                    name: res.data[i].name,
-                    owner: res.data[i].owner,
-                  });
-                  break;
-                case 'InProgress':
-                  pInProgress.push({
-                    name: res.data[i].name,
-                    owner: res.data[i].owner,
-                  });
-                  break;
-                case 'Dynastie':
-                  pDynastie.push({
-                    name: res.data[i].name,
-                    owner: res.data[i].owner,
-                  });
-                  break;
-                default:
-                  pCreated.push({
-                    name: res.data[i].name,
-                    owner: res.data[i].owner,
-                  });
-                  break;
-              }
-            }
-            setPoolDraft(pDraft);
-            setPoolInProgress(pInProgress);
-            setPoolDynastie(pDynastie);
-            setPoolCreated(pCreated);
-          }
-        })
-        .catch(e => {
-          console.log(e.response);
-        });
+      get_pools();
     }
   }, [user, showCreatePoolModal, poolDeleted]); //  force to refetch data when creating/deleting a new pool.
 

@@ -54,35 +54,41 @@ function App() {
   const refMenu = useRef(null);
   const refAccount = useRef(null);
 
-  useEffect(() => {
-    axios.get('/injury.json').then(res => {
+  const get_injury = async () => {
+    try {
+      const res = await axios.get('/injury.json');
       setInjury(res.data);
-    });
+    } catch (e) {
+      alert(e);
+    }
+  };
+
+  const get_users = async _user => {
+    try {
+      const res = await axios.get('/api-rust/users', {
+        headers: { Authorization: `Bearer ${Cookies.get(`token-${_user._id.$oid}`)}` },
+      });
+      const DictUsersTmp = {};
+      res.data.forEach(u => {
+        if (u._id.$oid === _user._id.$oid) setUser(u);
+        DictUsersTmp[u._id.$oid] = u.name;
+      });
+
+      setDictUsers(DictUsersTmp);
+    } catch (e) {
+      alert(e.response.data);
+      Cookies.remove(`token-${user._id.$oid}`);
+      localStorage.clear('persist-account');
+    }
+  };
+
+  useEffect(() => {
+    get_injury();
 
     const userTmp = JSON.parse(localStorage.getItem('persist-account'));
 
     if (userTmp) {
-      console.log('try to fetch users');
-      axios
-        .get('/api-rust/users', {
-          headers: { Authorization: `Bearer ${Cookies.get(`token-${userTmp._id.$oid}`)}` },
-        })
-        .then(res => {
-          if (res.status === 200) {
-            const DictUsersTmp = {};
-            res.data.forEach(u => {
-              if (u._id.$oid === userTmp._id.$oid) setUser(u);
-              DictUsersTmp[u._id.$oid] = u.name;
-            });
-
-            setDictUsers(DictUsersTmp);
-          }
-        })
-        .catch(err => {
-          console.log(err);
-          Cookies.remove(`token-${user._id.$oid}`);
-          localStorage.clear('persist-account');
-        });
+      get_users(userTmp);
     }
   }, []);
 

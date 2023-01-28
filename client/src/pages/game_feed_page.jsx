@@ -29,47 +29,55 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
   const [awayTeamSkaters, setAwayTeamSkaters] = useState([]);
   const { id } = useParams();
 
+  const get_live_feed = async () => {
+    try {
+      const res = await axios.get(`https://statsapi.web.nhl.com/api/v1/game/${id}/feed/live`); // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
+      setGameInfo(res.data);
+
+      // home game players
+
+      if (res.data.liveData.boxscore.teams.home.skaters.length > 0) {
+        setHomeTeamSkaters(
+          res.data.liveData.boxscore.teams.home.skaters.filter(key => {
+            if (res.data.liveData.boxscore.teams.home.players[`ID${key}`].stats.skaterStats) return key;
+            return null;
+          })
+        );
+      } else {
+        setHomeTeamSkaters(null);
+      }
+
+      // away game players
+
+      if (res.data.liveData.boxscore.teams.away.skaters.length > 0) {
+        setAwayTeamSkaters(
+          res.data.liveData.boxscore.teams.away.skaters.filter(key => {
+            if (res.data.liveData.boxscore.teams.away.players[`ID${key}`].stats.skaterStats) return key;
+            return null;
+          })
+        );
+      } else {
+        setAwayTeamSkaters(null);
+      }
+    } catch (e) {
+      alert(e);
+    }
+  };
+
+  const get_game_content = async () => {
+    try {
+      const res = await axios.get(`https://statsapi.web.nhl.com/api/v1/game/${id}/content`); // https://statsapi.web.nhl.com/api/v1/game/2021020128/content
+      setGameContent(res.data);
+    } catch (e) {
+      alert(e);
+    }
+  };
+
   useEffect(() => {
     if (id) {
       setSelectedGamePk(id);
-
-      axios
-        .get(`https://statsapi.web.nhl.com/api/v1/game/${id}/feed/live`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/feed/live
-        .then(res => {
-          setGameInfo(res.data);
-
-          // home game players
-
-          if (res.data.liveData.boxscore.teams.home.skaters.length > 0) {
-            setHomeTeamSkaters(
-              res.data.liveData.boxscore.teams.home.skaters.filter(key => {
-                if (res.data.liveData.boxscore.teams.home.players[`ID${key}`].stats.skaterStats) return key;
-                return null;
-              })
-            );
-          } else {
-            setHomeTeamSkaters(null);
-          }
-
-          // away game players
-
-          if (res.data.liveData.boxscore.teams.away.skaters.length > 0) {
-            setAwayTeamSkaters(
-              res.data.liveData.boxscore.teams.away.skaters.filter(key => {
-                if (res.data.liveData.boxscore.teams.away.players[`ID${key}`].stats.skaterStats) return key;
-                return null;
-              })
-            );
-          } else {
-            setAwayTeamSkaters(null);
-          }
-        });
-
-      axios
-        .get(`https://statsapi.web.nhl.com/api/v1/game/${id}/content`) // https://statsapi.web.nhl.com/api/v1/game/2021020128/content
-        .then(res => {
-          setGameContent(res.data);
-        });
+      get_live_feed();
+      get_game_content();
     }
 
     return () => {

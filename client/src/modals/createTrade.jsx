@@ -58,7 +58,7 @@ export default function CreateTradeModal({
     setSelectedPooler(participant);
   };
 
-  const send_trade = () => {
+  const send_trade = async () => {
     const tradeInfo = {
       proposed_by: user._id.$oid,
       ask_to: selectedPooler,
@@ -70,27 +70,19 @@ export default function CreateTradeModal({
       date_created: -1,
     };
 
-    axios
-      .post(
+    try {
+      await axios.post(
         '/api-rust/create-trade',
         { trade: tradeInfo, name: poolInfo.name },
         {
           headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
         }
-      )
-      .then(res => {
-        if (res.data.success) {
-          // the trade will need to be confirmed by the user that was selected by the trader.
-          // if the trade is accepted, people have 24h to create a counter offer. They can directly get out of the trade.
-          // At the end of the 24 hours, the traded players won't go in the roster they will go in the reservists.
-          // user will be able to make a reservists switch (only add player to roster to fill hole, not remove players from roster) on that day, and the players can receive points on that day
-
-          setShowCreateTradeModal(false);
-          setPoolUpdate(true);
-        } else {
-          alert(res.data.message);
-        }
-      });
+      );
+      setShowCreateTradeModal(false);
+      setPoolUpdate(true);
+    } catch (e) {
+      alert(e.response.data);
+    }
   };
 
   const validate_trade_size = (players, picks) => {

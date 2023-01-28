@@ -19,31 +19,28 @@ export default function PoolSettings({ user, poolInfo, hasOwnerRights, setPoolUp
     }
   };
 
-  const send_update = () => {
+  const send_update = async () => {
     if (
       window.confirm(
         `Do you really want to update the following pool settings?\n${JSON.stringify(poolSettingsUpdate, undefined, 4)}`
       )
     ) {
-      axios
-        .post(
+      try {
+        await axios.post(
           '/api-rust/update-pool-settings',
           {
             name: poolInfo.name,
             pool_settings: poolSettingsUpdate,
           },
           { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` } }
-        )
-        .then(res => {
-          if (res.data.success) {
-            setPoolUpdate(true);
-            setPoolSettingsUpdate(null);
-            alert('You have successfully update the pool setting!');
-          } else {
-            alert(res.data.message);
-            setPoolSettingsUpdate(null);
-          }
-        });
+        );
+
+        setPoolUpdate(true);
+        setPoolSettingsUpdate(null);
+        alert('You have successfully update the pool setting!');
+      } catch (e) {
+        alert(e.response.data);
+      }
     }
   };
 

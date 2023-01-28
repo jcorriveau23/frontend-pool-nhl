@@ -28,50 +28,44 @@ export default function ProfilePage({ user, setUser }) {
     navigate('/login');
   };
 
-  const set_username = () => {
+  const set_username = async () => {
     if (newUsername === '') alert(`The new username provided cannot be empty!`);
     else if (window.confirm(`Are you sure you want to set your new username to be ${newUsername}`)) {
-      axios
-        .post(
+      try {
+        const res = await axios.post(
           '/api-rust/set-username',
           { new_username: newUsername },
           {
             headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
           }
-        )
-        .then(res => {
-          if (res.data.user) {
-            localStorage.setItem('persist-account', JSON.stringify(res.data.user));
-            setUser(res.data.user);
-            alert("You have successfullly change you're username.");
-          } else {
-            alert(res.data.message);
-          }
-        });
+        );
+        localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+        setUser(res.data.user);
+        alert("You have successfullly change you're username.");
+      } catch (e) {
+        alert(e.response.data);
+      }
     }
   };
 
-  const set_password = () => {
+  const set_password = async () => {
     if (newPassword === '') alert(`The password provided cannot be empty!`);
     else if (newPassword !== newPasswordRepeat) alert(`The 2 passwords entered does not match!`);
     else if (window.confirm(`Are you sure you want to change your password?`)) {
-      axios
-        .post(
+      try {
+        const res = await axios.post(
           '/api-rust/set-password',
           { password: newPassword },
           {
             headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
           }
-        )
-        .then(res => {
-          if (res.data.user) {
-            localStorage.setItem('persist-account', JSON.stringify(res.data.user));
-            setUser(res.data.user);
-            alert("You have successfullly change you're password.");
-          } else {
-            alert(res.data.message);
-          }
-        });
+        );
+        localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+        setUser(res.data.user);
+        alert("You have successfullly change you're password.");
+      } catch (e) {
+        alert(e.response.data);
+      }
     }
   };
 

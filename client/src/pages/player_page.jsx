@@ -22,36 +22,45 @@ export default function PlayerPage() {
 
   const playerID = window.location.pathname.split('/').pop();
 
+  const get_player_stats = async () => {
+    try {
+      const res = await axios.get(
+        `https://statsapi.web.nhl.com/api/v1/people/${playerID}?expand=person.stats&stats=yearByYear,yearByYearPlayoffs,careerRegularSeason,careerPlayoffs&expand=stats.team&site=en_nhlCA`
+      ); // https://statsapi.web.nhl.com/api/v1/people/8475726?expand=person.stats&stats=yearByYear,yearByYearPlayoffs,careerRegularSeason&expand=stats.team&site=en_nhlCA
+
+      setPlayerInfo(res.data);
+      setPlayerStats(res.data.people[0].stats[0]);
+      setPlayerPlayoffStats(res.data.people[0].stats[1]);
+      if (res.data.people[0].stats[2].splits.length > 0) setTotalCareer(res.data.people[0].stats[2].splits[0].stat);
+      if (res.data.people[0].stats[3].splits.length > 0)
+        setTotalCareerPlayoffs(res.data.people[0].stats[3].splits[0].stat);
+    } catch (e) {
+      alert(e);
+    }
+  };
+
+  const get_prospect_info = async () => {
+    try {
+      const res = await axios.get(`https://statsapi.web.nhl.com/api/v1/draft/prospects/${playerID}`); // https://statsapi.web.nhl.com/api/v1/draft/prospects/76849
+      setProspectInfo({ ...res.data.prospects[0] });
+      // console.log(p.prospects[0])
+      if (res.data.prospects[0].nhlPlayerId > 8000000 && !hasNavigated) {
+        setHasNavigated(true);
+        navigate(`/player-info/${res.data.prospects[0].nhlPlayerId}`);
+      }
+    } catch (e) {
+      alert(e);
+    }
+  };
+
   useEffect(() => {
     const ID = parseInt(playerID, 10);
 
     if (prevPlayerID !== playerID && !Number.isNaN(ID)) {
       if (ID > 8000000) {
-        axios
-          .get(
-            `https://statsapi.web.nhl.com/api/v1/people/${playerID}?expand=person.stats&stats=yearByYear,yearByYearPlayoffs,careerRegularSeason,careerPlayoffs&expand=stats.team&site=en_nhlCA`
-          ) // https://statsapi.web.nhl.com/api/v1/people/8475726?expand=person.stats&stats=yearByYear,yearByYearPlayoffs,careerRegularSeason&expand=stats.team&site=en_nhlCA
-          .then(res => {
-            setPlayerInfo(res.data);
-            setPlayerStats(res.data.people[0].stats[0]);
-            setPlayerPlayoffStats(res.data.people[0].stats[1]);
-            if (res.data.people[0].stats[2].splits.length > 0)
-              setTotalCareer(res.data.people[0].stats[2].splits[0].stat);
-            if (res.data.people[0].stats[3].splits.length > 0)
-              setTotalCareerPlayoffs(res.data.people[0].stats[3].splits[0].stat);
-          });
+        get_player_stats();
       } else {
-        // console.log("fetching prospect")
-        axios
-          .get(`https://statsapi.web.nhl.com/api/v1/draft/prospects/${playerID}`) // https://statsapi.web.nhl.com/api/v1/draft/prospects/76849
-          .then(res => {
-            setProspectInfo({ ...res.data.prospects[0] });
-            // console.log(p.prospects[0])
-            if (res.data.prospects[0].nhlPlayerId > 8000000 && !hasNavigated) {
-              setHasNavigated(true);
-              navigate(`/player-info/${res.data.prospects[0].nhlPlayerId}`);
-            }
-          });
+        get_prospect_info();
       }
       setPrevPlayerID(playerID);
     } else {

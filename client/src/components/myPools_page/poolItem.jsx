@@ -7,27 +7,21 @@ import Cookies from 'js-cookie';
 import User from '../user';
 
 export default function PoolItem({ name, owner, user, poolDeleted, setPoolDeleted, DictUsers }) {
-  const delete_pool = () => {
+  const delete_pool = async () => {
     if (user) {
       // only pass the user if pool is in created status.
-      axios
-        .post(
+      try {
+        await axios.post(
           '/api-rust/delete-pool',
           { name },
           {
             headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
           }
-        )
-        .then(res => {
-          if (res.data.success) {
-            setPoolDeleted(!poolDeleted);
-          } else {
-            alert(res.data.message);
-          }
-        })
-        .catch(e => {
-          console.log(e.response);
-        });
+        );
+        setPoolDeleted(!poolDeleted);
+      } catch (e) {
+        alert(e.response.data);
+      }
     }
   };
 

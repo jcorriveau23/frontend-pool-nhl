@@ -10,25 +10,19 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
   const [poolNameInput, setPoolNameInput] = useState('');
   const [numberPoolerInput, setNumberPoolerInput] = useState(4);
 
-  const createPool = () => {
-    axios
-      .post(
+  const createPool = async () => {
+    try {
+      await axios.post(
         '/api-rust/create-pool',
         { name: poolNameInput, number_pooler: numberPoolerInput },
         {
           headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
         }
-      )
-      .then(res => {
-        if (res.data.success) {
-          setShowCreatePoolModal(false);
-        } else {
-          alert(res.data.message);
-        }
-      })
-      .catch(e => {
-        alert(e.response.data.error.description);
-      });
+      );
+      setShowCreatePoolModal(false);
+    } catch (e) {
+      alert(e.response.data);
+    }
   };
 
   const isLoggedRender = () => {

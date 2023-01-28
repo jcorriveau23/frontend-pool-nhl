@@ -26,23 +26,22 @@ export default function DayLeaders({
   const [dayLeaders, setDayLeaders] = useState(null);
   const [showAllPlayers, setShowAllPlayers] = useState(false); // by default only show the 15 leaders
 
+  const get_daily_leaders = async () => {
+    try {
+      const res = await axios.get(`/api-rust/daily_leaders/${formatDate}`);
+      setDayLeaders(res.data);
+      setPrevFormatDate(formatDate);
+    } catch (e) {
+      setDayLeaders(null);
+      setPrevFormatDate('');
+      console.log(e.response.data);
+    }
+  };
+
   useEffect(() => {
     if (formatDate !== prevFormatDate && formatDate) {
       // get the day leaders data from database.
-
-      axios
-        .get(`/api-rust/daily_leaders/${formatDate}`)
-        .then(res => {
-          if (res.status === 200) {
-            setDayLeaders(res.data);
-            setPrevFormatDate(formatDate);
-          }
-        })
-        .catch(e => {
-          setDayLeaders(null);
-          setPrevFormatDate('');
-          console.log(e.response);
-        });
+      get_daily_leaders();
     }
   }, [formatDate]);
 

@@ -80,7 +80,8 @@ export default function PoolPage({
           }
         );
       } catch (e) {
-        console.log(e.message);
+        alert(e.response.data);
+        return;
       }
 
       if (res.status === 200) {
@@ -93,7 +94,8 @@ export default function PoolPage({
                 headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
               });
             } catch (e) {
-              console.log(e.message);
+              alert(e.response.data);
+              return;
             }
           } else if (lastFormatDate) {
             // This is in the case we called the pool information for only a ranges of date since the rest of the date were already stored in the client database.

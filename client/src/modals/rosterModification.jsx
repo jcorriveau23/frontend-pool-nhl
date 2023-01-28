@@ -36,10 +36,10 @@ export default function RosterModificationModal({
     if (closeModal) setShowRosterModificationModal(false);
   };
 
-  const modify_roster = () => {
+  const modify_roster = async () => {
     if (window.confirm(`Do you really want to apply this roster modification?`)) {
-      axios
-        .post(
+      try {
+        await axios.post(
           '/api-rust/modify-roster',
           {
             name: poolInfo.name,
@@ -49,16 +49,13 @@ export default function RosterModificationModal({
             reserv_protected: reservSelected,
           },
           { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` } }
-        )
-        .then(res => {
-          if (res.data.success) {
-            setPoolUpdate(true);
-            setShowRosterModificationModal(false);
-            alert('You have successfully modify your roster.');
-          } else {
-            alert(res.data.message);
-          }
-        });
+        );
+        setPoolUpdate(true);
+        setShowRosterModificationModal(false);
+        alert('You have successfully modify your roster.');
+      } catch (e) {
+        alert(e.response.data);
+      }
     }
   };
 

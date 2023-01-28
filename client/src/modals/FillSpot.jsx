@@ -20,22 +20,19 @@ export default function FillSpot({
   user,
   fillSpotPosition,
 }) {
-  const fill_spot = player => {
+  const fill_spot = async player => {
     if (window.confirm(`Do you really chose ${player.name} to fill the empty spot?`)) {
-      axios
-        .post(
+      try {
+        await axios.post(
           '/api-rust/fill-spot',
           { player, name: poolInfo.name },
           { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` } }
-        )
-        .then(res => {
-          if (res.data.success) {
-            setShowFillSpotModal(false);
-            setPoolUpdate(true);
-          } else {
-            alert(res.data.message);
-          }
-        });
+        );
+        setShowFillSpotModal(false);
+        setPoolUpdate(true);
+      } catch (e) {
+        alert(e.response.data);
+      }
     }
   };
 
