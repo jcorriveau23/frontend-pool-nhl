@@ -28,7 +28,7 @@ import RosterModificationModal from '../../modals/rosterModification';
 import GraphStatsModal from '../../modals/graphStats';
 
 // images
-import { logos } from '../img/logos';
+import { team_info } from '../img/logos';
 import liveGame from '../img/icons/live-game.png';
 
 // css
@@ -530,7 +530,7 @@ export default function InProgressPool({
                 <PlayerLink name={playerIdToPlayersDataMap[player.id].name} id={player.id} injury={injury} />
               </td>
               <td>
-                <img src={logos[playerIdToPlayersDataMap[player.id].team]} alt="" width="40" height="40" />
+                <img src={team_info[playerIdToPlayersDataMap[player.id].team].logo} alt="" width="40" height="40" />
               </td>
               <td>{player.nb_game}</td>
               <td>{player.G}</td>
@@ -588,7 +588,7 @@ export default function InProgressPool({
                 <PlayerLink name={playerIdToPlayersDataMap[player.id].name} id={player.id} injury={injury} />
               </td>
               <td>
-                <img src={logos[playerIdToPlayersDataMap[player.id].team]} alt="" width="40" height="40" />
+                <img src={team_info[playerIdToPlayersDataMap[player.id].team].logo} alt="" width="40" height="40" />
               </td>
               <td>{player.nb_game}</td>
               <td>{player.G}</td>
@@ -643,7 +643,7 @@ export default function InProgressPool({
           <PlayerLink name={playerIdToPlayersDataMap[player.id].name} id={player.id} injury={injury} />
         </td>
         <td>
-          <img src={logos[playerIdToPlayersDataMap[player.id].team]} alt="" width="40" height="40" />
+          <img src={team_info[playerIdToPlayersDataMap[player.id].team].logo} alt="" width="40" height="40" />
         </td>
         <td>{player.position}</td>
       </tr>

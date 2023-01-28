@@ -7,7 +7,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 // images
-import { logos } from '../components/img/logos';
+import { team_info } from '../components/img/logos';
 
 // css
 import './modal.css';
@@ -44,7 +44,7 @@ export default function FillSpot({
           <td>{i + 1}</td>
           <td>{player.name}</td>
           <td>
-            <img src={logos[player.team]} alt="" width="40" height="40" />
+            <img src={team_info[player.team].logo} alt="" width="40" height="40" />
           </td>
         </tr>
       ));

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 // images
-import { logos } from '../img/logos';
+import { team_info } from '../img/logos';
 
 export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
   const render_game_state = status => {
@@ -58,13 +58,13 @@ export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
           <tbody>
             <tr>
               <td align="left">
-                <img src={logos[gameData.teams.away.team.id]} alt="" width="50" height="50" />
+                <img src={team_info[gameData.teams.away.team.id].logo} alt="" width="50" height="50" />
               </td>
               <td>{gameData.teams.away.score}</td>
             </tr>
             <tr>
               <td align="left">
-                <img src={logos[gameData.teams.home.team.id]} alt="" width="50" height="50" />
+                <img src={team_info[gameData.teams.home.team.id].logo} alt="" width="50" height="50" />
               </td>
               <td>{gameData.teams.home.score}</td>
             </tr>

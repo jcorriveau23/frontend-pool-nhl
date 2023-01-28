@@ -4,7 +4,7 @@ import React from 'react';
 import PlayerNoLink from '../playerNoLink';
 
 // images
-import { logos } from '../img/logos';
+import { team_info } from '../img/logos';
 
 export default function PlayerList({ poolerContext, injury }) {
   const render_players = players =>
@@ -15,7 +15,7 @@ export default function PlayerList({ poolerContext, injury }) {
           <PlayerNoLink name={player.name} injury={injury} />
         </td>
         <td>
-          <img src={logos[player.team]} alt="" width="40" height="40" />
+          <img src={team_info[player.team].logo} alt="" width="40" height="40" />
         </td>
       </tr>
     ));

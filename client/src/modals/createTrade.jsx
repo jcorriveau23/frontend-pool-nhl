@@ -17,7 +17,7 @@ import TradeItem from '../components/pool_state/tradeItem';
 import './modal.css';
 
 // images
-import { logos } from '../components/img/logos';
+import { team_info } from '../components/img/logos';
 
 export default function CreateTradeModal({
   showCreateTradeModal,
@@ -157,7 +157,7 @@ export default function CreateTradeModal({
           <td>{i + 1}</td>
           <PlayerNoLink name={player.name} injury={injury} />
           <td>
-            <img src={logos[player.team]} alt="" width="40" height="40" />
+            <img src={team_info[player.team].logo} alt="" width="40" height="40" />
           </td>
         </tr>
       ));

@@ -14,7 +14,7 @@ import DraftOrder from './draftOrder';
 import User from '../user';
 
 // Images
-import { logos } from '../img/logos';
+import { team_info } from '../img/logos';
 
 export default function DynastiePool({
   user,
@@ -186,7 +186,7 @@ export default function DynastiePool({
             <PlayerNoLink name={player.name} injury={injury} isLink={false} />
           </td>
           <td>
-            <img src={logos[player.team]} alt="" width="40" height="40" />
+            <img src={team_info[player.team].logo} alt="" width="40" height="40" />
           </td>
         </tr>
       ));
@@ -213,7 +213,7 @@ export default function DynastiePool({
             <PlayerNoLink name={player.name} injury={injury} isLink={false} />
           </td>
           <td>
-            <img src={logos[player.team]} alt="" width="40" height="40" />
+            <img src={team_info[player.team].logo} alt="" width="40" height="40" />
           </td>
         </tr>
       ))}

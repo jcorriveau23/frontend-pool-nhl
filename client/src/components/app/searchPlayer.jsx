@@ -5,7 +5,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 // images
 import { FiSearch } from 'react-icons/fi';
-import { abbrevToTeamId, logos } from '../img/logos';
+import { abbrevToTeamId, team_info } from '../img/logos';
 
 import './searchPlayer.css';
 
@@ -98,7 +98,7 @@ function SearchPlayer() {
                   <tr key={p} onClick={() => link_to(`/player-info/${p.id}`)}>
                     <td>{`${p.firstName} ${p.lastName} (${p.position})`}</td>
                     <td>
-                      <img src={logos[abbrevToTeamId[p.teamAbbrevs]]} alt="" width="70" height="70" />
+                      <img src={team_info[abbrevToTeamId[p.teamAbbrevs]].logo} alt="" width="70" height="70" />
                     </td>
                   </tr>
                 );

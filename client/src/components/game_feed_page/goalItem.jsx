@@ -7,7 +7,7 @@ import './goalItem.css';
 import PlayerLink from '../playerLink';
 
 // images
-import { logos } from '../img/logos';
+import { team_info } from '../img/logos';
 
 export default function GoalItem({ goalData, gameContent }) {
   const videoRef = useRef();
@@ -72,7 +72,7 @@ export default function GoalItem({ goalData, gameContent }) {
         <tbody>
           <tr>
             <td rowSpan={rowSpan} width="30">
-              <img src={logos[goalData.team.id]} alt="" width="70" height="70" />
+              <img src={team_info[goalData.team.id].logo} alt="" width="70" height="70" />
             </td>
             <th width="125">Time:</th>
             <td width="250">{goalData.about.periodTime}</td>

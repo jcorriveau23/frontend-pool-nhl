@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 // images
-import { logos } from '../components/img/logos';
+import { team_info } from '../components/img/logos';
 
 // css
 import './modal.css';
@@ -99,7 +99,12 @@ export default function SendPredictionModal({
             />
             <div className="float-left">
               <div>
-                <img src={logos[gameInfo.liveData.boxscore.teams.home.team.id]} alt="" width="100" height="100" />
+                <img
+                  src={team_info[gameInfo.liveData.boxscore.teams.home.team.id].logo}
+                  alt=""
+                  width="100"
+                  height="100"
+                />
               </div>
               <input
                 type="radio"
@@ -111,7 +116,12 @@ export default function SendPredictionModal({
             </div>
             <div className="float-right">
               <div>
-                <img src={logos[gameInfo.liveData.boxscore.teams.away.team.id]} alt="" width="100" height="100" />
+                <img
+                  src={team_info[gameInfo.liveData.boxscore.teams.away.team.id].logo}
+                  alt=""
+                  width="100"
+                  height="100"
+                />
               </div>
               <input
                 type="radio"

@@ -5,7 +5,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 import User from '../user';
 import PlayerLink from '../playerLink';
-import { logos } from '../img/logos';
+import { team_info } from '../img/logos';
 
 import GraphCapHits from '../../modals/graphCapHits';
 
@@ -158,7 +158,7 @@ export default function RosterCapHit({
               <PlayerLink name={player.name} id={player.id} injury={injury} />
             </td>
             <td>
-              <img src={logos[player.team]} alt="" width="30" height="30" />
+              <img src={team_info[player.team].logo} alt="" width="30" height="30" />
             </td>
             {player.caps ? (
               <>

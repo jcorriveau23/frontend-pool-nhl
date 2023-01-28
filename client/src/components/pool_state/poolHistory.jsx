@@ -13,7 +13,7 @@ import { RiInformationFill } from 'react-icons/ri';
 // Components
 import User from '../user';
 import PlayerLink from '../playerLink';
-import { logos } from '../img/logos';
+import { team_info } from '../img/logos';
 import TradeItem from './tradeItem';
 import TradeCenter from './tradeCenter';
 
@@ -191,7 +191,7 @@ export default function PoolHistory({
                         <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
                       </td>
                       <td>
-                        <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
+                        <img src={team_info[playerIdToPlayersDataMap[p].team].logo} alt="" width="50" height="50" />
                       </td>
                       <td>
                         <GiEntryDoor color="green" size={30} />
@@ -204,7 +204,7 @@ export default function PoolHistory({
                         <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
                       </td>
                       <td>
-                        <img src={logos[playerIdToPlayersDataMap[p].team]} alt="" width="50" height="50" />
+                        <img src={team_info[playerIdToPlayersDataMap[p].team].logo} alt="" width="50" height="50" />
                       </td>
                       <td>
                         <GiExitDoor color="red" size={30} />

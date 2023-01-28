@@ -5,90 +5,359 @@ import ATL from './ATL.png';
 
 // https://records.nhl.com/site/api/franchise?include=teams.id&include=teams.active&include=teams.triCode&include=teams.placeName&include=teams.commonName&include=teams.fullName&include=teams.logos&include=teams.conference.name&include=teams.division.name&include=teams.franchiseTeam.firstSeason.id&include=teams.franchiseTeam.lastSeason.id&include=teams.franchiseTeam.teamCommonName
 
-export const logos = {
-  8: 'https://assets.nhle.com/logos/nhl/svg/MTL_light.svg',
-  41: 'https://assets.nhle.com/logos/nhl/svg/MWN_19171918_light.svg',
-  36: 'https://assets.nhle.com/logos/nhl/svg/SEN_19171918-19331934_light.svg',
-  45: 'https://assets.nhle.com/logos/nhl/svg/SLE_19341935_dark.svg',
-  37: 'https://assets.nhle.com/logos/nhl/svg/HAM_19231924-19241925_light.svg',
-  42: 'https://assets.nhle.com/logos/nhl/svg/QBD_19191920_light.svg',
-  10: 'https://assets.nhle.com/logos/nhl/svg/TOR_alt.svg',
-  57: 'https://assets.nhle.com/logos/nhl/svg/TAN_19171918-19181919_light.svg',
-  58: 'https://assets.nhle.com/logos/nhl/svg/TSP_19261927_dark.svg',
-  6: 'https://assets.nhle.com/logos/nhl/svg/BOS_alt.svg',
-  43: 'https://assets.nhle.com/logos/nhl/svg/MMR_19351936-19371938_dark.svg',
-  44: 'https://assets.nhle.com/logos/nhl/svg/NYA_19401941_light.svg',
-  51: 'https://assets.nhle.com/logos/nhl/svg/BRK_19411942_light.svg',
-  38: 'https://assets.nhle.com/logos/nhl/svg/PIR_19291930_light.svg',
-  39: 'https://assets.nhle.com/logos/nhl/svg/QUA_19301931_dark.svg',
-  3: 'https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg',
-  16: 'https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg',
-  17: 'https://assets.nhle.com/logos/nhl/svg/DET_dark.svg',
-  40: 'https://assets.nhle.com/logos/nhl/svg/DCG_19261927-19291930_light.svg',
-  50: 'https://assets.nhle.com/logos/nhl/svg/DFL_19301931-19311932_light.svg',
-  46: 'https://assets.nhle.com/logos/nhl/svg/OAK_19671968-19691970_light.svg',
-  49: 'https://assets.nhle.com/logos/nhl/svg/CLE_19761977-19771978_dark.svg',
-  56: 'https://assets.nhle.com/logos/nhl/svg/CGS_19741975-19761977_light.svg',
-  26: 'https://assets.nhle.com/logos/nhl/svg/LAK_light.svg',
-  25: 'https://assets.nhle.com/logos/nhl/svg/DAL_light.svg',
-  31: 'https://assets.nhle.com/logos/nhl/svg/MNS_19911992-19921993_light.svg',
-  4: 'https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg',
-  5: 'https://assets.nhle.com/logos/nhl/svg/PIT_light.svg',
-  19: 'https://assets.nhle.com/logos/nhl/svg/STL_black.svg',
-  7: 'https://assets.nhle.com/logos/nhl/svg/BUF_light.svg',
-  23: 'https://assets.nhle.com/logos/nhl/svg/VAN_light.svg',
-  20: 'https://assets.nhle.com/logos/nhl/svg/CGY_alt.svg',
-  47: 'https://assets.nhle.com/logos/nhl/svg/AFM_19721973-19791980_light.svg',
-  2: 'https://assets.nhle.com/logos/nhl/svg/NYI_light.svg',
-  1: 'https://assets.nhle.com/logos/nhl/svg/NJD_light.svg',
-  35: 'https://assets.nhle.com/logos/nhl/svg/CLR_19761977-19811982_light.svg',
-  48: 'https://assets.nhle.com/logos/nhl/svg/KCS_19741975-19761977_dark.svg',
-  15: 'https://assets.nhle.com/logos/nhl/svg/WSH_light.svg',
-  22: 'https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg',
-  12: 'https://assets.nhle.com/logos/nhl/svg/CAR_light.svg',
-  34: 'https://assets.nhle.com/logos/nhl/svg/HFD_19921993-19961997_dark.svg',
-  21: 'https://assets.nhle.com/logos/nhl/svg/COL_light.svg',
-  32: 'https://assets.nhle.com/logos/nhl/svg/QUE_19791980-19941995_light.svg',
-  27: 'https://assets.nhle.com/logos/nhl/svg/PHX_20032004-20132014_light.svg',
-  33: 'https://assets.nhle.com/logos/nhl/svg/WIN_19901991-19951996_light.svg',
-  53: 'https://assets.nhle.com/logos/nhl/svg/ARI_light.svg',
-  28: 'https://assets.nhle.com/logos/nhl/svg/SJS_light.svg',
-  9: 'https://assets.nhle.com/logos/nhl/svg/OTT_light.svg',
-  14: 'https://assets.nhle.com/logos/nhl/svg/TBL_light.svg',
-  24: 'https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg',
-  13: 'https://assets.nhle.com/logos/nhl/svg/FLA_light.svg',
-  18: 'https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg',
-  11: 'https://assets.nhle.com/logos/nhl/svg/ATL_19992000-20102011_light.svg',
-  52: 'https://assets.nhle.com/logos/nhl/svg/WPG_light.svg',
-  29: 'https://assets.nhle.com/logos/nhl/svg/CBJ_light.svg',
-  30: 'https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg',
-  54: 'https://assets.nhle.com/logos/nhl/svg/VGK_light.svg',
-  55: 'https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg',
-  60: 'Canada', //
-  61: 'Czech Republic', //
-  62: 'Finland', //
-  63: 'Germany', //
-  64: 'Russia', //
-  65: 'Slovakia', //
-  66: 'Sweden', //
-  67: 'United States', //
-  80: 'Helsinki Jokerit', //
-  81: 'Stockholm Djurgarden', //
-  82: 'Stockman Farjestad', //
-  87: ATL,
-  88: MET,
-  89: CEN,
-  90: PAC,
-  91: 'Team Alfredsson', //
-  92: 'Team Chara', //
-  93: 'Team Foligno', //
-  94: 'Team Toews', //
-  95: 'Team Staal', //
-  96: 'Team Lidstrom', //
-  97: 'All-Stars East', //
-  98: 'All-Stars West', //
-  100: 'Young Stars East', //
-  101: 'Young Stars West', //
+export const team_info = {
+  8: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/MTL_light.svg',
+    fullName: 'Montr\u00e9al Canadiens',
+    firstSeason: 19171918,
+    lastSeason: null,
+  },
+  41: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/MWN_19171918_light.svg',
+    fullName: 'Montreal Wanderers',
+    firstSeason: 19171918,
+    lastSeason: 19171918,
+  },
+  36: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/SEN_19171918-19331934_light.svg',
+    fullName: 'Ottawa Senators (1917)',
+    firstSeason: 19171918,
+    lastSeason: 19331934,
+  },
+  45: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/SLE_19341935_dark.svg',
+    fullName: 'St. Louis Eagles',
+    firstSeason: 19341935,
+    lastSeason: 19341935,
+  },
+  37: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/HAM_19231924-19241925_light.svg',
+    fullName: 'Hamilton Tigers',
+    firstSeason: 19201921,
+    lastSeason: 19241925,
+  },
+  42: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/QBD_19191920_light.svg',
+    fullName: 'Quebec Bulldogs',
+    firstSeason: 19191920,
+    lastSeason: 19191920,
+  },
+  10: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/TOR_alt.svg',
+    fullName: 'Toronto Maple Leafs',
+    firstSeason: 19271928,
+    lastSeason: null,
+  },
+  57: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/TAN_19171918-19181919_light.svg',
+    fullName: 'Toronto Arenas',
+    firstSeason: 19171918,
+    lastSeason: 19181919,
+  },
+  58: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/TSP_19261927_dark.svg',
+    fullName: 'Toronto St. Patricks',
+    firstSeason: 19191920,
+    lastSeason: 19261927,
+  },
+  6: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/BOS_alt.svg',
+    fullName: 'Boston Bruins',
+    firstSeason: 19241925,
+    lastSeason: null,
+  },
+  43: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/MMR_19351936-19371938_dark.svg',
+    fullName: 'Montreal Maroons',
+    firstSeason: 19241925,
+    lastSeason: 19371938,
+  },
+  44: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/NYA_19401941_light.svg',
+    fullName: 'New York Americans',
+    firstSeason: 19251926,
+    lastSeason: 19401941,
+  },
+  51: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/BRK_19411942_light.svg',
+    fullName: 'Brooklyn Americans',
+    firstSeason: 19411942,
+    lastSeason: 19411942,
+  },
+  38: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/PIR_19291930_light.svg',
+    fullName: 'Pittsburgh Pirates',
+    firstSeason: 19251926,
+    lastSeason: 19291930,
+  },
+  39: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/QUA_19301931_dark.svg',
+    fullName: 'Philadelphia Quakers',
+    firstSeason: 19301931,
+    lastSeason: 19301931,
+  },
+  3: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg',
+    fullName: 'New York Rangers',
+    firstSeason: 19261927,
+    lastSeason: null,
+  },
+  16: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg',
+    fullName: 'Chicago Blackhawks',
+    firstSeason: 19261927,
+    lastSeason: null,
+  },
+  17: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/DET_dark.svg',
+    fullName: 'Detroit Red Wings',
+    firstSeason: 19321933,
+    lastSeason: null,
+  },
+  40: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/DCG_19261927-19291930_light.svg',
+    fullName: 'Detroit Cougars',
+    firstSeason: 19261927,
+    lastSeason: 19291930,
+  },
+  50: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/DFL_19301931-19311932_light.svg',
+    fullName: 'Detroit Falcons',
+    firstSeason: 19301931,
+    lastSeason: 19311932,
+  },
+  46: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/OAK_19671968-19691970_light.svg',
+    fullName: 'Oakland Seals',
+    firstSeason: 19671968,
+    lastSeason: 19691970,
+  },
+  49: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/CLE_19761977-19771978_dark.svg',
+    fullName: 'Cleveland Barons',
+    firstSeason: 19761977,
+    lastSeason: 19771978,
+  },
+  56: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/CGS_19741975-19761977_light.svg',
+    fullName: 'California Golden Seals',
+    firstSeason: 19701971,
+    lastSeason: 19751976,
+  },
+  26: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/LAK_light.svg',
+    fullName: 'Los Angeles Kings',
+    firstSeason: 19671968,
+    lastSeason: null,
+  },
+  25: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/DAL_light.svg',
+    fullName: 'Dallas Stars',
+    firstSeason: 19931994,
+    lastSeason: null,
+  },
+  31: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/MNS_19911992-19921993_light.svg',
+    fullName: 'Minnesota North Stars',
+    firstSeason: 19671968,
+    lastSeason: 19921993,
+  },
+  4: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg',
+    fullName: 'Philadelphia Flyers',
+    firstSeason: 19671968,
+    lastSeason: null,
+  },
+  5: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/PIT_light.svg',
+    fullName: 'Pittsburgh Penguins',
+    firstSeason: 19671968,
+    lastSeason: null,
+  },
+  19: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/STL_black.svg',
+    fullName: 'St. Louis Blues',
+    firstSeason: 19671968,
+    lastSeason: null,
+  },
+  7: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/BUF_light.svg',
+    fullName: 'Buffalo Sabres',
+    firstSeason: 19701971,
+    lastSeason: null,
+  },
+  23: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/VAN_light.svg',
+    fullName: 'Vancouver Canucks',
+    firstSeason: 19701971,
+    lastSeason: null,
+  },
+  20: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/CGY_alt.svg',
+    fullName: 'Calgary Flames',
+    firstSeason: 19801981,
+    lastSeason: null,
+  },
+  47: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/AFM_19721973-19791980_light.svg',
+    fullName: 'Atlanta Flames',
+    firstSeason: 19721973,
+    lastSeason: 19791980,
+  },
+  2: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/NYI_light.svg',
+    fullName: 'New York Islanders',
+    firstSeason: 19721973,
+    lastSeason: null,
+  },
+  1: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/NJD_light.svg',
+    fullName: 'New Jersey Devils',
+    firstSeason: 19821983,
+    lastSeason: null,
+  },
+  35: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/CLR_19761977-19811982_light.svg',
+    fullName: 'Colorado Rockies',
+    firstSeason: 19761977,
+    lastSeason: 19811982,
+  },
+  48: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/KCS_19741975-19761977_dark.svg',
+    fullName: 'Kansas City Scouts',
+    firstSeason: 19741975,
+    lastSeason: 19751976,
+  },
+  15: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/WSH_light.svg',
+    fullName: 'Washington Capitals',
+    firstSeason: 19741975,
+    lastSeason: null,
+  },
+  22: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg',
+    fullName: 'Edmonton Oilers',
+    firstSeason: 19791980,
+    lastSeason: null,
+  },
+  12: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/CAR_light.svg',
+    fullName: 'Carolina Hurricanes',
+    firstSeason: 19971998,
+    lastSeason: null,
+  },
+  34: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/HFD_19921993-19961997_dark.svg',
+    fullName: 'Hartford Whalers',
+    firstSeason: 19791980,
+    lastSeason: 19961997,
+  },
+  21: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/COL_light.svg',
+    fullName: 'Colorado Avalanche',
+    firstSeason: 19951996,
+    lastSeason: null,
+  },
+  32: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/QUE_19791980-19941995_light.svg',
+    fullName: 'Quebec Nordiques',
+    firstSeason: 19791980,
+    lastSeason: 19941995,
+  },
+  27: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/PHX_20032004-20132014_light.svg',
+    fullName: 'Phoenix Coyotes',
+    firstSeason: 19961997,
+    lastSeason: 20132014,
+  },
+  33: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/WIN_19901991-19951996_light.svg',
+    fullName: 'Winnipeg Jets (1979)',
+    firstSeason: 19791980,
+    lastSeason: 19951996,
+  },
+  53: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/ARI_light.svg',
+    fullName: 'Arizona Coyotes',
+    firstSeason: 20142015,
+    lastSeason: null,
+  },
+  28: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/SJS_light.svg',
+    fullName: 'San Jose Sharks',
+    firstSeason: 19911992,
+    lastSeason: null,
+  },
+  9: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/OTT_light.svg',
+    fullName: 'Ottawa Senators',
+    firstSeason: 19921993,
+    lastSeason: null,
+  },
+  14: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/TBL_light.svg',
+    fullName: 'Tampa Bay Lightning',
+    firstSeason: 19921993,
+    lastSeason: null,
+  },
+  24: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg',
+    fullName: 'Anaheim Ducks',
+    firstSeason: 19931994,
+    lastSeason: null,
+  },
+  13: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/FLA_light.svg',
+    fullName: 'Florida Panthers',
+    firstSeason: 19931994,
+    lastSeason: null,
+  },
+  18: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg',
+    fullName: 'Nashville Predators',
+    firstSeason: 19981999,
+    lastSeason: null,
+  },
+  11: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/ATL_19992000-20102011_light.svg',
+    fullName: 'Atlanta Thrashers',
+    firstSeason: 19992000,
+    lastSeason: 20102011,
+  },
+  52: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/WPG_light.svg',
+    fullName: 'Winnipeg Jets',
+    firstSeason: 20112012,
+    lastSeason: null,
+  },
+  29: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/CBJ_light.svg',
+    fullName: 'Columbus Blue Jackets',
+    firstSeason: 20002001,
+    lastSeason: null,
+  },
+  30: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg',
+    fullName: 'Minnesota Wild',
+    firstSeason: 20002001,
+    lastSeason: null,
+  },
+  54: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/VGK_light.svg',
+    fullName: 'Vegas Golden Knights',
+    firstSeason: 20172018,
+    lastSeason: null,
+  },
+  55: {
+    logo: 'https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg',
+    fullName: 'Seattle Kraken',
+    firstSeason: 20212022,
+    lastSeason: null,
+  },
+  87: { logos: ATL },
+  88: { logos: MET },
+  89: { logos: CEN },
+  90: { logos: PAC },
 };
 
 export const abbrevToTeamId = {
@@ -152,4 +421,4 @@ export const abbrevToTeamId = {
   SEA: 55,
 };
 
-export default logos;
+export default team_info;

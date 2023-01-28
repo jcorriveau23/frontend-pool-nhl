@@ -12,7 +12,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import PlayerLink from '../playerLink';
 
 // images
-import { logos } from '../img/logos';
+import { team_info } from '../img/logos';
 
 export default function SummaryLeaders({ injury, statsType, type, playerType, season }) {
   // statsType: "points", "assists", goals, "wins", "gaa", "savePct", and more defined in nhl api
@@ -70,7 +70,7 @@ export default function SummaryLeaders({ injury, statsType, type, playerType, se
                 <PlayerLink name={player.person.fullName} id={player.person.id} injury={injury} />
               </td>
               <td>
-                <img src={logos[player.team.id]} alt="" width="70" height="70" />
+                <img src={team_info[player.team.id].logo} alt="" width="70" height="70" />
               </td>
               <td>{player.value}</td>
             </tr>

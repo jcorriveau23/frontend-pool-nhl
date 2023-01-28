@@ -11,7 +11,7 @@ import User from '../user';
 import NaviguateToday from '../pool_state/naviguateToday';
 
 // images
-import { logos } from '../img/logos';
+import { team_info } from '../img/logos';
 
 export default function DayLeaders({
   formatDate,
@@ -114,7 +114,7 @@ export default function DayLeaders({
                         <PlayerLink name={skater.name} id={skater.id} injury={injury} />
                       </td>
                       <td>
-                        <img src={logos[skater.team]} alt="" width="40" height="40" />
+                        <img src={team_info[skater.team].logo} alt="" width="40" height="40" />
                       </td>
                       {isPoolContext ? render_owner(skater.id) : null}
                       <td>{skater.stats.goals}</td>
@@ -165,7 +165,7 @@ export default function DayLeaders({
                         <PlayerLink name={goalie.name} id={goalie.id} injury={injury} />
                       </td>
                       <td>
-                        <img src={logos[goalie.team]} alt="" width="40" height="40" />
+                        <img src={team_info[goalie.team].logo} alt="" width="40" height="40" />
                       </td>
                       {isPoolContext ? render_owner(goalie.id) : null}
                       <td>{goalie.stats.shots}</td>

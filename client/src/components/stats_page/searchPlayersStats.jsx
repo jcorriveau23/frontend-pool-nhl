@@ -12,7 +12,7 @@ import { RiInformationFill } from 'react-icons/ri';
 import PlayerLink from '../playerLink';
 import User from '../user';
 
-import { logos, abbrevToTeamId } from '../img/logos';
+import { team_info, abbrevToTeamId } from '../img/logos';
 
 export default function SearchPlayersStats({
   injury,
@@ -236,7 +236,7 @@ export default function SearchPlayersStats({
     <>
       {searchMode === 'allSeasonsAggregate' ? null : (
         <td>
-          <img src={logos[abbrevToTeamId[player.teamAbbrevs]]} alt="" width="40" height="40" />
+          <img src={team_info[abbrevToTeamId[player.teamAbbrevs]].logo} alt="" width="40" height="40" />
         </td>
       )}
       {searchMode === 'allSeasons' ? <td>{make_readable_season(`${player.seasonId}`)}</td> : null}

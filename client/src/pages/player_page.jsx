@@ -6,7 +6,7 @@ import axios from 'axios';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 // images
-import { logos } from '../components/img/logos';
+import { team_info } from '../components/img/logos';
 
 export default function PlayerPage() {
   const [playerStats, setPlayerStats] = useState(null);
@@ -319,7 +319,9 @@ export default function PlayerPage() {
       <table className="content-table">
         <thead>
           <tr>
-            <th>{p.currentTeam ? <img src={logos[p.currentTeam.id]} alt="" width="60" height="60" /> : null}</th>
+            <th>
+              {p.currentTeam ? <img src={team_info[p.currentTeam.id].logo} alt="" width="60" height="60" /> : null}
+            </th>
             <th>
               <h3>
                 {p.fullName}

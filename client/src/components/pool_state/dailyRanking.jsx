@@ -12,7 +12,7 @@ import NaviguateToday from './naviguateToday';
 import User from '../user';
 
 // images
-import { logos } from '../img/logos';
+import { team_info } from '../img/logos';
 
 export default function DailyRanking({
   formatDate,
@@ -343,11 +343,11 @@ export default function DailyRanking({
               <PlayerLink name={player.name} id={player.id} injury={injury} />
             </td>
             <td>
-              <img src={logos[player.team]} alt="" width="40" height="40" />
+              <img src={team_info[player.team].logo} alt="" width="40" height="40" />
             </td>
             {player.team in DictTeamAgainst ? (
               <td>
-                <img src={logos[DictTeamAgainst[player.team]]} alt="" width="40" height="40" />
+                <img src={team_info[DictTeamAgainst[player.team].logo]} alt="" width="40" height="40" />
               </td>
             ) : (
               <td>Not playing</td>
@@ -386,11 +386,11 @@ export default function DailyRanking({
                 <PlayerLink name={player.name} id={player.id} injury={injury} />
               </td>
               <td>
-                <img src={logos[player.team]} alt="" width="40" height="40" />
+                <img src={team_info[player.team].logo} alt="" width="40" height="40" />
               </td>
               {player.team in DictTeamAgainst ? (
                 <td>
-                  <img src={logos[DictTeamAgainst[player.team]]} alt="" width="40" height="40" />
+                  <img src={team_info[DictTeamAgainst[player.team]].logo} alt="" width="40" height="40" />
                 </td>
               ) : (
                 <td>Not playing</td>
@@ -521,7 +521,7 @@ export default function DailyRanking({
             <PlayerLink name={player.name} id={player.id} injury={injury} />
           </td>
           <td colSpan={2}>
-            <img src={logos[player.team]} alt="" width="40" height="40" />
+            <img src={team_info[player.team].logo} alt="" width="40" height="40" />
           </td>
           {player.played ? (
             <>
@@ -585,7 +585,7 @@ export default function DailyRanking({
             <PlayerLink name={player.name} id={player.id} injury={injury} />
           </td>
           <td>
-            <img src={logos[player.team]} alt="" width="40" height="40" />
+            <img src={team_info[player.team].logo} alt="" width="40" height="40" />
           </td>
           {player.played ? (
             <>

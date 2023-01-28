@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 // images
-import { logos } from '../components/img/logos';
+import { team_info } from '../components/img/logos';
 
 // component
 import GamePrediction from '../components/GameBet/gamePrediction';
@@ -296,11 +296,11 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
             </tr>
             <tr>
               <th>
-                <img src={logos[teams.away.team.id]} alt="" width="70" height="70" />
+                <img src={team_info[teams.away.team.id].logo} alt="" width="70" height="70" />
               </th>
               <th>Summary</th>
               <th>
-                <img src={logos[teams.home.team.id]} alt="" width="70" height="70" />
+                <img src={team_info[teams.home.team.id].logo} alt="" width="70" height="70" />
               </th>
             </tr>
           </thead>
@@ -406,7 +406,7 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
             return (
               <tr key={i}>
                 <td>
-                  <img src={logos[liveData.plays.allPlays[i].team.id]} alt="" width="40" height="40" />
+                  <img src={team_info[liveData.plays.allPlays[i].team.id].logo} alt="" width="40" height="40" />
                 </td>
                 <td>
                   <PlayerLink
@@ -445,10 +445,20 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
               <Tab>Game stats</Tab>
               <Tab>Game recap</Tab>
               <Tab>
-                <img src={logos[gameInfo.liveData.boxscore.teams.home.team.id]} alt="" width="40" height="40" />
+                <img
+                  src={team_info[gameInfo.liveData.boxscore.teams.home.team.id].logo}
+                  alt=""
+                  width="40"
+                  height="40"
+                />
               </Tab>
               <Tab>
-                <img src={logos[gameInfo.liveData.boxscore.teams.away.team.id]} alt="" width="40" height="40" />
+                <img
+                  src={team_info[gameInfo.liveData.boxscore.teams.away.team.id].logo}
+                  alt=""
+                  width="40"
+                  height="40"
+                />
               </Tab>
               {contract ? <Tab>Prediction Market</Tab> : null}
             </TabList>

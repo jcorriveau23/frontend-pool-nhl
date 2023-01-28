@@ -9,7 +9,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import PlayerLink from '../components/playerLink';
 
 // images
-import { logos } from '../components/img/logos';
+import { team_info } from '../components/img/logos';
 
 export default function DraftPage(injury) {
   const [draftInfo, setDraftInfo] = useState(null);
@@ -55,7 +55,7 @@ export default function DraftPage(injury) {
             <tr key={pick.pickOverall}>
               <td>{pick.pickOverall}</td>
               <td>
-                <img src={logos[pick.team.id]} alt="" width="40" height="40" />
+                <img src={team_info[pick.team.id].logo} alt="" width="40" height="40" />
               </td>
               {pick.prospect.id > 0 ? (
                 <td>

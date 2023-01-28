@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 // images
-import { logos } from '../img/logos';
+import { team_info } from '../img/logos';
 
 // css
 import './teamStanding.css';
@@ -45,7 +45,7 @@ export default function TeamsStanding({ data }) {
           {isWildCard && i <= 2 ? '*' : null}
         </td>
         <td>
-          <img src={logos[team.team.id]} alt="" width="40" height="40" />
+          <img src={team_info[team.team.id].logo} alt="" width="40" height="40" />
         </td>
         <td borderLeft="none">
           <b>{team.clinchIndicator}</b>
