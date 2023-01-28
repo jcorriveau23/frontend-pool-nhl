@@ -31,6 +31,7 @@ import MyGameBetsPage from './pages/myGameBets_page';
 import DraftPage from './pages/draft_page';
 import LeagueLeadersPage from './pages/leagueLeaders_page';
 import StatsPage from './pages/stats_page';
+import TeamPage from './pages/team_page';
 
 // components
 import WalletCard from './components/web3/WalletCard';
@@ -194,6 +195,7 @@ function App() {
             />
             <Route path="/player-info" element={<PlayerPage />} />
             <Route path="/player-info/:id" element={<PlayerPage />} />
+            <Route path="/teams" element={<TeamPage />} />
             <Route path="/team-roster/:teamID/:season" element={<TeamRosterBySeasonPage injury={injury} />} />
             <Route path="/draft" element={<DraftPage injury={injury} />} />
             <Route path="/draft/:year" element={<DraftPage />} />

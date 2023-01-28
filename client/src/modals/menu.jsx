@@ -12,6 +12,7 @@ import { MdLeaderboard, MdQueryStats } from 'react-icons/md';
 import { BsPenFill } from 'react-icons/bs';
 import { FaGamepad, FaEthereum, FaHome } from 'react-icons/fa';
 import { GiPodiumWinner } from 'react-icons/gi';
+import { RiTeamFill } from 'react-icons/ri';
 
 // css
 import './modal.css';
@@ -108,6 +109,15 @@ export default function MenuModal({ user, isWalletConnected, showMenuModal, setS
               <MdQueryStats size={45} />
             </td>
             <td>Players Stats</td>
+          </tr>
+          <tr
+            style={window.location.pathname.includes('/teams') ? { color: '#fff' } : null}
+            onClick={() => link_to('/teams')}
+          >
+            <td>
+              <RiTeamFill size={45} />
+            </td>
+            <td>Teams</td>
           </tr>
           <tr
             style={window.location.pathname.includes('/draft') ? { color: '#fff' } : null}
