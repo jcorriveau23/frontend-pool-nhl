@@ -10,6 +10,7 @@ import './App.css';
 
 // component
 import DayGamesFeed from './components/game_feed/dayGamesFeed';
+import Footer from './components/footer';
 
 // modals
 import WrongNetworkModal from './modals/wrongNetwork';
@@ -200,6 +201,7 @@ function App() {
             <Route path="/stats" element={<StatsPage injury={injury} />} />
           </Routes>
         </div>
+        <Footer />
       </div>
     </Router>
   );

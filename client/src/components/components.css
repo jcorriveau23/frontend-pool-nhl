@@ -131,3 +131,9 @@ li {
 .headerSortUp {
   padding-right: 10px;
 }
+
+.icon-link :hover {
+  background-color: #444444;
+  color: #fff;
+  cursor: pointer;
+}
