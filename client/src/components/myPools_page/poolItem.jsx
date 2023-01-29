@@ -30,7 +30,7 @@ export default function PoolItem({ name, owner, user, poolDeleted, setPoolDelete
       <tbody>
         <tr>
           <td>
-            <Link to={`/my-pools/${name}`} key={name}>
+            <Link to={`/pools/${name}`} key={name}>
               <li>
                 <div>
                   <h1>Pool: {name}</h1>

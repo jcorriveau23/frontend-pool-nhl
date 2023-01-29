@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import ReactTooltip from 'react-tooltip';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 // icons
 import { IoMdAdd } from 'react-icons/io';
 import { FaRunning, FaTools, FaHockeyPuck } from 'react-icons/fa';
 import { BsFillPenFill } from 'react-icons/bs';
+import { RiInformationFill } from 'react-icons/ri';
 
 // css
 import '../components/react-tabs.css';
@@ -28,9 +29,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
 
   const get_pools = async () => {
     try {
-      const res = await axios.get('/api-rust/pools', {
-        headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
-      });
+      const res = await axios.get('/api-rust/pools');
       const pDraft = [];
       const pInProgress = [];
       const pDynastie = [];
@@ -74,119 +73,129 @@ export default function MyPoolsPage({ user, DictUsers }) {
   };
 
   useEffect(() => {
-    if (user && showCreatePoolModal === false) {
+    if (showCreatePoolModal === false) {
       get_pools();
     }
-  }, [user, showCreatePoolModal, poolDeleted]); //  force to refetch data when creating/deleting a new pool.
+  }, [showCreatePoolModal, poolDeleted]); //  force to refetch data when creating/deleting a new pool.
 
   const openCreatePoolModal = () => {
     setShowCreatePoolModal(true);
   };
 
-  if (user) {
-    return (
-      <div className="cont">
-        <div>
-          <h1>Pool list</h1>
-          <button className="base-button" type="button" onClick={openCreatePoolModal} disabled={false}>
-            <table>
-              <tbody>
-                <tr>
-                  <td>
-                    <IoMdAdd size={30} />
-                  </td>
-                  <td>Create a new Pool</td>
-                </tr>
-              </tbody>
-            </table>
-          </button>
-        </div>
-        <div>
-          <Tabs>
-            <TabList>
-              {poolInProgress.length > 0 ? (
-                <Tab>
-                  <FaRunning size={30} />
-                  in Progress
-                </Tab>
-              ) : null}
-              <Tab>
-                <FaTools size={30} />
-                Created
-              </Tab>
-              {poolDraft.length > 0 ? (
-                <Tab>
-                  <BsFillPenFill size={30} />
-                  Drafting
-                </Tab>
-              ) : null}
-              {poolDynastie.length > 0 ? (
-                <Tab>
-                  <FaHockeyPuck size={30} />
-                  Dynastie
-                </Tab>
-              ) : null}
-            </TabList>
+  return (
+    <div className="cont">
+      <div>
+        <h1>Pool list</h1>
+        <table>
+          <tbody>
+            <td>
+              <button className="base-button" type="button" onClick={openCreatePoolModal} disabled>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <IoMdAdd size={45} />
+                      </td>
+                      <td>Create a new Pool</td>
+                      <td>
+                        <ReactTooltip className="tooltip" padding="8px" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </button>
+            </td>
+            <td>
+              <a data-tip="Pool creation are disabled until the end of the 2022-23 season!">
+                <RiInformationFill color="yellow" size={45} />
+              </a>
+            </td>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <Tabs>
+          <TabList>
             {poolInProgress.length > 0 ? (
-              <TabPanel>
-                <div className="pool_item">
-                  <ul>
-                    {poolInProgress.map(pool => (
-                      <PoolItem key={pool.name} name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
-                    ))}
-                  </ul>
-                </div>
-              </TabPanel>
+              <Tab>
+                <FaRunning size={30} />
+                in Progress
+              </Tab>
             ) : null}
+            <Tab>
+              <FaTools size={30} />
+              Created
+            </Tab>
+            {poolDraft.length > 0 ? (
+              <Tab>
+                <BsFillPenFill size={30} />
+                Drafting
+              </Tab>
+            ) : null}
+            {poolDynastie.length > 0 ? (
+              <Tab>
+                <FaHockeyPuck size={30} />
+                Dynastie
+              </Tab>
+            ) : null}
+          </TabList>
+          {poolInProgress.length > 0 ? (
             <TabPanel>
               <div className="pool_item">
                 <ul>
-                  {poolCreated.map(pool => (
-                    <PoolItem
-                      key={pool.name}
-                      name={pool.name}
-                      owner={pool.owner}
-                      user={user}
-                      poolDeleted={poolDeleted}
-                      setPoolDeleted={setPoolDeleted}
-                      DictUsers={DictUsers}
-                    />
+                  {poolInProgress.map(pool => (
+                    <PoolItem key={pool.name} name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
                   ))}
                 </ul>
               </div>
             </TabPanel>
-            {poolDraft.length > 0 ? (
-              <TabPanel>
-                <div className="pool_item">
-                  <ul>
-                    {poolDraft.map(pool => (
-                      <PoolItem key={pool.name} name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
-                    ))}
-                  </ul>
-                </div>
-              </TabPanel>
-            ) : null}
-            {poolDynastie.length > 0 ? (
-              <TabPanel>
-                <div className="pool_item">
-                  <ul>
-                    {poolDynastie.map(pool => (
-                      <PoolItem key={pool.name} name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
-                    ))}
-                  </ul>
-                </div>
-              </TabPanel>
-            ) : null}
-          </Tabs>
-          <CreatePoolModal
-            showCreatePoolModal={showCreatePoolModal}
-            setShowCreatePoolModal={setShowCreatePoolModal}
-            user={user}
-          />
-        </div>
+          ) : null}
+          <TabPanel>
+            <div className="pool_item">
+              <ul>
+                {poolCreated.map(pool => (
+                  <PoolItem
+                    key={pool.name}
+                    name={pool.name}
+                    owner={pool.owner}
+                    user={user}
+                    poolDeleted={poolDeleted}
+                    setPoolDeleted={setPoolDeleted}
+                    DictUsers={DictUsers}
+                  />
+                ))}
+              </ul>
+            </div>
+          </TabPanel>
+          {poolDraft.length > 0 ? (
+            <TabPanel>
+              <div className="pool_item">
+                <ul>
+                  {poolDraft.map(pool => (
+                    <PoolItem key={pool.name} name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
+                  ))}
+                </ul>
+              </div>
+            </TabPanel>
+          ) : null}
+          {poolDynastie.length > 0 ? (
+            <TabPanel>
+              <div className="pool_item">
+                <ul>
+                  {poolDynastie.map(pool => (
+                    <PoolItem key={pool.name} name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
+                  ))}
+                </ul>
+              </div>
+            </TabPanel>
+          ) : null}
+        </Tabs>
+        <CreatePoolModal
+          showCreatePoolModal={showCreatePoolModal}
+          setShowCreatePoolModal={setShowCreatePoolModal}
+          user={user}
+        />
       </div>
-    );
-  }
-
-  return <h1>You are not connected.</h1>;
+    </div>
+  );
 }

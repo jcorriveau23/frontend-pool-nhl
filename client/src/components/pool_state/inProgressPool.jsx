@@ -465,7 +465,7 @@ export default function InProgressPool({
         <tr key={i}>
           <td>{i + 1}</td>
           <td colSpan={3}>
-            {pooler === user._id.$oid ? (
+            {pooler === user?._id.$oid ? (
               <button className="base-button" type="button" onClick={() => open_fill_spot_modal(position)}>
                 Fill Spot
               </button>
@@ -718,7 +718,7 @@ export default function InProgressPool({
       {poolInfo.participants.map(pooler => (
         <TabPanel key={pooler}>
           <div className="half-cont">
-            {pooler === user._id.$oid && rosterModificationAllowed ? (
+            {pooler === user?._id.$oid && rosterModificationAllowed ? (
               <table>
                 <tbody>
                   <tr>

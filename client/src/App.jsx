@@ -67,12 +67,10 @@ function App() {
 
   const get_users = async _user => {
     try {
-      const res = await axios.get('/api-rust/users', {
-        headers: { Authorization: `Bearer ${Cookies.get(`token-${_user._id.$oid}`)}` },
-      });
+      const res = await axios.get('/api-rust/users');
       const DictUsersTmp = {};
       res.data.forEach(u => {
-        if (u._id.$oid === _user._id.$oid) setUser(u);
+        if (u._id.$oid === _user?._id.$oid) setUser(u);
         DictUsersTmp[u._id.$oid] = u.name;
       });
 
@@ -89,9 +87,7 @@ function App() {
 
     const userTmp = JSON.parse(localStorage.getItem('persist-account'));
 
-    if (userTmp) {
-      get_users(userTmp);
-    }
+    get_users(userTmp);
   }, []);
 
   return (
@@ -169,10 +165,10 @@ function App() {
               }
             />
             <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
-            <Route path="/my-pools" element={<MyPoolsPage user={user} DictUsers={DictUsers} />} />
+            <Route path="/pools" element={<MyPoolsPage user={user} DictUsers={DictUsers} />} />
             <Route path="/my-bets" element={<MyGameBetsPage user={user} contract={contract} />} />
             <Route
-              path="/my-pools/:name"
+              path="/pools/:name"
               element={
                 <PoolPage
                   user={user}

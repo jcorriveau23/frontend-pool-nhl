@@ -16,8 +16,8 @@ export default function HomePage({ formatDate, todayFormatDate, gameStatus, inju
         </p>
         <h1>We manage pool for you</h1>
         <p>The draft, trades and roster modifications processes are automated. So you have almost nothing to manage.</p>
-        <Link to="/my-pools" style={{ textDecoration: 'none', color: '#000099' }}>
-          <h2>Create Pool...</h2>
+        <Link to="/pools/jax" style={{ textDecoration: 'none', color: '#000099' }}>
+          <h2>demo...</h2>
         </Link>
       </div>
       <SummaryLeaders injury={injury} statsType="points" type="skater" playerType="allSkaters" season="20222023" />

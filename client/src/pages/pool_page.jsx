@@ -61,7 +61,7 @@ export default function PoolPage({
 
   const fetch_pool_info = async forceUpdate => {
     const poolName_temp = url.name;
-    if (user && (poolName_temp !== poolName || forceUpdate)) {
+    if (poolName_temp !== poolName || forceUpdate) {
       console.log('fetching pool');
       setPoolInfo(null);
       setPoolName(poolName_temp);
@@ -74,10 +74,7 @@ export default function PoolPage({
 
       try {
         res = await axios.get(
-          lastFormatDate ? `/api-rust/pool/${poolName_temp}/${lastFormatDate}` : `/api-rust/pool/${poolName_temp}`,
-          {
-            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
-          }
+          lastFormatDate ? `/api-rust/pool/${poolName_temp}/${lastFormatDate}` : `/api-rust/pool/${poolName_temp}`
         );
       } catch (e) {
         alert(e.response.data);
@@ -90,9 +87,7 @@ export default function PoolPage({
             // In the case we want to force a complete pool update we check that field if an updated happened to request the complete pool information instead.
 
             try {
-              res = await axios.get(`/api-rust/pool/${poolName_temp}`, {
-                headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
-              });
+              res = await axios.get(`/api-rust/pool/${poolName_temp}`);
             } catch (e) {
               alert(e.response.data);
               return;
@@ -110,7 +105,7 @@ export default function PoolPage({
         db.pools.put(res.data, 'name');
 
         if (res.data.participants) {
-          setUserIndex(res.data.participants.findIndex(participant => participant === user._id.$oid));
+          setUserIndex(res.data.participants.findIndex(participant => participant === user?._id.$oid));
         }
       }
     }
@@ -118,7 +113,7 @@ export default function PoolPage({
 
   useEffect(() => {
     fetch_pool_info(poolUpdate);
-  }, [user, url, poolUpdate]);
+  }, [url, poolUpdate]);
 
   const process_pool_players_dict = async () => {
     const playersIdToPooler = {}; // 1st Player-ID -> Pooler-owner
@@ -168,85 +163,82 @@ export default function PoolPage({
 
   useEffect(() => {
     process_pool_players_dict();
-    if (poolInfo) setHasOwnerRights(poolInfo.owner === user._id.$oid || poolInfo.assistants.includes(user._id.$oid));
+    if (poolInfo) setHasOwnerRights(poolInfo.owner === user?._id.$oid || poolInfo.assistants.includes(user?._id.$oid));
   }, [poolInfo]);
 
-  if (user) {
-    if (poolInfo && userIndex >= -1) {
-      switch (poolInfo.status) {
-        case 'Created':
-          return (
-            <CreatedPool
-              user={user}
-              hasOwnerRights={hasOwnerRights}
-              DictUsers={DictUsers}
-              poolName={poolName}
-              poolInfo={poolInfo}
-              setPoolInfo={setPoolInfo}
-              socket={socket}
-            />
-          );
-        case 'Draft':
-          return (
-            <DraftPool
-              user={user}
-              DictUsers={DictUsers}
-              poolName={poolName}
-              poolInfo={poolInfo}
-              setPoolInfo={setPoolInfo}
-              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-              playersIdToPoolerMap={playersIdToPoolerMap}
-              injury={injury}
-              socket={socket}
-              userIndex={userIndex}
-            />
-          );
-        case 'InProgress':
-          return (
-            <InProgressPool
-              user={user}
-              hasOwnerRights={hasOwnerRights}
-              DictUsers={DictUsers}
-              poolInfo={poolInfo}
-              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-              playersIdToPoolerMap={playersIdToPoolerMap}
-              injury={injury}
-              userIndex={userIndex}
-              formatDate={formatDate}
-              todayFormatDate={todayFormatDate}
-              gameStatus={gameStatus}
-              setPoolUpdate={setPoolUpdate}
-              DictTeamAgainst={DictTeamAgainst}
-            />
-          );
-        case 'Dynastie':
-          return (
-            <DynastiePool
-              user={user}
-              DictUsers={DictUsers}
-              poolInfo={poolInfo}
-              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-              playersIdToPoolerMap={playersIdToPoolerMap}
-              setPoolUpdate={setPoolUpdate}
-              injury={injury}
-              userIndex={userIndex}
-            />
-          );
-        default:
-          return (
-            <div className="cont">
-              <h1>Not a valid pool status</h1>
-            </div>
-          );
-      }
+  if (poolInfo && userIndex >= -1) {
+    switch (poolInfo.status) {
+      case 'Created':
+        return (
+          <CreatedPool
+            user={user}
+            hasOwnerRights={hasOwnerRights}
+            DictUsers={DictUsers}
+            poolName={poolName}
+            poolInfo={poolInfo}
+            setPoolInfo={setPoolInfo}
+            socket={socket}
+          />
+        );
+      case 'Draft':
+        return (
+          <DraftPool
+            user={user}
+            DictUsers={DictUsers}
+            poolName={poolName}
+            poolInfo={poolInfo}
+            setPoolInfo={setPoolInfo}
+            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+            playersIdToPoolerMap={playersIdToPoolerMap}
+            injury={injury}
+            socket={socket}
+            userIndex={userIndex}
+          />
+        );
+      case 'InProgress':
+        return (
+          <InProgressPool
+            user={user}
+            hasOwnerRights={hasOwnerRights}
+            DictUsers={DictUsers}
+            poolInfo={poolInfo}
+            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+            playersIdToPoolerMap={playersIdToPoolerMap}
+            injury={injury}
+            userIndex={userIndex}
+            formatDate={formatDate}
+            todayFormatDate={todayFormatDate}
+            gameStatus={gameStatus}
+            setPoolUpdate={setPoolUpdate}
+            DictTeamAgainst={DictTeamAgainst}
+          />
+        );
+      case 'Dynastie':
+        return (
+          <DynastiePool
+            user={user}
+            DictUsers={DictUsers}
+            poolInfo={poolInfo}
+            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+            playersIdToPoolerMap={playersIdToPoolerMap}
+            setPoolUpdate={setPoolUpdate}
+            injury={injury}
+            userIndex={userIndex}
+          />
+        );
+      default:
+        return (
+          <div className="cont">
+            <h1>Not a valid pool status</h1>
+          </div>
+        );
     }
-
-    return (
-      <div className="cont">
-        <h1>Trying to fetch pool data info...</h1>
-        <ClipLoader color="#fff" loading size={75} />
-      </div>
-    );
   }
-  return <h1>You are not connected.</h1>;
+
+  return (
+    <div className="cont">
+      <h1>Trying to fetch pool informations...</h1>
+      <ClipLoader color="#fff" loading size={75} />
+    </div>
+  );
 }

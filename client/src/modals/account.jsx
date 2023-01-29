@@ -69,7 +69,7 @@ export default function AccountModal({
           </tr>
           {user
             ? user.pool_list.map(poolName => (
-                <tr key={poolName} onClick={() => link_to(`/my-pools/${poolName}`)}>
+                <tr key={poolName} onClick={() => link_to(`/pools/${poolName}`)}>
                   <td colSpan={2}>{poolName}</td>
                 </tr>
               ))

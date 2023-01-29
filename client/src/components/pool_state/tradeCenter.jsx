@@ -100,17 +100,17 @@ export default function TradeCenter({
                     />
                   </th>
                   <th>
-                    {tradeInfo.proposed_by === user._id.$oid ? (
+                    {tradeInfo.proposed_by === user?._id.$oid ? (
                       <button onClick={() => cancel_trade(tradeInfo.id)} type="button" className="base-button">
                         Cancel
                       </button>
                     ) : null}
-                    {tradeInfo.ask_to === user._id.$oid || hasOwnerRights ? (
+                    {tradeInfo.ask_to === user?._id.$oid || hasOwnerRights ? (
                       <button onClick={() => respond_trade(tradeInfo.id, true)} type="button" className="base-button">
                         Accept
                       </button>
                     ) : null}
-                    {tradeInfo.ask_to === user._id.$oid ? (
+                    {tradeInfo.ask_to === user?._id.$oid ? (
                       <button onClick={() => respond_trade(tradeInfo.id, false)} type="button" className="base-button">
                         Refuse
                       </button>

@@ -34,7 +34,7 @@ export default function CreateTradeModal({
   const [toPlayers, setToPlayers] = useState([]);
   const [toPicks, setToPicks] = useState([]);
   const [selectedPooler, setSelectedPooler] = useState(
-    poolInfo.participants[0] === user._id.$oid ? poolInfo.participants[1] : poolInfo.participants[0]
+    poolInfo.participants[0] === user?._id.$oid ? poolInfo.participants[1] : poolInfo.participants[0]
   );
 
   const reset_from_items = () => {
