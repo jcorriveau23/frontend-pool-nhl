@@ -12,13 +12,13 @@ export default function Footer() {
     <div className="cont">
       <IoLogoTwitter
         size={70}
-        color="black"
+        color="#999"
         className="icon-link"
         onClick={() => open_link('https://twitter.com/hockeypool3')}
       />
       <IoLogoGithub
         size={70}
-        color="black"
+        color="#999"
         className="icon-link"
         onClick={() => open_link('https://github.com/jcorriveau23/pool-nhl-ethereum')}
       />

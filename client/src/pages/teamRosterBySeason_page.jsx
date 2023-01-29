@@ -2,6 +2,7 @@
 // display the list of player with their overal stats with this team
 
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 
 // Loader
@@ -9,6 +10,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 // components
 import PlayerLink from '../components/playerLink';
+import SeasonOption from '../components/seasonOptions';
 
 // images
 import { team_info } from '../components/img/logos';
@@ -17,15 +19,14 @@ export default function TeamRosterBySeasonPage(injury) {
   const [skatersStats, setSkatersStats] = useState(null);
   const [goaliesStats, setGoaliesStats] = useState(null);
 
-  const url = window.location.pathname.split('/');
-
-  const season = url.pop();
-  const teamID = url.pop();
+  const [seasonParams, setSeasonParams] = useSearchParams();
+  const [season, setSeason] = useState(seasonParams.get('season') ?? '20222023');
+  const [teamId, setTeamId] = useState(Number(seasonParams.get('teamId') ?? 8));
 
   const get_skaters_stats = async () => {
     try {
       const urlSkaters = `/cors-anywhere/https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=
-    ${teamID}
+    ${teamId}
     %20and%20gameTypeId=2%20and%20seasonId%3C=
     ${season}
     %20and%20seasonId%3E=
@@ -33,17 +34,17 @@ export default function TeamRosterBySeasonPage(injury) {
       // https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22},{%22property%22:%22goals%22,%22direction%22:%22DESC%22},{%22property%22:%22assists%22,%22direction%22:%22DESC%22},{%22property%22:%22playerId%22,%22direction%22:%22ASC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=8%20and%20gameTypeId=2%20and%20seasonId%3C=20172018%20and%20seasonId%3E=20172018
 
       const res = await axios.get(urlSkaters);
-      console.log(res.data.data);
+      // console.log(res.data.data);
       setSkatersStats([...res.data.data]);
     } catch (e) {
-      alert(e.response);
+      alert(e);
     }
   };
 
   const get_goalies_stats = async () => {
     try {
       const urlgoalies = `/cors-anywhere/https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&sort=[{%22property%22:%22wins%22,%22direction%22:%22DESC%22}]&start=0&limit=50&factCayenneExp=gamesPlayed%3E=1&cayenneExp=teamId=
-    ${teamID}
+    ${teamId}
     %20and%20gameTypeId=2%20and%20seasonId%3C=
     ${season}
     %20and%20seasonId%3E=
@@ -53,14 +54,16 @@ export default function TeamRosterBySeasonPage(injury) {
       // console.log(res.data.data);
       setGoaliesStats([...res.data.data]);
     } catch (e) {
-      alert(e.response);
+      alert(e);
     }
   };
 
   useEffect(() => {
+    setSkatersStats(null);
+    setGoaliesStats(null);
     get_skaters_stats();
     get_goalies_stats();
-  }, []);
+  }, [season]);
 
   const sort_by_int = (isSkater, stat) => {
     let array;
@@ -74,16 +77,25 @@ export default function TeamRosterBySeasonPage(injury) {
     }
   };
 
-  const render_team_skaters = roster => (
+  const render_team_skaters = () => (
     <div>
       <table className="content-table">
         <thead>
           <tr>
-            <th colSpan="12">Season : {`${season.substring(0, 4)}-${season.substring(4)}`}</th>
+            <th colSpan="12">
+              <SeasonOption
+                season={season}
+                setSeason={setSeason}
+                seasonParams={seasonParams}
+                setSeasonParams={setSeasonParams}
+                firstSeason={team_info[teamId].firstSeason}
+                lastSeason={team_info[teamId].lastSeason}
+              />
+            </th>
           </tr>
           <tr>
             <th colSpan="12">
-              <img src={team_info[teamID].logo} alt="" width="70" height="70" />
+              <img src={team_info[teamId].logo} alt="" width="70" height="70" />
             </th>
           </tr>
           <tr>
@@ -111,36 +123,44 @@ export default function TeamRosterBySeasonPage(injury) {
           </tr>
         </thead>
         <tbody>
-          {roster.map(player => (
-            <tr key={player.playerId}>
-              <td>-</td>
-              <td>
-                <PlayerLink name={player.skaterFullName} id={player.playerId} injury={injury} />
-              </td>
-              <td>{player.positionCode}</td>
-              <td>{player.gamesPlayed}</td>
-              <td>{player.goals}</td>
-              <td>{player.assists}</td>
-              <td>{player.points}</td>
-              <td>{player.plusMinus}</td>
-              <td>{player.penaltyMinutes}</td>
-              <td>{player.shots}</td>
-              {/* <td>-</td>
+          {skatersStats ? (
+            skatersStats.map(player => (
+              <tr key={player.playerId}>
+                <td>-</td>
+                <td>
+                  <PlayerLink name={player.skaterFullName} id={player.playerId} injury={injury} />
+                </td>
+                <td>{player.positionCode}</td>
+                <td>{player.gamesPlayed}</td>
+                <td>{player.goals}</td>
+                <td>{player.assists}</td>
+                <td>{player.points}</td>
+                <td>{player.plusMinus}</td>
+                <td>{player.penaltyMinutes}</td>
+                <td>{player.shots}</td>
+                {/* <td>-</td>
                   <td>-</td>
                   <td>-</td>
                   <td>-</td> */}
-              <td>{Math.round((player.faceoffWinPct + Number.EPSILON) * 100) / 100}</td>
-              <td>{Math.round((player.timeOnIcePerGame + Number.EPSILON) * 100) / 100}</td>
-              {/* <td>-</td>
+                <td>{Math.round((player.faceoffWinPct + Number.EPSILON) * 100) / 100}</td>
+                <td>{Math.round((player.timeOnIcePerGame + Number.EPSILON) * 100) / 100}</td>
+                {/* <td>-</td>
                   <td>-</td> */}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <th colSpan="12">
+                <ClipLoader color="#fff" loading size={75} />
+              </th>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
   );
 
-  const render_team_goalies = roster => (
+  const render_team_goalies = () => (
     <div>
       <table className="content-table">
         <thead>
@@ -168,46 +188,46 @@ export default function TeamRosterBySeasonPage(injury) {
           </tr>
         </thead>
         <tbody>
-          {roster.map(goalie => (
-            <tr key={goalie.playerId}>
-              <td>-</td>
-              <td>
-                <PlayerLink name={goalie.goalieFullName} id={goalie.playerId} injury={injury} />
-              </td>
-              <td>G</td>
-              <td>{goalie.gamesPlayed}</td>
-              <td>{goalie.gamesStarted}</td>
-              <td>{goalie.goals}</td>
-              <td>{goalie.points}</td>
-              <td>{goalie.goalsAgainst}</td>
-              <td>{goalie.goalsAgainstAverage}</td>
-              <td>{goalie.wins}</td>
-              <td>{goalie.losses}</td>
-              <td>{goalie.otLosses}</td>
-              <td>{goalie.penaltyMinutes}</td>
-              <td>{goalie.savePct}</td>
-              <td>{goalie.saves}</td>
-              <td>{goalie.shutouts}</td>
-              {/* <td>{goalie.timeOnIcePerGame}</td> */}
+          {goaliesStats ? (
+            goaliesStats.map(goalie => (
+              <tr key={goalie.playerId}>
+                <td>-</td>
+                <td>
+                  <PlayerLink name={goalie.goalieFullName} id={goalie.playerId} injury={injury} />
+                </td>
+                <td>G</td>
+                <td>{goalie.gamesPlayed}</td>
+                <td>{goalie.gamesStarted}</td>
+                <td>{goalie.goals}</td>
+                <td>{goalie.points}</td>
+                <td>{goalie.goalsAgainst}</td>
+                <td>{goalie.goalsAgainstAverage}</td>
+                <td>{goalie.wins}</td>
+                <td>{goalie.losses}</td>
+                <td>{goalie.otLosses}</td>
+                <td>{goalie.penaltyMinutes}</td>
+                <td>{goalie.savePct}</td>
+                <td>{goalie.saves}</td>
+                <td>{goalie.shutouts}</td>
+                {/* <td>{goalie.timeOnIcePerGame}</td> */}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <th colSpan="17">
+                <ClipLoader color="#fff" loading size={75} />
+              </th>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
   );
 
-  if (skatersStats && goaliesStats) {
-    return (
-      <div className="cont">
-        {render_team_skaters(skatersStats)}
-        {render_team_goalies(goaliesStats)}
-      </div>
-    );
-  }
   return (
     <div className="cont">
-      <h1>Trying to fetch team roster data from nhl api...</h1>
-      <ClipLoader color="#fff" loading size={75} />
+      {render_team_skaters()}
+      {render_team_goalies()}
     </div>
   );
 }

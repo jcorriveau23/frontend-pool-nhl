@@ -164,7 +164,7 @@ export default function PlayerPage() {
                 <>
                   <td>
                     <Link
-                      to={`/team-roster/${season.team.id}/${season.season}`}
+                      to={`/team-roster?teamId=${season.team.id}&season=${season.season}`}
                       style={{ textDecoration: 'none', color: '#0000ff' }}
                     >
                       {`${season.season.slice(0, 4)}-${season.season.slice(4)}`}
@@ -257,7 +257,7 @@ export default function PlayerPage() {
               <>
                 <td>
                   <Link
-                    to={`/team-roster/${season.team.id}/${season.season}`}
+                    to={`/team-roster?teamId=${season.team.id}&season=${season.season}`}
                     style={{ textDecoration: 'none', color: '#000099' }}
                   >
                     {`${season.season.slice(0, 4)}-${season.season.slice(4)}`}

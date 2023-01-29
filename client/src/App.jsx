@@ -196,7 +196,7 @@ function App() {
             <Route path="/player-info" element={<PlayerPage />} />
             <Route path="/player-info/:id" element={<PlayerPage />} />
             <Route path="/teams" element={<TeamPage />} />
-            <Route path="/team-roster/:teamID/:season" element={<TeamRosterBySeasonPage injury={injury} />} />
+            <Route path="/team-roster" element={<TeamRosterBySeasonPage injury={injury} />} />
             <Route path="/draft" element={<DraftPage injury={injury} />} />
             <Route path="/draft/:year" element={<DraftPage />} />
             <Route path="/leaders" element={<LeagueLeadersPage injury={injury} />} />

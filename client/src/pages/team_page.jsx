@@ -12,9 +12,9 @@ export default function TeamPage() {
 
   useEffect(() => {}, []);
 
-  const render_team = (team, id) => (
-    <div>
-      <Link to={`/team-roster/${id}/${season}`}>
+  const render_team = (team, teamId) => (
+    <div style={{ padding: 10 }}>
+      <Link to={`/team-roster?teamId=${teamId}&season=${season}`}>
         <img src={team.logo} alt="" width={140} height={140} />
       </Link>
       <h3>{team.fullName}</h3>
@@ -29,12 +29,14 @@ export default function TeamPage() {
         seasonParams={seasonParams}
         setSeasonParams={setSeasonParams}
       />
-      {Object.keys(team_info).map(teamId =>
-        team_info[teamId].firstSeason <= Number(season) &&
-        (!team_info[teamId].lastSeason || team_info[teamId].lastSeason >= Number(season))
-          ? render_team(team_info[teamId], teamId)
-          : null
-      )}
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {Object.keys(team_info).map(teamId =>
+          team_info[teamId].firstSeason <= Number(season) &&
+          (!team_info[teamId].lastSeason || team_info[teamId].lastSeason >= Number(season))
+            ? render_team(team_info[teamId], teamId)
+            : null
+        )}
+      </div>
     </div>
   );
 }
