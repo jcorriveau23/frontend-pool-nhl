@@ -15,9 +15,9 @@ import DynastiePool from '../components/pool_state/dynastiePool';
 
 import { db } from '../components/db/db';
 
-const socket = io.connect('https://hockeypool.live', {
-  path: '/mysocket',
-});
+// const socket = io.connect('https://hockeypool.live', {
+//   path: '/mysocket',
+// });
 
 export default function PoolPage({
   user,
@@ -177,7 +177,7 @@ export default function PoolPage({
             poolName={poolName}
             poolInfo={poolInfo}
             setPoolInfo={setPoolInfo}
-            socket={socket}
+            // socket={socket}
           />
         );
       case 'Draft':
@@ -191,7 +191,7 @@ export default function PoolPage({
             playerIdToPlayersDataMap={playerIdToPlayersDataMap}
             playersIdToPoolerMap={playersIdToPoolerMap}
             injury={injury}
-            socket={socket}
+            // socket={socket}
             userIndex={userIndex}
           />
         );

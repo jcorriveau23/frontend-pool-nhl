@@ -354,10 +354,10 @@ export const team_info = {
     firstSeason: 20212022,
     lastSeason: null,
   },
-  87: { logos: ATL },
-  88: { logos: MET },
-  89: { logos: CEN },
-  90: { logos: PAC },
+  87: { logo: ATL },
+  88: { logo: MET },
+  89: { logo: CEN },
+  90: { logo: PAC },
 };
 
 export const abbrevToTeamId = {
