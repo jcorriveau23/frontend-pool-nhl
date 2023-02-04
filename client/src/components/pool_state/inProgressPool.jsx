@@ -700,6 +700,7 @@ export default function InProgressPool({
     updatedSearchParams.set('userTab', _userTabIndex);
     setTabSelectionParams(updatedSearchParams.toString());
 
+    console.log('user tab changed');
     setUserTabIndex(_userTabIndex);
   };
 
@@ -720,7 +721,10 @@ export default function InProgressPool({
       {poolInfo.participants.map(pooler => (
         <TabPanel key={pooler}>
           <div className="half-cont">
-            {(pooler === user?._id.$oid || poolInfo.owner === user?._id.$oid) && rosterModificationAllowed ? (
+            {(pooler === user?._id.$oid ||
+              poolInfo.owner === user?._id.$oid ||
+              poolInfo.assistants.includes(user?._id.$oid)) &&
+            rosterModificationAllowed ? (
               <table>
                 <tbody>
                   <tr>
@@ -816,7 +820,7 @@ export default function InProgressPool({
                 {render_header_reservists()}
               </thead>
               <tbody>{render_reservists(pooler)}</tbody>
-              {poolInfo.owner === user._id.$oid ? (
+              {poolInfo.owner === user?._id.$oid || poolInfo.assistants.includes(user?._id.$oid) ? (
                 <tr>
                   <td colSpan={13}>
                     <button
@@ -1092,34 +1096,39 @@ export default function InProgressPool({
           playersIdToPoolerMap={playersIdToPoolerMap}
         />
       </div>
-      <FillSpotModal
-        showFillSpotModal={showFillSpotModal}
-        setShowFillSpotModal={setShowFillSpotModal}
-        poolInfo={poolInfo}
-        setPoolUpdate={setPoolUpdate}
-        user={user}
-        fillSpotPosition={fillSpotPosition}
-        userIndex={userIndex}
-      />
-      <RosterModificationModal
-        showRosterModificationModal={showRosterModificationModal}
-        setShowRosterModificationModal={setShowRosterModificationModal}
-        poolInfo={poolInfo}
-        setPoolUpdate={setPoolUpdate}
-        injury={injury}
-        user={user}
-      />
-      <AddPlayerModal
-        showAddPlayerModal={showAddPlayerModal}
-        setShowAddPlayerModal={setShowAddPlayerModal}
-        participant={poolInfo.participants[userTabIndex]}
-        poolInfo={poolInfo}
-        DictUsers={DictUsers}
-        setPoolUpdate={setPoolUpdate}
-        injury={injury}
-        playersIdToPoolerMap={playersIdToPoolerMap}
-        user={user}
-      />
+      {userIndex > -1 ? (
+        <>
+          <FillSpotModal
+            showFillSpotModal={showFillSpotModal}
+            setShowFillSpotModal={setShowFillSpotModal}
+            poolInfo={poolInfo}
+            setPoolUpdate={setPoolUpdate}
+            user={user}
+            fillSpotPosition={fillSpotPosition}
+            userIndex={userIndex}
+          />
+          <RosterModificationModal
+            showRosterModificationModal={showRosterModificationModal}
+            setShowRosterModificationModal={setShowRosterModificationModal}
+            poolInfo={poolInfo}
+            userModified={poolInfo.participants[userTabIndex]}
+            setPoolUpdate={setPoolUpdate}
+            injury={injury}
+            user={user}
+          />
+          <AddPlayerModal
+            showAddPlayerModal={showAddPlayerModal}
+            setShowAddPlayerModal={setShowAddPlayerModal}
+            participant={poolInfo.participants[userTabIndex]}
+            poolInfo={poolInfo}
+            DictUsers={DictUsers}
+            setPoolUpdate={setPoolUpdate}
+            injury={injury}
+            playersIdToPoolerMap={playersIdToPoolerMap}
+            user={user}
+          />
+        </>
+      ) : null}
     </div>
   );
 }

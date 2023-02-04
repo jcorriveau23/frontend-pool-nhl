@@ -1,7 +1,7 @@
 // This modals pop up to fill an empty spot with a reservist.
 // It will call fill_spot post method to chose from the user reservist to fill an empty spot.
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -19,22 +19,27 @@ export default function RosterModificationModal({
   showRosterModificationModal,
   setShowRosterModificationModal,
   poolInfo,
+  userModified,
   setPoolUpdate,
   injury,
   user,
 }) {
-  const [forwSelected, setForwSelected] = useState(poolInfo.context.pooler_roster[user._id.$oid].chosen_forwards);
-  const [defSelected, setDefSelected] = useState(poolInfo.context.pooler_roster[user._id.$oid].chosen_defenders);
-  const [goalSelected, setGoalSelected] = useState(poolInfo.context.pooler_roster[user._id.$oid].chosen_goalies);
-  const [reservSelected, setReservSelected] = useState(poolInfo.context.pooler_roster[user._id.$oid].chosen_reservists);
+  const [forwSelected, setForwSelected] = useState(poolInfo.context.pooler_roster[userModified].chosen_forwards);
+  const [defSelected, setDefSelected] = useState(poolInfo.context.pooler_roster[userModified].chosen_defenders);
+  const [goalSelected, setGoalSelected] = useState(poolInfo.context.pooler_roster[userModified].chosen_goalies);
+  const [reservSelected, setReservSelected] = useState(poolInfo.context.pooler_roster[userModified].chosen_reservists);
 
   const reset_selection = closeModal => {
-    setForwSelected(poolInfo.context.pooler_roster[user._id.$oid].chosen_forwards);
-    setDefSelected(poolInfo.context.pooler_roster[user._id.$oid].chosen_defenders);
-    setGoalSelected(poolInfo.context.pooler_roster[user._id.$oid].chosen_goalies);
-    setReservSelected(poolInfo.context.pooler_roster[user._id.$oid].chosen_reservists);
+    setForwSelected(poolInfo.context.pooler_roster[userModified].chosen_forwards);
+    setDefSelected(poolInfo.context.pooler_roster[userModified].chosen_defenders);
+    setGoalSelected(poolInfo.context.pooler_roster[userModified].chosen_goalies);
+    setReservSelected(poolInfo.context.pooler_roster[userModified].chosen_reservists);
     if (closeModal) setShowRosterModificationModal(false);
   };
+
+  useEffect(() => {
+    reset_selection(false);
+  }, [userModified]);
 
   const modify_roster = async () => {
     if (window.confirm(`Do you really want to apply this roster modification?`)) {
@@ -43,16 +48,17 @@ export default function RosterModificationModal({
           '/api-rust/modify-roster',
           {
             name: poolInfo.name,
-            forw_protected: forwSelected,
-            def_protected: defSelected,
-            goal_protected: goalSelected,
-            reserv_protected: reservSelected,
+            user_id: userModified,
+            forw_list: forwSelected,
+            def_list: defSelected,
+            goal_list: goalSelected,
+            reserv_list: reservSelected,
           },
           { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` } }
         );
         setPoolUpdate(true);
         setShowRosterModificationModal(false);
-        alert('You have successfully modify your roster.');
+        alert('You have successfully modify the roster.');
       } catch (e) {
         alert(e.response.data);
       }

@@ -75,7 +75,7 @@ export default function FillSpotModal({
       </div>
       <table className="content-table-no-min">
         <thead>{render_tabs_choice_headers('Reservists')}</thead>
-        <tbody>{render_players(poolInfo.context.pooler_roster[user._id.$oid].chosen_reservists)}</tbody>
+        <tbody>{render_players(poolInfo.context.pooler_roster[user?._id.$oid].chosen_reservists)}</tbody>
       </table>
     </Modal>
   );
