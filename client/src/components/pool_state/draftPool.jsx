@@ -56,18 +56,12 @@ export default function DraftPool({
     }
   }, [socket]);
 
-  const chose_player = (player, playerName, playerPosition) => {
-    socket.emit(
-      'pickPlayer',
-      Cookies.get(`token-${user._id.$oid}`),
-      poolInfo.name,
-      { id: player.playerId, name: playerName, team: abbrevToTeamId[player.teamAbbrevs], position: playerPosition },
-      ack => {
-        if (ack.success === false) {
-          alert(ack.message);
-        }
+  const chose_player = player => {
+    socket.emit('pickPlayer', Cookies.get(`token-${user._id.$oid}`), poolInfo.name, player, ack => {
+      if (ack.success === false) {
+        alert(ack.message);
       }
-    );
+    });
   };
 
   const undo = () => {
@@ -81,32 +75,8 @@ export default function DraftPool({
   };
 
   const confirm_selection = player => {
-    const playerName = player.skaterFullName ?? player.goalieFullName;
-    let playerPosition;
-
-    if (player.goalieFullName) {
-      playerPosition = 'G';
-    } else {
-      switch (player.positionCode) {
-        case 'L':
-        case 'C':
-        case 'R': {
-          playerPosition = 'F'; // forward
-          break;
-        }
-        case 'D': {
-          playerPosition = player.positionCode; // forward
-          break;
-        }
-        default: {
-          alert(`This player positionCode is not valid ${player.positionCode}!`);
-          return;
-        }
-      }
-    }
-
-    if (window.confirm(`Do you really want to select ${playerName}?`)) {
-      chose_player(player, playerName, playerPosition);
+    if (window.confirm(`Do you really want to select ${player.name}?`)) {
+      chose_player(player);
     }
   };
 

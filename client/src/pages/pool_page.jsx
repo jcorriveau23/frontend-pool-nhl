@@ -81,32 +81,30 @@ export default function PoolPage({
         return;
       }
 
-      if (res.status === 200) {
-        if (pool) {
-          if (res.data.date_updated !== pool.date_updated) {
-            // In the case we want to force a complete pool update we check that field if an updated happened to request the complete pool information instead.
+      if (pool) {
+        if (res.data.date_updated !== pool.date_updated) {
+          // In the case we want to force a complete pool update we check that field if an updated happened to request the complete pool information instead.
 
-            try {
-              res = await axios.get(`/api-rust/pool/${poolName_temp}`);
-            } catch (e) {
-              alert(e.response.data);
-              return;
-            }
-          } else if (lastFormatDate) {
-            // This is in the case we called the pool information for only a ranges of date since the rest of the date were already stored in the client database.
-
-            res.data.context.score_by_day = { ...pool.context.score_by_day, ...res.data.context.score_by_day }; // merge the new keys to the past saved pool.
+          try {
+            res = await axios.get(`/api-rust/pool/${poolName_temp}`);
+          } catch (e) {
+            alert(e.response.data);
+            return;
           }
+        } else if (lastFormatDate) {
+          // This is in the case we called the pool information for only a ranges of date since the rest of the date were already stored in the client database.
 
-          res.data.id = pool.id;
+          res.data.context.score_by_day = { ...pool.context.score_by_day, ...res.data.context.score_by_day }; // merge the new keys to the past saved pool.
         }
 
-        setPoolInfo(res.data);
-        db.pools.put(res.data, 'name');
+        res.data.id = pool.id;
+      }
 
-        if (res.data.participants) {
-          setUserIndex(res.data.participants.findIndex(participant => participant === user?._id.$oid));
-        }
+      setPoolInfo(res.data);
+      db.pools.put(res.data, 'name');
+
+      if (res.data.participants) {
+        setUserIndex(res.data.participants.findIndex(participant => participant === user?._id.$oid));
       }
     }
   };

@@ -23,9 +23,10 @@ import PoolHistory from './poolHistory';
 import PoolSettings from './poolSettings';
 
 // modals
-import FillSpot from '../../modals/FillSpot';
+import FillSpotModal from '../../modals/FillSpot';
 import RosterModificationModal from '../../modals/rosterModification';
 import GraphStatsModal from '../../modals/graphStats';
+import AddPlayerModal from '../../modals/addPlayer';
 
 // images
 import { team_info } from '../img/logos';
@@ -57,7 +58,8 @@ export default function InProgressPool({
   const [showFillSpotModal, setShowFillSpotModal] = useState(false);
   const [fillSpotPosition, setFillSpotPosition] = useState('');
   const [showRosterModificationModal, setShowRosterModificationModal] = useState(false);
-  const [showGraphStatsModal, setShowGraphStatsModal] = useState(false);
+  const [showGraphStats, setShowGraphStats] = useState(false);
+  const [showAddPlayerModal, setShowAddPlayerModal] = useState(false);
   const [rosterModificationAllowed, setRosterModificationAllowed] = useState(false);
   const [tabSelectionParams, setTabSelectionParams] = useSearchParams();
 
@@ -718,7 +720,7 @@ export default function InProgressPool({
       {poolInfo.participants.map(pooler => (
         <TabPanel key={pooler}>
           <div className="half-cont">
-            {pooler === user?._id.$oid && rosterModificationAllowed ? (
+            {(pooler === user?._id.$oid || poolInfo.owner === user?._id.$oid) && rosterModificationAllowed ? (
               <table>
                 <tbody>
                   <tr>
@@ -814,6 +816,19 @@ export default function InProgressPool({
                 {render_header_reservists()}
               </thead>
               <tbody>{render_reservists(pooler)}</tbody>
+              {poolInfo.owner === user._id.$oid ? (
+                <tr>
+                  <td colSpan={13}>
+                    <button
+                      className="base-button"
+                      onClick={() => setShowAddPlayerModal(!showAddPlayerModal)}
+                      type="button"
+                    >
+                      Add Player
+                    </button>
+                  </td>
+                </tr>
+              ) : null}
             </table>
             <PickList tradablePicks={poolInfo.context.tradable_picks} participant={pooler} DictUsers={DictUsers} />
           </div>
@@ -925,11 +940,7 @@ export default function InProgressPool({
             </TabList>
             <TabPanel>
               <div className="half-cont">
-                <button
-                  className="base-button"
-                  onClick={() => setShowGraphStatsModal(!showGraphStatsModal)}
-                  type="button"
-                >
+                <button className="base-button" onClick={() => setShowGraphStats(!showGraphStats)} type="button">
                   <table>
                     <tbody>
                       <tr>
@@ -943,7 +954,7 @@ export default function InProgressPool({
                     </tbody>
                   </table>
                 </button>
-                {showGraphStatsModal ? <GraphStatsModal poolInfo={poolInfo} DictUsers={DictUsers} /> : null}
+                {showGraphStats ? <GraphStatsModal poolInfo={poolInfo} DictUsers={DictUsers} /> : null}
                 <table className="content-table-no-min">
                   <thead>
                     <NaviguateToday
@@ -1080,27 +1091,34 @@ export default function InProgressPool({
           playersIdToPoolerMap={playersIdToPoolerMap}
         />
       </div>
-      {userIndex > -1 ? (
-        <>
-          <FillSpot
-            showFillSpotModal={showFillSpotModal}
-            setShowFillSpotModal={setShowFillSpotModal}
-            poolInfo={poolInfo}
-            setPoolUpdate={setPoolUpdate}
-            user={user}
-            fillSpotPosition={fillSpotPosition}
-            userIndex={userIndex}
-          />
-          <RosterModificationModal
-            showRosterModificationModal={showRosterModificationModal}
-            setShowRosterModificationModal={setShowRosterModificationModal}
-            poolInfo={poolInfo}
-            setPoolUpdate={setPoolUpdate}
-            injury={injury}
-            user={user}
-          />
-        </>
-      ) : null}
+      <FillSpotModal
+        showFillSpotModal={showFillSpotModal}
+        setShowFillSpotModal={setShowFillSpotModal}
+        poolInfo={poolInfo}
+        setPoolUpdate={setPoolUpdate}
+        user={user}
+        fillSpotPosition={fillSpotPosition}
+        userIndex={userIndex}
+      />
+      <RosterModificationModal
+        showRosterModificationModal={showRosterModificationModal}
+        setShowRosterModificationModal={setShowRosterModificationModal}
+        poolInfo={poolInfo}
+        setPoolUpdate={setPoolUpdate}
+        injury={injury}
+        user={user}
+      />
+      <AddPlayerModal
+        showAddPlayerModal={showAddPlayerModal}
+        setShowAddPlayerModal={setShowAddPlayerModal}
+        participant={poolInfo.participants[userTabIndex]}
+        poolInfo={poolInfo}
+        DictUsers={DictUsers}
+        setPoolUpdate={setPoolUpdate}
+        injury={injury}
+        playersIdToPoolerMap={playersIdToPoolerMap}
+        user={user}
+      />
     </div>
   );
 }

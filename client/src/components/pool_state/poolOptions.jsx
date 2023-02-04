@@ -1,7 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRights, update_settings }) {
   useEffect(() => {}, []);
+
+  const [isDynastie, setIsDynastie] = useState(false);
+  // TODO: use a poolInfo.settings.dynasties_settings and poolInfo.settings
+  // so that some options would only be available in dynastie type pool.
 
   const create_select_Item = (min, max) => {
     const items = [];

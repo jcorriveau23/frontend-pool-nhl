@@ -12,7 +12,7 @@ import { team_info } from '../components/img/logos';
 // css
 import './modal.css';
 
-export default function FillSpot({
+export default function FillSpotModal({
   showFillSpotModal,
   setShowFillSpotModal,
   poolInfo,

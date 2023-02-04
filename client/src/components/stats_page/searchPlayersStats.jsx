@@ -243,9 +243,42 @@ export default function SearchPlayersStats({
     </>
   );
 
+  const get_player_format = player => {
+    const playerName = player.skaterFullName ?? player.goalieFullName;
+    let playerPosition;
+
+    if (player.goalieFullName) {
+      playerPosition = 'G'; // goalies
+    } else {
+      switch (player.positionCode) {
+        case 'L':
+        case 'C':
+        case 'R': {
+          playerPosition = 'F'; // forward
+          break;
+        }
+        case 'D': {
+          playerPosition = player.positionCode; // defenders
+          break;
+        }
+        default: {
+          alert(`This player positionCode is not valid ${player.positionCode}!`);
+          return null;
+        }
+      }
+    }
+
+    return {
+      id: player.playerId,
+      name: playerName,
+      team: abbrevToTeamId[player.teamAbbrevs],
+      position: playerPosition,
+    };
+  };
+
   const render_draft_button = player => (
     <td colSpan={8}>
-      <button className="base-button" type="button" onClick={() => confirm_selection(player)}>
+      <button className="base-button" type="button" onClick={() => confirm_selection(get_player_format(player))}>
         Draft Player
       </button>
     </td>
