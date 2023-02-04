@@ -108,7 +108,12 @@ export default function CreatedPool({ user, hasOwnerRights, DictUsers, poolName,
       <div className="min-width">
         <h1>Match Making for Pool {poolName}</h1>
         <div className="float-left">
-          <PoolOptions poolInfo={poolInfo} hasOwnerRights={hasOwnerRights} update_settings={update_settings} />
+          <PoolOptions
+            poolInfo={poolInfo}
+            hasOwnerRights={hasOwnerRights}
+            update_settings={update_settings}
+            DictUsers={DictUsers}
+          />
         </div>
         <div className="float-right">
           <div className="half-cont">

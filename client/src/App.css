@@ -77,10 +77,6 @@ select {
   display: inline;
 }
 
-.menu {
-  display: inline-block;
-}
-
 input[type='checkbox'] {
   /* Double-sized Checkboxes */
   -ms-transform: scale(2); /* IE */
@@ -114,19 +110,23 @@ input {
   color: #fff;
 }
 
-.search-players {
-  display: inline-block;
-}
-
 .search-players button {
   border: 3px solid #000;
 }
 
-.inline-block {
+.block {
+  display: block;
+}
+
+.inline-block,
+.wallet-card,
+.menu,
+.search-players,
+.base-button,
+.base-button_no_border {
   display: inline-block;
 }
 .wallet-card {
-  display: inline-block;
   position: fixed;
   right: 2%;
 }
@@ -142,7 +142,6 @@ input {
 .base-button {
   align-items: center;
   text-align: center;
-  display: inline-block;
   font-size: 22px;
   border-radius: 3px;
   border: 3px solid #000;
@@ -158,7 +157,6 @@ input {
   min-width: 200px;
   border: none;
   color: #000;
-  display: inline-block;
   font-size: 22px;
   height: 35px;
   margin: 10px;

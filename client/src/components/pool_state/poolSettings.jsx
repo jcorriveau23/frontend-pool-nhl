@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 // Components
 import PoolOptions from './poolOptions';
 
-export default function PoolSettings({ user, poolInfo, hasOwnerRights, setPoolUpdate }) {
+export default function PoolSettings({ user, poolInfo, hasOwnerRights, setPoolUpdate, DictUsers }) {
   const [poolSettingsUpdate, setPoolSettingsUpdate] = useState(null);
 
   useEffect(() => {}, []);
@@ -51,6 +51,7 @@ export default function PoolSettings({ user, poolInfo, hasOwnerRights, setPoolUp
         poolSettingsUpdate={poolSettingsUpdate}
         hasOwnerRights={hasOwnerRights}
         update_settings={update_settings}
+        DictUsers={DictUsers}
       />
       <button className="base-button" type="button" disabled={!poolSettingsUpdate} onClick={() => send_update()}>
         Send Modification

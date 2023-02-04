@@ -62,7 +62,7 @@ export default function PoolPage({
   const fetch_pool_info = async forceUpdate => {
     const poolName_temp = url.name;
     if (poolName_temp !== poolName || forceUpdate) {
-      console.log('fetching pool');
+      console.log(`fetching pool: ${poolName_temp}`);
       setPoolInfo(null);
       setPoolName(poolName_temp);
       setPoolUpdate(false);

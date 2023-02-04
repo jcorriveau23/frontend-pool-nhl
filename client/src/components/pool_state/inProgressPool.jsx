@@ -1071,6 +1071,7 @@ export default function InProgressPool({
                 poolInfo={poolInfo}
                 hasOwnerRights={hasOwnerRights}
                 setPoolUpdate={setPoolUpdate}
+                DictUsers={DictUsers}
               />
             </TabPanel>
           </Tabs>

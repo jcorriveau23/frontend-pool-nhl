@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRights, update_settings }) {
+export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRights, update_settings, DictUsers }) {
   useEffect(() => {}, []);
 
   const [isDynastie, setIsDynastie] = useState(false);
@@ -35,10 +35,56 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
     </tr>
   );
 
+  const render_assistants_selection = setting => (
+    <tr>
+      <td>Pool&apos;s assistants:</td>
+      <td>
+        {poolInfo.participants.map(id =>
+          id === poolInfo.owner ? null : (
+            <label htmlFor="date-selection">
+              <input type="checkbox" checked={poolInfo.assistants.includes(id)} />
+              {DictUsers[id]}
+            </label>
+          )
+        )}
+      </td>
+    </tr>
+  );
+
+  const render_date_modifications = setting => (
+    <tr>
+      <td>Roster Modification dates:</td>
+      <td>
+        <ul>
+          {poolInfo.roster_modification_date.map(date => (
+            <li className="block" key={date}>
+              {date}
+            </li>
+          ))}
+        </ul>
+      </td>
+    </tr>
+  );
+
   return (
     <div className="half-cont">
       <table className="content-table-no-min">
         <tbody>
+          <tr>
+            <th colSpan={2}>Pool Information</th>
+          </tr>
+          <tr>
+            <td>Pool Name</td>
+            <td>{poolInfo.name}</td>
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td>{poolInfo.status}</td>
+          </tr>
+          <tr>
+            <td>Owner</td>
+            <td>{DictUsers[poolInfo.owner]}</td>
+          </tr>
           <tr>
             <th colSpan={2}>General Rules</th>
           </tr>
@@ -52,6 +98,8 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
           {render_options('Number of reservists:', 'number_reservists', 1, 5)}
           {render_options('Number of tradable draft picks:', 'tradable_picks', 1, 5)}
           {render_options('Next season number of player to protected:', 'next_season_number_players_protected', 6, 12)}
+          {render_assistants_selection()}
+          {render_date_modifications()}
         </tbody>
       </table>
       <table className="content-table-no-min">
