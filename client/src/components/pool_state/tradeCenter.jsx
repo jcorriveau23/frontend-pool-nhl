@@ -10,16 +10,7 @@ import TradeItem from './tradeItem';
 // modal
 import CreateTradeModal from '../../modals/createTrade';
 
-export default function TradeCenter({
-  poolInfo,
-  setPoolUpdate,
-  playerIdToPlayersDataMap,
-  injury,
-  user,
-  hasOwnerRights,
-  DictUsers,
-  userIndex,
-}) {
+export default function TradeCenter({ poolInfo, setPoolUpdate, injury, user, hasOwnerRights, DictUsers, userIndex }) {
   const [showCreateTradeModal, setShowCreateTradeModal] = useState(false);
 
   const respond_trade = async (tradeID, isAccepted) => {
@@ -77,7 +68,6 @@ export default function TradeCenter({
               setShowCreateTradeModal={setShowCreateTradeModal}
               poolInfo={poolInfo}
               setPoolUpdate={setPoolUpdate}
-              playerIdToPlayersDataMap={playerIdToPlayersDataMap}
               injury={injury}
               user={user}
               DictUsers={DictUsers}
@@ -93,11 +83,7 @@ export default function TradeCenter({
               <tbody>
                 <tr>
                   <th>
-                    <TradeItem
-                      tradeInfo={tradeInfo}
-                      playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-                      DictUsers={DictUsers}
-                    />
+                    <TradeItem tradeInfo={tradeInfo} poolInfo={poolInfo} DictUsers={DictUsers} />
                   </th>
                   <th>
                     {tradeInfo.proposed_by === user?._id.$oid ? (
@@ -133,11 +119,7 @@ export default function TradeCenter({
                     <AiFillCheckCircle size={50} color="green" />
                   </th>
                   <th>
-                    <TradeItem
-                      tradeInfo={tradeInfo}
-                      playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-                      DictUsers={DictUsers}
-                    />
+                    <TradeItem tradeInfo={tradeInfo} poolInfo={poolInfo} DictUsers={DictUsers} />
                   </th>
                   <th width="300px">{new Date(tradeInfo.date_accepted).toLocaleString('sv-SE')}</th>
                 </tr>
@@ -161,7 +143,6 @@ export default function TradeCenter({
             setShowCreateTradeModal={setShowCreateTradeModal}
             poolInfo={poolInfo}
             setPoolUpdate={setPoolUpdate}
-            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
             user={user}
             DictUsers={DictUsers}
           />

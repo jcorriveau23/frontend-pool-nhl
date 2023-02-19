@@ -15,7 +15,7 @@ export default function PlayerList({ poolerContext, injury }) {
           <PlayerNoLink name={player.name} injury={injury} />
         </td>
         <td>
-          <img src={team_info[player.team].logo} alt="" width="40" height="40" />
+          <img src={team_info[player.team]?.logo} alt="" width="40" height="40" />
         </td>
       </tr>
     ));

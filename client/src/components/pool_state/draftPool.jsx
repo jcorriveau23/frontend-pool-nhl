@@ -24,7 +24,6 @@ export default function DraftPool({
   poolName,
   poolInfo,
   setPoolInfo,
-  playerIdToPlayersDataMap,
   playersIdToPoolerMap,
   injury,
   socket,
@@ -97,7 +96,6 @@ export default function DraftPool({
         ) : null}
         <DraftOrder
           poolInfo={poolInfo}
-          playerIdToPlayersDataMap={playerIdToPlayersDataMap}
           injury={injury}
           DictUsers={DictUsers}
           setNextDrafter={setNextDrafter}

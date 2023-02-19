@@ -100,7 +100,7 @@ export default function SendPredictionModal({
             <div className="float-left">
               <div>
                 <img
-                  src={team_info[gameInfo.liveData.boxscore.teams.home.team.id].logo}
+                  src={team_info[gameInfo.liveData.boxscore.teams.home.team.id]?.logo}
                   alt=""
                   width="100"
                   height="100"
@@ -117,7 +117,7 @@ export default function SendPredictionModal({
             <div className="float-right">
               <div>
                 <img
-                  src={team_info[gameInfo.liveData.boxscore.teams.away.team.id].logo}
+                  src={team_info[gameInfo.liveData.boxscore.teams.away.team.id]?.logo}
                   alt=""
                   width="100"
                   height="100"

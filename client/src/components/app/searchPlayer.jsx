@@ -98,7 +98,7 @@ function SearchPlayer() {
                   <tr key={p} onClick={() => link_to(`/player-info/${p.id}`)}>
                     <td>{`${p.firstName} ${p.lastName} (${p.position})`}</td>
                     <td>
-                      <img src={team_info[abbrevToTeamId[p.teamAbbrevs]].logo} alt="" width="70" height="70" />
+                      <img src={team_info[abbrevToTeamId[p.teamAbbrevs]]?.logo} alt="" width="70" height="70" />
                     </td>
                   </tr>
                 );

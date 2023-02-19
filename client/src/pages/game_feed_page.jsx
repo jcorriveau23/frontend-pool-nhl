@@ -296,11 +296,11 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
             </tr>
             <tr>
               <th>
-                <img src={team_info[teams.away.team.id].logo} alt="" width="70" height="70" />
+                <img src={team_info[teams.away.team.id]?.logo} alt="" width="70" height="70" />
               </th>
               <th>Summary</th>
               <th>
-                <img src={team_info[teams.home.team.id].logo} alt="" width="70" height="70" />
+                <img src={team_info[teams.home.team.id]?.logo} alt="" width="70" height="70" />
               </th>
             </tr>
           </thead>
@@ -406,7 +406,7 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
             return (
               <tr key={i}>
                 <td>
-                  <img src={team_info[liveData.plays.allPlays[i].team.id].logo} alt="" width="40" height="40" />
+                  <img src={team_info[liveData.plays.allPlays[i].team.id]?.logo} alt="" width="40" height="40" />
                 </td>
                 <td>
                   <PlayerLink
@@ -446,7 +446,7 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
               <Tab>Game recap</Tab>
               <Tab>
                 <img
-                  src={team_info[gameInfo.liveData.boxscore.teams.home.team.id].logo}
+                  src={team_info[gameInfo.liveData.boxscore.teams.home.team.id]?.logo}
                   alt=""
                   width="40"
                   height="40"
@@ -454,7 +454,7 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
               </Tab>
               <Tab>
                 <img
-                  src={team_info[gameInfo.liveData.boxscore.teams.away.team.id].logo}
+                  src={team_info[gameInfo.liveData.boxscore.teams.away.team.id]?.logo}
                   alt=""
                   width="40"
                   height="40"

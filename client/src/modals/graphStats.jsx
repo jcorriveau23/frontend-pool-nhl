@@ -27,6 +27,36 @@ export default function GraphStatsModal({ poolInfo, DictUsers }) {
   const [chartData, setChartData] = useState(null);
   const [chartOptions, setChartOptions] = useState(null);
 
+  const get_stats_value = (cumulate, keyStats) => {
+    switch (keyStats) {
+      case 'P':
+        return get_stats_value(cumulate, 'P_F') + get_stats_value(cumulate, 'P_D') + get_stats_value(cumulate, 'P_G');
+      case 'P_F':
+        return (
+          cumulate.G_F * poolInfo.forward_pts_goals +
+          cumulate.A_F * poolInfo.forward_pts_assists +
+          cumulate.HT_F * poolInfo.forward_pts_hattricks +
+          cumulate.SOG_F * poolInfo.forward_pts_shootout_goals
+        );
+      case 'P_D':
+        return (
+          cumulate.G_D * poolInfo.defender_pts_goals +
+          cumulate.A_D * poolInfo.defender_pts_assists +
+          cumulate.HT_D * poolInfo.defender_pts_hattricks +
+          cumulate.SOG_D * poolInfo.defender_pts_shootout_goals
+        );
+      case 'P_G':
+        return (
+          cumulate.W_G * poolInfo.goalies_pts_wins +
+          cumulate.SO_G * poolInfo.goalies_pts_shutouts +
+          cumulate.G_G * poolInfo.goalies_pts_goals +
+          cumulate.A_G * poolInfo.goalies_pts_assists
+        );
+      default:
+        return cumulate[keyStats];
+    }
+  };
+
   const update_graph_stats = keyStats => {
     const startDate = new Date(poolInfo.season_start);
     const endDate = new Date();
@@ -51,7 +81,7 @@ export default function GraphStatsModal({ poolInfo, DictUsers }) {
         data: labels.map(
           key =>
             poolInfo.context.score_by_day[key][participant].cumulate
-              ? poolInfo.context.score_by_day[key][participant].cumulate[keyStats]
+              ? get_stats_value(poolInfo.context.score_by_day[key][participant].cumulate, keyStats)
               : null // No cumulative data on that date. (Mostly no games has started yet)
         ),
         backgroundColor: color[i % poolInfo.participants.length],

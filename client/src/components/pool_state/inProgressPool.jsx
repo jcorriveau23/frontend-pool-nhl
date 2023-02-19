@@ -41,7 +41,6 @@ export default function InProgressPool({
   DictUsers,
   poolInfo,
   playersIdToPoolerMap,
-  playerIdToPlayersDataMap,
   injury,
   userIndex,
   formatDate,
@@ -103,7 +102,8 @@ export default function InProgressPool({
       // Forwards
 
       for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_forwards.length; j += 1) {
-        const player = poolInfo.context.pooler_roster[participant].chosen_forwards[j];
+        const playerId = poolInfo.context.pooler_roster[participant].chosen_forwards[j];
+        const player = poolInfo.context.players[playerId.toString()];
 
         player.nb_game = 0;
         player.G = 0;
@@ -118,7 +118,8 @@ export default function InProgressPool({
       // Defenders
 
       for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_defenders.length; j += 1) {
-        const player = poolInfo.context.pooler_roster[participant].chosen_defenders[j];
+        const playerId = poolInfo.context.pooler_roster[participant].chosen_defenders[j];
+        const player = { ...poolInfo.context.players[playerId.toString()] };
 
         player.nb_game = 0;
         player.G = 0;
@@ -133,7 +134,8 @@ export default function InProgressPool({
       // Goalies
 
       for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_goalies.length; j += 1) {
-        const player = poolInfo.context.pooler_roster[participant].chosen_goalies[j];
+        const playerId = poolInfo.context.pooler_roster[participant].chosen_goalies[j];
+        const player = { ...poolInfo.context.players[playerId.toString()] };
 
         player.nb_game = 0;
         player.G = 0;
@@ -149,7 +151,9 @@ export default function InProgressPool({
       // Reservists
 
       for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_reservists.length; j += 1) {
-        const player = poolInfo.context.pooler_roster[participant].chosen_reservists[j];
+        const playerId = poolInfo.context.pooler_roster[participant].chosen_reservists[j];
+        const player = { ...poolInfo.context.players[playerId.toString()] };
+
         player.own = false;
       }
     }
@@ -172,25 +176,26 @@ export default function InProgressPool({
 
           Object.keys(poolInfo.context.score_by_day[jDate][participant].roster.F).map(key => {
             const player = poolInfo.context.score_by_day[jDate][participant].roster.F[key];
+            const playerId = Number(key);
 
             if (player) {
-              let index = stats[participant].chosen_forwards.findIndex(f => Number(f.id) === Number(key));
+              let index = stats[participant].chosen_forwards.findIndex(f => f.id === playerId);
 
               if (index === -1) {
                 const indexReservist = poolInfo.context.pooler_roster[participant].chosen_reservists.findIndex(
-                  f => Number(f.id) === Number(key)
+                  r => r === playerId
                 );
 
-                const newPlayer = {
-                  id: key,
-                  nb_game: 1,
-                  G: player.G,
-                  A: player.A,
-                  HT: player.G >= 3 ? 1 : 0,
-                  SOG: player.SOG ? player.SOG : 0,
-                  own: false,
-                  reservist: indexReservist > -1,
-                };
+                const newPlayer = { ...poolInfo.context.players[key] };
+
+                newPlayer.nb_game = 1;
+                newPlayer.G = player.G;
+                newPlayer.A = player.A;
+                newPlayer.HT = player.G >= 3 ? 1 : 0;
+                newPlayer.SOG = player.SOG ? player.SOG : 0;
+                newPlayer.own = false;
+                newPlayer.reservist = indexReservist > -1;
+
                 index = stats[participant].chosen_forwards.push(newPlayer) - 1;
               } else {
                 stats[participant].chosen_forwards[index].nb_game += 1;
@@ -226,25 +231,26 @@ export default function InProgressPool({
 
           Object.keys(poolInfo.context.score_by_day[jDate][participant].roster.D).map(key => {
             const player = poolInfo.context.score_by_day[jDate][participant].roster.D[key];
+            const playerId = Number(key);
 
             if (player) {
-              let index = stats[participant].chosen_defenders.findIndex(d => Number(d.id) === Number(key));
+              let index = stats[participant].chosen_defenders.findIndex(d => d.id === playerId);
 
               if (index === -1) {
                 const indexReservist = poolInfo.context.pooler_roster[participant].chosen_reservists.findIndex(
-                  d => Number(d.id) === Number(key)
+                  r => r === playerId
                 );
 
-                const newPlayer = {
-                  id: key,
-                  nb_game: 1,
-                  G: player.G,
-                  A: player.A,
-                  HT: player.G >= 3 ? 1 : 0,
-                  SOG: player.SOG ? player.SOG : 0,
-                  own: false,
-                  reservist: indexReservist > -1,
-                };
+                const newPlayer = { ...poolInfo.context.players[key] };
+
+                newPlayer.nb_game = 1;
+                newPlayer.G = player.G;
+                newPlayer.A = player.A;
+                newPlayer.HT = player.G >= 3 ? 1 : 0;
+                newPlayer.SOG = player.SOG ? player.SOG : 0;
+                newPlayer.own = false;
+                newPlayer.reservist = indexReservist > -1;
+
                 index = stats[participant].chosen_defenders.push(newPlayer) - 1;
               } else {
                 stats[participant].chosen_defenders[index].nb_game += 1;
@@ -281,25 +287,27 @@ export default function InProgressPool({
 
           Object.keys(poolInfo.context.score_by_day[jDate][participant].roster.G).map(key => {
             const player = poolInfo.context.score_by_day[jDate][participant].roster.G[key];
+            const playerId = Number(key);
 
             if (player) {
-              let index = stats[participant].chosen_goalies.findIndex(g => Number(g.id) === Number(key));
+              let index = stats[participant].chosen_goalies.findIndex(g => g.id === playerId);
 
               if (index === -1) {
                 const indexReservist = poolInfo.context.pooler_roster[participant].chosen_reservists.findIndex(
-                  g => Number(g.id) === Number(key)
+                  r => r === playerId
                 );
-                const newPlayer = {
-                  id: key,
-                  nb_game: 1,
-                  G: player.G,
-                  A: player.A,
-                  W: player.W,
-                  SO: player.SO,
-                  OT: player.OT,
-                  own: false,
-                  reservist: indexReservist > -1,
-                };
+
+                const newPlayer = { ...poolInfo.context.players[key] };
+
+                newPlayer.nb_game = 1;
+                newPlayer.G = player.G;
+                newPlayer.A = player.A;
+                newPlayer.W = player.W;
+                newPlayer.SO = player.SO;
+                newPlayer.OT = player.OT;
+                newPlayer.own = false;
+                newPlayer.reservist = indexReservist > -1;
+
                 index = stats[participant].chosen_goalies.push(newPlayer) - 1;
               } else {
                 stats[participant].chosen_goalies[index].nb_game += 1;
@@ -398,7 +406,9 @@ export default function InProgressPool({
     }
 
     setRanking(rank);
+    console.log(stats);
     setPlayersStats(stats);
+    console.log('done calculating');
   };
 
   useEffect(() => {
@@ -467,7 +477,9 @@ export default function InProgressPool({
         <tr key={i}>
           <td>{i + 1}</td>
           <td colSpan={3}>
-            {pooler === user?._id.$oid ? (
+            {pooler === user?._id.$oid ||
+            poolInfo.owner === user?._id.$oid ||
+            poolInfo.assistants.includes(user?._id.$oid) ? (
               <button className="base-button" type="button" onClick={() => open_fill_spot_modal(position)}>
                 Fill Spot
               </button>
@@ -486,14 +498,14 @@ export default function InProgressPool({
   const render_inactive_players_tooltip = player =>
     player.reservist ? (
       <>
-        <a data-tip={`${playerIdToPlayersDataMap[player.id].name} is a reservist.`}>
+        <a data-tip={`${poolInfo.context.players[player.id].name} is a reservist.`}>
           <RiInformationFill size={30} color="yellow" />
         </a>
         <ReactTooltip className="tooltip" padding="8px" />
       </>
     ) : (
       <>
-        <a data-tip={`${playerIdToPlayersDataMap[player.id].name} has been traded.`}>
+        <a data-tip={`${poolInfo.context.players[player.id].name} has been traded.`}>
           <RiInformationFill size={30} color="yellow" />
         </a>
         <ReactTooltip className="tooltip" padding="8px" />
@@ -529,10 +541,10 @@ export default function InProgressPool({
               <td>{i + 1}</td>
               <td>{player.own ? <RiTeamFill size={25} /> : render_inactive_players_tooltip(player)}</td>
               <td colSpan={2}>
-                <PlayerLink name={playerIdToPlayersDataMap[player.id].name} id={player.id} injury={injury} />
+                <PlayerLink name={poolInfo.context.players[player.id].name} id={player.id} injury={injury} />
               </td>
               <td>
-                <img src={team_info[playerIdToPlayersDataMap[player.id].team].logo} alt="" width="40" height="40" />
+                <img src={team_info[poolInfo.context.players[player.id].team]?.logo} alt="" width="40" height="40" />
               </td>
               <td>{player.nb_game}</td>
               <td>{player.G}</td>
@@ -587,10 +599,10 @@ export default function InProgressPool({
               <td>{i + 1}</td>
               <td>{player.own ? <RiTeamFill size={25} /> : render_inactive_players_tooltip(player)}</td>
               <td colSpan={2}>
-                <PlayerLink name={playerIdToPlayersDataMap[player.id].name} id={player.id} injury={injury} />
+                <PlayerLink name={poolInfo.context.players[player.id].name} id={player.id} injury={injury} />
               </td>
               <td>
-                <img src={team_info[playerIdToPlayersDataMap[player.id].team].logo} alt="" width="40" height="40" />
+                <img src={team_info[poolInfo.context.players[player.id].team]?.logo} alt="" width="40" height="40" />
               </td>
               <td>{player.nb_game}</td>
               <td>{player.G}</td>
@@ -635,19 +647,19 @@ export default function InProgressPool({
   };
 
   const render_reservists = pooler =>
-    poolInfo.context.pooler_roster[pooler].chosen_reservists.map((player, i) => (
-      <tr key={player.name}>
+    poolInfo.context.pooler_roster[pooler].chosen_reservists.map((playerId, i) => (
+      <tr key={playerId}>
         <td>{i + 1}</td>
         <td>
           <RiTeamFill size={25} />
         </td>
         <td colSpan={9}>
-          <PlayerLink name={playerIdToPlayersDataMap[player.id].name} id={player.id} injury={injury} />
+          <PlayerLink name={poolInfo.context.players[playerId].name} id={playerId} injury={injury} />
         </td>
         <td>
-          <img src={team_info[playerIdToPlayersDataMap[player.id].team].logo} alt="" width="40" height="40" />
+          <img src={team_info[poolInfo.context.players[playerId].team]?.logo} alt="" width="40" height="40" />
         </td>
-        <td>{player.position}</td>
+        <td>{poolInfo.context.players[playerId].position}</td>
       </tr>
     ));
 
@@ -849,68 +861,113 @@ export default function InProgressPool({
     setMainTabIndex(_mainTabIndex);
   };
 
-  const render_tabs_pool_rank = () =>
-    ranking
-      .sort((p1, p2) => {
-        const diff = p2.total_pts - p1.total_pts;
-        if (diff === 0) {
-          return p1.total_game - p2.total_game;
-        }
-        return diff;
-      })
-      .map((rank, i) => (
-        <tr
-          key={rank.name}
-          onClick={() => select_participant(rank.participant)}
-          style={
-            poolInfo.participants[userTabIndex] === rank.participant
-              ? { backgroundColor: '#eee', cursor: 'pointer' }
-              : { cursor: 'pointer' }
-          }
-        >
-          <td>{i + 1}</td>
-          <td>
-            <User id={rank.participant} user={user} DictUsers={DictUsers} />
-          </td>
-          <td>{rank.forwards_total_game}</td>
-          <td>{rank.forwards_total_goal}</td>
-          <td>{rank.forwards_total_assist}</td>
-          <td>{rank.forwards_total_hattrick}</td>
-          <td>{rank.forwards_total_shootout_goals}</td>
-          <td>
-            <b>{rank.forwards_total_pts}</b>
-          </td>
-          <td>{rank.defenders_total_game}</td>
-          <td>{rank.defenders_total_goal}</td>
-          <td>{rank.defenders_total_assist}</td>
-          <td>{rank.defenders_total_hattrick}</td>
-          <td>{rank.defenders_total_shootout_goals}</td>
-          <td>
-            <b>{rank.defenders_total_pts}</b>
-          </td>
-          <td>{rank.goalies_total_game}</td>
-          <td>{rank.goalies_total_goal}</td>
-          <td>{rank.goalies_total_assist}</td>
-          <td>{rank.goalies_total_win}</td>
-          <td>{rank.goalies_total_shutout}</td>
-          <td>{rank.goalies_total_OT}</td>
-          <td>
-            <b>{rank.goalies_total_pts}</b>
-          </td>
-          <td style={{ backgroundColor: '#eee', cursor: 'pointer' }}>{rank.total_game}</td>
-          <td style={{ backgroundColor: '#eee', cursor: 'pointer' }}>
-            <b style={{ color: '#a20' }}>{rank.total_pts}</b>
-          </td>
-          <td style={{ backgroundColor: '#eee', cursor: 'pointer' }}>
-            {Math.round((rank.total_game > 0 ? rank.total_pts / rank.total_game : 0 + Number.EPSILON) * 100) / 100}
-          </td>
+  const render_tabs_pool_rank = () => (
+    <table className="content-table-no-min">
+      <thead>
+        <NaviguateToday
+          formatDate={formatDate}
+          todayFormatDate={todayFormatDate}
+          msg="Cumulative Ranking"
+          colSpan={26}
+        />
+        <tr>
+          <th rowSpan={2}>#</th>
+          <th rowSpan={2}>Pooler</th>
+          <th colSpan={6}>Forwards</th>
+          <th colSpan={6}>Defenders</th>
+          <th colSpan={7}>Goalies</th>
+          <th colSpan={3}>Total</th>
         </tr>
-      ));
+        <tr>
+          <th>GP</th>
+          <th>G</th>
+          <th>A</th>
+          <th>HT</th>
+          <th>G*</th>
+          <th>P</th>
+          <th>GP</th>
+          <th>G</th>
+          <th>A</th>
+          <th>HT</th>
+          <th>G*</th>
+          <th>P</th>
+          <th>GP</th>
+          <th>G</th>
+          <th>A</th>
+          <th>W</th>
+          <th>SO</th>
+          <th>OT</th>
+          <th>P</th>
+          <th>GP</th>
+          <th>P</th>
+          <th>P/G</th>
+        </tr>
+      </thead>
+      <tbody>
+        {ranking
+          .sort((p1, p2) => {
+            const diff = p2.total_pts - p1.total_pts;
+            if (diff === 0) {
+              return p1.total_game - p2.total_game;
+            }
+            return diff;
+          })
+          .map((rank, i) => (
+            <tr
+              key={rank.name}
+              onClick={() => select_participant(rank.participant)}
+              style={
+                poolInfo.participants[userTabIndex] === rank.participant
+                  ? { backgroundColor: '#eee', cursor: 'pointer' }
+                  : { cursor: 'pointer' }
+              }
+            >
+              <td>{i + 1}</td>
+              <td>
+                <User id={rank.participant} user={user} DictUsers={DictUsers} />
+              </td>
+              <td>{rank.forwards_total_game}</td>
+              <td>{rank.forwards_total_goal}</td>
+              <td>{rank.forwards_total_assist}</td>
+              <td>{rank.forwards_total_hattrick}</td>
+              <td>{rank.forwards_total_shootout_goals}</td>
+              <td>
+                <b>{rank.forwards_total_pts}</b>
+              </td>
+              <td>{rank.defenders_total_game}</td>
+              <td>{rank.defenders_total_goal}</td>
+              <td>{rank.defenders_total_assist}</td>
+              <td>{rank.defenders_total_hattrick}</td>
+              <td>{rank.defenders_total_shootout_goals}</td>
+              <td>
+                <b>{rank.defenders_total_pts}</b>
+              </td>
+              <td>{rank.goalies_total_game}</td>
+              <td>{rank.goalies_total_goal}</td>
+              <td>{rank.goalies_total_assist}</td>
+              <td>{rank.goalies_total_win}</td>
+              <td>{rank.goalies_total_shutout}</td>
+              <td>{rank.goalies_total_OT}</td>
+              <td>
+                <b>{rank.goalies_total_pts}</b>
+              </td>
+              <td style={{ backgroundColor: '#eee', cursor: 'pointer' }}>{rank.total_game}</td>
+              <td style={{ backgroundColor: '#eee', cursor: 'pointer' }}>
+                <b style={{ color: '#a20' }}>{rank.total_pts}</b>
+              </td>
+              <td style={{ backgroundColor: '#eee', cursor: 'pointer' }}>
+                {Math.round((rank.total_game > 0 ? rank.total_pts / rank.total_game : 0 + Number.EPSILON) * 100) / 100}
+              </td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
+  );
 
   return (
     <div className="min-width">
       <div className="cont">
-        {playersStats && ranking && playerIdToPlayersDataMap && gameStatus ? (
+        {playersStats && ranking && gameStatus ? (
           <Tabs selectedIndex={mainTabIndex} onSelect={index => setMainTab(index)}>
             <TabList>
               <Tab>
@@ -959,49 +1016,7 @@ export default function InProgressPool({
                   </table>
                 </button>
                 {showGraphStats ? <GraphStatsModal poolInfo={poolInfo} DictUsers={DictUsers} /> : null}
-                <table className="content-table-no-min">
-                  <thead>
-                    <NaviguateToday
-                      formatDate={formatDate}
-                      todayFormatDate={todayFormatDate}
-                      msg="Cumulative Ranking"
-                      colSpan={26}
-                    />
-                    <tr>
-                      <th rowSpan={2}>#</th>
-                      <th rowSpan={2}>Pooler</th>
-                      <th colSpan={6}>Forwards</th>
-                      <th colSpan={6}>Defenders</th>
-                      <th colSpan={7}>Goalies</th>
-                      <th colSpan={3}>Total</th>
-                    </tr>
-                    <tr>
-                      <th>GP</th>
-                      <th>G</th>
-                      <th>A</th>
-                      <th>HT</th>
-                      <th>G*</th>
-                      <th>P</th>
-                      <th>GP</th>
-                      <th>G</th>
-                      <th>A</th>
-                      <th>HT</th>
-                      <th>G*</th>
-                      <th>P</th>
-                      <th>GP</th>
-                      <th>G</th>
-                      <th>A</th>
-                      <th>W</th>
-                      <th>SO</th>
-                      <th>OT</th>
-                      <th>P</th>
-                      <th>GP</th>
-                      <th>P</th>
-                      <th>P/G</th>
-                    </tr>
-                  </thead>
-                  <tbody>{render_tabs_pool_rank()}</tbody>
-                </table>
+                {render_tabs_pool_rank()}
                 {render_tabs_roster_stats()}
                 <button className="base-button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
                   Download CSV
@@ -1014,7 +1029,6 @@ export default function InProgressPool({
                   formatDate={formatDate}
                   todayFormatDate={todayFormatDate}
                   poolInfo={poolInfo}
-                  playerIdToPlayersDataMap={playerIdToPlayersDataMap}
                   userTabIndex={userTabIndex}
                   setUserTab={setUserTab}
                   select_participant={select_participant}
@@ -1051,7 +1065,6 @@ export default function InProgressPool({
               <PoolHistory
                 poolInfo={poolInfo}
                 todayFormatDate={todayFormatDate}
-                playerIdToPlayersDataMap={playerIdToPlayersDataMap}
                 setPoolUpdate={setPoolUpdate}
                 hasOwnerRights={hasOwnerRights}
                 injury={injury}
@@ -1061,13 +1074,7 @@ export default function InProgressPool({
               />
             </TabPanel>
             <TabPanel>
-              <DraftOrder
-                poolInfo={poolInfo}
-                playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-                injury={injury}
-                DictUsers={DictUsers}
-                user={user}
-              />
+              <DraftOrder poolInfo={poolInfo} injury={injury} DictUsers={DictUsers} user={user} />
             </TabPanel>
             <TabPanel>
               <PoolSettings
@@ -1102,6 +1109,7 @@ export default function InProgressPool({
             showFillSpotModal={showFillSpotModal}
             setShowFillSpotModal={setShowFillSpotModal}
             poolInfo={poolInfo}
+            userModified={poolInfo.participants[userTabIndex]}
             setPoolUpdate={setPoolUpdate}
             user={user}
             fillSpotPosition={fillSpotPosition}

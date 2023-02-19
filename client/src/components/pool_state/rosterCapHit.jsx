@@ -25,8 +25,11 @@ export default function RosterCapHit({
   const get_players_tot_cap = (playerList, playerType, k) => {
     let totalCapHit = 0;
     for (let i = 0; i < playerList.length; i += 1) {
-      if (playerList[i].caps?.length > k && playerList[i].position === playerType)
-        totalCapHit += parseInt(playerList[i].caps[k], 10);
+      if (
+        poolInfo.context.players[playerList[i]].caps?.length > k &&
+        poolInfo.context.players[playerList[i]].position === playerType
+      )
+        totalCapHit += parseInt(poolInfo.context.players[playerList[i]].caps[k], 10);
     }
 
     return totalCapHit;
@@ -150,23 +153,33 @@ export default function RosterCapHit({
   const render_roster_with_cap_hit_content = (players, position, participant) => (
     <tbody>
       {players
-        .filter(player => player.position === position)
-        .map((player, i) => (
-          <tr key={player.id}>
+        .filter(playerId => poolInfo.context.players[playerId].position === position)
+        .map((playerId, i) => (
+          <tr key={playerId}>
             <td>{i + 1}</td>
             <td>
-              <PlayerLink name={player.name} id={player.id} injury={injury} />
+              <PlayerLink name={poolInfo.context.players[playerId].name} id={playerId} injury={injury} />
             </td>
             <td>
-              <img src={team_info[player.team].logo} alt="" width="30" height="30" />
+              <img src={team_info[poolInfo.context.players[playerId].team]?.logo} alt="" width="30" height="30" />
             </td>
-            {player.caps ? (
+            {poolInfo.context.players[playerId].caps ? (
               <>
-                <td style={indexYear === 0 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[0])}</td>
-                <td style={indexYear === 1 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[1])}</td>
-                <td style={indexYear === 2 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[2])}</td>
-                <td style={indexYear === 3 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[3])}</td>
-                <td style={indexYear === 4 ? { backgroundColor: '#eee' } : null}>{cap_hit_value(player.caps[4])}</td>
+                <td style={indexYear === 0 ? { backgroundColor: '#eee' } : null}>
+                  {cap_hit_value(poolInfo.context.players[playerId].caps[0])}
+                </td>
+                <td style={indexYear === 1 ? { backgroundColor: '#eee' } : null}>
+                  {cap_hit_value(poolInfo.context.players[playerId].caps[1])}
+                </td>
+                <td style={indexYear === 2 ? { backgroundColor: '#eee' } : null}>
+                  {cap_hit_value(poolInfo.context.players[playerId].caps[2])}
+                </td>
+                <td style={indexYear === 3 ? { backgroundColor: '#eee' } : null}>
+                  {cap_hit_value(poolInfo.context.players[playerId].caps[3])}
+                </td>
+                <td style={indexYear === 4 ? { backgroundColor: '#eee' } : null}>
+                  {cap_hit_value(poolInfo.context.players[playerId].caps[4])}
+                </td>
               </>
             ) : (
               <td colSpan={5}>No cap hit available yet.</td>

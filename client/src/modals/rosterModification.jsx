@@ -121,13 +121,20 @@ export default function RosterModificationModal({
   };
 
   const render_players = (players, isReservist) =>
-    players.map((player, i) => (
-      <tr onClick={() => (isReservist ? add_player(player) : remove_player(player))} key={player}>
+    players.map((playerId, i) => (
+      <tr
+        onClick={() =>
+          isReservist
+            ? add_player(poolInfo.context.players[playerId])
+            : remove_player(poolInfo.context.players[playerId])
+        }
+        key={playerId}
+      >
         <td>{i + 1}</td>
-        <td>{player.position}</td>
-        <PlayerNoLink name={player.name} injury={injury} />
+        <td>{poolInfo.context.players[playerId].position}</td>
+        <PlayerNoLink name={poolInfo.context.players[playerId].name} injury={injury} />
         <td>
-          <img src={team_info[player.team].logo} alt="" width="40" height="40" />
+          <img src={team_info[poolInfo.context.players[playerId].team]?.logo} alt="" width="40" height="40" />
         </td>
       </tr>
     ));

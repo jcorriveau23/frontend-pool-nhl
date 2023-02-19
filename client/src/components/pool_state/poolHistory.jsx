@@ -20,7 +20,6 @@ import TradeCenter from './tradeCenter';
 export default function PoolHistory({
   poolInfo,
   todayFormatDate,
-  playerIdToPlayersDataMap,
   setPoolUpdate,
   hasOwnerRights,
   injury,
@@ -95,9 +94,9 @@ export default function PoolHistory({
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
       const participant = poolInfo.participants[i];
 
-      const forwards = poolInfo.context.pooler_roster[participant].chosen_forwards.map(player => player.id);
-      const defenders = poolInfo.context.pooler_roster[participant].chosen_defenders.map(player => player.id);
-      const goalies = poolInfo.context.pooler_roster[participant].chosen_goalies.map(player => player.id);
+      const forwards = poolInfo.context.pooler_roster[participant].chosen_forwards.map(playerId => playerId);
+      const defenders = poolInfo.context.pooler_roster[participant].chosen_defenders.map(playerId => playerId);
+      const goalies = poolInfo.context.pooler_roster[participant].chosen_goalies.map(playerId => playerId);
 
       const roster = forwards.concat(defenders, goalies);
 
@@ -188,10 +187,10 @@ export default function PoolHistory({
                   {d.addedPlayers.map(p => (
                     <tr>
                       <td>
-                        <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
+                        <PlayerLink name={poolInfo.context.players[p].name} id={p} />
                       </td>
                       <td>
-                        <img src={team_info[playerIdToPlayersDataMap[p].team].logo} alt="" width="50" height="50" />
+                        <img src={team_info[poolInfo.context.players[p].team]?.logo} alt="" width="50" height="50" />
                       </td>
                       <td>
                         <GiEntryDoor color="green" size={30} />
@@ -201,10 +200,10 @@ export default function PoolHistory({
                   {d.removedPlayers.map(p => (
                     <tr>
                       <td>
-                        <PlayerLink name={playerIdToPlayersDataMap[p].name} id={p} />
+                        <PlayerLink name={poolInfo.context.players[p].name} id={p} />
                       </td>
                       <td>
-                        <img src={team_info[playerIdToPlayersDataMap[p].team].logo} alt="" width="50" height="50" />
+                        <img src={team_info[poolInfo.context.players[p].team]?.logo} alt="" width="50" height="50" />
                       </td>
                       <td>
                         <GiExitDoor color="red" size={30} />
@@ -227,11 +226,7 @@ export default function PoolHistory({
                                 <AiFillCheckCircle size={50} color="green" />
                               </th>
                               <th>
-                                <TradeItem
-                                  tradeInfo={tradeInfo}
-                                  playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-                                  DictUsers={DictUsers}
-                                />
+                                <TradeItem tradeInfo={tradeInfo} poolInfo={poolInfo} DictUsers={DictUsers} />
                               </th>
                             </tr>
                           </tbody>
@@ -270,7 +265,6 @@ export default function PoolHistory({
           <TradeCenter
             poolInfo={poolInfo}
             setPoolUpdate={setPoolUpdate}
-            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
             injury={injury}
             user={user}
             hasOwnerRights={hasOwnerRights}

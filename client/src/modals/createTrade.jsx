@@ -24,7 +24,6 @@ export default function CreateTradeModal({
   setShowCreateTradeModal,
   poolInfo,
   setPoolUpdate,
-  playerIdToPlayersDataMap,
   injury,
   user,
   DictUsers,
@@ -151,13 +150,13 @@ export default function CreateTradeModal({
 
   const render_players = (side, players, playersTraded) =>
     players
-      .filter(player => playersTraded.findIndex(p => p === player.id) === -1)
-      .map((player, i) => (
-        <tr onClick={() => add_player(side, player)} key={player}>
+      .filter(playerId => playersTraded.findIndex(p => p === playerId) === -1)
+      .map((playerId, i) => (
+        <tr onClick={() => add_player(side, poolInfo.context.players[playerId])} key={playerId}>
           <td>{i + 1}</td>
-          <PlayerNoLink name={player.name} injury={injury} />
+          <PlayerNoLink name={poolInfo.context.players[playerId].name} injury={injury} />
           <td>
-            <img src={team_info[player.team].logo} alt="" width="40" height="40" />
+            <img src={team_info[poolInfo.context.players[playerId].team]?.logo} alt="" width="40" height="40" />
           </td>
         </tr>
       ));
@@ -230,7 +229,7 @@ export default function CreateTradeModal({
               from_items: { players: fromPlayers, picks: fromPicks },
               to_items: { players: toPlayers, picks: toPicks },
             }}
-            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
+            poolInfo={poolInfo}
             setFromPlayers={setFromPlayers}
             setFromPicks={setFromPicks}
             setToPlayers={setToPlayers}

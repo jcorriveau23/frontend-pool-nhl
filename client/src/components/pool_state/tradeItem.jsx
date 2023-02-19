@@ -5,7 +5,7 @@ import { team_info } from '../img/logos';
 
 export default function TradeItem({
   tradeInfo,
-  playerIdToPlayersDataMap,
+  poolInfo,
   DictUsers,
   setFromPlayers,
   setFromPicks,
@@ -44,9 +44,9 @@ export default function TradeItem({
       <tbody>
         {items.players.map(player => (
           <tr onClick={setPlayers ? () => remove_player(items.players, setPlayers, player) : null}>
-            <td>{playerIdToPlayersDataMap[player].name}</td>
+            <td>{poolInfo.context.players[player].name}</td>
             <td>
-              <img src={team_info[playerIdToPlayersDataMap[player].team].logo} alt="" width="40" height="40" />
+              <img src={team_info[poolInfo.context.players[player].team]?.logo} alt="" width="40" height="40" />
             </td>
           </tr>
         ))}

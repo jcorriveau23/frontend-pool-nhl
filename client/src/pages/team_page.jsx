@@ -15,7 +15,7 @@ export default function TeamPage() {
   const render_team = (team, teamId) => (
     <div style={{ padding: 10 }}>
       <Link to={`/team-roster?teamId=${teamId}&season=${season}`}>
-        <img src={team.logo} alt="" width={140} height={140} />
+        <img src={team?.logo} alt="" width={140} height={140} />
       </Link>
       <h3>{team.fullName}</h3>
     </div>

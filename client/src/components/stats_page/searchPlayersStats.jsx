@@ -236,7 +236,7 @@ export default function SearchPlayersStats({
     <>
       {searchMode === 'allSeasonsAggregate' ? null : (
         <td>
-          <img src={team_info[abbrevToTeamId[player.teamAbbrevs]].logo} alt="" width="40" height="40" />
+          <img src={team_info[abbrevToTeamId[player.teamAbbrevs]]?.logo} alt="" width="40" height="40" />
         </td>
       )}
       {searchMode === 'allSeasons' ? <td>{make_readable_season(`${player.seasonId}`)}</td> : null}
@@ -271,7 +271,7 @@ export default function SearchPlayersStats({
     return {
       id: player.playerId,
       name: playerName,
-      team: abbrevToTeamId[player.teamAbbrevs],
+      team: abbrevToTeamId[player.teamAbbrevs] ?? 0,
       position: playerPosition,
     };
   };

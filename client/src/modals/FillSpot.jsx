@@ -16,16 +16,17 @@ export default function FillSpotModal({
   showFillSpotModal,
   setShowFillSpotModal,
   poolInfo,
+  userModified,
   setPoolUpdate,
   user,
   fillSpotPosition,
 }) {
-  const fill_spot = async player => {
-    if (window.confirm(`Do you really chose ${player.name} to fill the empty spot?`)) {
+  const fill_spot = async player_id => {
+    if (window.confirm(`Do you really chose ${poolInfo.context.players[player_id].name} to fill the empty spot?`)) {
       try {
         await axios.post(
           '/api-rust/fill-spot',
-          { player, name: poolInfo.name },
+          { player_id, name: poolInfo.name, user_id: userModified },
           { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` } }
         );
         setShowFillSpotModal(false);
@@ -38,13 +39,13 @@ export default function FillSpotModal({
 
   const render_players = players =>
     players
-      .filter(player => player.position === fillSpotPosition)
-      .map((player, i) => (
-        <tr onClick={() => fill_spot(player)} key={player}>
+      .filter(playerId => poolInfo.context.players[playerId].position === fillSpotPosition)
+      .map((playerId, i) => (
+        <tr onClick={() => fill_spot(playerId)} key={playerId}>
           <td>{i + 1}</td>
-          <td>{player.name}</td>
+          <td>{poolInfo.context.players[playerId].name}</td>
           <td>
-            <img src={team_info[player.team].logo} alt="" width="40" height="40" />
+            <img src={team_info[poolInfo.context.players[playerId].team]?.logo} alt="" width="40" height="40" />
           </td>
         </tr>
       ));
@@ -71,11 +72,11 @@ export default function FillSpotModal({
       appElement={document.getElementById('root')}
     >
       <div className="modal_content">
-        <h1>Select the player you want to add to your roster to fill the empty spot.</h1>
+        <h1>Select the player you want to add to the roster to fill the empty spot.</h1>
       </div>
       <table className="content-table-no-min">
         <thead>{render_tabs_choice_headers('Reservists')}</thead>
-        <tbody>{render_players(poolInfo.context.pooler_roster[user?._id.$oid].chosen_reservists)}</tbody>
+        <tbody>{render_players(poolInfo.context.pooler_roster[userModified].chosen_reservists)}</tbody>
       </table>
     </Modal>
   );

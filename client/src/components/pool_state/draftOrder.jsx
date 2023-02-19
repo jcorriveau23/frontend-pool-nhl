@@ -8,7 +8,7 @@ import User from '../user';
 // image
 import { team_info } from '../img/logos';
 
-export default function DraftOrder({ poolInfo, playerIdToPlayersDataMap, injury, DictUsers, setNextDrafter, user }) {
+export default function DraftOrder({ poolInfo, injury, DictUsers, setNextDrafter, user }) {
   const [nbPlayers, setNbPlayers] = useState(0);
   const [totalColumns, setTotalColumns] = useState(0);
 
@@ -35,13 +35,13 @@ export default function DraftOrder({ poolInfo, playerIdToPlayersDataMap, injury,
   };
 
   const render_players_columns = player_drafted =>
-    playerIdToPlayersDataMap && playerIdToPlayersDataMap[player_drafted] ? (
+    poolInfo.context.players && poolInfo.context.players[player_drafted] ? (
       <>
         <td>
-          <PlayerNoLink name={playerIdToPlayersDataMap[player_drafted].name} injury={injury} />
+          <PlayerNoLink name={poolInfo.context.players[player_drafted].name} injury={injury} />
         </td>
         <td>
-          <img src={team_info[playerIdToPlayersDataMap[player_drafted].team].logo} alt="" width="30" height="30" />
+          <img src={team_info[poolInfo.context.players[player_drafted].team]?.logo} alt="" width="30" height="30" />
         </td>
       </>
     ) : (

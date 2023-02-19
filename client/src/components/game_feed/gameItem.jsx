@@ -58,13 +58,13 @@ export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
           <tbody>
             <tr>
               <td align="left">
-                <img src={team_info[gameData.teams.away.team.id].logo} alt="" width="50" height="50" />
+                <img src={team_info[gameData.teams.away.team.id]?.logo} alt="" width="50" height="50" />
               </td>
               <td>{gameData.teams.away.score}</td>
             </tr>
             <tr>
               <td align="left">
-                <img src={team_info[gameData.teams.home.team.id].logo} alt="" width="50" height="50" />
+                <img src={team_info[gameData.teams.home.team.id]?.logo} alt="" width="50" height="50" />
               </td>
               <td>{gameData.teams.home.score}</td>
             </tr>

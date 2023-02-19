@@ -55,7 +55,7 @@ export default function DraftPage(injury) {
             <tr key={pick.pickOverall}>
               <td>{pick.pickOverall}</td>
               <td>
-                <img src={team_info[pick.team.id].logo} alt="" width="40" height="40" />
+                <img src={team_info[pick.team.id]?.logo} alt="" width="40" height="40" />
               </td>
               {pick.prospect.id > 0 ? (
                 <td>

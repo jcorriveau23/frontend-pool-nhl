@@ -18,7 +18,6 @@ export default function DailyRanking({
   formatDate,
   todayFormatDate,
   poolInfo,
-  playerIdToPlayersDataMap,
   userTabIndex,
   setUserTab,
   select_participant,
@@ -60,8 +59,8 @@ export default function DailyRanking({
           if (score_by_day[formatDate][participant].roster.F[key]) {
             forwardDailyGames += 1;
             player = {
-              name: playerIdToPlayersDataMap[key].name,
-              team: playerIdToPlayersDataMap[key].team,
+              name: poolInfo.context.players[key].name,
+              team: poolInfo.context.players[key].team,
               id: key,
               G: score_by_day[formatDate][participant].roster.F[key].G,
               A: score_by_day[formatDate][participant].roster.F[key].A,
@@ -81,8 +80,8 @@ export default function DailyRanking({
             }
           } else {
             player = {
-              name: playerIdToPlayersDataMap[key].name,
-              team: playerIdToPlayersDataMap[key].team,
+              name: poolInfo.context.players[key].name,
+              team: poolInfo.context.players[key].team,
               id: key,
               pts: 0,
               played: false,
@@ -99,8 +98,8 @@ export default function DailyRanking({
           if (score_by_day[formatDate][participant].roster.D[key]) {
             defendersDailyGames += 1;
             player = {
-              name: playerIdToPlayersDataMap[key].name,
-              team: playerIdToPlayersDataMap[key].team,
+              name: poolInfo.context.players[key].name,
+              team: poolInfo.context.players[key].team,
               id: key,
               G: score_by_day[formatDate][participant].roster.D[key].G,
               A: score_by_day[formatDate][participant].roster.D[key].A,
@@ -118,8 +117,8 @@ export default function DailyRanking({
             }
           } else {
             player = {
-              name: playerIdToPlayersDataMap[key].name,
-              team: playerIdToPlayersDataMap[key].team,
+              name: poolInfo.context.players[key].name,
+              team: poolInfo.context.players[key].team,
               id: key,
               pts: 0,
               played: false,
@@ -136,8 +135,8 @@ export default function DailyRanking({
           if (score_by_day[formatDate][participant].roster.G[key]) {
             goaliesDailyGames += 1;
             player = {
-              name: playerIdToPlayersDataMap[key].name,
-              team: playerIdToPlayersDataMap[key].team,
+              name: poolInfo.context.players[key].name,
+              team: poolInfo.context.players[key].team,
               id: key,
               G: score_by_day[formatDate][participant].roster.G[key].G,
               A: score_by_day[formatDate][participant].roster.G[key].A,
@@ -160,8 +159,8 @@ export default function DailyRanking({
             }
           } else {
             player = {
-              name: playerIdToPlayersDataMap[key].name,
-              team: playerIdToPlayersDataMap[key].team,
+              name: poolInfo.context.players[key].name,
+              team: poolInfo.context.players[key].team,
               id: key,
               pts: 0,
               played: false,
@@ -216,6 +215,7 @@ export default function DailyRanking({
         });
       }
 
+      console.log(forwDailyStatsTemp);
       setForwDailyStats(forwDailyStatsTemp);
       setDefDailyStats(defDailyStatsTemp);
       setGoalDailyStats(goalDailyStatsTemp);
@@ -244,29 +244,32 @@ export default function DailyRanking({
 
           const forwardsIds = Object.keys(poolInfo.context.score_by_day[formatDate][participant].roster.F);
           for (let j = 0; j < forwardsIds.length; j += 1) {
-            if (playerIdToPlayersDataMap[forwardsIds[j]].team in DictTeamAgainst) forwardsCount += 1;
+            if (poolInfo.context.players[forwardsIds[j]].team in DictTeamAgainst) forwardsCount += 1;
           }
 
           const defendersIds = Object.keys(poolInfo.context.score_by_day[formatDate][participant].roster.D);
           for (let j = 0; j < defendersIds.length; j += 1) {
-            if (playerIdToPlayersDataMap[defendersIds[j]].team in DictTeamAgainst) defendersCount += 1;
+            if (poolInfo.context.players[defendersIds[j]].team in DictTeamAgainst) defendersCount += 1;
           }
 
           const goaliesIds = Object.keys(poolInfo.context.score_by_day[formatDate][participant].roster.G);
           for (let j = 0; j < goaliesIds.length; j += 1) {
-            if (playerIdToPlayersDataMap[goaliesIds[j]].team in DictTeamAgainst) goaliesCount += 1;
+            if (poolInfo.context.players[goaliesIds[j]].team in DictTeamAgainst) goaliesCount += 1;
           }
         } else {
           for (let j = 0; j < poolerRoster[participant].chosen_forwards.length; j += 1) {
-            if (poolerRoster[participant].chosen_forwards[j].team in DictTeamAgainst) forwardsCount += 1;
+            if (poolInfo.context.players[poolerRoster[participant].chosen_forwards[j]].team in DictTeamAgainst)
+              forwardsCount += 1;
           }
 
           for (let j = 0; j < poolerRoster[participant].chosen_defenders.length; j += 1) {
-            if (poolerRoster[participant].chosen_defenders[j].team in DictTeamAgainst) defendersCount += 1;
+            if (poolInfo.context.players[poolerRoster[participant].chosen_defenders[j]].team in DictTeamAgainst)
+              defendersCount += 1;
           }
 
           for (let j = 0; j < poolerRoster[participant].chosen_goalies.length; j += 1) {
-            if (poolerRoster[participant].chosen_goalies[j].team in DictTeamAgainst) goaliesCount += 1;
+            if (poolInfo.context.players[poolerRoster[participant].chosen_goalies[j]].team in DictTeamAgainst)
+              goaliesCount += 1;
           }
         }
 
@@ -325,51 +328,23 @@ export default function DailyRanking({
         </tr>
       ));
 
-  const render_table_roster_preview = (players, position) => (
-    <>
-      <tr>
-        <th colSpan={3}>{position}</th>
-      </tr>
-      <tr>
-        <th>Name</th>
-        <th>Team</th>
-        <th>Playing Against</th>
-      </tr>
-      {players
-        .sort((p1, p2) => (p2.team in DictTeamAgainst) - (p1.team in DictTeamAgainst))
-        .map(player => (
-          <tr key={player.id}>
-            <td>
-              <PlayerLink name={player.name} id={player.id} injury={injury} />
-            </td>
-            <td>
-              <img src={team_info[player.team].logo} alt="" width="40" height="40" />
-            </td>
-            {player.team in DictTeamAgainst ? (
-              <td>
-                <img src={team_info[DictTeamAgainst[player.team].logo]} alt="" width="40" height="40" />
-              </td>
-            ) : (
-              <td>Not playing</td>
-            )}
-          </tr>
-        ))}
-    </>
-  );
-
-  const render_table_roster_preview_locked = (roster, position) => {
+  const render_table_roster_preview = (playerIds, position, isLocked) => {
     // After 12PM the roster was locked so we need to use score_by_day to display the locked roster instead of the pooler_roster
 
-    const playerIds = Object.keys(roster);
-    const players = playerIds.map(id => playerIdToPlayersDataMap[id]);
+    const players = playerIds.map(id => poolInfo.context.players[id]);
     return (
       <>
         <tr>
           <th width="85%" colSpan={3}>
-            <a data-tip="This is the roster that was locked at 12PM for tonight's games">
-              <BiLockAlt size={30} color="red" />
-            </a>
-            <ReactTooltip className="tooltip" padding="8px" />
+            {isLocked ? (
+              <>
+                <a data-tip="This is the roster that was locked at 12PM for tonight's games">
+                  <BiLockAlt size={30} color="red" />
+                </a>
+                <ReactTooltip className="tooltip" padding="8px" />
+              </>
+            ) : null}
+
             {position}
           </th>
         </tr>
@@ -386,11 +361,11 @@ export default function DailyRanking({
                 <PlayerLink name={player.name} id={player.id} injury={injury} />
               </td>
               <td>
-                <img src={team_info[player.team].logo} alt="" width="40" height="40" />
+                <img src={team_info[player.team]?.logo} alt="" width="40" height="40" />
               </td>
               {player.team in DictTeamAgainst ? (
                 <td>
-                  <img src={team_info[DictTeamAgainst[player.team]].logo} alt="" width="40" height="40" />
+                  <img src={team_info[DictTeamAgainst[player.team]]?.logo} alt="" width="40" height="40" />
                 </td>
               ) : (
                 <td>Not playing</td>
@@ -521,7 +496,7 @@ export default function DailyRanking({
             <PlayerLink name={player.name} id={player.id} injury={injury} />
           </td>
           <td colSpan={2}>
-            <img src={team_info[player.team].logo} alt="" width="40" height="40" />
+            <img src={team_info[player.team]?.logo} alt="" width="40" height="40" />
           </td>
           {player.played ? (
             <>
@@ -585,7 +560,7 @@ export default function DailyRanking({
             <PlayerLink name={player.name} id={player.id} injury={injury} />
           </td>
           <td>
-            <img src={team_info[player.team].logo} alt="" width="40" height="40" />
+            <img src={team_info[player.team]?.logo} alt="" width="40" height="40" />
           </td>
           {player.played ? (
             <>
@@ -649,17 +624,20 @@ export default function DailyRanking({
                   />
                   {poolInfo.context.score_by_day && poolInfo.context.score_by_day[formatDate] ? (
                     <>
-                      {render_table_roster_preview_locked(
-                        poolInfo.context.score_by_day[formatDate][participant].roster.F,
-                        'Forwards'
+                      {render_table_roster_preview(
+                        Object.keys(poolInfo.context.score_by_day[formatDate][participant].roster.F),
+                        'Forwards',
+                        true
                       )}
-                      {render_table_roster_preview_locked(
-                        poolInfo.context.score_by_day[formatDate][participant].roster.D,
-                        'Defenders'
+                      {render_table_roster_preview(
+                        Object.keys(poolInfo.context.score_by_day[formatDate][participant].roster.D),
+                        'Defenders',
+                        true
                       )}
-                      {render_table_roster_preview_locked(
-                        poolInfo.context.score_by_day[formatDate][participant].roster.G,
-                        'Goalies'
+                      {render_table_roster_preview(
+                        Object.keys(poolInfo.context.score_by_day[formatDate][participant].roster.G),
+                        'Goalies',
+                        true
                       )}
                     </>
                   ) : (
@@ -739,7 +717,7 @@ export default function DailyRanking({
   }
   return (
     <div className="cont">
-      <h1>Processing pool informations...</h1>
+      <h1>Processing daily informations...</h1>
       <ClipLoader color="#fff" loading size={75} />
     </div>
   );

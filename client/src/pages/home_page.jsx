@@ -14,7 +14,7 @@ export default function HomePage({ formatDate, todayFormatDate, gameStatus, inju
           Where you can watch live nhl game content, watch your favorite players stats! All the players/teams/games
           information is coming from the nhl api. Nothing is being monetize with this web site.
         </p>
-        <h1>We manage pool for you</h1>
+        <h1>Free pool experience</h1>
         <p>The draft, trades and roster modifications processes are automated. So you have almost nothing to manage.</p>
         <Link to="/pools/jax" style={{ textDecoration: 'none', color: '#000099' }}>
           <h2>demo...</h2>

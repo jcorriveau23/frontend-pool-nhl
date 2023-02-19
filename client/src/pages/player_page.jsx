@@ -320,7 +320,7 @@ export default function PlayerPage() {
         <thead>
           <tr>
             <th>
-              {p.currentTeam ? <img src={team_info[p.currentTeam.id].logo} alt="" width="60" height="60" /> : null}
+              {p.currentTeam ? <img src={team_info[p.currentTeam.id]?.logo} alt="" width="60" height="60" /> : null}
             </th>
             <th>
               <h3>

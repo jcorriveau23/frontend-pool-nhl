@@ -23,9 +23,7 @@ export default function AddPlayerModal({
   playersIdToPoolerMap,
   user,
 }) {
-  useEffect(() => {
-    console.log('hey');
-  }, []);
+  useEffect(() => {}, []);
 
   const add_player = async player => {
     try {

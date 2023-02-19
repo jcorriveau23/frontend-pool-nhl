@@ -95,7 +95,7 @@ export default function TeamRosterBySeasonPage(injury) {
           </tr>
           <tr>
             <th colSpan="12">
-              <img src={team_info[teamId].logo} alt="" width="70" height="70" />
+              <img src={team_info[teamId]?.logo} alt="" width="70" height="70" />
             </th>
           </tr>
           <tr>

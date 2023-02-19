@@ -45,7 +45,7 @@ export default function TeamsStanding({ data }) {
           {isWildCard && i <= 2 ? '*' : null}
         </td>
         <td>
-          <img src={team_info[team.team.id].logo} alt="" width="40" height="40" />
+          <img src={team_info[team.team.id]?.logo} alt="" width="40" height="40" />
         </td>
         <td borderLeft="none">
           <b>{team.clinchIndicator}</b>

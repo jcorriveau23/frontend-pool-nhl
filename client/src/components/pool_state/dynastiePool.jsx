@@ -20,7 +20,6 @@ export default function DynastiePool({
   user,
   DictUsers,
   poolInfo,
-  playerIdToPlayersDataMap,
   playersIdToPoolerMap,
   setPoolUpdate,
   injury,
@@ -186,7 +185,7 @@ export default function DynastiePool({
             <PlayerNoLink name={player.name} injury={injury} isLink={false} />
           </td>
           <td>
-            <img src={team_info[player.team].logo} alt="" width="40" height="40" />
+            <img src={team_info[player.team]?.logo} alt="" width="40" height="40" />
           </td>
         </tr>
       ));
@@ -213,7 +212,7 @@ export default function DynastiePool({
             <PlayerNoLink name={player.name} injury={injury} isLink={false} />
           </td>
           <td>
-            <img src={team_info[player.team].logo} alt="" width="40" height="40" />
+            <img src={team_info[player.team]?.logo} alt="" width="40" height="40" />
           </td>
         </tr>
       ))}
@@ -343,13 +342,7 @@ export default function DynastiePool({
           </div>
         </TabPanel>
         <TabPanel>
-          <DraftOrder
-            poolInfo={poolInfo}
-            playerIdToPlayersDataMap={playerIdToPlayersDataMap}
-            injury={injury}
-            DictUsers={DictUsers}
-            user={user}
-          />
+          <DraftOrder poolInfo={poolInfo} injury={injury} DictUsers={DictUsers} user={user} />
         </TabPanel>
       </Tabs>
     </div>
