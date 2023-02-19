@@ -1,4 +1,5 @@
 # frontend-pool-nhl
+Free NHL hockey pool build using the nhl api.
 
 https://hockeypool.live
 
