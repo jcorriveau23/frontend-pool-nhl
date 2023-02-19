@@ -1,18 +1,12 @@
-# pool-nhl-ethereum
-
-nhl hockey prediction market that allowed any Ethereum wallet to bets some Ethers on hockey games for the team they think will win. 
-
-## Live on Kovan Network
+# frontend-pool-nhl
 
 https://hockeypool.live
 
+## Backend Repository
+
+https://github.com/jcorriveau23/backend-pool-nhl
+
 ## Run the app in development configuration
-### Start server command
-
-in project root folder with mongoDB installed on computer
-
-- Set PORT=8080 && node bin/www
-
 ### Start client server command
 
 in root/client folder
