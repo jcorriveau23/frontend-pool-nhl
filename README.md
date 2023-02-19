@@ -7,8 +7,7 @@ https://hockeypool.live
 
 https://github.com/jcorriveau23/backend-pool-nhl
 
-## Run the app in development configuration
-### Start client server command
+## Run the client server
 
 in root/client folder
 
