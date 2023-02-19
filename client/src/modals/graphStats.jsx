@@ -23,7 +23,7 @@ import { Line } from 'react-chartjs-2';
 
 Chart.register(Title, Tooltip, LineElement, Legend, CategoryScale, LinearScale, PointElement, TimeScale);
 
-export default function GraphStatsModal({ poolInfo, DictUsers }) {
+export default function GraphStats({ poolInfo, DictUsers }) {
   const [chartData, setChartData] = useState(null);
   const [chartOptions, setChartOptions] = useState(null);
 
@@ -87,7 +87,6 @@ export default function GraphStatsModal({ poolInfo, DictUsers }) {
         backgroundColor: color[i % poolInfo.participants.length],
         borderColor: color[i % poolInfo.participants.length],
         tension: 0.4,
-        pointStyle: 'star',
         pointBorderColor: 'blue',
       };
       datasets.push(dataset);
@@ -111,8 +110,8 @@ export default function GraphStatsModal({ poolInfo, DictUsers }) {
       },
       tooltips: {
         mode: 'label',
-        titleFont: { size: 30 },
-        bodyFont: { size: 22 },
+        titleFont: { size: 75 },
+        bodyFont: { size: 60 },
       },
       interaction: {
         mode: 'nearest',

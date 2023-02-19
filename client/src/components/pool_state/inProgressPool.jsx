@@ -25,7 +25,7 @@ import PoolSettings from './poolSettings';
 // modals
 import FillSpotModal from '../../modals/FillSpot';
 import RosterModificationModal from '../../modals/rosterModification';
-import GraphStatsModal from '../../modals/graphStats';
+import GraphStats from '../../modals/graphStats';
 import AddPlayerModal from '../../modals/addPlayer';
 
 // images
@@ -1015,7 +1015,7 @@ export default function InProgressPool({
                     </tbody>
                   </table>
                 </button>
-                {showGraphStats ? <GraphStatsModal poolInfo={poolInfo} DictUsers={DictUsers} /> : null}
+                {showGraphStats ? <GraphStats poolInfo={poolInfo} DictUsers={DictUsers} /> : null}
                 {render_tabs_pool_rank()}
                 {render_tabs_roster_stats()}
                 <button className="base-button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
