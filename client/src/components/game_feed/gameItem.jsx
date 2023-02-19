@@ -13,7 +13,7 @@ export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
             {liveGameInfo[Number(gameData.gamePk)].period} | {liveGameInfo[Number(gameData.gamePk)].time}
           </td>
         ) : (
-          <td colSpan={2}>
+          <td colSpan={2} style={{ fontSize: 25 }}>
             {new Date(Date.parse(gameData.gameDate)).toLocaleString(navigator.language, {
               hour: '2-digit',
               minute: '2-digit',
@@ -37,7 +37,7 @@ export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
       }
       default: {
         return (
-          <td colSpan={2}>
+          <td colSpan={2} style={{ fontSize: 25 }}>
             {new Date(Date.parse(gameData.gameDate)).toLocaleString(navigator.language, {
               hour: '2-digit',
               minute: '2-digit',
@@ -58,15 +58,15 @@ export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
           <tbody>
             <tr>
               <td align="left">
-                <img src={team_info[gameData.teams.away.team.id]?.logo} alt="" width="50" height="50" />
+                <img src={team_info[gameData.teams.away.team.id]?.logo} alt="" width="70" height="70" />
               </td>
-              <td>{gameData.teams.away.score}</td>
+              <td style={{ fontSize: 35 }}>{gameData.teams.away.score}</td>
             </tr>
             <tr>
               <td align="left">
-                <img src={team_info[gameData.teams.home.team.id]?.logo} alt="" width="50" height="50" />
+                <img src={team_info[gameData.teams.home.team.id]?.logo} alt="" width="70" height="70" />
               </td>
-              <td>{gameData.teams.home.score}</td>
+              <td style={{ fontSize: 35 }}>{gameData.teams.home.score}</td>
             </tr>
           </tbody>
         </table>
