@@ -20,7 +20,7 @@ export default function Footer() {
         size={70}
         color="#999"
         className="icon-link"
-        onClick={() => open_link('https://github.com/jcorriveau23/pool-nhl-ethereum')}
+        onClick={() => open_link('https://github.com/jcorriveau23/backend-pool-nhl')}
       />
     </div>
   );
