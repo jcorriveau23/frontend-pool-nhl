@@ -67,10 +67,6 @@ def init_cumulate_dict():
     }
 
 def get_db_infos(day):
-    if day is None: # If no time was provided, use the current time.
-            day = date.today()
-            if datetime.now().hour < 12:    # Before 12h AM, fetch the data from yesterday in the case a game was completed after 12h PM.
-                day -= timedelta(days=1)
 
     today_pointers = db.day_leaders.find_one({"date": str(day)})
     played = db.played.find_one({"date": str(day)})
@@ -78,6 +74,11 @@ def get_db_infos(day):
     return today_pointers, played, day
 
 def cumulate_daily_roster_pts(day = None):
+    if day is None: # If no time was provided, use the current time.
+        day = date.today()
+        if datetime.now().hour < 12:    # Before 12h AM, fetch the data from yesterday in the case a game was completed after 12h PM.
+            day -= timedelta(days=1)
+
     dict_cumulate = {}
 
     today_pointers, played, day = get_db_infos(day)
@@ -228,6 +229,8 @@ cumulate_daily_roster_pts.last_played = {}
 def lock_daily_roster(day = None):
     if day is None:
         day = date.today()
+        if datetime.now().hour < 12:    # Before 12h AM, fetch the data from yesterday in the case a game was completed after 12h PM.
+            day -= timedelta(days=1)
 
     daily_roster = {}
 
@@ -242,22 +245,22 @@ def lock_daily_roster(day = None):
 
             daily_roster[participant]["roster"]["F"] = {}
 
-            for forward in pool["context"]["pooler_roster"][participant]["chosen_forwards"]:
-                daily_roster[participant]["roster"]["F"][str(forward["id"])] = None
+            for forward_id in pool["context"]["pooler_roster"][participant]["chosen_forwards"]:
+                daily_roster[participant]["roster"]["F"][str(forward_id)] = None
 
             # Defenders
 
             daily_roster[participant]["roster"]["D"] = {}
 
-            for defender in pool["context"]["pooler_roster"][participant]["chosen_defenders"]:
-                daily_roster[participant]["roster"]["D"][str(defender["id"])] = None
+            for defender_id in pool["context"]["pooler_roster"][participant]["chosen_defenders"]:
+                daily_roster[participant]["roster"]["D"][str(defender_id)] = None
 
             # Goalies
 
             daily_roster[participant]["roster"]["G"] = {}
 
-            for goaly in pool["context"]["pooler_roster"][participant]["chosen_goalies"]:
-                daily_roster[participant]["roster"]["G"][str(goaly["id"])] = None
+            for goaly_id in pool["context"]["pooler_roster"][participant]["chosen_goalies"]:
+                daily_roster[participant]["roster"]["G"][str(goaly_id)] = None
 
         if pool["context"]["score_by_day"] is None:
             # when score_by_day is null, at the begginning of the season, we need to initialize it.
@@ -267,7 +270,7 @@ def lock_daily_roster(day = None):
 
 
 if __name__ == "__main__":
-    start_date = date(2022, 11, 20)     # beginning of the 2021-2022 season
+    start_date = date(2023, 2, 11)     # beginning of the 2021-2022 season
     end_date = date.today()
     delta = timedelta(days=1)
     while start_date <= end_date:
@@ -276,4 +279,5 @@ if __name__ == "__main__":
         cumulate_daily_roster_pts(start_date)
         start_date += delta
 
-    #cumulate_daily_roster_pts(date.today())
+    # lock_daily_roster()
+    # cumulate_daily_roster_pts()

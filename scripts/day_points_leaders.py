@@ -231,13 +231,13 @@ def fetch_pointers_day(day = None):
 fetch_pointers_day.end_games = []
 
 if __name__ == "__main__":
-    # start_date = date(2022, 10, 7)
-    # end_date = date(2022, 10, 31)
-    # delta = timedelta(days=1)
-    # while start_date <= end_date:
-    #     print(start_date)
-    #     fetch_pointers_day(start_date)
-    #     start_date += delta
+    start_date = date(2023, 2, 11)
+    end_date = date.today()
+    delta = timedelta(days=1)
+    while start_date <= end_date:
+        print(start_date)
+        fetch_pointers_day(start_date)
+        start_date += delta
 
-    fetch_pointers_day(date.today())
+    # fetch_pointers_day()
     # fetch_pointers_day(date(2022, 10, 31))
