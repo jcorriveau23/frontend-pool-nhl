@@ -28,21 +28,21 @@ def update_pool_players_team():
         for participant in pool["context"]["pooler_roster"]:
             # print(participant)
             for players_type_key in ["chosen_forwards", "chosen_defenders", "chosen_goalies", "chosen_reservists"]:
-                for i, player in enumerate(pool["context"]["pooler_roster"][participant][players_type_key]):
+                for i, player_id in enumerate(pool["context"]["pooler_roster"][participant][players_type_key]):
                     # print(player)
-                    if players_id_to_current_team_dict.get(player["id"]) is None:
+                    if players_id_to_current_team_dict.get(player_id) is None:
                         player_url = 'https://statsapi.web.nhl.com/api/v1/people/' + str(player["id"])
 
                         response = requests.request('GET', player_url)
                         player_info_json = json.loads(response.text)
                         player_current_team = player_info_json["people"][0]["currentTeam"]["id"]
-                        players_id_to_current_team_dict[player["id"]] = player_current_team
+                        players_id_to_current_team_dict[player_id] = player_current_team
                     else:
-                        player_current_team = players_id_to_current_team_dict[player["id"]]
+                        player_current_team = players_id_to_current_team_dict[player_id]
                     
-                    if player["team"] != player_current_team: # player got traded.
-                        pool["context"]["pooler_roster"][participant][players_type_key][i]["team"] = player_current_team
-                        print("{} got traded to the {}.".format(player["name"], player_current_team))
+                    if pool["context"]["players"][str(player_id)]["team"] != player_current_team: # player got traded.
+                        pool["context"]["players"][str(player_id)]["team"] = player_current_team
+                        print("{} got traded to the {}.".format(pool["context"]["players"][str(player_id)]["name"], player_current_team))
 
         db.pools.update_one({"name": pool["name"]}, {"$set": {f"context.pooler_roster": pool["context"]["pooler_roster"]}}, upsert=True)
                     
