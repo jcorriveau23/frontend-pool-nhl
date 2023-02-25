@@ -9,7 +9,7 @@ export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
     switch (status.abstractGameState) {
       case 'Live': {
         return liveGameInfo && Number(gameData.gamePk) in liveGameInfo ? (
-          <td colSpan={2} style={{ color: '#a20' }}>
+          <td colSpan={2} style={{ color: '#a20', fontSize: 25 }}>
             {liveGameInfo[Number(gameData.gamePk)].period} | {liveGameInfo[Number(gameData.gamePk)].time}
           </td>
         ) : (
@@ -23,14 +23,14 @@ export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
       }
       case 'Postponed': {
         return (
-          <td colSpan={2} style={{ color: '#a20' }}>
+          <td colSpan={2} style={{ color: '#a20', fontSize: 25 }}>
             PPD
           </td>
         );
       }
       case 'Final': {
         return (
-          <td colSpan={2} style={{ color: '#a20' }}>
+          <td colSpan={2} style={{ color: '#a20', fontSize: 25 }}>
             Final
           </td>
         );
@@ -51,7 +51,7 @@ export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
   return (
     <Link to={`/game/${gameData.gamePk}`} key={gameData.gamePk}>
       <li style={Number(selectedGamePk) === Number(gameData.gamePk) ? { borderColor: '#fff' } : null}>
-        <table style={{ width: '100px' }}>
+        <table style={{ width: '150px' }}>
           <thead>
             <tr>{render_game_state(gameData.status)}</tr>
           </thead>
