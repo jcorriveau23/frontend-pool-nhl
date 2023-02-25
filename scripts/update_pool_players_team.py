@@ -31,7 +31,7 @@ def update_pool_players_team():
                 for i, player_id in enumerate(pool["context"]["pooler_roster"][participant][players_type_key]):
                     # print(player)
                     if players_id_to_current_team_dict.get(player_id) is None:
-                        player_url = 'https://statsapi.web.nhl.com/api/v1/people/' + str(player["id"])
+                        player_url = 'https://statsapi.web.nhl.com/api/v1/people/' + str(player_id)
 
                         response = requests.request('GET', player_url)
                         player_info_json = json.loads(response.text)
