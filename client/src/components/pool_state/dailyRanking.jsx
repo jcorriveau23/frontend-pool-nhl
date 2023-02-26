@@ -78,9 +78,9 @@ export default function DailyRanking({
         name: poolInfo.context.players[key].name,
         team: poolInfo.context.players[key].team,
         id: key,
-        G: dayLeaders.skaters[i].goals,
-        A: dayLeaders.skaters[i].assists,
-        SOG: dayLeaders.skaters[i].shootoutGoals,
+        G: dayLeaders.skaters[i].stats.goals,
+        A: dayLeaders.skaters[i].stats.assists,
+        SOG: dayLeaders.skaters[i].stats.shootoutGoals,
         played: true,
       };
 
@@ -155,11 +155,11 @@ export default function DailyRanking({
         name: poolInfo.context.players[key].name,
         team: poolInfo.context.players[key].team,
         id: key,
-        G: dayLeaders.goalies[i].goals,
-        A: dayLeaders.goalies[i].assists,
-        W: dayLeaders.goalies[i].decision === 'W',
-        SO: dayLeaders.goalies[i].decision === 'W' && dayLeaders.goalies[i].shots === dayLeaders.goalies[i].saves,
-        OT: dayLeaders.goalies[i].OT === true,
+        G: dayLeaders.goalies[i].stats.goals,
+        A: dayLeaders.goalies[i].stats.assists,
+        W: dayLeaders.goalies[i].stats.decision === 'W',
+        SO: dayLeaders.goalies[i].stats.decision === 'W' && dayLeaders.goalies[i].shots === dayLeaders.goalies[i].saves,
+        OT: dayLeaders.goalies[i].stats.OT === true,
         played: true,
       };
 
@@ -209,6 +209,33 @@ export default function DailyRanking({
     return count;
   };
 
+  const count_stats = (players, stats) => {
+    let count = 0;
+    for (let i = 0; i < players.length; i += 1) {
+      if (players[i][stats]) count += players[i][stats];
+    }
+
+    return count;
+  };
+
+  const get_skaters_total_points = (players, isForward) => {
+    let pts = 0;
+    for (let i = 0; i < players.length; i += 1) {
+      pts += get_skater_total_points(players[i], isForward);
+    }
+
+    return pts;
+  };
+
+  const get_goalies_total_points = players => {
+    let pts = 0;
+    for (let i = 0; i < players.length; i += 1) {
+      pts += get_goaly_total_points(players[i]);
+    }
+
+    return pts;
+  };
+
   const calculate_daily_stats = () => {
     const forwDailyStatsTemp = {};
     const defDailyStatsTemp = {};
@@ -225,7 +252,7 @@ export default function DailyRanking({
         // Forwards daily stats
 
         forwDailyStatsTemp[participant] = Object.keys(score_by_day[formatDate][participant].roster.F).map(key => {
-          if (dayLeaders && dayLeaders.date === formatDate) {
+          if (dayLeaders && dayLeaders.date === todayFormatDate) {
             // The players stats is not yet stored into the pool information
             // we can take the information from the daiLeaders that is being update live.
 
@@ -239,7 +266,7 @@ export default function DailyRanking({
         // Defenders daily stats
 
         defDailyStatsTemp[participant] = Object.keys(score_by_day[formatDate][participant].roster.D).map(key => {
-          if (dayLeaders && dayLeaders.date === formatDate) {
+          if (dayLeaders && dayLeaders.date === todayFormatDate) {
             // The players stats is not yet stored into the pool information
             // we can take the information from the daiLeaders that is being update live.
 
@@ -254,7 +281,7 @@ export default function DailyRanking({
         // Goalies daily stats
 
         goalDailyStatsTemp[participant] = Object.keys(score_by_day[formatDate][participant].roster.G).map(key => {
-          if (dayLeaders && dayLeaders.date === formatDate) {
+          if (dayLeaders && dayLeaders.date === todayFormatDate) {
             // The players stats is not yet stored into the pool information
             // we can take the information from the daiLeaders that is being update live.
 
@@ -273,42 +300,26 @@ export default function DailyRanking({
           participant,
           // Forwards total daily points
           F_games: forwardsCount,
-          G_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.G : 0,
-          A_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.A : 0,
-          HT_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.HT : 0,
-          SOG_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.SOG : 0,
-          P_F: score_by_day[formatDate][participant].F_tot
-            ? score_by_day[formatDate][participant].F_tot.G * poolInfo.forward_pts_goals +
-              score_by_day[formatDate][participant].F_tot.A * poolInfo.forward_pts_assists +
-              score_by_day[formatDate][participant].F_tot.HT * poolInfo.forward_pts_hattricks +
-              score_by_day[formatDate][participant].F_tot.SOG * poolInfo.forward_pts_shootout_goals
-            : 0,
+          G_F: count_stats(forwDailyStatsTemp[participant], 'G'),
+          A_F: count_stats(forwDailyStatsTemp[participant], 'A'),
+          HT_F: count_stats(forwDailyStatsTemp[participant], 'HT'),
+          SOG_F: count_stats(forwDailyStatsTemp[participant], 'SOG'),
+          P_F: get_skaters_total_points(forwDailyStatsTemp[participant], true),
           // Defenders total daily points
           D_games: defendersCount,
-          G_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.G : 0,
-          A_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.A : 0,
-          HT_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.HT : 0,
-          SOG_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.SOG : 0,
-          P_D: score_by_day[formatDate][participant].D_tot
-            ? score_by_day[formatDate][participant].D_tot.G * poolInfo.defender_pts_goals +
-              score_by_day[formatDate][participant].D_tot.A * poolInfo.defender_pts_assists +
-              score_by_day[formatDate][participant].D_tot.HT * poolInfo.defender_pts_hattricks +
-              score_by_day[formatDate][participant].D_tot.SOG * poolInfo.defender_pts_shootout_goals
-            : 0,
+          G_D: count_stats(defDailyStatsTemp[participant], 'G'),
+          A_D: count_stats(defDailyStatsTemp[participant], 'A'),
+          HT_D: count_stats(defDailyStatsTemp[participant], 'HT'),
+          SOG_D: count_stats(defDailyStatsTemp[participant], 'SOG'),
+          P_D: get_skaters_total_points(defDailyStatsTemp[participant], false),
           // Goalies total daily points
           G_games: goaliesCount,
-          G_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.G : 0,
-          A_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.A : 0,
-          W_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.W : 0,
-          SO_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.SO : 0,
-          OT_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.OT : 0,
-          P_G: score_by_day[formatDate][participant].G_tot
-            ? score_by_day[formatDate][participant].G_tot.G * poolInfo.goalies_pts_goals +
-              score_by_day[formatDate][participant].G_tot.A * poolInfo.goalies_pts_assists +
-              score_by_day[formatDate][participant].G_tot.W * poolInfo.goalies_pts_wins +
-              score_by_day[formatDate][participant].G_tot.SO * poolInfo.goalies_pts_shutouts +
-              score_by_day[formatDate][participant].G_tot.OT * poolInfo.goalies_pts_overtimes
-            : 0,
+          G_G: count_stats(goalDailyStatsTemp[participant], 'G'),
+          A_G: count_stats(goalDailyStatsTemp[participant], 'A'),
+          W_G: count_stats(goalDailyStatsTemp[participant], 'W'),
+          SO_G: count_stats(goalDailyStatsTemp[participant], 'SO'),
+          OT_G: count_stats(goalDailyStatsTemp[participant], 'SO'),
+          P_G: get_goalies_total_points(goalDailyStatsTemp[participant]),
           // Total daily points
           total_games: forwardsCount + defendersCount + goaliesCount,
         });
@@ -385,8 +396,8 @@ export default function DailyRanking({
 
   useEffect(() => {
     if (gameStatus === 'Preview') calculate_daily_preview();
-    else if (gameStatus !== 'N/A') calculate_daily_stats();
-  }, [formatDate, gameStatus, DictTeamAgainst]);
+    else if (gameStatus !== 'N/A' && dayLeaders) calculate_daily_stats();
+  }, [formatDate, gameStatus, DictTeamAgainst, dayLeaders]);
 
   const render_table_preview_header = () => (
     <>
