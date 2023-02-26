@@ -53,6 +53,7 @@ export default function InProgressPool({
   const get_default_userTab = () => (userIndex === -1 ? 0 : userIndex);
 
   const [playersStats, setPlayersStats] = useState(null);
+  const [dayLeaders, setDayLeaders] = useState(null);
   const [ranking, setRanking] = useState(null);
   const [showFillSpotModal, setShowFillSpotModal] = useState(false);
   const [fillSpotPosition, setFillSpotPosition] = useState('');
@@ -1028,6 +1029,7 @@ export default function InProgressPool({
                 <DailyRanking
                   formatDate={formatDate}
                   todayFormatDate={todayFormatDate}
+                  dayLeaders={dayLeaders}
                   poolInfo={poolInfo}
                   userTabIndex={userTabIndex}
                   setUserTab={setUserTab}
@@ -1046,6 +1048,8 @@ export default function InProgressPool({
                   user={user}
                   DictUsers={DictUsers}
                   injury={injury}
+                  dayLeaders={dayLeaders}
+                  setDayLeaders={setDayLeaders}
                   isPoolContext
                 />
               </div>

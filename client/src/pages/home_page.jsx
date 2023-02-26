@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // component
@@ -6,6 +6,8 @@ import DayLeaders from '../components/home_page/dailyLeaders';
 import SummaryLeaders from '../components/leagueLeaders_page/summaryLeaders';
 
 export default function HomePage({ formatDate, todayFormatDate, gameStatus, injury }) {
+  const [dayLeaders, setDayLeaders] = useState(null);
+
   return (
     <div className="cont">
       <div className="information-box">
@@ -23,7 +25,14 @@ export default function HomePage({ formatDate, todayFormatDate, gameStatus, inju
       <SummaryLeaders injury={injury} statsType="points" type="skater" playerType="allSkaters" season="20222023" />
       <SummaryLeaders injury={injury} statsType="wins" type="goalie" playerType="GOnly" season="20222023" />
       <div>
-        <DayLeaders formatDate={formatDate} todayFormatDate={todayFormatDate} gameStatus={gameStatus} injury={injury} />
+        <DayLeaders
+          formatDate={formatDate}
+          todayFormatDate={todayFormatDate}
+          gameStatus={gameStatus}
+          injury={injury}
+          dayLeaders={dayLeaders}
+          setDayLeaders={setDayLeaders}
+        />
       </div>
     </div>
   );

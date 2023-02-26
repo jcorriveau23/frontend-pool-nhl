@@ -17,6 +17,7 @@ import { team_info } from '../img/logos';
 export default function DailyRanking({
   formatDate,
   todayFormatDate,
+  dayLeaders,
   poolInfo,
   userTabIndex,
   setUserTab,
@@ -33,6 +34,181 @@ export default function DailyRanking({
   const [dailyRank, setDailyRank] = useState(null);
   const [dailyPreview, setDailyPreview] = useState(null);
 
+  const get_empty_skater_info = (key, played) => ({
+    name: poolInfo.context.players[key].name,
+    team: poolInfo.context.players[key].team,
+    id: key,
+    G: 0,
+    A: 0,
+    SOG: 0,
+    pts: 0,
+    played,
+  });
+
+  const get_skater_total_points = (player, isForward) => {
+    let pts = 0;
+
+    if (isForward) {
+      pts = player.G * poolInfo.forward_pts_goals + player.A * poolInfo.forward_pts_assists;
+
+      if (player.G >= 3) {
+        pts += poolInfo.forward_pts_hattricks;
+      }
+      if (player.SOG) {
+        pts += player.SOG * poolInfo.forward_pts_shootout_goals;
+      }
+    } else {
+      pts = player.G * poolInfo.defender_pts_goals + player.A * poolInfo.defender_pts_assists;
+
+      if (player.G >= 3) {
+        pts += poolInfo.defender_pts_hattricks;
+      }
+      if (player.SOG) {
+        pts += player.SOG * poolInfo.forward_pts_shootout_goals;
+      }
+    }
+
+    return pts;
+  };
+
+  const get_skater_info_from_daily_leaders = (key, isForward) => {
+    const i = dayLeaders.skaters.findIndex(p => p.id === Number(key));
+    if (i > -1) {
+      const player = {
+        name: poolInfo.context.players[key].name,
+        team: poolInfo.context.players[key].team,
+        id: key,
+        G: dayLeaders.skaters[i].goals,
+        A: dayLeaders.skaters[i].assists,
+        SOG: dayLeaders.skaters[i].shootoutGoals,
+        played: true,
+      };
+
+      player.pts = get_skater_total_points(player, isForward);
+
+      return player;
+    }
+
+    if (dayLeaders.played.findIndex(id => id === Number(key)) > -1) {
+      // The player did played but did not make any points.
+      return get_empty_skater_info(key, true);
+    }
+
+    // The player did not played.
+    return get_empty_skater_info(key, false);
+  };
+
+  const get_skater_info_from_score_by_day = (p, key, isForward) => {
+    if (p) {
+      const player = {
+        name: poolInfo.context.players[key].name,
+        team: poolInfo.context.players[key].team,
+        id: key,
+        G: p.G,
+        A: p.A,
+        SOG: p.SOG,
+        played: true,
+      };
+
+      player.pts = get_skater_total_points(player, isForward);
+
+      return player;
+    }
+
+    // The player did not played.
+    return get_empty_skater_info(key, false);
+  };
+
+  const get_empty_goaly_info = (key, played) => ({
+    name: poolInfo.context.players[key].name,
+    team: poolInfo.context.players[key].team,
+    id: key,
+    G: 0,
+    A: 0,
+    W: 0,
+    SO: 0,
+    OT: 0,
+    pts: 0,
+    played,
+  });
+
+  const get_goaly_total_points = player => {
+    let pts = player.G * poolInfo.goalies_pts_goals + player.A * poolInfo.goalies_pts_assists;
+
+    if (player.W) {
+      pts += poolInfo.goalies_pts_wins;
+    }
+    if (player.SO) {
+      pts += poolInfo.goalies_pts_shutouts;
+    }
+    if (player.OT) {
+      pts += poolInfo.goalies_pts_overtimes;
+    }
+
+    return pts;
+  };
+
+  const get_goaly_info_from_daily_leaders = key => {
+    const i = dayLeaders.goalies.findIndex(p => p.id === Number(key));
+    if (i > -1) {
+      const player = {
+        name: poolInfo.context.players[key].name,
+        team: poolInfo.context.players[key].team,
+        id: key,
+        G: dayLeaders.goalies[i].goals,
+        A: dayLeaders.goalies[i].assists,
+        W: dayLeaders.goalies[i].decision === 'W',
+        SO: dayLeaders.goalies[i].decision === 'W' && dayLeaders.goalies[i].shots === dayLeaders.goalies[i].saves,
+        OT: dayLeaders.goalies[i].OT === true,
+        played: true,
+      };
+
+      player.pts = get_goaly_total_points(player);
+
+      return player;
+    }
+
+    if (dayLeaders.played.findIndex(id => id === Number(key)) > -1) {
+      // The player did played but did not make any points.
+      return get_empty_skater_info(key, true);
+    }
+
+    // The player did not played.
+    return get_empty_skater_info(key, false);
+  };
+
+  const get_goaly_info_from_score_by_day = (p, key) => {
+    if (p) {
+      const player = {
+        name: poolInfo.context.players[key].name,
+        team: poolInfo.context.players[key].team,
+        id: key,
+        G: p.G,
+        A: p.A,
+        W: p.W,
+        SO: p.SO,
+        OT: p.OT,
+        played: true,
+      };
+
+      player.pts = get_goaly_total_points(player);
+
+      return player;
+    }
+    return get_empty_goaly_info(key, false);
+  };
+
+  const count_played = players => {
+    let count = 0;
+    for (let i = 0; i < players.length; i += 1) {
+      if (players[i].played) {
+        count += 1;
+      }
+    }
+
+    return count;
+  };
+
   const calculate_daily_stats = () => {
     const forwDailyStatsTemp = {};
     const defDailyStatsTemp = {};
@@ -46,134 +222,57 @@ export default function DailyRanking({
       for (let i = 0; i < poolInfo.participants.length; i += 1) {
         const participant = poolInfo.participants[i];
 
-        // These variable will count the number of games.
-
-        let forwardDailyGames = 0;
-        let defendersDailyGames = 0;
-        let goaliesDailyGames = 0;
-
         // Forwards daily stats
 
         forwDailyStatsTemp[participant] = Object.keys(score_by_day[formatDate][participant].roster.F).map(key => {
-          let player;
-          if (score_by_day[formatDate][participant].roster.F[key]) {
-            forwardDailyGames += 1;
-            player = {
-              name: poolInfo.context.players[key].name,
-              team: poolInfo.context.players[key].team,
-              id: key,
-              G: score_by_day[formatDate][participant].roster.F[key].G,
-              A: score_by_day[formatDate][participant].roster.F[key].A,
-              SOG: score_by_day[formatDate][participant].roster.F[key].SOG,
-              pts:
-                score_by_day[formatDate][participant].roster.F[key].G * poolInfo.forward_pts_goals +
-                score_by_day[formatDate][participant].roster.F[key].A * poolInfo.forward_pts_assists,
-              played: true,
-            };
+          if (dayLeaders && dayLeaders.date === formatDate) {
+            // The players stats is not yet stored into the pool information
+            // we can take the information from the daiLeaders that is being update live.
 
-            if (player.G >= 3) {
-              player.pts += poolInfo.forward_pts_hattricks;
-            }
-
-            if (player.SOG) {
-              player.pts += player.SOG * poolInfo.forward_pts_shootout_goals;
-            }
-          } else {
-            player = {
-              name: poolInfo.context.players[key].name,
-              team: poolInfo.context.players[key].team,
-              id: key,
-              pts: 0,
-              played: false,
-            };
+            return get_skater_info_from_daily_leaders(key, true);
           }
+          // the information is stored in the pool directly
 
-          return player;
+          return get_skater_info_from_score_by_day(score_by_day[formatDate][participant].roster.F[key], key, true);
         });
 
         // Defenders daily stats
 
         defDailyStatsTemp[participant] = Object.keys(score_by_day[formatDate][participant].roster.D).map(key => {
-          let player;
-          if (score_by_day[formatDate][participant].roster.D[key]) {
-            defendersDailyGames += 1;
-            player = {
-              name: poolInfo.context.players[key].name,
-              team: poolInfo.context.players[key].team,
-              id: key,
-              G: score_by_day[formatDate][participant].roster.D[key].G,
-              A: score_by_day[formatDate][participant].roster.D[key].A,
-              SOG: score_by_day[formatDate][participant].roster.D[key].SOG,
-              pts:
-                score_by_day[formatDate][participant].roster.D[key].G * poolInfo.defender_pts_goals +
-                score_by_day[formatDate][participant].roster.D[key].A * poolInfo.defender_pts_assists,
-              played: true,
-            };
-            if (player.G >= 3) {
-              player.pts += poolInfo.defender_pts_hattricks;
-            }
-            if (player.SOG) {
-              player.pts += player.SOG * poolInfo.defender_pts_shootout_goals;
-            }
-          } else {
-            player = {
-              name: poolInfo.context.players[key].name,
-              team: poolInfo.context.players[key].team,
-              id: key,
-              pts: 0,
-              played: false,
-            };
+          if (dayLeaders && dayLeaders.date === formatDate) {
+            // The players stats is not yet stored into the pool information
+            // we can take the information from the daiLeaders that is being update live.
+
+            return get_skater_info_from_daily_leaders(key, false);
           }
 
-          return player;
+          // the information is stored in the pool directly
+
+          return get_skater_info_from_score_by_day(score_by_day[formatDate][participant].roster.D[key], key, false);
         });
 
         // Goalies daily stats
 
         goalDailyStatsTemp[participant] = Object.keys(score_by_day[formatDate][participant].roster.G).map(key => {
-          let player;
-          if (score_by_day[formatDate][participant].roster.G[key]) {
-            goaliesDailyGames += 1;
-            player = {
-              name: poolInfo.context.players[key].name,
-              team: poolInfo.context.players[key].team,
-              id: key,
-              G: score_by_day[formatDate][participant].roster.G[key].G,
-              A: score_by_day[formatDate][participant].roster.G[key].A,
-              W: score_by_day[formatDate][participant].roster.G[key].W,
-              SO: score_by_day[formatDate][participant].roster.G[key].SO,
-              OT: score_by_day[formatDate][participant].roster.G[key].OT,
-              pts:
-                score_by_day[formatDate][participant].roster.G[key].G * poolInfo.goalies_pts_goals +
-                score_by_day[formatDate][participant].roster.G[key].A * poolInfo.goalies_pts_assists,
-              played: true,
-            };
-            if (player.W) {
-              player.pts += poolInfo.goalies_pts_wins;
-            }
-            if (player.SO) {
-              player.pts += poolInfo.goalies_pts_shutouts;
-            }
-            if (player.OT) {
-              player.pts += poolInfo.goalies_pts_overtimes;
-            }
-          } else {
-            player = {
-              name: poolInfo.context.players[key].name,
-              team: poolInfo.context.players[key].team,
-              id: key,
-              pts: 0,
-              played: false,
-            };
-          }
+          if (dayLeaders && dayLeaders.date === formatDate) {
+            // The players stats is not yet stored into the pool information
+            // we can take the information from the daiLeaders that is being update live.
 
-          return player;
+            return get_goaly_info_from_daily_leaders(key);
+          }
+          // the information is stored in the pool directly
+
+          return get_goaly_info_from_score_by_day(score_by_day[formatDate][participant].roster.G[key], key);
         });
+
+        const forwardsCount = count_played(forwDailyStatsTemp[participant]);
+        const defendersCount = count_played(defDailyStatsTemp[participant]);
+        const goaliesCount = count_played(goalDailyStatsTemp[participant]);
 
         dailyRankTemp.push({
           participant,
           // Forwards total daily points
-          F_games: forwardDailyGames,
+          F_games: forwardsCount,
           G_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.G : 0,
           A_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.A : 0,
           HT_F: score_by_day[formatDate][participant].F_tot ? score_by_day[formatDate][participant].F_tot.HT : 0,
@@ -185,7 +284,7 @@ export default function DailyRanking({
               score_by_day[formatDate][participant].F_tot.SOG * poolInfo.forward_pts_shootout_goals
             : 0,
           // Defenders total daily points
-          D_games: defendersDailyGames,
+          D_games: defendersCount,
           G_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.G : 0,
           A_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.A : 0,
           HT_D: score_by_day[formatDate][participant].D_tot ? score_by_day[formatDate][participant].D_tot.HT : 0,
@@ -197,7 +296,7 @@ export default function DailyRanking({
               score_by_day[formatDate][participant].D_tot.SOG * poolInfo.defender_pts_shootout_goals
             : 0,
           // Goalies total daily points
-          G_games: goaliesDailyGames,
+          G_games: goaliesCount,
           G_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.G : 0,
           A_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.A : 0,
           W_G: score_by_day[formatDate][participant].G_tot ? score_by_day[formatDate][participant].G_tot.W : 0,
@@ -211,11 +310,10 @@ export default function DailyRanking({
               score_by_day[formatDate][participant].G_tot.OT * poolInfo.goalies_pts_overtimes
             : 0,
           // Total daily points
-          total_games: forwardDailyGames + defendersDailyGames + goaliesDailyGames,
+          total_games: forwardsCount + defendersCount + goaliesCount,
         });
       }
 
-      console.log(forwDailyStatsTemp);
       setForwDailyStats(forwDailyStatsTemp);
       setDefDailyStats(defDailyStatsTemp);
       setGoalDailyStats(goalDailyStatsTemp);

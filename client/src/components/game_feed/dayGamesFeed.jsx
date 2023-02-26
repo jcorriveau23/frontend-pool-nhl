@@ -198,7 +198,7 @@ export default function DayGamesFeed({
                 <tr>
                   <td>
                     <button type="button" onClick={currentDate} className="base-button">
-                      Set Current Date...
+                      Set date of interest...
                     </button>
                   </td>
                   <td>

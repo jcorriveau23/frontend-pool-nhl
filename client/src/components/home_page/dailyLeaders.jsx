@@ -20,10 +20,11 @@ export default function DayLeaders({
   user,
   DictUsers,
   injury,
+  dayLeaders,
+  setDayLeaders,
   isPoolContext, // Owner column added in pool Context to gives the information of the pooler who owns the player
 }) {
   const [prevFormatDate, setPrevFormatDate] = useState('');
-  const [dayLeaders, setDayLeaders] = useState(null);
   const [showAllPlayers, setShowAllPlayers] = useState(false); // by default only show the 15 leaders
 
   const get_daily_leaders = async () => {
@@ -128,7 +129,7 @@ export default function DayLeaders({
               </>
             ) : (
               <tr>
-                <td colSpan={get_context_column_span()}>No games started yet ({formatDate})</td>
+                <td colSpan={get_context_column_span()}>No games started yet.</td>
               </tr>
             )}
           </tbody>
@@ -177,7 +178,7 @@ export default function DayLeaders({
               </>
             ) : (
               <tr>
-                <td colSpan={get_context_column_span()}>No games started yet ({formatDate})</td>
+                <td colSpan={get_context_column_span()}>No games started yet.</td>
               </tr>
             )}
           </tbody>

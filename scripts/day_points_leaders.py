@@ -23,7 +23,8 @@ def get_day_leaders_data(day):
         day_leaders_data = {
             'date': str(day),
             "skaters": [],
-            "goalies": []
+            "goalies": [],
+            "played": []
             }
 
     return day_leaders_data
@@ -208,7 +209,7 @@ def fetch_pointers_day(day = None):
         if win_processed and loss_processed:              
             fetch_pointers_day.end_games.append(gameID)
                         
-        
+        day_leaders_data["played"] = played_data["players"]
         day_leaders.update_one({'date': str(day)}, {'$set': day_leaders_data}, upsert=True) # upsert = True, to create a new document if not found
         played.update_one({'date': str(day)}, {'$set': played_data}, upsert=True) # upsert = True, to create a new document if not found
             
@@ -231,7 +232,7 @@ def fetch_pointers_day(day = None):
 fetch_pointers_day.end_games = []
 
 if __name__ == "__main__":
-    start_date = date(2023, 2, 11)
+    start_date = date(2023, 2, 15)
     end_date = date.today()
     delta = timedelta(days=1)
     while start_date <= end_date:
