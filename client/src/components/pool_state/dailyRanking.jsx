@@ -158,7 +158,9 @@ export default function DailyRanking({
         G: dayLeaders.goalies[i].stats.goals,
         A: dayLeaders.goalies[i].stats.assists,
         W: dayLeaders.goalies[i].stats.decision === 'W',
-        SO: dayLeaders.goalies[i].stats.decision === 'W' && dayLeaders.goalies[i].shots === dayLeaders.goalies[i].saves,
+        SO:
+          dayLeaders.goalies[i].stats.decision === 'W' &&
+          dayLeaders.goalies[i].stats.shots === dayLeaders.goalies[i].stats.saves,
         OT: dayLeaders.goalies[i].stats.OT === true,
         played: true,
       };
