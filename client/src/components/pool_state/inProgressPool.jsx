@@ -422,8 +422,6 @@ export default function InProgressPool({
       d.setDate(d.getDate() + 1);
       setRosterModificationAllowed(poolInfo.roster_modification_date.includes(d.toISOString().slice(0, 10)));
     }
-
-    console.log();
   }, [formatDate, poolInfo.context.score_by_day]);
 
   const download_csv = pool => {
@@ -836,11 +834,7 @@ export default function InProgressPool({
               {poolInfo.owner === user?._id.$oid || poolInfo.assistants.includes(user?._id.$oid) ? (
                 <tr>
                   <td colSpan={13}>
-                    <button
-                      className="base-button"
-                      onClick={() => setShowAddPlayerModal(!showAddPlayerModal)}
-                      type="button"
-                    >
+                    <button className="base-button" onClick={() => setShowAddPlayerModal(true)} type="button">
                       Add Player
                     </button>
                   </td>
@@ -1107,7 +1101,7 @@ export default function InProgressPool({
           playersIdToPoolerMap={playersIdToPoolerMap}
         />
       </div>
-      {userIndex > -1 ? (
+      {userIndex > -2 ? (
         <>
           <FillSpotModal
             showFillSpotModal={showFillSpotModal}
