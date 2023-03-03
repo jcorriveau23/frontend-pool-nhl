@@ -71,8 +71,8 @@ export default function RosterModificationModal({
         if (forwSelected.length >= poolInfo.number_forwards) {
           alert('The limit of forwards is already reached.');
         } else {
-          setForwSelected(prev => [...prev, player]);
-          setReservSelected(reservSelected.filter(p => p.id !== player.id));
+          setForwSelected(prev => [...prev, player.id]);
+          setReservSelected(reservSelected.filter(p => p !== player.id));
         }
         break;
       }
@@ -80,8 +80,8 @@ export default function RosterModificationModal({
         if (defSelected.length >= poolInfo.number_defenders) {
           alert('The limit of defenders is already reached.');
         } else {
-          setDefSelected(prev => [...prev, player]);
-          setReservSelected(reservSelected.filter(p => p.id !== player.id));
+          setDefSelected(prev => [...prev, player.id]);
+          setReservSelected(reservSelected.filter(p => p !== player.id));
         }
         break;
       }
@@ -89,8 +89,8 @@ export default function RosterModificationModal({
         if (goalSelected.length >= poolInfo.number_goalies) {
           alert('The limit of goalies is already reached.');
         } else {
-          setGoalSelected(prev => [...prev, player]);
-          setReservSelected(reservSelected.filter(p => p.id !== player.id));
+          setGoalSelected(prev => [...prev, player.id]);
+          setReservSelected(reservSelected.filter(p => p !== player.id));
         }
         break;
       }
@@ -100,19 +100,19 @@ export default function RosterModificationModal({
   };
 
   const remove_player = player => {
-    setReservSelected(prev => [...prev, player]);
+    setReservSelected(prev => [...prev, player.id]);
 
     switch (player.position) {
       case 'F': {
-        setForwSelected(forwSelected.filter(p => p.id !== player.id));
+        setForwSelected(forwSelected.filter(p => p !== player.id));
         break;
       }
       case 'D': {
-        setDefSelected(defSelected.filter(p => p.id !== player.id));
+        setDefSelected(defSelected.filter(p => p !== player.id));
         break;
       }
       case 'G': {
-        setGoalSelected(goalSelected.filter(p => p.id !== player.id));
+        setGoalSelected(goalSelected.filter(p => p !== player.id));
         break;
       }
       default:
@@ -120,8 +120,9 @@ export default function RosterModificationModal({
     }
   };
 
-  const render_players = (players, isReservist) =>
-    players.map((playerId, i) => (
+  const render_players = (players, isReservist) => {
+    console.log(players);
+    return players.map((playerId, i) => (
       <tr
         onClick={() =>
           isReservist
@@ -138,6 +139,7 @@ export default function RosterModificationModal({
         </td>
       </tr>
     ));
+  };
 
   const render_tabs_choice_headers = (position, count_position, allowed_count_position) => (
     <>
