@@ -1101,7 +1101,7 @@ export default function InProgressPool({
           playersIdToPoolerMap={playersIdToPoolerMap}
         />
       </div>
-      {userIndex > -2 ? (
+      {poolInfo.participants.includes(user?._id.$oid) ? (
         <>
           <FillSpotModal
             showFillSpotModal={showFillSpotModal}

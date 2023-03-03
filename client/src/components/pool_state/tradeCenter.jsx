@@ -58,7 +58,7 @@ export default function TradeCenter({ poolInfo, setPoolUpdate, injury, user, has
   if (poolInfo.trades) {
     return (
       <div className="half-cont">
-        {userIndex > -1 ? (
+        {poolInfo.participants.includes(user?._id.$oid) ? (
           <>
             <button className="base-button" type="button" onClick={() => setShowCreateTradeModal(true)}>
               Create a trade
