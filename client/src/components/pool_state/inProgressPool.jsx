@@ -67,6 +67,37 @@ export default function InProgressPool({
   const [mainTabIndex, setMainTabIndex] = useState(Number(tabSelectionParams.get('mainTab') ?? get_default_mainTab()));
   const [userTabIndex, setUserTabIndex] = useState(Number(tabSelectionParams.get('userTab') ?? get_default_userTab()));
 
+  const get_new_skater = (playerId, isOwn, isReservist) => {
+    const player = { ...poolInfo.context.players[playerId] };
+
+    player.nb_game = 0;
+    player.G = 0;
+    player.A = 0;
+    player.HT = 0;
+    player.SOG = 0;
+    player.pool_points = 0;
+    player.own = isOwn;
+    player.reservist = isReservist;
+
+    return player;
+  };
+
+  const get_new_goaly = (playerId, isOwn, isReservist) => {
+    const player = { ...poolInfo.context.players[playerId] };
+
+    player.nb_game = 0;
+    player.G = 0;
+    player.A = 0;
+    player.W = 0;
+    player.SO = 0;
+    player.OT = 0;
+    player.pool_points = 0;
+    player.own = isOwn;
+    player.reservist = isReservist;
+
+    return player;
+  };
+
   const calculate_pool_stats = async () => {
     const stats = {}; // contains players list per pooler and poolers total points
     const rank = []; // contains pooler total points
@@ -104,49 +135,24 @@ export default function InProgressPool({
 
       for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_forwards.length; j += 1) {
         const playerId = poolInfo.context.pooler_roster[participant].chosen_forwards[j];
-        const player = poolInfo.context.players[playerId.toString()];
 
-        player.nb_game = 0;
-        player.G = 0;
-        player.A = 0;
-        player.HT = 0;
-        player.SOG = 0;
-        player.pool_points = 0;
-        player.own = true;
-        stats[participant].chosen_forwards.push(player);
+        stats[participant].chosen_forwards.push(get_new_skater(playerId.toString(), true, false));
       }
 
       // Defenders
 
       for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_defenders.length; j += 1) {
         const playerId = poolInfo.context.pooler_roster[participant].chosen_defenders[j];
-        const player = { ...poolInfo.context.players[playerId.toString()] };
 
-        player.nb_game = 0;
-        player.G = 0;
-        player.A = 0;
-        player.HT = 0;
-        player.SOG = 0;
-        player.pool_points = 0;
-        player.own = true;
-        stats[participant].chosen_defenders.push(player);
+        stats[participant].chosen_defenders.push(get_new_skater(playerId.toString(), true, false));
       }
 
       // Goalies
 
       for (let j = 0; j < poolInfo.context.pooler_roster[participant].chosen_goalies.length; j += 1) {
         const playerId = poolInfo.context.pooler_roster[participant].chosen_goalies[j];
-        const player = { ...poolInfo.context.players[playerId.toString()] };
 
-        player.nb_game = 0;
-        player.G = 0;
-        player.A = 0;
-        player.W = 0;
-        player.SO = 0;
-        player.OT = 0;
-        player.pool_points = 0;
-        player.own = true;
-        stats[participant].chosen_goalies.push(player);
+        stats[participant].chosen_goalies.push(get_new_goaly(playerId.toString(), true, false));
       }
 
       // Reservists
@@ -187,24 +193,16 @@ export default function InProgressPool({
                   r => r === playerId
                 );
 
-                const newPlayer = { ...poolInfo.context.players[key] };
-
-                newPlayer.nb_game = 1;
-                newPlayer.G = player.G;
-                newPlayer.A = player.A;
-                newPlayer.HT = player.G >= 3 ? 1 : 0;
-                newPlayer.SOG = player.SOG ? player.SOG : 0;
-                newPlayer.own = false;
-                newPlayer.reservist = indexReservist > -1;
-
-                index = stats[participant].chosen_forwards.push(newPlayer) - 1;
-              } else {
-                stats[participant].chosen_forwards[index].nb_game += 1;
-                stats[participant].chosen_forwards[index].G += player.G;
-                stats[participant].chosen_forwards[index].A += player.A;
-                stats[participant].chosen_forwards[index].HT += player.G >= 3 ? 1 : 0; //  hattrick
-                stats[participant].chosen_forwards[index].SOG += player.SOG ? player.SOG : 0; // Shootout goals
+                // The player has played in the past for this participant but is no more into the starting roster.
+                index = stats[participant].chosen_forwards.push(get_new_skater(key, false, indexReservist > -1)) - 1;
               }
+
+              stats[participant].chosen_forwards[index].nb_game += 1;
+              stats[participant].chosen_forwards[index].G += player.G;
+              stats[participant].chosen_forwards[index].A += player.A;
+              stats[participant].chosen_forwards[index].HT += player.G >= 3 ? 1 : 0; //  hattrick
+              stats[participant].chosen_forwards[index].SOG += player.SOG ? player.SOG : 0; // Shootout goals
+
               // total pool points
               stats[participant].chosen_forwards[index].pool_points =
                 stats[participant].chosen_forwards[index].G * poolInfo.forward_pts_goals +
@@ -242,24 +240,16 @@ export default function InProgressPool({
                   r => r === playerId
                 );
 
-                const newPlayer = { ...poolInfo.context.players[key] };
-
-                newPlayer.nb_game = 1;
-                newPlayer.G = player.G;
-                newPlayer.A = player.A;
-                newPlayer.HT = player.G >= 3 ? 1 : 0;
-                newPlayer.SOG = player.SOG ? player.SOG : 0;
-                newPlayer.own = false;
-                newPlayer.reservist = indexReservist > -1;
-
-                index = stats[participant].chosen_defenders.push(newPlayer) - 1;
-              } else {
-                stats[participant].chosen_defenders[index].nb_game += 1;
-                stats[participant].chosen_defenders[index].G += player.G;
-                stats[participant].chosen_defenders[index].A += player.A;
-                stats[participant].chosen_defenders[index].HT += player.G >= 3 ? 1 : 0; // hattricks
-                stats[participant].chosen_defenders[index].SOG += player.SOG ? player.SOG : 0; // shootout goals
+                // The player has played in the past for this participant but is no more into the starting roster.
+                index = stats[participant].chosen_defenders.push(get_new_skater(key, false, indexReservist > -1)) - 1;
               }
+
+              stats[participant].chosen_defenders[index].nb_game += 1;
+              stats[participant].chosen_defenders[index].G += player.G;
+              stats[participant].chosen_defenders[index].A += player.A;
+              stats[participant].chosen_defenders[index].HT += player.G >= 3 ? 1 : 0; // hattricks
+              stats[participant].chosen_defenders[index].SOG += player.SOG ? player.SOG : 0; // shootout goals
+
               // total pool points
               stats[participant].chosen_defenders[index].pool_points =
                 stats[participant].chosen_defenders[index].G * poolInfo.defender_pts_goals +
@@ -298,26 +288,16 @@ export default function InProgressPool({
                   r => r === playerId
                 );
 
-                const newPlayer = { ...poolInfo.context.players[key] };
-
-                newPlayer.nb_game = 1;
-                newPlayer.G = player.G;
-                newPlayer.A = player.A;
-                newPlayer.W = player.W;
-                newPlayer.SO = player.SO;
-                newPlayer.OT = player.OT;
-                newPlayer.own = false;
-                newPlayer.reservist = indexReservist > -1;
-
-                index = stats[participant].chosen_goalies.push(newPlayer) - 1;
-              } else {
-                stats[participant].chosen_goalies[index].nb_game += 1;
-                stats[participant].chosen_goalies[index].G += player.G;
-                stats[participant].chosen_goalies[index].A += player.A;
-                stats[participant].chosen_goalies[index].W += player.W;
-                stats[participant].chosen_goalies[index].SO += player.SO;
-                stats[participant].chosen_goalies[index].OT += player.OT;
+                // The player has played in the past for this participant but is no more into the starting roster.
+                index = stats[participant].chosen_goalies.push(get_new_goaly(key, false, indexReservist > -1)) - 1;
               }
+
+              stats[participant].chosen_goalies[index].nb_game += 1;
+              stats[participant].chosen_goalies[index].G += player.G;
+              stats[participant].chosen_goalies[index].A += player.A;
+              stats[participant].chosen_goalies[index].W += player.W;
+              stats[participant].chosen_goalies[index].SO += player.SO;
+              stats[participant].chosen_goalies[index].OT += player.OT;
 
               // total pool points
               stats[participant].chosen_goalies[index].pool_points =
@@ -369,7 +349,7 @@ export default function InProgressPool({
         stats[participant].goalies_own += stats[participant].chosen_goalies[j].own ? 1 : 0;
       }
 
-      const pooler_global_stats = {
+      rank.push({
         participant,
         // forwards global stats
         forwards_total_game: stats[participant].forwards_total_game,
@@ -401,13 +381,10 @@ export default function InProgressPool({
           stats[participant].forwards_total_pts +
           stats[participant].defenders_total_pts +
           stats[participant].goalies_total_pts,
-      };
-
-      rank.push(pooler_global_stats);
+      });
     }
 
     setRanking(rank);
-    console.log(stats);
     setPlayersStats(stats);
     console.log('done calculating');
   };
