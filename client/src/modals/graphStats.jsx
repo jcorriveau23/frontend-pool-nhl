@@ -87,7 +87,6 @@ export default function GraphStats({ poolInfo, DictUsers }) {
         backgroundColor: color[i % poolInfo.participants.length],
         borderColor: color[i % poolInfo.participants.length],
         tension: 0.4,
-        pointBorderColor: 'blue',
       };
       datasets.push(dataset);
     }
