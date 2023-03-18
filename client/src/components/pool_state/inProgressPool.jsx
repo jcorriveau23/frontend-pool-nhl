@@ -742,6 +742,12 @@ export default function InProgressPool({
                   todayFormatDate={todayFormatDate}
                   msg="Points Cumulate"
                   colSpan={13}
+                  tooltipMsg={
+                    formatDate === todayFormatDate &&
+                    poolInfo.context.score_by_day[formatDate][poolInfo.participants[0]].cumulate
+                      ? 'The last games points have not been cumulated yet.'
+                      : null
+                  }
                 />
                 <tr>
                   <th colSpan={13}>
@@ -840,6 +846,12 @@ export default function InProgressPool({
           formatDate={formatDate}
           todayFormatDate={todayFormatDate}
           msg="Cumulative Ranking"
+          tooltipMsg={
+            formatDate === todayFormatDate &&
+            poolInfo.context.score_by_day[formatDate][poolInfo.participants[0]].cumulate
+              ? 'The last games points have not been cumulated yet.'
+              : null
+          }
           colSpan={26}
         />
         <tr>
