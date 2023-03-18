@@ -697,6 +697,13 @@ export default function InProgressPool({
     setUserTab(index);
   };
 
+  const tooltip_msg = () =>
+    formatDate === todayFormatDate &&
+    (gameStatus === 'Live' || gameStatus === 'Final') &&
+    !poolInfo.context.score_by_day[formatDate][poolInfo.participants[0]].cumulate
+      ? 'The last games points have not been cumulated yet.'
+      : null;
+
   const render_tabs_roster_stats = () => (
     <Tabs selectedIndex={userTabIndex} onSelect={index => setUserTab(index)}>
       <TabList>
@@ -742,12 +749,7 @@ export default function InProgressPool({
                   todayFormatDate={todayFormatDate}
                   msg="Points Cumulate"
                   colSpan={13}
-                  tooltipMsg={
-                    formatDate === todayFormatDate &&
-                    !poolInfo.context.score_by_day[formatDate][poolInfo.participants[0]].cumulate
-                      ? 'The last games points have not been cumulated yet.'
-                      : null
-                  }
+                  tooltipMsg={tooltip_msg()}
                 />
                 <tr>
                   <th colSpan={13}>
@@ -846,12 +848,7 @@ export default function InProgressPool({
           formatDate={formatDate}
           todayFormatDate={todayFormatDate}
           msg="Cumulative Ranking"
-          tooltipMsg={
-            formatDate === todayFormatDate &&
-            !poolInfo.context.score_by_day[formatDate][poolInfo.participants[0]].cumulate
-              ? 'The last games points have not been cumulated yet.'
-              : null
-          }
+          tooltipMsg={tooltip_msg()}
           colSpan={26}
         />
         <tr>
