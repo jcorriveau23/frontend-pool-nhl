@@ -697,12 +697,21 @@ export default function InProgressPool({
     setUserTab(index);
   };
 
-  const tooltip_msg = () =>
-    formatDate === todayFormatDate &&
-    (gameStatus === 'Live' || gameStatus === 'Final') &&
-    !poolInfo.context.score_by_day[formatDate][poolInfo.participants[0]].cumulate
-      ? 'The last games points have not been cumulated yet.'
-      : null;
+  const tooltip_msg = () => {
+    if (
+      formatDate === todayFormatDate &&
+      !poolInfo.context.score_by_day[formatDate][poolInfo.participants[0]].cumulate
+    ) {
+      if (gameStatus === 'Live') {
+        return 'The current game have not been cumulated yet.';
+      }
+      if (gameStatus === 'Final') {
+        return 'Yesterday games have not been cumulated yet.';
+      }
+    }
+
+    return null;
+  };
 
   const render_tabs_roster_stats = () => (
     <Tabs selectedIndex={userTabIndex} onSelect={index => setUserTab(index)}>

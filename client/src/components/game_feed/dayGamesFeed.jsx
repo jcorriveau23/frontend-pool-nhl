@@ -6,8 +6,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 // icons
 import { RiInformationFill } from 'react-icons/ri';
-import goPrev from '../img/icons/Actions-go-previous-icon.png';
-import goNext from '../img/icons/Actions-go-next-icon.png';
+import { BiArrowToLeft, BiArrowToRight, BiCurrentLocation } from 'react-icons/bi';
 
 // component
 import GameItem from './gameItem';
@@ -176,42 +175,28 @@ export default function DayGamesFeed({
           <tbody>
             <tr>
               <td>
-                <button onClick={() => prevDate()} type="button">
-                  <img src={goPrev} alt="" width={60} height={60} />
-                </button>
+                <BiArrowToLeft size={90} color="#999" className="icon-link" onClick={() => prevDate()} />
               </td>
               <td>
                 <DatePicker selected={date} onChange={d => setSpecificDate(d)} dateFormat="yyyy-MM-dd" />
               </td>
               <td>
-                <button onClick={() => nextDate()} type="button">
-                  <img src={goNext} alt="" width={60} height={60} />
-                </button>
+                <BiArrowToRight size={90} color="#999" className="icon-link" onClick={() => nextDate()} />
               </td>
             </tr>
+            {todayFormatDate === formatDate ? null : (
+              <tr>
+                <td colSpan={3}>
+                  <a data-tip="The date selected is not the current date.">
+                    <RiInformationFill size={70} color="yellow" />
+                  </a>
+                  <ReactTooltip className="tooltip" padding="8px" />
+                  <BiCurrentLocation size={70} color="#999" className="icon-link" onClick={() => currentDate()} />
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
-        {todayFormatDate === formatDate ? null : (
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  <td>
-                    <button type="button" onClick={currentDate} className="base-button">
-                      Set date of interest...
-                    </button>
-                  </td>
-                  <td>
-                    <a data-tip="The date selected is not the current date.">
-                      <RiInformationFill size={45} color="yellow" />
-                    </a>
-                    <ReactTooltip className="tooltip" padding="8px" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        )}
       </div>
       <div className="dayGamesFeed">
         <div>
