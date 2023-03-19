@@ -120,9 +120,8 @@ export default function RosterModificationModal({
     }
   };
 
-  const render_players = (players, isReservist) => {
-    console.log(players);
-    return players.map((playerId, i) => (
+  const render_players = (players, isReservist) =>
+    players.map((playerId, i) => (
       <tr
         onClick={() =>
           isReservist
@@ -139,7 +138,6 @@ export default function RosterModificationModal({
         </td>
       </tr>
     ));
-  };
 
   const render_tabs_choice_headers = (position, count_position, allowed_count_position) => (
     <>
