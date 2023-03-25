@@ -88,24 +88,24 @@ function SearchPlayer() {
           </tbody>
         </table>
       </button>
-      <div className="results">
-        <table className="results_table">
-          {isSearching ? <ClipLoader color="#fff" loading size={35} /> : null}
-          {searchResult?.suggestions?.length > 0
-            ? searchResult?.suggestions?.map(player => {
-                const p = get_player_info(player);
-                return (
-                  <tr key={p} onClick={() => link_to(`/player-info/${p.id}`)}>
-                    <td>{`${p.firstName} ${p.lastName} (${p.position})`}</td>
-                    <td>
-                      <img src={team_info[abbrevToTeamId[p.teamAbbrevs]]?.logo} alt="" width="70" height="70" />
-                    </td>
-                  </tr>
-                );
-              })
-            : null}
-        </table>
-      </div>
+      {searchResult?.suggestions?.length > 0 ? (
+        <div className="results">
+          <table className="results_table">
+            {isSearching ? <ClipLoader color="#fff" loading size={35} /> : null}
+            {searchResult.suggestions.map(player => {
+              const p = get_player_info(player);
+              return (
+                <tr key={p} onClick={() => link_to(`/player-info/${p.id}`)}>
+                  <td>{`${p.firstName} ${p.lastName} (${p.position})`}</td>
+                  <td>
+                    <img src={team_info[abbrevToTeamId[p.teamAbbrevs]]?.logo} alt="" width="70" height="70" />
+                  </td>
+                </tr>
+              );
+            })}
+          </table>
+        </div>
+      ) : null}
     </div>
   );
 }

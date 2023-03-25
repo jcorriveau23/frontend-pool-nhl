@@ -93,25 +93,16 @@ input {
 }
 
 .menu button {
-  background-color: #888;
-  border-color: #000;
-  border-radius: 3px;
-  border: 2px solid #000;
   display: inline-flex;
-  align-items: center;
-  color: #000;
-  border: 3px solid #000;
 }
 
-.menu button:hover:enabled {
-  border-color: #fff;
-  background-color: #888;
-  cursor: pointer;
-  color: #fff;
-}
-
+.wallet-card button,
+.menu button,
 .search-players button {
-  border: 3px solid #000;
+  border: 6px solid #000;
+  border-radius: 3px;
+  background-color: #888;
+  margin-right: 5px;
 }
 
 .block {
@@ -128,7 +119,7 @@ input {
 }
 .wallet-card {
   position: fixed;
-  right: 2%;
+  right: 1.5%;
 }
 
 .wallet-card button {
@@ -136,7 +127,6 @@ input {
   text-align: center;
   min-height: 85px;
   min-width: 130px;
-  border: 3px solid #000;
 }
 
 .base-button {
@@ -178,7 +168,6 @@ input {
 }
 
 .draft-button,
-.search-players button,
 .wallet-card button,
 .base-button {
   background-color: #888;
@@ -187,6 +176,7 @@ input {
 }
 
 .draft-button:hover:enabled,
+.menu button:hover:enabled,
 .search-players button:hover:enabled,
 .wallet-card button:hover:enabled,
 .base-button:hover:enabled {
