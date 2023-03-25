@@ -61,17 +61,15 @@ export default function MenuModal({ user, isWalletConnected, showMenuModal, setS
           </tr>
         </thead>
         <tbody>
-          {user ? (
-            <tr
-              style={window.location.pathname.includes('/pools') ? { color: '#fff' } : null}
-              onClick={() => link_to('/pools')}
-            >
-              <td>
-                <FaGamepad size={45} />
-              </td>
-              <td>My Pools</td>
-            </tr>
-          ) : null}
+          <tr
+            style={window.location.pathname.includes('/pools') ? { color: '#fff' } : null}
+            onClick={() => link_to('/pools')}
+          >
+            <td>
+              <FaGamepad size={45} />
+            </td>
+            <td>Pools</td>
+          </tr>
           {isWalletConnected ? (
             <tr
               style={window.location.pathname.includes('/my-bets') ? { color: '#fff' } : null}

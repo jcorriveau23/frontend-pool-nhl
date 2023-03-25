@@ -700,6 +700,7 @@ export default function InProgressPool({
   const tooltip_msg = () => {
     if (
       formatDate === todayFormatDate &&
+      poolInfo.context.score_by_day[formatDate] &&
       !poolInfo.context.score_by_day[formatDate][poolInfo.participants[0]].cumulate
     ) {
       if (gameStatus === 'Live') {
