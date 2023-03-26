@@ -154,7 +154,6 @@ input {
 
 .base-button_no_border:hover:enabled {
   background-color: #444;
-  border-color: #fff;
   cursor: pointer;
   color: #fff;
 }
@@ -181,7 +180,6 @@ input {
 .wallet-card button:hover:enabled,
 .base-button:hover:enabled {
   border-color: #fff;
-  background-color: #888;
   cursor: pointer;
   color: #fff;
 }
