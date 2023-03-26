@@ -77,7 +77,7 @@ export default function TradeItem({
               {render_trade_side(tradeInfo.from_items, tradeInfo.proposed_by, setFromPlayers, setFromPicks)}
             </th>
             <th width="10%">
-              <FaExchangeAlt size={30} />
+              <FaExchangeAlt size={45} />
             </th>
             <th width="45%">{render_trade_side(tradeInfo.to_items, tradeInfo.ask_to, setToPlayers, setToPicks)}</th>
           </tr>

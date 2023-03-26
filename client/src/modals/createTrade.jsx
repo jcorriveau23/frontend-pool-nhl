@@ -32,7 +32,8 @@ export default function CreateTradeModal({
   const [fromPicks, setFromPicks] = useState([]);
   const [toPlayers, setToPlayers] = useState([]);
   const [toPicks, setToPicks] = useState([]);
-  const [selectedPooler, setSelectedPooler] = useState(
+  const [fromSelectedPooler, setFromSelectedPooler] = useState(user._id.$oid);
+  const [toSelectedPooler, setToSelectedPooler] = useState(
     poolInfo.participants[0] === user?._id.$oid ? poolInfo.participants[1] : poolInfo.participants[0]
   );
 
@@ -54,13 +55,18 @@ export default function CreateTradeModal({
 
   const on_change_to_selection = participant => {
     reset_to_items();
-    setSelectedPooler(participant);
+    setToSelectedPooler(participant);
+  };
+
+  const on_change_from_selection = participant => {
+    reset_from_items();
+    setFromSelectedPooler(participant);
   };
 
   const send_trade = async () => {
     const tradeInfo = {
-      proposed_by: user._id.$oid,
-      ask_to: selectedPooler,
+      proposed_by: fromSelectedPooler,
+      ask_to: toSelectedPooler,
       from_items: { players: fromPlayers, picks: fromPicks },
       to_items: { players: toPlayers, picks: toPicks },
       id: 0,
@@ -224,8 +230,8 @@ export default function CreateTradeModal({
           <h1>Create Trade</h1>
           <TradeItem
             tradeInfo={{
-              proposed_by: user._id.$oid,
-              ask_to: selectedPooler,
+              proposed_by: fromSelectedPooler,
+              ask_to: toSelectedPooler,
               from_items: { players: fromPlayers, picks: fromPicks },
               to_items: { players: toPlayers, picks: toPicks },
             }}
@@ -242,10 +248,19 @@ export default function CreateTradeModal({
         </div>
         <div className="float-left">
           <div className="half-cont">
+            <select
+              onChange={event => on_change_from_selection(event.target.value)}
+              defaultValue={fromSelectedPooler}
+              disabled={poolInfo.owner !== user._id.$oid && !poolInfo.assistants.includes(user._id.$oid)}
+            >
+              {poolInfo.participants.map(pooler => (
+                <option value={pooler}>{DictUsers ? DictUsers[pooler] : pooler}</option>
+              ))}
+            </select>
             {render_pooler_player_list(
               'from',
-              poolInfo.context.pooler_roster[user._id.$oid],
-              user._id.$oid,
+              poolInfo.context.pooler_roster[fromSelectedPooler],
+              fromSelectedPooler,
               fromPlayers,
               fromPicks
             )}
@@ -253,18 +268,17 @@ export default function CreateTradeModal({
         </div>
         <div className="float-right">
           <div className="half-cont">
-            <select onChange={event => on_change_to_selection(event.target.value)} defaultValue={selectedPooler}>
+            <select onChange={event => on_change_to_selection(event.target.value)} defaultValue={toSelectedPooler}>
               {poolInfo.participants
                 .filter(pooler => pooler !== user._id.$oid)
                 .map(pooler => (
                   <option value={pooler}>{DictUsers ? DictUsers[pooler] : pooler}</option>
                 ))}
             </select>
-
             {render_pooler_player_list(
               'to',
-              poolInfo.context.pooler_roster[selectedPooler],
-              selectedPooler,
+              poolInfo.context.pooler_roster[toSelectedPooler],
+              toSelectedPooler,
               toPlayers,
               toPicks
             )}
