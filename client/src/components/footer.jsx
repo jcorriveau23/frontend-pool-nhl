@@ -10,18 +10,16 @@ export default function Footer() {
 
   return (
     <div className="cont">
-      <IoLogoTwitter
-        size={70}
-        color="#999"
-        className="icon-link"
-        onClick={() => open_link('https://twitter.com/hockeypool3')}
-      />
-      <IoLogoGithub
-        size={70}
-        color="#999"
-        className="icon-link"
+      <button className="icon-button" onClick={() => open_link('https://twitter.com/hockeypool3')} type="button">
+        <IoLogoTwitter size={70} />
+      </button>
+      <button
+        className="icon-button"
         onClick={() => open_link('https://github.com/jcorriveau23/backend-pool-nhl')}
-      />
+        type="button"
+      >
+        <IoLogoGithub size={70} />
+      </button>
     </div>
   );
 }

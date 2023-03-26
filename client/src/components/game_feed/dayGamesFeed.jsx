@@ -175,13 +175,17 @@ export default function DayGamesFeed({
           <tbody>
             <tr>
               <td>
-                <BiArrowToLeft size={90} color="#999" className="icon-link" onClick={() => prevDate()} />
+                <button className="icon-button" onClick={() => prevDate()} type="button">
+                  <BiArrowToLeft size={90} />
+                </button>
               </td>
               <td>
                 <DatePicker selected={date} onChange={d => setSpecificDate(d)} dateFormat="yyyy-MM-dd" />
               </td>
               <td>
-                <BiArrowToRight size={90} color="#999" className="icon-link" onClick={() => nextDate()} />
+                <button className="icon-button" onClick={() => nextDate()} type="button">
+                  <BiArrowToRight size={90} />
+                </button>
               </td>
             </tr>
             {todayFormatDate === formatDate ? null : (
@@ -191,7 +195,9 @@ export default function DayGamesFeed({
                     <RiInformationFill size={70} color="yellow" />
                   </a>
                   <ReactTooltip className="tooltip" padding="8px" />
-                  <BiCurrentLocation size={70} color="#999" className="icon-link" onClick={() => currentDate()} />
+                  <button className="icon-button" onClick={() => currentDate()} type="button">
+                    <BiCurrentLocation size={70} />
+                  </button>
                 </td>
               </tr>
             )}

@@ -132,8 +132,13 @@ li {
   padding-right: 10px;
 }
 
-.icon-link :hover {
-  background-color: #444444;
+.icon-button {
+  color: #888;
+  background-color: #444;
+  border: none;
+}
+
+.icon-button :hover {
   color: #fff;
   cursor: pointer;
 }
