@@ -19,7 +19,7 @@ import Cookies from 'js-cookie';
 // css
 import './page.css';
 
-export default function LoginPage({ user, setUser, setIsWalletConnected, setCurrentAddr, setDictUsers }) {
+export default function LoginPage({ user, setUser, setIsWalletConnected, setCurrentAddr }) {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState(''); // for Register
@@ -50,16 +50,8 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
       setUser(res.data.user);
       setIsWalletConnected(true);
       setCurrentAddr(addr);
-      const res2 = await axios.get('/api-rust/users', {
-        headers: { Authorization: `Bearer ${Cookies.get(`token-${res.data.user._id.$oid}`)}` },
-      });
-      const DictUsersTmp = {};
-      res2.data.forEach(u => {
-        DictUsersTmp[u._id.$oid] = u.name;
-      });
 
-      setDictUsers(DictUsersTmp);
-      navigate('/');
+      navigate('/'); // Navigate to the home page on success wallet login.
     } catch (e) {
       alert(e.response.data);
     }
@@ -71,16 +63,8 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
       Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
       localStorage.setItem('persist-account', JSON.stringify(res.data.user));
       setUser(res.data.user);
-      const res2 = await axios.get('/api-rust/users', {
-        headers: { Authorization: `Bearer ${Cookies.get(`token-${res.data.user._id.$oid}`)}` },
-      });
-      const DictUsersTmp = {};
-      res2.data.forEach(u => {
-        DictUsersTmp[u._id.$oid] = u.name;
-      });
 
-      setDictUsers(DictUsersTmp);
-      navigate('/');
+      navigate('/'); // Navigate to the home page on success login.
     } catch (e) {
       alert(e.response.data);
     }

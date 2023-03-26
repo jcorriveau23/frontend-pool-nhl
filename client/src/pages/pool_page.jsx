@@ -22,6 +22,7 @@ import { db } from '../components/db/db';
 export default function PoolPage({
   user,
   DictUsers,
+  setDictUsers,
   injury,
   formatDate,
   todayFormatDate,
@@ -56,6 +57,20 @@ export default function PoolPage({
     } while (i > 0);
 
     return null;
+  };
+
+  const get_users = async participants => {
+    try {
+      const res = await axios.get('/api-rust/users', { params: { names: participants } });
+      const DictUsersTmp = {};
+      res.data.forEach(u => {
+        DictUsersTmp[u._id.$oid] = u.name;
+      });
+
+      setDictUsers(DictUsersTmp);
+    } catch (e) {
+      alert(e.response.data);
+    }
   };
 
   const fetch_pool_info = async forceUpdate => {
@@ -100,6 +115,7 @@ export default function PoolPage({
       }
 
       setPoolInfo(res.data);
+      get_users(res.data.participants); // Get the list of users that are in the pool.
       db.pools.put(res.data, 'name');
 
       if (res.data.participants) {

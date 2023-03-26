@@ -65,29 +65,12 @@ function App() {
     }
   };
 
-  const get_users = async _user => {
-    try {
-      const res = await axios.get('/api-rust/users');
-      const DictUsersTmp = {};
-      res.data.forEach(u => {
-        if (u._id.$oid === _user?._id.$oid) setUser(u);
-        DictUsersTmp[u._id.$oid] = u.name;
-      });
-
-      setDictUsers(DictUsersTmp);
-    } catch (e) {
-      alert(e.response.data);
-      Cookies.remove(`token-${user._id.$oid}`);
-      localStorage.clear('persist-account');
-    }
-  };
-
   useEffect(() => {
     get_injury();
 
     const userTmp = JSON.parse(localStorage.getItem('persist-account'));
 
-    get_users(userTmp);
+    setUser(userTmp);
   }, []);
 
   return (
@@ -160,9 +143,7 @@ function App() {
             />
             <Route
               path="/login"
-              element={
-                <LoginPage user={user} setUser={setUser} setCurrentAddr={setCurrentAddr} setDictUsers={setDictUsers} />
-              }
+              element={<LoginPage user={user} setUser={setUser} setCurrentAddr={setCurrentAddr} />}
             />
             <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
             <Route path="/pools" element={<MyPoolsPage user={user} DictUsers={DictUsers} />} />
@@ -173,6 +154,7 @@ function App() {
                 <PoolPage
                   user={user}
                   DictUsers={DictUsers}
+                  setDictUsers={setDictUsers}
                   injury={injury}
                   formatDate={formatDate}
                   todayFormatDate={todayFormatDate}

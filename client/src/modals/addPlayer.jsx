@@ -61,7 +61,9 @@ export default function AddPlayerModal({
     >
       <div className="modal_content">
         <div className="cont">
-          <h1>Select a players your want to add to {DictUsers[participant]}&apos;s roster.</h1>
+          <h1>
+            Select a players your want to add to {DictUsers ? DictUsers[participant] : participant}&apos;s roster.
+          </h1>
         </div>
         <div className="cont">
           <SearchPlayersStats
