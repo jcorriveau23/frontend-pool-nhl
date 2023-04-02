@@ -65,7 +65,7 @@ export default function CreatedPool({ user, hasOwnerRights, DictUsers, poolName,
   const render_participants = () => {
     const participants = [];
 
-    for (let i = 0; i < poolInfo.number_poolers; i += 1) {
+    for (let i = 0; i < poolInfo.settings.number_poolers; i += 1) {
       if (i < userList.length) {
         participants.push(
           <li key={userList[i]._oid}>
@@ -86,8 +86,8 @@ export default function CreatedPool({ user, hasOwnerRights, DictUsers, poolName,
   const render_start_draft_button = () => {
     let bDisable = false;
 
-    if (userList.length === poolInfo.number_poolers) {
-      for (let i = 0; i < poolInfo.number_poolers; i += 1) {
+    if (userList.length === poolInfo.settings.number_poolers) {
+      for (let i = 0; i < poolInfo.settings.number_poolers; i += 1) {
         if (userList[i].ready === false) bDisable = true;
       }
     } else bDisable = true;

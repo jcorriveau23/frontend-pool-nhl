@@ -205,10 +205,10 @@ export default function InProgressPool({
 
               // total pool points
               stats[participant].chosen_forwards[index].pool_points =
-                stats[participant].chosen_forwards[index].G * poolInfo.forward_pts_goals +
-                stats[participant].chosen_forwards[index].A * poolInfo.forward_pts_assists +
-                stats[participant].chosen_forwards[index].HT * poolInfo.forward_pts_hattricks +
-                stats[participant].chosen_forwards[index].SOG * poolInfo.forward_pts_shootout_goals;
+                stats[participant].chosen_forwards[index].G * poolInfo.settings.forward_pts_goals +
+                stats[participant].chosen_forwards[index].A * poolInfo.settings.forward_pts_assists +
+                stats[participant].chosen_forwards[index].HT * poolInfo.settings.forward_pts_hattricks +
+                stats[participant].chosen_forwards[index].SOG * poolInfo.settings.forward_pts_shootout_goals;
 
               // cumulative info.
               stats[participant].forwards_total_goal += player.G;
@@ -217,10 +217,10 @@ export default function InProgressPool({
               stats[participant].forwards_total_hattrick += player.G >= 3 ? 1 : 0;
               stats[participant].forwards_total_shootout_goals += player.SOG ? player.SOG : 0;
               stats[participant].forwards_total_pts +=
-                player.G * poolInfo.forward_pts_goals +
-                player.A * poolInfo.forward_pts_assists +
-                player.SOG * poolInfo.forward_pts_shootout_goals;
-              if (player.G >= 3) stats[participant].forwards_total_pts += poolInfo.forward_pts_hattricks;
+                player.G * poolInfo.settings.forward_pts_goals +
+                player.A * poolInfo.settings.forward_pts_assists +
+                player.SOG * poolInfo.settings.forward_pts_shootout_goals;
+              if (player.G >= 3) stats[participant].forwards_total_pts += poolInfo.settings.forward_pts_hattricks;
             }
 
             return null;
@@ -252,10 +252,10 @@ export default function InProgressPool({
 
               // total pool points
               stats[participant].chosen_defenders[index].pool_points =
-                stats[participant].chosen_defenders[index].G * poolInfo.defender_pts_goals +
-                stats[participant].chosen_defenders[index].A * poolInfo.defender_pts_assists +
-                stats[participant].chosen_defenders[index].HT * poolInfo.defender_pts_hattricks +
-                stats[participant].chosen_defenders[index].SOG * poolInfo.defender_pts_shootout_goals;
+                stats[participant].chosen_defenders[index].G * poolInfo.settings.defender_pts_goals +
+                stats[participant].chosen_defenders[index].A * poolInfo.settings.defender_pts_assists +
+                stats[participant].chosen_defenders[index].HT * poolInfo.settings.defender_pts_hattricks +
+                stats[participant].chosen_defenders[index].SOG * poolInfo.settings.defender_pts_shootout_goals;
 
               // cumulative info.
               stats[participant].defenders_total_goal += player.G;
@@ -264,11 +264,11 @@ export default function InProgressPool({
               stats[participant].defenders_total_hattrick += player.G >= 3 ? 1 : 0;
               stats[participant].defenders_total_shootout_goals += player.SOG ? player.SOG : 0;
               stats[participant].defenders_total_pts +=
-                player.G * poolInfo.defender_pts_goals +
-                player.A * poolInfo.defender_pts_assists +
-                player.SOG * poolInfo.defender_pts_shootout_goals;
+                player.G * poolInfo.settings.defender_pts_goals +
+                player.A * poolInfo.settings.defender_pts_assists +
+                player.SOG * poolInfo.settings.defender_pts_shootout_goals;
 
-              if (player.G >= 3) stats[participant].defenders_total_pts += poolInfo.defender_pts_hattricks;
+              if (player.G >= 3) stats[participant].defenders_total_pts += poolInfo.settings.defender_pts_hattricks;
             }
 
             return null;
@@ -301,11 +301,11 @@ export default function InProgressPool({
 
               // total pool points
               stats[participant].chosen_goalies[index].pool_points =
-                stats[participant].chosen_goalies[index].G * poolInfo.goalies_pts_goals +
-                stats[participant].chosen_goalies[index].A * poolInfo.goalies_pts_assists +
-                stats[participant].chosen_goalies[index].W * poolInfo.goalies_pts_wins +
-                stats[participant].chosen_goalies[index].SO * poolInfo.goalies_pts_shutouts +
-                stats[participant].chosen_goalies[index].OT * poolInfo.goalies_pts_overtimes;
+                stats[participant].chosen_goalies[index].G * poolInfo.settings.goalies_pts_goals +
+                stats[participant].chosen_goalies[index].A * poolInfo.settings.goalies_pts_assists +
+                stats[participant].chosen_goalies[index].W * poolInfo.settings.goalies_pts_wins +
+                stats[participant].chosen_goalies[index].SO * poolInfo.settings.goalies_pts_shutouts +
+                stats[participant].chosen_goalies[index].OT * poolInfo.settings.goalies_pts_overtimes;
 
               // cumulative info.
               stats[participant].goalies_total_goal += player.G;
@@ -315,11 +315,11 @@ export default function InProgressPool({
               stats[participant].goalies_total_shutout += player.SO;
               stats[participant].goalies_total_OT += player.OT;
               stats[participant].goalies_total_pts +=
-                player.G * poolInfo.goalies_pts_goals +
-                player.A * poolInfo.goalies_pts_assists +
-                player.W * poolInfo.goalies_pts_wins +
-                player.SO * poolInfo.goalies_pts_shutouts +
-                player.OT * poolInfo.goalies_pts_overtimes;
+                player.G * poolInfo.settings.goalies_pts_goals +
+                player.A * poolInfo.settings.goalies_pts_assists +
+                player.W * poolInfo.settings.goalies_pts_wins +
+                player.SO * poolInfo.settings.goalies_pts_shutouts +
+                player.OT * poolInfo.settings.goalies_pts_overtimes;
             }
 
             return null;
@@ -397,7 +397,7 @@ export default function InProgressPool({
     if (todayFormatDate) {
       const d = new Date(todayFormatDate);
       d.setDate(d.getDate() + 1);
-      setRosterModificationAllowed(poolInfo.roster_modification_date.includes(d.toISOString().slice(0, 10)));
+      setRosterModificationAllowed(poolInfo.settings.roster_modification_date.includes(d.toISOString().slice(0, 10)));
     }
   }, [formatDate, poolInfo.context.score_by_day]);
 
@@ -763,7 +763,7 @@ export default function InProgressPool({
                 />
                 <tr>
                   <th colSpan={13}>
-                    Forwards ({playersStats[pooler].forwards_own}/{poolInfo.number_forwards})
+                    Forwards ({playersStats[pooler].forwards_own}/{poolInfo.settings.number_forwards})
                   </th>
                 </tr>
                 {render_header_skaters()}
@@ -778,7 +778,7 @@ export default function InProgressPool({
                   'forwards_total_assist',
                   'forwards_total_hattrick',
                   'forwards_total_shootout_goals',
-                  poolInfo.number_forwards,
+                  poolInfo.settings.number_forwards,
                   'F'
                 )}
               </tbody>
@@ -787,7 +787,7 @@ export default function InProgressPool({
               <thead>
                 <tr>
                   <th colSpan={13}>
-                    Defenders ({playersStats[pooler].defenders_own}/{poolInfo.number_defenders})
+                    Defenders ({playersStats[pooler].defenders_own}/{poolInfo.settings.number_defenders})
                   </th>
                 </tr>
                 {render_header_skaters()}
@@ -802,7 +802,7 @@ export default function InProgressPool({
                   'defenders_total_assist',
                   'defenders_total_hattrick',
                   'defenders_total_shootout_goals',
-                  poolInfo.number_defenders,
+                  poolInfo.settings.number_defenders,
                   'D'
                 )}
               </tbody>
@@ -811,12 +811,12 @@ export default function InProgressPool({
               <thead>
                 <tr>
                   <th colSpan={13}>
-                    Goalies ({playersStats[pooler].goalies_own}/{poolInfo.number_goalies})
+                    Goalies ({playersStats[pooler].goalies_own}/{poolInfo.settings.number_goalies})
                   </th>
                 </tr>
                 {render_header_goalies()}
               </thead>
-              <tbody>{render_goalies_stats(pooler, poolInfo.number_goalies)}</tbody>
+              <tbody>{render_goalies_stats(pooler, poolInfo.settings.number_goalies)}</tbody>
             </table>
             <table className="content-table-no-min">
               <thead>

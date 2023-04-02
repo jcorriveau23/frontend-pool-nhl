@@ -68,7 +68,7 @@ export default function RosterModificationModal({
   const add_player = player => {
     switch (player.position) {
       case 'F': {
-        if (forwSelected.length >= poolInfo.number_forwards) {
+        if (forwSelected.length >= poolInfo.settings.number_forwards) {
           alert('The limit of forwards is already reached.');
         } else {
           setForwSelected(prev => [...prev, player.id]);
@@ -77,7 +77,7 @@ export default function RosterModificationModal({
         break;
       }
       case 'D': {
-        if (defSelected.length >= poolInfo.number_defenders) {
+        if (defSelected.length >= poolInfo.settings.number_defenders) {
           alert('The limit of defenders is already reached.');
         } else {
           setDefSelected(prev => [...prev, player.id]);
@@ -86,7 +86,7 @@ export default function RosterModificationModal({
         break;
       }
       case 'G': {
-        if (goalSelected.length >= poolInfo.number_goalies) {
+        if (goalSelected.length >= poolInfo.settings.number_goalies) {
           alert('The limit of goalies is already reached.');
         } else {
           setGoalSelected(prev => [...prev, player.id]);
@@ -173,15 +173,21 @@ export default function RosterModificationModal({
         <div className="float-left">
           <div className="half-cont">
             <table className="content-table-no-min">
-              <thead>{render_tabs_choice_headers('Forwards', forwSelected.length, poolInfo.number_forwards)}</thead>
+              <thead>
+                {render_tabs_choice_headers('Forwards', forwSelected.length, poolInfo.settings.number_forwards)}
+              </thead>
               <tbody>{render_players(forwSelected, false)}</tbody>
             </table>
             <table className="content-table-no-min">
-              <thead>{render_tabs_choice_headers('Defenders', defSelected.length, poolInfo.number_defenders)}</thead>
+              <thead>
+                {render_tabs_choice_headers('Defenders', defSelected.length, poolInfo.settings.number_defenders)}
+              </thead>
               <tbody>{render_players(defSelected, false)}</tbody>
             </table>
             <table className="content-table-no-min">
-              <thead>{render_tabs_choice_headers('Goalies', goalSelected.length, poolInfo.number_goalies)}</thead>
+              <thead>
+                {render_tabs_choice_headers('Goalies', goalSelected.length, poolInfo.settings.number_goalies)}
+              </thead>
               <tbody>{render_players(goalSelected, false)}</tbody>
             </table>
           </div>
@@ -190,7 +196,7 @@ export default function RosterModificationModal({
           <div className="half-cont">
             <table className="content-table-no-min">
               <thead>
-                {render_tabs_choice_headers('Reservists', reservSelected.length, poolInfo.number_reservists)}
+                {render_tabs_choice_headers('Reservists', reservSelected.length, poolInfo.settings.number_reservists)}
               </thead>
               <tbody>{render_players(reservSelected, true)}</tbody>
             </table>

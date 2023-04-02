@@ -41,9 +41,9 @@ export default function DynastiePool({
 
     let add_to_reservist = false;
 
-    if (number_protected < poolInfo.next_season_number_players_protected) {
+    if (number_protected < poolInfo.settings.next_season_number_players_protected) {
       if (player.position === 'D') {
-        if (defProtected.length < poolInfo.number_defenders) {
+        if (defProtected.length < poolInfo.settings.number_defenders) {
           const changedArray = defProtected;
           changedArray.push(player);
 
@@ -52,7 +52,7 @@ export default function DynastiePool({
           add_to_reservist = true;
         }
       } else if (player.position === 'F') {
-        if (forwProtected.length < poolInfo.number_forwards) {
+        if (forwProtected.length < poolInfo.settings.number_forwards) {
           const changedArray = forwProtected;
           changedArray.push(player);
 
@@ -61,7 +61,7 @@ export default function DynastiePool({
           add_to_reservist = true;
         }
       } else if (player.position === 'G') {
-        if (goalProtected.length < poolInfo.number_goalies) {
+        if (goalProtected.length < poolInfo.settings.number_goalies) {
           const changedArray = goalProtected;
           changedArray.push(player);
 
@@ -72,14 +72,14 @@ export default function DynastiePool({
       }
 
       if (add_to_reservist) {
-        if (reservProtected.length < poolInfo.number_reservists) {
+        if (reservProtected.length < poolInfo.settings.number_reservists) {
           const changedArray = reservProtected;
           changedArray.push(player);
 
           setReservProtected([...changedArray]);
-        } else alert(`You cannot have more than ${poolInfo.number_reservists} reservists`);
+        } else alert(`You cannot have more than ${poolInfo.settings.number_reservists} reservists`);
       }
-    } else alert(`You cannot protect more than ${poolInfo.next_season_number_players_protected} players`);
+    } else alert(`You cannot protect more than ${poolInfo.settings.next_season_number_players_protected} players`);
   };
 
   const unprotect_player = (player, isReservist) => {
@@ -138,7 +138,7 @@ export default function DynastiePool({
     const number_protected_player =
       defProtected.length + forwProtected.length + goalProtected.length + reservProtected.length;
 
-    if (number_protected_player === poolInfo.next_season_number_players_protected) {
+    if (number_protected_player === poolInfo.settings.dynastie_settings.next_season_number_players_protected) {
       try {
         await axios.post(
           '/api-rust/protect-players',
@@ -162,7 +162,8 @@ export default function DynastiePool({
       } catch (e) {
         alert(e.response.data);
       }
-    } else alert(`You need to protect ${poolInfo.next_season_number_players_protected} players`);
+    } else
+      alert(`You need to protect ${poolInfo.settings.dynastie_settings.next_season_number_players_protected} players`);
   };
 
   const render_not_protected_players = (players, isUser, isDone) =>
@@ -226,7 +227,7 @@ export default function DynastiePool({
       poolInfo.context.pooler_roster[participant].chosen_goalies.length +
       poolInfo.context.pooler_roster[participant].chosen_reservists.length;
 
-    return nb_player <= poolInfo.next_season_number_players_protected;
+    return nb_player <= poolInfo.settings.dynastie_settings.next_season_number_players_protected;
   };
 
   const nb_player_protected =
@@ -261,7 +262,7 @@ export default function DynastiePool({
                   <TabPanel>
                     <h2>
                       {participant === user._id.$oid
-                        ? `Protect ${poolInfo.next_season_number_players_protected} players.`
+                        ? `Protect ${poolInfo.settings.dynastie_settings.next_season_number_players_protected} players.`
                         : null}
                     </h2>
                     <table className="content-table-no-min">
@@ -308,7 +309,8 @@ export default function DynastiePool({
               {!isParticipantDone(user._id.$oid) ? (
                 <>
                   <h2>
-                    My Protected players ({nb_player_protected}/{poolInfo.next_season_number_players_protected})
+                    My Protected players ({nb_player_protected}/
+                    {poolInfo.settings.dynastie_settings.next_season_number_players_protected})
                   </h2>
                   <table className="content-table-no-min">
                     {render_position_header('Forwards')}
@@ -323,7 +325,9 @@ export default function DynastiePool({
                   <button
                     className="base-button"
                     onClick={() => send_protected_player()}
-                    disabled={nb_player_protected !== poolInfo.next_season_number_players_protected}
+                    disabled={
+                      nb_player_protected !== poolInfo.settings.dynastie_settings.next_season_number_players_protected
+                    }
                     type="button"
                   >
                     Send Protection list
@@ -331,7 +335,8 @@ export default function DynastiePool({
                 </>
               ) : (
                 <h2>
-                  You have already protected your {poolInfo.next_season_number_players_protected} players. Waiting for
+                  You have already protected your{' '}
+                  {poolInfo.settings.dynastie_settings.next_season_number_players_protected} players. Waiting for
                   {poolInfo.participants.map(participant =>
                     !isParticipantDone(participant) ? (DictUsers ? ` ${DictUsers[participant]}, ` : null) : null
                   )}
