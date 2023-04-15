@@ -41,7 +41,15 @@ def get_played_data(day):
 def update_skaters_stats(day_leaders_data, p):
     for player in day_leaders_data["skaters"]:
         if player["id"] == p["id"]:
-            player["stats"] = p["stats"]
+            if player["stats"]["goals"] != p["stats"]["goals"] or player["stats"]["assists"] != p["stats"]["assists"]:
+                date = day_leaders_data["date"]
+                name = player["name"]
+                past_goals = player["stats"]["goals"]
+                new_goals = p["stats"]["goals"]
+                past_assists = player["stats"]["assists"]
+                new_assists = p["stats"]["assists"]
+                print(f"Date: {date}, fix: {name}, G: {past_goals} -> {new_goals}, A: {past_assists} -> {new_assists}")
+                player["stats"] = p["stats"]
             return
     
     day_leaders_data["skaters"].append(p)
@@ -49,7 +57,6 @@ def update_skaters_stats(day_leaders_data, p):
 def remove_skaters_stats(day_leaders_data, id):
     for player in day_leaders_data["skaters"]:
         if player["id"] == id:
-            print(f"TEST: {player}")
             day_leaders_data["skaters"].remove(player)
             return
 
@@ -93,7 +100,6 @@ def fetch_pointers_day(day = None):
         hasOT = False # tell if the game has been in shootout.
         win_processed = False   # tell if the win has been processed to the goaly.
         loss_processed = False  # tell if the loss has been processed to the goaly.
-        print(game)
 
         gameID = game['gamePk']
         gameState = game['status']['abstractGameState']

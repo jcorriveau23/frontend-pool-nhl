@@ -120,7 +120,17 @@ def cumulate_daily_roster_pts(day = None):
 
             for key_forward in score_by_day[participant]["roster"]["F"]:
                 # print(score_by_day[participant]["roster"]["F"][key_forward])
-                score_by_day[participant]["roster"]["F"][key_forward] = get_skaters_stats(int(key_forward), today_pointers, played["players"])
+                player_stats = get_skaters_stats(int(key_forward), today_pointers, played["players"])
+
+                if score_by_day[participant]["roster"]["F"][key_forward] and score_by_day[participant]["roster"]["F"][key_forward] != player_stats:
+                    name = pool["context"]["players"][key_forward]["name"]
+                    past_goals = score_by_day[participant]["roster"]["F"][key_forward].get("G")
+                    past_assists = score_by_day[participant]["roster"]["F"][key_forward].get("A")
+                    new_goals = player_stats["G"]
+                    new_assists = player_stats["A"]
+                    print(f"Date: {str(day)}, fix: {name}, G: {past_goals} -> {new_goals}, A: {past_assists} -> {new_assists}")
+
+                score_by_day[participant]["roster"]["F"][key_forward] = player_stats
                 if score_by_day[participant]["roster"]["F"][key_forward] is not None:
                     tot_goal += score_by_day[participant]["roster"]["F"][key_forward]["G"]
                     tot_assist += score_by_day[participant]["roster"]["F"][key_forward]["A"]
@@ -156,8 +166,18 @@ def cumulate_daily_roster_pts(day = None):
             tot_shootout_goals = 0
 
             for key_defender in score_by_day[participant]["roster"]["D"]:
-                score_by_day[participant]["roster"]["D"][key_defender] = get_skaters_stats(int(key_defender), today_pointers, played["players"])
-                if score_by_day[participant]["roster"]["D"][key_defender] is not None:
+                player_stats = get_skaters_stats(int(key_defender), today_pointers, played["players"])
+                score_by_day[participant]["roster"]["D"][key_defender]
+                if score_by_day[participant]["roster"]["D"][key_defender] and score_by_day[participant]["roster"]["D"][key_defender] != player_stats:
+                    name = pool["context"]["players"][key_defender]["name"]
+                    past_goals = score_by_day[participant]["roster"]["D"][key_defender].get("G")
+                    past_assists = score_by_day[participant]["roster"]["D"][key_defender].get("A")
+                    new_goals = player_stats["G"]
+                    new_assists = player_stats["A"]
+                    print(f"Date: {str(day)}, fix: {name}, G: {past_goals} -> {new_goals}, A: {past_assists} -> {new_assists}")
+
+                    score_by_day[participant]["roster"]["D"][key_defender] = player_stats
+
                     tot_goal += score_by_day[participant]["roster"]["D"][key_defender]["G"]
                     tot_assist += score_by_day[participant]["roster"]["D"][key_defender]["A"]
                     if score_by_day[participant]["roster"]["D"][key_defender]["G"] >= 3:
@@ -236,7 +256,6 @@ def lock_daily_roster(day = None):
 
     for pool in db.pools.find({"status": "InProgress"}):
         for participant in pool["participants"]:
-            print(participant)
             daily_roster[participant] = {}
 
             daily_roster[participant]["roster"] = {}
