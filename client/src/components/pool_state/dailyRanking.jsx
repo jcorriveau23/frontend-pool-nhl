@@ -49,22 +49,22 @@ export default function DailyRanking({
     let pts = 0;
 
     if (isForward) {
-      pts = player.G * poolInfo.forward_pts_goals + player.A * poolInfo.forward_pts_assists;
+      pts = player.G * poolInfo.settings.forward_pts_goals + player.A * poolInfo.settings.forward_pts_assists;
 
       if (player.G >= 3) {
-        pts += poolInfo.forward_pts_hattricks;
+        pts += poolInfo.settings.forward_pts_hattricks;
       }
       if (player.SOG) {
-        pts += player.SOG * poolInfo.forward_pts_shootout_goals;
+        pts += player.SOG * poolInfo.settings.forward_pts_shootout_goals;
       }
     } else {
-      pts = player.G * poolInfo.defender_pts_goals + player.A * poolInfo.defender_pts_assists;
+      pts = player.G * poolInfo.settings.defender_pts_goals + player.A * poolInfo.settings.defender_pts_assists;
 
       if (player.G >= 3) {
-        pts += poolInfo.defender_pts_hattricks;
+        pts += poolInfo.settings.defender_pts_hattricks;
       }
       if (player.SOG) {
-        pts += player.SOG * poolInfo.forward_pts_shootout_goals;
+        pts += player.SOG * poolInfo.settings.forward_pts_shootout_goals;
       }
     }
 
@@ -133,16 +133,16 @@ export default function DailyRanking({
   });
 
   const get_goaly_total_points = player => {
-    let pts = player.G * poolInfo.goalies_pts_goals + player.A * poolInfo.goalies_pts_assists;
+    let pts = player.G * poolInfo.settings.goalies_pts_goals + player.A * poolInfo.settings.goalies_pts_assists;
 
     if (player.W) {
-      pts += poolInfo.goalies_pts_wins;
+      pts += poolInfo.settings.goalies_pts_wins;
     }
     if (player.SO) {
-      pts += poolInfo.goalies_pts_shutouts;
+      pts += poolInfo.settings.goalies_pts_shutouts;
     }
     if (player.OT) {
-      pts += poolInfo.goalies_pts_overtimes;
+      pts += poolInfo.settings.goalies_pts_overtimes;
     }
 
     return pts;
@@ -646,7 +646,7 @@ export default function DailyRanking({
     <>
       <tr>
         <th colSpan={9}>
-          Goalies ({goalDailyStats[participant].length}/{poolInfo.number_goalies})
+          Goalies ({goalDailyStats[participant].length}/{poolInfo.settings.number_goalies})
         </th>
       </tr>
       <tr>
@@ -808,10 +808,20 @@ export default function DailyRanking({
                     />
                   </thead>
                   <tbody>
-                    {render_skaters_headers_stats(participant, 'Forwards', poolInfo.number_forwards, forwDailyStats)}
+                    {render_skaters_headers_stats(
+                      participant,
+                      'Forwards',
+                      poolInfo.settings.number_forwards,
+                      forwDailyStats
+                    )}
                     {render_skaters_stats(participant, forwDailyStats)}
                     {render_skaters_total(participant, 'F')}
-                    {render_skaters_headers_stats(participant, 'Defenders', poolInfo.number_defenders, defDailyStats)}
+                    {render_skaters_headers_stats(
+                      participant,
+                      'Defenders',
+                      poolInfo.settings.number_defenders,
+                      defDailyStats
+                    )}
                     {render_skaters_stats(participant, defDailyStats)}
                     {render_skaters_total(participant, 'D')}
                     {render_goalies_headers_stats(participant)}

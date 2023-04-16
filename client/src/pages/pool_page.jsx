@@ -170,7 +170,8 @@ export default function PoolPage({
 
   useEffect(() => {
     process_pool_players_dict();
-    if (poolInfo) setHasOwnerRights(poolInfo.owner === user?._id.$oid || poolInfo.assistants.includes(user?._id.$oid));
+    if (poolInfo)
+      setHasOwnerRights(poolInfo.owner === user?._id.$oid || poolInfo.settings.assistants.includes(user?._id.$oid));
   }, [poolInfo]);
 
   if (poolInfo && userIndex >= -1) {

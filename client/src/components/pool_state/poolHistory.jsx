@@ -156,8 +156,9 @@ export default function PoolHistory({
           <div style={{ float: 'left' }}>
             <BsCalendarDay size={30} style={{ paddingRight: '10px' }} />
             {dailyMovements.date}
-            {poolInfo.roster_modification_date.includes(dailyMovements.date) ||
-            (poolInfo.roster_modification_date.includes(todayFormatDate) && dailyMovements.date === 'Today') ? (
+            {poolInfo.settings.roster_modification_date.includes(dailyMovements.date) ||
+            (poolInfo.settings.roster_modification_date.includes(todayFormatDate) &&
+              dailyMovements.date === 'Today') ? (
               <>
                 <a data-tip="roster modifications were allowed on this day!">
                   <RiInformationFill size={40} color="yellow" style={{ paddingLeft: '10px' }} />

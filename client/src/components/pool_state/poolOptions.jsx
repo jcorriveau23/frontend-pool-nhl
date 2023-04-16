@@ -42,7 +42,7 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
         {poolInfo.participants.map(id =>
           id === poolInfo.owner ? null : (
             <label htmlFor="date-selection">
-              <input type="checkbox" checked={poolInfo.assistants.includes(id)} />
+              <input type="checkbox" checked={poolInfo.settings.assistants.includes(id)} />
               {DictUsers ? DictUsers[id] : id}
             </label>
           )
@@ -56,7 +56,7 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
       <td>Roster Modification dates:</td>
       <td>
         <ul>
-          {poolInfo.roster_modification_date.map(date => (
+          {poolInfo.settings.roster_modification_date.map(date => (
             <li className="block" key={date}>
               {date}
             </li>
@@ -90,7 +90,7 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
           </tr>
           <tr>
             <td>Number of poolers</td>
-            <td>{poolInfo.number_poolers}</td>
+            <td>{poolInfo.settings.number_poolers}</td>
           </tr>
           {render_options('Number of forwards:', 'number_forwards', 2, 12)}
           {render_options('Number of defenders:', 'number_defenders', 2, 6)}

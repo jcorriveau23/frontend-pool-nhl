@@ -33,24 +33,24 @@ export default function GraphStats({ poolInfo, DictUsers }) {
         return get_stats_value(cumulate, 'P_F') + get_stats_value(cumulate, 'P_D') + get_stats_value(cumulate, 'P_G');
       case 'P_F':
         return (
-          cumulate.G_F * poolInfo.forward_pts_goals +
-          cumulate.A_F * poolInfo.forward_pts_assists +
-          cumulate.HT_F * poolInfo.forward_pts_hattricks +
-          cumulate.SOG_F * poolInfo.forward_pts_shootout_goals
+          cumulate.G_F * poolInfo.settings.forward_pts_goals +
+          cumulate.A_F * poolInfo.settings.forward_pts_assists +
+          cumulate.HT_F * poolInfo.settings.forward_pts_hattricks +
+          cumulate.SOG_F * poolInfo.settings.forward_pts_shootout_goals
         );
       case 'P_D':
         return (
-          cumulate.G_D * poolInfo.defender_pts_goals +
-          cumulate.A_D * poolInfo.defender_pts_assists +
-          cumulate.HT_D * poolInfo.defender_pts_hattricks +
-          cumulate.SOG_D * poolInfo.defender_pts_shootout_goals
+          cumulate.G_D * poolInfo.settings.defender_pts_goals +
+          cumulate.A_D * poolInfo.settings.defender_pts_assists +
+          cumulate.HT_D * poolInfo.settings.defender_pts_hattricks +
+          cumulate.SOG_D * poolInfo.settings.defender_pts_shootout_goals
         );
       case 'P_G':
         return (
-          cumulate.W_G * poolInfo.goalies_pts_wins +
-          cumulate.SO_G * poolInfo.goalies_pts_shutouts +
-          cumulate.G_G * poolInfo.goalies_pts_goals +
-          cumulate.A_G * poolInfo.goalies_pts_assists
+          cumulate.W_G * poolInfo.settings.goalies_pts_wins +
+          cumulate.SO_G * poolInfo.settings.goalies_pts_shutouts +
+          cumulate.G_G * poolInfo.settings.goalies_pts_goals +
+          cumulate.A_G * poolInfo.settings.goalies_pts_assists
         );
       default:
         return cumulate[keyStats];

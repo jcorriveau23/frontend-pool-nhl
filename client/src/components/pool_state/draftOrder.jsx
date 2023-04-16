@@ -14,7 +14,10 @@ export default function DraftOrder({ poolInfo, injury, DictUsers, setNextDrafter
 
   useEffect(() => {
     setNbPlayers(
-      poolInfo.number_forwards + poolInfo.number_defenders + poolInfo.number_goalies + poolInfo.number_reservists
+      poolInfo.settings.number_forwards +
+        poolInfo.settings.number_defenders +
+        poolInfo.settings.number_goalies +
+        poolInfo.settings.number_reservists
     );
     setTotalColumns(poolInfo.status === 'Draft' ? 5 : 4);
   }, [poolInfo]);
@@ -89,7 +92,7 @@ export default function DraftOrder({ poolInfo, injury, DictUsers, setNextDrafter
 
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
       participantsToRosterCountDict[poolInfo.participants[i]] = poolInfo.final_rank
-        ? poolInfo.next_season_number_players_protected
+        ? poolInfo.settings.dynastie_settings.next_season_number_players_protected
         : 0; // initiate count to 0
     }
 

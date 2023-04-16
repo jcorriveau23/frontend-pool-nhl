@@ -139,10 +139,10 @@ def cumulate_daily_roster_pts(day = None):
                     if "SOG" in score_by_day[participant]["roster"]["F"][key_forward]:
                         tot_shootout_goals += score_by_day[participant]["roster"]["F"][key_forward]["SOG"]
 
-            tot_forward_pool_pts = tot_goal * pool["forward_pts_goals"] + \
-                                        tot_assist * pool["forward_pts_assists"] + \
-                                        tot_hat_trick * pool["forward_pts_hattricks"] + \
-                                        tot_shootout_goals * pool["defender_pts_shootout_goals"]
+            tot_forward_pool_pts = tot_goal * pool["settings"]["forward_pts_goals"] + \
+                                        tot_assist * pool["settings"]["forward_pts_assists"] + \
+                                        tot_hat_trick * pool["settings"]["forward_pts_hattricks"] + \
+                                        tot_shootout_goals * pool["settings"]["defender_pts_shootout_goals"]
 
             score_by_day[participant]["F_tot"] = {
                                                     "G": tot_goal, 
@@ -185,10 +185,10 @@ def cumulate_daily_roster_pts(day = None):
                     if "SOG" in score_by_day[participant]["roster"]["D"][key_defender]:
                         tot_shootout_goals += score_by_day[participant]["roster"]["D"][key_defender]["SOG"]
 
-            tot_defender_pool_pts = tot_goal * pool["defender_pts_goals"] + \
-                                        tot_assist * pool["defender_pts_assists"] + \
-                                        tot_hat_trick * pool["defender_pts_hattricks"] + \
-                                        tot_shootout_goals * pool["defender_pts_shootout_goals"]
+            tot_defender_pool_pts = tot_goal * pool["settings"]["defender_pts_goals"] + \
+                                        tot_assist * pool["settings"]["defender_pts_assists"] + \
+                                        tot_hat_trick * pool["settings"]["defender_pts_hattricks"] + \
+                                        tot_shootout_goals * pool["settings"]["defender_pts_shootout_goals"]
 
             score_by_day[participant]["D_tot"] = {
                                                     "G": tot_goal,
@@ -224,7 +224,7 @@ def cumulate_daily_roster_pts(day = None):
                     if score_by_day[participant]["roster"]["G"][key_goaly]["OT"]:                    
                         tot_OT += 1
 
-            tot_goaly_pool_pts = tot_goal * pool["goalies_pts_goals"] + tot_assist * pool["goalies_pts_assists"] + tot_Win * pool["goalies_pts_wins"] + tot_SO * pool["goalies_pts_shutouts"] + tot_OT * pool["goalies_pts_overtimes"] 
+            tot_goaly_pool_pts = tot_goal * pool["settings"]["goalies_pts_goals"] + tot_assist * pool["settings"]["goalies_pts_assists"] + tot_Win * pool["settings"]["goalies_pts_wins"] + tot_SO * pool["settings"]["goalies_pts_shutouts"] + tot_OT * pool["settings"]["goalies_pts_overtimes"] 
             score_by_day[participant]["G_tot"] = {"G": tot_goal, "A": tot_assist, "W": tot_Win, "SO": tot_SO, "OT": tot_OT, "pts": tot_goaly_pool_pts}
             score_by_day[participant]["tot_pts"] = tot_forward_pool_pts + tot_defender_pool_pts + tot_goaly_pool_pts
 
