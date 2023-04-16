@@ -42,7 +42,7 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
         {poolInfo.participants.map(id =>
           id === poolInfo.owner ? null : (
             <label htmlFor="date-selection">
-              <input type="checkbox" checked={poolInfo.assistants.includes(id)} />
+              <input type="checkbox" checked={poolInfo.settings.assistants.includes(id)} />
               {DictUsers ? DictUsers[id] : id}
             </label>
           )

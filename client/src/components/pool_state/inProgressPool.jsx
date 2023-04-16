@@ -455,7 +455,7 @@ export default function InProgressPool({
           <td colSpan={3}>
             {pooler === user?._id.$oid ||
             poolInfo.owner === user?._id.$oid ||
-            poolInfo.assistants.includes(user?._id.$oid) ? (
+            poolInfo.settings.assistants.includes(user?._id.$oid) ? (
               <button className="base-button" type="button" onClick={() => open_fill_spot_modal(position)}>
                 Fill Spot
               </button>
@@ -728,7 +728,7 @@ export default function InProgressPool({
           <div className="half-cont">
             {(pooler === user?._id.$oid ||
               poolInfo.owner === user?._id.$oid ||
-              poolInfo.assistants.includes(user?._id.$oid)) &&
+              poolInfo.settings.assistants.includes(user?._id.$oid)) &&
             rosterModificationAllowed ? (
               <table>
                 <tbody>
@@ -826,7 +826,7 @@ export default function InProgressPool({
                 {render_header_reservists()}
               </thead>
               <tbody>{render_reservists(pooler)}</tbody>
-              {poolInfo.owner === user?._id.$oid || poolInfo.assistants.includes(user?._id.$oid) ? (
+              {poolInfo.owner === user?._id.$oid || poolInfo.settings.assistants.includes(user?._id.$oid) ? (
                 <tr>
                   <td colSpan={13}>
                     <button className="base-button" onClick={() => setShowAddPlayerModal(true)} type="button">

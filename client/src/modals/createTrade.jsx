@@ -251,7 +251,7 @@ export default function CreateTradeModal({
             <select
               onChange={event => on_change_from_selection(event.target.value)}
               defaultValue={fromSelectedPooler}
-              disabled={poolInfo.owner !== user._id.$oid && !poolInfo.assistants.includes(user._id.$oid)}
+              disabled={poolInfo.owner !== user._id.$oid && !poolInfo.settings.assistants.includes(user._id.$oid)}
             >
               {poolInfo.participants.map(pooler => (
                 <option value={pooler}>{DictUsers ? DictUsers[pooler] : pooler}</option>

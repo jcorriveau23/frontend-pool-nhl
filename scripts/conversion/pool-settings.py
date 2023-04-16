@@ -24,7 +24,9 @@ for pool in db.pools.find():
     pool["settings"]["goalies_pts_shutouts"] = pool["goalies_pts_shutouts"]
     pool["settings"]["goalies_pts_goals"] = pool["goalies_pts_goals"]
     pool["settings"]["goalies_pts_assists"] = pool["goalies_pts_assists"]
+    pool["settings"]["goalies_pts_overtimes"] = pool["goalies_pts_overtimes"]
     pool["settings"]["can_trade"] = True
+    pool["settings"]["assistants"] = pool["assistants"]
 
     # Dynastie settings
     pool["settings"]["dynastie_settings"] = {}
