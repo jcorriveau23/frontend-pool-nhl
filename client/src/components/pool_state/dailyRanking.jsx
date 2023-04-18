@@ -836,6 +836,15 @@ export default function DailyRanking({
       </>
     );
   }
+
+  if (new Date(poolInfo.season_end) < new Date(formatDate)) {
+    return (
+      <div className="cont">
+        <h1>The season has ended.</h1>
+      </div>
+    );
+  }
+
   return (
     <div className="cont">
       <h1>Processing daily informations...</h1>
