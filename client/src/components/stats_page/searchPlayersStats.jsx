@@ -28,11 +28,14 @@ export default function SearchPlayersStats({
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [searchText, setSearchText] = useState(''); // TODO: use this to search for a players using name
 
+  const get_default_game_type = () => (process.env.REACT_APP_POST_SEASON ? '3' : '2');
+
   // Search Parameters
   const [searchParams, setSearchParams] = useSearchParams();
   const [type, setType] = useState(searchParams.get('type') ?? 'skater');
   const [statsType, setStatsType] = useState(searchParams.get('statsType') ?? 'points');
   const [playerType, setPlayerType] = useState(searchParams.get('playerType') ?? 'allSkaters'); // allSkaters, allForwards, LOnly, ROnly, COnly, DOnly, GOnly
+  const [gameType, setGameType] = useState(searchParams.get('gameType') ?? get_default_game_type());
   const [startSeason, setStartSeason] = useState(searchParams.get('startSeason') ?? '20222023');
   const [endSeason, setEndSeason] = useState(searchParams.get('endSeason') ?? '20222023');
   const [searchMode, setSearchMode] = useState(searchParams.get('searchMode') ?? 'singleSeason'); // singleSeason, allSeasons, allSeasonsAggregate
@@ -82,6 +85,7 @@ export default function SearchPlayersStats({
     _type,
     _statsType,
     _playerType,
+    _gameType,
     _startSeason,
     _endSeason,
     _searchMode
@@ -96,6 +100,7 @@ export default function SearchPlayersStats({
     updatedSearchParams.set('type', _type);
     updatedSearchParams.set('statsType', _statsType);
     updatedSearchParams.set('playerType', _playerType);
+    updatedSearchParams.set('gameType', _gameType);
     updatedSearchParams.set('startSeason', _startSeason);
     updatedSearchParams.set('endSeason', _endSeason);
     updatedSearchParams.set('searchMode', _searchMode);
@@ -107,7 +112,7 @@ export default function SearchPlayersStats({
 
     try {
       const res = await axios.get(
-        `/cors-anywhere/https://api.nhle.com/stats/rest/en/${_type}/summary?isAggregate=${isAggregate}&isGame=false&sort=${sorting}&start=${s}&limit=${limit}&factCayenneExp=gamesPlayed>=1&cayenneExp=${positionCode} and gameTypeId=2 and seasonId<=${_endSeason} and seasonId>=${_startSeason}`
+        `/cors-anywhere/https://api.nhle.com/stats/rest/en/${_type}/summary?isAggregate=${isAggregate}&isGame=false&sort=${sorting}&start=${s}&limit=${limit}&factCayenneExp=gamesPlayed>=1&cayenneExp=${positionCode} and gameTypeId=${_gameType} and seasonId<=${_endSeason} and seasonId>=${_startSeason}`
       );
       if (reset) setLeaders(res.data.data);
       else setLeaders(prevList => [...prevList, ...res.data.data]);
@@ -117,12 +122,12 @@ export default function SearchPlayersStats({
   };
 
   useEffect(() => {
-    fetch_top_players(15, true, type, statsType, playerType, startSeason, endSeason, searchMode);
+    fetch_top_players(15, true, type, statsType, playerType, gameType, startSeason, endSeason, searchMode);
   }, []);
 
   const onClickSortingColumns = _statsType => {
     setStatsType(_statsType);
-    fetch_top_players(15, true, type, _statsType, playerType, startSeason, endSeason, searchMode);
+    fetch_top_players(15, true, type, _statsType, playerType, gameType, startSeason, endSeason, searchMode);
     setLeaders([]);
   };
 
@@ -389,7 +394,13 @@ export default function SearchPlayersStats({
     setType(_type);
     setPlayerType(_playerType);
     setStatsType(_statsType);
-    fetch_top_players(15, true, _type, _statsType, _playerType, startSeason, endSeason, searchMode);
+    fetch_top_players(15, true, _type, _statsType, _playerType, gameType, startSeason, endSeason, searchMode);
+    setLeaders([]);
+  };
+
+  const onClickGameType = _gameType => {
+    setGameType(_gameType);
+    fetch_top_players(15, true, type, statsType, playerType, _gameType, startSeason, endSeason, searchMode);
     setLeaders([]);
   };
 
@@ -399,7 +410,9 @@ export default function SearchPlayersStats({
         <button
           className="base-button"
           type="button"
-          onClick={() => fetch_top_players(20, false, type, statsType, playerType, startSeason, endSeason, searchMode)}
+          onClick={() =>
+            fetch_top_players(20, false, type, statsType, playerType, gameType, startSeason, endSeason, searchMode)
+          }
         >
           20 More...
         </button>
@@ -433,6 +446,13 @@ export default function SearchPlayersStats({
         onClick={() => onClickPlayerType(_type, _statsType, _playerType)}
         checked={type === _type}
       />
+      {_title}
+    </label>
+  );
+
+  const render_game_type_inputs = (_gameType, _title) => (
+    <label htmlFor="default">
+      <input type="checkbox" onClick={() => onClickGameType(_gameType)} checked={gameType === _gameType} />
       {_title}
     </label>
   );
@@ -471,14 +491,14 @@ export default function SearchPlayersStats({
   const handleChangeStartSeason = event => {
     setLeaders([]);
     setStartSeason(event.target.value);
-    fetch_top_players(15, true, type, statsType, playerType, event.target.value, endSeason, searchMode);
+    fetch_top_players(15, true, type, statsType, playerType, gameType, event.target.value, endSeason, searchMode);
   };
 
   // End season
   const handleChangeEndSeason = event => {
     setLeaders([]);
     setEndSeason(event.target.value);
-    fetch_top_players(15, true, type, statsType, playerType, startSeason, event.target.value, searchMode);
+    fetch_top_players(15, true, type, statsType, playerType, gameType, startSeason, event.target.value, searchMode);
   };
 
   // Single Season
@@ -486,7 +506,17 @@ export default function SearchPlayersStats({
     setLeaders([]);
     setStartSeason(event.target.value);
     setEndSeason(event.target.value);
-    fetch_top_players(15, true, type, statsType, playerType, event.target.value, event.target.value, searchMode);
+    fetch_top_players(
+      15,
+      true,
+      type,
+      statsType,
+      playerType,
+      gameType,
+      event.target.value,
+      event.target.value,
+      searchMode
+    );
   };
 
   const handleChangesSearchMode = event => {
@@ -495,13 +525,13 @@ export default function SearchPlayersStats({
       case 'singleSeason': {
         setStartSeason(endSeason); // make sure that when this mode is requested, start date and end date are the same.
         setEndSeason(endSeason);
-        fetch_top_players(15, true, type, statsType, playerType, endSeason, endSeason, event.target.value);
+        fetch_top_players(15, true, type, statsType, playerType, gameType, endSeason, endSeason, event.target.value);
         setSearchMode(event.target.value);
         break;
       }
       case 'allSeasons':
       case 'allSeasonsAggregate': {
-        fetch_top_players(15, true, type, statsType, playerType, startSeason, endSeason, event.target.value);
+        fetch_top_players(15, true, type, statsType, playerType, gameType, startSeason, endSeason, event.target.value);
         setSearchMode(event.target.value);
         break;
       }
@@ -564,6 +594,15 @@ export default function SearchPlayersStats({
               )}
             </>
           ) : null}
+          <tr>
+            <th>
+              <h2>Game Type:</h2>
+            </th>
+            <td>
+              {render_game_type_inputs('2', 'Regular Season')}
+              {render_game_type_inputs('3', 'Playoffs')}
+            </td>
+          </tr>
           <tr>
             <th>
               <h2>Player Type:</h2>
