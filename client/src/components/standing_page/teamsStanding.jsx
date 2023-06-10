@@ -2,6 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import axios from 'axios';
+
+// Loader
+import ClipLoader from 'react-spinners/ClipLoader';
 
 // images
 import { team_info } from '../img/logos';
@@ -10,32 +14,49 @@ import { team_info } from '../img/logos';
 import './teamStanding.css';
 import '../react-tabs.css';
 
-export default function TeamsStanding({ data }) {
+export default function TeamsStanding({ season }) {
   const [easternTeams, setEasternTeams] = useState(null);
   const [westernTeams, setWesternTeams] = useState(null);
   const [leagueTeams, setLeagueTeams] = useState(null);
+  const [wildCardAvailable, setWildCardAvailable] = useState(true);
+  const [standing, setStanding] = useState(null);
 
-  useEffect(() => {
+  const get_standing = async () => {
     const teams = [];
     const easternTeamsTmp = [];
     const westernTeamsTmp = [];
 
-    for (let i = 0; i < data.records.length; i += 1) {
-      for (let j = 0; j < data.records[i].teamRecords.length; j += 1) {
-        teams.push(data.records[i].teamRecords[j]);
+    try {
+      const res = await axios.get(`https://statsapi.web.nhl.com/api/v1/standings?season=${season}`);
 
-        if (data.records[i].conference.name === 'Eastern') {
-          easternTeamsTmp.push(data.records[i].teamRecords[j]);
-        } else {
-          westernTeamsTmp.push(data.records[i].teamRecords[j]);
+      // 1993-1994 is the year where wild card ranking started.
+      setWildCardAvailable(!(Number(season) < 19931994));
+
+      for (let i = 0; i < res.data.records.length; i += 1) {
+        for (let j = 0; j < res.data.records[i].teamRecords.length; j += 1) {
+          teams.push(res.data.records[i].teamRecords[j]);
+
+          if (res.data.records[i].conference?.name === 'Eastern') {
+            easternTeamsTmp.push(res.data.records[i].teamRecords[j]);
+          } else {
+            westernTeamsTmp.push(res.data.records[i].teamRecords[j]);
+          }
         }
       }
-    }
 
-    setLeagueTeams([...teams]);
-    setEasternTeams([...easternTeamsTmp]);
-    setWesternTeams([...westernTeamsTmp]);
-  }, []);
+      setLeagueTeams([...teams]);
+      setEasternTeams([...easternTeamsTmp]);
+      setWesternTeams([...westernTeamsTmp]);
+      setStanding(res.data);
+    } catch (e) {
+      alert(e);
+    }
+  };
+
+  useEffect(() => {
+    setStanding(null);
+    get_standing(); // fetch team standing stats from nhl api.
+  }, [season]);
 
   const renderTeamRow = (team, i, isWildCard) => (
     <>
@@ -108,8 +129,8 @@ export default function TeamsStanding({ data }) {
       <table className="content-table">
         {renderHeader(conference)}
         <tbody>
-          {data.records
-            .filter(div => div.conference.name === conference)
+          {standing.records
+            .filter(div => div.conference?.name === conference)
             .map(div => (
               <>
                 <tr key={div.division.name}>
@@ -133,9 +154,9 @@ export default function TeamsStanding({ data }) {
   };
 
   const renderDivisionStanding = () =>
-    data.records.map(div => (
-      <table className="content-table" key={div.division.name}>
-        {renderHeader(div.division.name)}
+    standing.records.map(div => (
+      <table className="content-table" key={div.division?.name}>
+        {renderHeader(div.division?.name)}
         <tbody>{renderDivisionTeams(div)}</tbody>
       </table>
     ));
@@ -168,20 +189,24 @@ export default function TeamsStanding({ data }) {
     </table>
   );
 
-  if (easternTeams && westernTeams && leagueTeams) {
+  if (easternTeams && westernTeams && leagueTeams && standing) {
     return (
       <div>
         <Tabs>
           <TabList>
-            <Tab>Wild Card</Tab>
+            {wildCardAvailable ? <Tab>Wild Card</Tab> : null}
             <Tab>Divison</Tab>
             <Tab>Conference</Tab>
             <Tab>League</Tab>
           </TabList>
-          <TabPanel>
-            {renderWildCardStanding('Eastern')}
-            {renderWildCardStanding('Western')}
-          </TabPanel>
+          {wildCardAvailable ? (
+            <TabPanel>
+              <>
+                {renderWildCardStanding('Eastern')}
+                {renderWildCardStanding('Western')}
+              </>
+            </TabPanel>
+          ) : null}
           <TabPanel>{renderDivisionStanding()}</TabPanel>
           <TabPanel>
             {renderConferenceStanding('Eastern')}
@@ -192,5 +217,10 @@ export default function TeamsStanding({ data }) {
       </div>
     );
   }
-  return <h1>Preparing Standings...</h1>;
+  return (
+    <div className="cont">
+      <h1>Trying to fetch teams data from nhl api...</h1>
+      <ClipLoader color="#fff" loading size={75} />
+    </div>
+  );
 }
