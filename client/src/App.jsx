@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+
 import { CgMenuRound } from 'react-icons/cg';
 
 // css
@@ -68,7 +68,8 @@ function App() {
   useEffect(() => {
     get_injury();
 
-    const userTmp = JSON.parse(localStorage.getItem('persist-account'));
+    const persistAccount = localStorage.getItem('persist-account');
+    const userTmp = persistAccount ? JSON.parse(persistAccount) : null;
 
     setUser(userTmp);
   }, []);

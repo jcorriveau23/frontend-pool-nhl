@@ -10,15 +10,6 @@ export default function PoolSettings({ user, poolInfo, hasOwnerRights, setPoolUp
 
   useEffect(() => {}, []);
 
-  const update_settings = event => {
-    if (event.target.type === 'select-one') {
-      const updated_field = {};
-      updated_field[event.target.name] = Number(event.target.value);
-
-      setPoolSettingsUpdate(pool => ({ ...pool, ...updated_field }));
-    }
-  };
-
   const send_update = async () => {
     if (
       window.confirm(
@@ -29,10 +20,10 @@ export default function PoolSettings({ user, poolInfo, hasOwnerRights, setPoolUp
         await axios.post(
           '/api-rust/update-pool-settings',
           {
-            name: poolInfo.name,
+            pool_name: poolInfo.name,
             pool_settings: poolSettingsUpdate,
           },
-          { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` } }
+          { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` } }
         );
 
         setPoolUpdate(true);
@@ -49,8 +40,8 @@ export default function PoolSettings({ user, poolInfo, hasOwnerRights, setPoolUp
       <PoolOptions
         poolInfo={poolInfo}
         poolSettingsUpdate={poolSettingsUpdate}
+        setPoolSettingsUpdate={setPoolSettingsUpdate}
         hasOwnerRights={hasOwnerRights}
-        update_settings={update_settings}
         DictUsers={DictUsers}
       />
       <button className="base-button" type="button" disabled={!poolSettingsUpdate} onClick={() => send_update()}>

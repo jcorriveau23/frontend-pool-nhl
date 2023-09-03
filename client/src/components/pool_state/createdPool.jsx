@@ -6,72 +6,81 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import ParticipantItem from './participantItem';
 import PoolOptions from './poolOptions';
 
-export default function CreatedPool({ user, hasOwnerRights, DictUsers, poolName, poolInfo, setPoolInfo, socket }) {
+export default function CreatedPool({
+  user,
+  hasOwnerRights,
+  DictUsers,
+  setDictUsers,
+  poolName,
+  poolInfo,
+  setPoolInfo,
+}) {
   const [inRoom, setInRoom] = useState(false);
   const [userList, setUserList] = useState([]);
-  // const [msg, setMsg] = useState(""); // TODO: add some error msg to display on the app.
+  const [socket, setSocket] = useState(null);
+  const [poolSettingsUpdate, setPoolSettingsUpdate] = useState(null);
+
+  const create_socket_command = (command, arg) => `{"${command}": ${arg}}`;
 
   useEffect(() => {
-    if (socket && poolName) {
-      // TODO: add some validation server socket side to prevent someone joining the pool
-      // when there is already the maximum poolers in the room
-      socket.emit('joinRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
-      setInRoom(true);
-    }
-    return () => {
-      if (socket && poolName) {
-        socket.emit('leaveRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
-        socket.off('roomData');
-        setInRoom(false);
+    const socket_tmp = new WebSocket(`ws://localhost:8000/api-rust/ws/${Cookies.get(`token-${user._id}`)}`);
+
+    // Receiving message from the socket server.
+    socket_tmp.onmessage = event => {
+      try {
+        const response = JSON.parse(event.data);
+        if (response.Pool) {
+          // This is a pool update
+          setPoolInfo(response.Pool.pool);
+          setPoolSettingsUpdate(null);
+        } else if (response.Users) {
+          setUserList(Object.keys(response.Users.room_users).map(key => response.Users.room_users[key]));
+          const DictUsersTmp = {};
+          Object.keys(response.Users.room_users).forEach(id => {
+            DictUsersTmp[id] = response.Users.room_users[id].name;
+          });
+          setDictUsers(DictUsersTmp);
+        }
+      } catch (e) {
+        alert(event.data);
       }
+    };
+
+    socket_tmp.onopen = () => socket_tmp.send(create_socket_command('JoinRoom', `{"pool_name": "${poolName}"}`));
+
+    setSocket(socket_tmp);
+    setInRoom(true);
+
+    return () => {
+      socket_tmp.send('"LeaveRoom"');
+      socket_tmp.close();
     };
   }, []);
 
-  useEffect(() => {
-    if (socket) {
-      socket.on('roomData', data => {
-        // console.log(data);
-        setUserList(data);
-      });
+  const update_pool_settings = () => {
+    const newPoolSettings = { ...poolInfo.settings, ...poolSettingsUpdate };
+    console.log(newPoolSettings);
+    socket.send(create_socket_command('OnPoolSettingChanges', `{"pool_settings": ${JSON.stringify(newPoolSettings)}}`));
+  };
 
-      socket.on('poolInfo', data => {
-        // console.log(data);
-        setPoolInfo(data);
-      });
-    }
-  }, [socket]);
+  const on_ready = () => {
+    socket.send('"OnReady"');
+  };
 
-  const update_settings = event => {
-    if (event.target.type === 'checkbox') {
-      // the host click on the start button
-      if (event.target.checked) {
-        socket.emit('playerReady', Cookies.get(`token-${user._id.$oid}`), poolName);
-      } else {
-        socket.emit('playerNotReady', Cookies.get(`token-${user._id.$oid}`), poolName);
-      }
-    } else if (event.target.type === 'button') {
-      // the host click on the start button
-      socket.emit('startDraft', Cookies.get(`token-${user._id.$oid}`), poolInfo);
-    } else if (event.target.type === 'select-one') {
-      // the host change a value of the pool configuration
-      const poolInfoChanged = poolInfo;
-
-      poolInfoChanged[event.target.name] = Number(event.target.value);
-
-      socket.emit('changeRule', Cookies.get(`token-${user._id.$oid}`), poolInfoChanged);
-    }
+  const start_draft = () => {
+    socket.send('"StartDraft"');
   };
 
   const render_participants = () => {
     const participants = [];
 
-    for (let i = 0; i < poolInfo.settings.number_poolers; i += 1) {
+    for (let i = 0; i < poolInfo.number_poolers; i += 1) {
       if (i < userList.length) {
         participants.push(
-          <li key={userList[i]._oid}>
-            <ParticipantItem id={userList[i]._oid} user={user} DictUsers={DictUsers} ready={userList[i].ready} />
+          <li key={userList[i]._id}>
+            <ParticipantItem id={userList[i]._id} user={user} DictUsers={DictUsers} ready={userList[i].is_ready} />
           </li>
-        ); // TODO: add a modal pop up to add that friend
+        );
       } else {
         participants.push(
           <li key={`user not found: ${i}`}>
@@ -86,15 +95,15 @@ export default function CreatedPool({ user, hasOwnerRights, DictUsers, poolName,
   const render_start_draft_button = () => {
     let bDisable = false;
 
-    if (userList.length === poolInfo.settings.number_poolers) {
-      for (let i = 0; i < poolInfo.settings.number_poolers; i += 1) {
-        if (userList[i].ready === false) bDisable = true;
+    if (userList.length === poolInfo.number_poolers) {
+      for (let i = 0; i < poolInfo.number_poolers; i += 1) {
+        if (userList[i].is_ready === false) bDisable = true;
       }
     } else bDisable = true;
 
-    if (user._id.$oid === poolInfo.owner) {
+    if (user._id === poolInfo.owner) {
       return (
-        <button className="base-button" onClick={update_settings} disabled={bDisable} type="button">
+        <button className="base-button" onClick={start_draft} disabled={bDisable} type="button">
           Start draft
         </button>
       );
@@ -107,17 +116,27 @@ export default function CreatedPool({ user, hasOwnerRights, DictUsers, poolName,
     return (
       <div className="min-width">
         <h1>Match Making for Pool {poolName}</h1>
+
         <div className="float-left">
+          <button
+            className="base-button"
+            type="button"
+            disabled={!poolSettingsUpdate}
+            onClick={() => update_pool_settings()}
+          >
+            Update Settings
+          </button>
           <PoolOptions
             poolInfo={poolInfo}
+            poolSettingsUpdate={poolSettingsUpdate}
+            setPoolSettingsUpdate={setPoolSettingsUpdate}
             hasOwnerRights={hasOwnerRights}
-            update_settings={update_settings}
             DictUsers={DictUsers}
           />
         </div>
         <div className="float-right">
           <div className="half-cont">
-            <input type="checkbox" onChange={update_settings} />
+            <input type="checkbox" onChange={on_ready} />
             <b>Ready?</b>
             {render_start_draft_button()}
             <h2>Participants: </h2>

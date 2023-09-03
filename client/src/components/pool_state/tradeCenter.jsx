@@ -26,9 +26,9 @@ export default function TradeCenter({ poolInfo, setPoolUpdate, injury, user, has
       try {
         await axios.post(
           '/api-rust/respond-trade',
-          { trade_id: tradeID, name: poolInfo.name, is_accepted: isAccepted },
+          { pool_name: poolInfo.name, trade_id: tradeID, is_accepted: isAccepted },
           {
-            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
           }
         );
         setPoolUpdate(true);
@@ -42,10 +42,10 @@ export default function TradeCenter({ poolInfo, setPoolUpdate, injury, user, has
     if (window.confirm(`Do you really want to cancel the trade?`)) {
       try {
         await axios.post(
-          '/api-rust/cancel-trade',
-          { trade_id: tradeID, name: poolInfo.name },
+          '/api-rust/delete-trade',
+          { pool_name: poolInfo.name, trade_id: tradeID },
           {
-            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
           }
         );
         setPoolUpdate(true);
@@ -58,7 +58,7 @@ export default function TradeCenter({ poolInfo, setPoolUpdate, injury, user, has
   if (poolInfo.trades) {
     return (
       <div className="half-cont">
-        {poolInfo.participants.includes(user?._id.$oid) ? (
+        {poolInfo.participants.includes(user?._id) ? (
           <>
             <button className="base-button" type="button" onClick={() => setShowCreateTradeModal(true)}>
               Create a trade
@@ -86,17 +86,17 @@ export default function TradeCenter({ poolInfo, setPoolUpdate, injury, user, has
                     <TradeItem tradeInfo={tradeInfo} poolInfo={poolInfo} DictUsers={DictUsers} />
                   </th>
                   <th>
-                    {tradeInfo.proposed_by === user?._id.$oid ? (
+                    {tradeInfo.proposed_by === user?._id ? (
                       <button onClick={() => cancel_trade(tradeInfo.id)} type="button" className="base-button">
                         Cancel
                       </button>
                     ) : null}
-                    {tradeInfo.ask_to === user?._id.$oid || hasOwnerRights ? (
+                    {tradeInfo.ask_to === user?._id || hasOwnerRights ? (
                       <button onClick={() => respond_trade(tradeInfo.id, true)} type="button" className="base-button">
                         Accept
                       </button>
                     ) : null}
-                    {tradeInfo.ask_to === user?._id.$oid ? (
+                    {tradeInfo.ask_to === user?._id ? (
                       <button onClick={() => respond_trade(tradeInfo.id, false)} type="button" className="base-button">
                         Refuse
                       </button>

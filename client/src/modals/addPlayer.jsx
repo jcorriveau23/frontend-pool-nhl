@@ -30,12 +30,12 @@ export default function AddPlayerModal({
       await axios.post(
         '/api-rust/add-player',
         {
-          name: poolInfo.name,
-          user_id: participant,
+          pool_name: poolInfo.name,
+          added_player_user_id: participant,
           player,
         },
         {
-          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
         }
       );
       setPoolUpdate(true);

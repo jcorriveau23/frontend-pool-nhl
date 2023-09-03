@@ -47,14 +47,14 @@ export default function RosterModificationModal({
         await axios.post(
           '/api-rust/modify-roster',
           {
-            name: poolInfo.name,
-            user_id: userModified,
+            pool_name: poolInfo.name,
+            roster_modified_user_id: userModified,
             forw_list: forwSelected,
             def_list: defSelected,
             goal_list: goalSelected,
             reserv_list: reservSelected,
           },
-          { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` } }
+          { headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` } }
         );
         setPoolUpdate(true);
         setShowRosterModificationModal(false);

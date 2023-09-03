@@ -324,7 +324,7 @@ export default function SearchPlayersStats({
         onClick={() => setSelectedPlayer(player.playerId)}
         style={poolInfo?.status === 'Draft' ? get_already_drafted_bg_color(player) : null}
       >
-        {poolInfo?.status === 'Draft' ? render_already_drafted_tooltip(player) : <td>{i + 1}</td>}
+        {poolInfo?.status === 'Draft' ? render_already_drafted_tooltip(player, i) : <td>{i + 1}</td>}
         <td>
           <PlayerLink name={player.skaterFullName} id={player.playerId} injury={injury} />
         </td>
@@ -358,7 +358,7 @@ export default function SearchPlayersStats({
         onClick={() => setSelectedPlayer(player.playerId)}
         style={poolInfo?.status === 'Draft' ? get_already_drafted_bg_color(player) : null}
       >
-        {poolInfo?.status === 'Draft' ? render_already_drafted_tooltip(player) : <td>{i + 1}</td>}
+        {poolInfo?.status === 'Draft' ? render_already_drafted_tooltip(player, i) : <td>{i + 1}</td>}
         <td>
           <PlayerLink name={player.goalieFullName} id={player.playerId} injury={injury} />
         </td>

@@ -66,7 +66,7 @@ export default function GraphStats({ poolInfo, DictUsers }) {
 
     for (let j = startDate; j <= endDate; j.setDate(j.getDate() + 1)) {
       const jDate = j.toISOString().slice(0, 10);
-      if (poolInfo.context.score_by_day[jDate]) {
+      if (poolInfo.context.score_by_day && poolInfo.context.score_by_day[jDate]) {
         labels.push(jDate);
       }
     }

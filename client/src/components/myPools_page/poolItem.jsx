@@ -13,9 +13,9 @@ export default function PoolItem({ name, owner, user, poolDeleted, setPoolDelete
       try {
         await axios.post(
           '/api-rust/delete-pool',
-          { name },
+          { pool_name: name },
           {
-            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
           }
         );
         setPoolDeleted(!poolDeleted);
@@ -40,7 +40,7 @@ export default function PoolItem({ name, owner, user, poolDeleted, setPoolDelete
             </Link>
           </td>
           <td>
-            {user && user._id.$oid === owner ? (
+            {user && user._id === owner ? (
               <button className="base-button" onClick={delete_pool} type="button">
                 Delete
               </button>

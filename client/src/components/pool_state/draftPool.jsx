@@ -16,7 +16,6 @@ import '../react-tabs.css';
 
 // images
 import SearchPlayersStats from '../stats_page/searchPlayersStats';
-import { abbrevToTeamId } from '../img/logos';
 
 export default function DraftPool({
   user,
@@ -26,56 +25,58 @@ export default function DraftPool({
   setPoolInfo,
   playersIdToPoolerMap,
   injury,
-  socket,
   userIndex,
 }) {
   const [inRoom, setInRoom] = useState(false);
+  const [userList, setUserList] = useState([]);
+  const [socket, setSocket] = useState(null);
   const [selectedTeamIndex, setSelectedTeamIndex] = useState(userIndex === -1 ? 0 : userIndex);
   const [nextDrafter, setNextDrafter] = useState('');
 
+  const create_socket_command = (command, arg) => `{"${command}": ${arg}}`;
+
   useEffect(() => {
-    if (socket && poolName && user._id) {
-      socket.emit('joinRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
-      setInRoom(true);
-    }
-    return () => {
-      if (socket && poolName) {
-        socket.emit('leaveRoom', Cookies.get(`token-${user._id.$oid}`), poolName);
-        socket.off('roomData');
-        setInRoom(false);
+    const socket_tmp = new WebSocket(`ws://localhost:8000/api-rust/ws/${Cookies.get(`token-${user._id}`)}`);
+
+    // Receiving message from the socket server.
+    socket_tmp.onmessage = event => {
+      try {
+        const response = JSON.parse(event.data);
+        if (response.Pool) {
+          // This is a pool update
+          setPoolInfo(response.Pool.pool);
+        } else if (response.Users) {
+          setUserList(Object.keys(response.Users.room_users).map(key => response.Users.room_users[key]));
+        }
+      } catch (e) {
+        alert(event.data);
       }
+    };
+
+    socket_tmp.onopen = () => socket_tmp.send(create_socket_command('JoinRoom', `{"pool_name": "${poolName}"}`));
+
+    setSocket(socket_tmp);
+    setInRoom(true);
+
+    return () => {
+      socket_tmp.send('"LeaveRoom"');
+      socket_tmp.close();
     };
   }, [user]);
 
-  useEffect(() => {
-    if (socket) {
-      socket.on('poolInfo', data => {
-        setPoolInfo(data);
-      });
-    }
-  }, [socket]);
-
-  const chose_player = player => {
-    socket.emit('pickPlayer', Cookies.get(`token-${user._id.$oid}`), poolInfo.name, player, ack => {
-      if (ack.success === false) {
-        alert(ack.message);
-      }
-    });
+  const draft_player = player => {
+    socket.send(create_socket_command('DraftPlayer', `{"player": ${JSON.stringify(player)}}`));
   };
 
-  const undo = () => {
+  const undo_draft_player = () => {
     if (window.confirm(`Do you really want to undo the last selection?`)) {
-      socket.emit('undo', Cookies.get(`token-${user._id.$oid}`), poolInfo.name, ack => {
-        if (ack.success === false) {
-          alert(ack.message);
-        }
-      });
+      socket.send('"UndoDraftPlayer"');
     }
   };
 
   const confirm_selection = player => {
     if (window.confirm(`Do you really want to select ${player.name}?`)) {
-      chose_player(player);
+      draft_player(player);
     }
   };
 
@@ -89,8 +90,8 @@ export default function DraftPool({
         <Tab>Teams</Tab>
       </TabList>
       <TabPanel>
-        {user._id.$oid === poolInfo.owner ? (
-          <button className="base-button" onClick={undo} type="button">
+        {user._id === poolInfo.owner ? (
+          <button className="base-button" onClick={undo_draft_player} type="button">
             Undo
           </button>
         ) : null}
@@ -113,7 +114,11 @@ export default function DraftPool({
           </TabList>
           {poolInfo.participants.map(participant => (
             <TabPanel key={participant}>
-              <PlayerList poolerContext={poolInfo.context.pooler_roster[participant]} injury={injury} />
+              <PlayerList
+                poolerContext={poolInfo.context.pooler_roster[participant]}
+                players={poolInfo.context.players}
+                injury={injury}
+              />
             </TabPanel>
           ))}
         </Tabs>
@@ -156,7 +161,6 @@ export default function DraftPool({
           </div>
           <div className="float-right">
             <div className="half-cont">{render_tabs_choice(nextDrafter)}</div>
-            <h1>{nextDrafter}</h1>
           </div>
         </div>
       </div>

@@ -89,7 +89,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
         <table>
           <tbody>
             <td>
-              <button className="base-button" type="button" onClick={openCreatePoolModal} disabled>
+              <button className="base-button" type="button" onClick={openCreatePoolModal}>
                 <table>
                   <tbody>
                     <tr>
@@ -104,11 +104,6 @@ export default function MyPoolsPage({ user, DictUsers }) {
                   </tbody>
                 </table>
               </button>
-            </td>
-            <td>
-              <a data-tip="Pool creation are disabled until the end of the 2022-23 season!">
-                <RiInformationFill color="yellow" size={45} />
-              </a>
             </td>
           </tbody>
         </table>

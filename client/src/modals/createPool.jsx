@@ -14,9 +14,9 @@ export default function CreatePoolModal({ showCreatePoolModal, setShowCreatePool
     try {
       await axios.post(
         '/api-rust/create-pool',
-        { name: poolNameInput, number_pooler: numberPoolerInput },
+        { pool_name: poolNameInput, number_pooler: numberPoolerInput },
         {
-          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
         }
       );
       setShowCreatePoolModal(false);

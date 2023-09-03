@@ -22,7 +22,7 @@ export default function ProfilePage({ user, setUser }) {
   useEffect(() => {}, []);
 
   const logout = () => {
-    Cookies.remove(`token-${user._id.$oid}`);
+    Cookies.remove(`token-${user._id}`);
     localStorage.clear('persist-account');
     setUser(null);
     navigate('/login');
@@ -33,10 +33,10 @@ export default function ProfilePage({ user, setUser }) {
     else if (window.confirm(`Are you sure you want to set your new username to be ${newUsername}`)) {
       try {
         const res = await axios.post(
-          '/api-rust/set-username',
+          '/api-rust/user/set-username',
           { new_username: newUsername },
           {
-            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
           }
         );
         localStorage.setItem('persist-account', JSON.stringify(res.data.user));
@@ -54,10 +54,10 @@ export default function ProfilePage({ user, setUser }) {
     else if (window.confirm(`Are you sure you want to change your password?`)) {
       try {
         const res = await axios.post(
-          '/api-rust/set-password',
+          '/api-rust/user/set-password',
           { password: newPassword },
           {
-            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
           }
         );
         localStorage.setItem('persist-account', JSON.stringify(res.data.user));

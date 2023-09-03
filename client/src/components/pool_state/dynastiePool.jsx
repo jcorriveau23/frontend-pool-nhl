@@ -143,14 +143,14 @@ export default function DynastiePool({
         await axios.post(
           '/api-rust/protect-players',
           {
-            name: poolInfo.name,
+            pool_name: poolInfo.name,
             forw_protected: forwProtected,
             def_protected: defProtected,
             goal_protected: goalProtected,
             reserv_protected: reservProtected,
           },
           {
-            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
           }
         );
         setPoolUpdate(true);
@@ -261,7 +261,7 @@ export default function DynastiePool({
                 {poolInfo.participants.map(participant => (
                   <TabPanel>
                     <h2>
-                      {participant === user._id.$oid
+                      {participant === user._id
                         ? `Protect ${poolInfo.settings.dynastie_settings.next_season_number_players_protected} players.`
                         : null}
                     </h2>
@@ -270,32 +270,32 @@ export default function DynastiePool({
                       <tbody>
                         {render_not_protected_players(
                           poolInfo.context.pooler_roster[participant].chosen_forwards,
-                          participant === user._id.$oid,
-                          isParticipantDone(user._id.$oid)
+                          participant === user._id,
+                          isParticipantDone(user._id)
                         )}
                       </tbody>
                       {render_position_header('Defenders')}
                       <tbody>
                         {render_not_protected_players(
                           poolInfo.context.pooler_roster[participant].chosen_defenders,
-                          participant === user._id.$oid,
-                          isParticipantDone(user._id.$oid)
+                          participant === user._id,
+                          isParticipantDone(user._id)
                         )}
                       </tbody>
                       {render_position_header('Goalies')}
                       <tbody>
                         {render_not_protected_players(
                           poolInfo.context.pooler_roster[participant].chosen_goalies,
-                          participant === user._id.$oid,
-                          isParticipantDone(user._id.$oid)
+                          participant === user._id,
+                          isParticipantDone(user._id)
                         )}
                       </tbody>
                       {render_position_header('Reservists')}
                       <tbody>
                         {render_not_protected_players(
                           poolInfo.context.pooler_roster[participant].chosen_reservists,
-                          participant === user._id.$oid,
-                          isParticipantDone(user._id.$oid)
+                          participant === user._id,
+                          isParticipantDone(user._id)
                         )}
                       </tbody>
                     </table>
@@ -306,7 +306,7 @@ export default function DynastiePool({
           </div>
           <div className="float-right">
             <div className="half-cont">
-              {!isParticipantDone(user._id.$oid) ? (
+              {!isParticipantDone(user._id) ? (
                 <>
                   <h2>
                     My Protected players ({nb_player_protected}/

@@ -44,8 +44,8 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
     const sig = await signer.signMessage('Unlock wallet to access nhl-pool-ethereum.');
     const addr = await signer.getAddress();
     try {
-      const res = await axios.post('/api-rust/wallet-login', { addr, sig });
-      Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
+      const res = await axios.post('/api-rust/user/wallet-login', { addr, sig });
+      Cookies.set(`token-${res.data.user._id}`, res.data.token);
       localStorage.setItem('persist-account', JSON.stringify(res.data.user));
       setUser(res.data.user);
       setIsWalletConnected(true);
@@ -59,8 +59,8 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
 
   const login = async () => {
     try {
-      const res = await axios.post('/api-rust/login', { name, password });
-      Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
+      const res = await axios.post('/api-rust/user/login', { name, password });
+      Cookies.set(`token-${res.data.user._id}`, res.data.token);
       localStorage.setItem('persist-account', JSON.stringify(res.data.user));
       setUser(res.data.user);
 
@@ -73,13 +73,13 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
   const register = async () => {
     if (password === repeatPassword) {
       try {
-        const res = await axios.post('/api-rust/register', {
+        const res = await axios.post('/api-rust/user/register', {
           name,
           email,
           password,
           phone: 'TODO',
         });
-        Cookies.set(`token-${res.data.user._id.$oid}`, res.data.token);
+        Cookies.set(`token-${res.data.user._id}`, res.data.token);
         localStorage.setItem('persist-account', JSON.stringify(res.data.user));
         setUser(res.data.user);
         navigate('/');

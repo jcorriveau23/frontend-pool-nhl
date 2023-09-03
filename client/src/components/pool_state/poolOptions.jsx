@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRights, update_settings, DictUsers }) {
+export default function PoolOptions({
+  poolInfo,
+  poolSettingsUpdate,
+  setPoolSettingsUpdate,
+  hasOwnerRights,
+  DictUsers,
+}) {
   useEffect(() => {}, []);
 
   const [isDynastie, setIsDynastie] = useState(false);
@@ -19,6 +25,15 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
     return items;
   };
 
+  const update_settings = event => {
+    if (event.target.type === 'select-one') {
+      const updated_field = {};
+      updated_field[event.target.name] = Number(event.target.value);
+
+      setPoolSettingsUpdate(pool => ({ ...pool, ...updated_field }));
+    }
+  };
+
   const render_options = (title, setting, min, max) => (
     <tr>
       <td>{title}</td>
@@ -27,7 +42,29 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
           name={setting}
           onChange={update_settings}
           disabled={!hasOwnerRights}
-          value={poolSettingsUpdate && poolSettingsUpdate[setting] ? poolSettingsUpdate[setting] : poolInfo[setting]}
+          value={
+            poolSettingsUpdate && poolSettingsUpdate[setting] ? poolSettingsUpdate[setting] : poolInfo.settings[setting]
+          }
+        >
+          {create_select_Item(min, max)}
+        </select>
+      </td>
+    </tr>
+  );
+
+  const render_dynastie_options = (title, setting, min, max) => (
+    <tr>
+      <td>{title}</td>
+      <td>
+        <select
+          name={setting}
+          onChange={update_settings}
+          disabled={!hasOwnerRights}
+          value={
+            poolSettingsUpdate && poolSettingsUpdate.dynastie_settings && poolSettingsUpdate.dynastie_settings[setting]
+              ? poolSettingsUpdate.dynastie_settings[setting]
+              : poolInfo.settings.dynastie_settings[setting]
+          }
         >
           {create_select_Item(min, max)}
         </select>
@@ -39,7 +76,7 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
     <tr>
       <td>Pool&apos;s assistants:</td>
       <td>
-        {poolInfo.participants.map(id =>
+        {poolInfo.participants?.map(id =>
           id === poolInfo.owner ? null : (
             <label htmlFor="date-selection">
               <input type="checkbox" checked={poolInfo.settings.assistants.includes(id)} />
@@ -96,8 +133,18 @@ export default function PoolOptions({ poolInfo, poolSettingsUpdate, hasOwnerRigh
           {render_options('Number of defenders:', 'number_defenders', 2, 6)}
           {render_options('Number of goalies:', 'number_goalies', 1, 3)}
           {render_options('Number of reservists:', 'number_reservists', 1, 5)}
-          {render_options('Number of tradable draft picks:', 'tradable_picks', 1, 5)}
-          {render_options('Next season number of player to protected:', 'next_season_number_players_protected', 6, 12)}
+          {poolInfo.settings.dynastie_settings || poolSettingsUpdate?.dynastie_settings ? (
+            <>
+              {render_dynastie_options('Number of tradable draft picks:', 'tradable_picks', 1, 5)}
+              {render_dynastie_options(
+                'Next season number of player to protected:',
+                'next_season_number_players_protected',
+                6,
+                12
+              )}
+            </>
+          ) : null}
+
           {render_assistants_selection()}
           {render_date_modifications()}
         </tbody>

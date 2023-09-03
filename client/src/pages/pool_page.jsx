@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { io } from 'socket.io-client';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -14,10 +12,6 @@ import InProgressPool from '../components/pool_state/inProgressPool';
 import DynastiePool from '../components/pool_state/dynastiePool';
 
 import { db } from '../components/db/db';
-
-// const socket = io.connect('https://hockeypool.live', {
-//   path: '/mysocket',
-// });
 
 export default function PoolPage({
   user,
@@ -61,15 +55,16 @@ export default function PoolPage({
 
   const get_users = async participants => {
     try {
-      const res = await axios.get('/api-rust/users', { params: { names: participants } });
+      const res = await axios.get(`/api-rust/users/${participants.join(',')}`);
       const DictUsersTmp = {};
       res.data.forEach(u => {
-        DictUsersTmp[u._id.$oid] = u.name;
+        DictUsersTmp[u._id] = u.name;
       });
 
       setDictUsers(DictUsersTmp);
     } catch (e) {
-      alert(e.response.data);
+      console.log(e);
+      alert(e);
     }
   };
 
@@ -82,6 +77,7 @@ export default function PoolPage({
       setPoolUpdate(false);
 
       const pool = await db.pools.get({ name: poolName_temp });
+      console.log(pool);
       const lastFormatDate = find_last_date_in_db(pool);
 
       let res;
@@ -109,17 +105,20 @@ export default function PoolPage({
           // This is in the case we called the pool information for only a ranges of date since the rest of the date were already stored in the client database.
 
           res.data.context.score_by_day = { ...pool.context.score_by_day, ...res.data.context.score_by_day }; // merge the new keys to the past saved pool.
+          // TODO hash the results and compare with server hash to determine if an update is needed
         }
 
         res.data.id = pool.id;
       }
 
       setPoolInfo(res.data);
-      get_users(res.data.participants); // Get the list of users that are in the pool.
+      if (res.data.participants) {
+        get_users(res.data.participants);
+      } // Get the list of users that are in the pool.
       db.pools.put(res.data, 'name');
 
       if (res.data.participants) {
-        setUserIndex(res.data.participants.findIndex(participant => participant === user?._id.$oid));
+        setUserIndex(res.data.participants.findIndex(participant => participant === user?._id));
       }
     }
   };
@@ -170,8 +169,7 @@ export default function PoolPage({
 
   useEffect(() => {
     process_pool_players_dict();
-    if (poolInfo)
-      setHasOwnerRights(poolInfo.owner === user?._id.$oid || poolInfo.settings.assistants.includes(user?._id.$oid));
+    if (poolInfo) setHasOwnerRights(poolInfo.owner === user?._id || poolInfo.settings.assistants.includes(user?._id));
   }, [poolInfo]);
 
   if (poolInfo && userIndex >= -1) {
@@ -182,10 +180,10 @@ export default function PoolPage({
             user={user}
             hasOwnerRights={hasOwnerRights}
             DictUsers={DictUsers}
+            setDictUsers={setDictUsers}
             poolName={poolName}
             poolInfo={poolInfo}
             setPoolInfo={setPoolInfo}
-            // socket={socket}
           />
         );
       case 'Draft':
@@ -198,7 +196,6 @@ export default function PoolPage({
             setPoolInfo={setPoolInfo}
             playersIdToPoolerMap={playersIdToPoolerMap}
             injury={injury}
-            // socket={socket}
             userIndex={userIndex}
           />
         );

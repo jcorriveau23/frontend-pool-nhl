@@ -32,9 +32,9 @@ export default function CreateTradeModal({
   const [fromPicks, setFromPicks] = useState([]);
   const [toPlayers, setToPlayers] = useState([]);
   const [toPicks, setToPicks] = useState([]);
-  const [fromSelectedPooler, setFromSelectedPooler] = useState(user._id.$oid);
+  const [fromSelectedPooler, setFromSelectedPooler] = useState(user._id);
   const [toSelectedPooler, setToSelectedPooler] = useState(
-    poolInfo.participants[0] === user?._id.$oid ? poolInfo.participants[1] : poolInfo.participants[0]
+    poolInfo.participants[0] === user?._id ? poolInfo.participants[1] : poolInfo.participants[0]
   );
 
   const reset_from_items = () => {
@@ -78,9 +78,9 @@ export default function CreateTradeModal({
     try {
       await axios.post(
         '/api-rust/create-trade',
-        { trade: tradeInfo, name: poolInfo.name },
+        { pool_name: poolInfo.name, trade: tradeInfo },
         {
-          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id.$oid}`)}` },
+          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
         }
       );
       setShowCreateTradeModal(false);
@@ -251,7 +251,7 @@ export default function CreateTradeModal({
             <select
               onChange={event => on_change_from_selection(event.target.value)}
               defaultValue={fromSelectedPooler}
-              disabled={poolInfo.owner !== user._id.$oid && !poolInfo.settings.assistants.includes(user._id.$oid)}
+              disabled={poolInfo.owner !== user._id && !poolInfo.settings.assistants.includes(user._id)}
             >
               {poolInfo.participants.map(pooler => (
                 <option value={pooler}>{DictUsers ? DictUsers[pooler] : pooler}</option>
@@ -270,7 +270,7 @@ export default function CreateTradeModal({
           <div className="half-cont">
             <select onChange={event => on_change_to_selection(event.target.value)} defaultValue={toSelectedPooler}>
               {poolInfo.participants
-                .filter(pooler => pooler !== user._id.$oid)
+                .filter(pooler => pooler !== user._id)
                 .map(pooler => (
                   <option value={pooler}>{DictUsers ? DictUsers[pooler] : pooler}</option>
                 ))}

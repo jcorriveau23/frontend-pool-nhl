@@ -453,9 +453,9 @@ export default function InProgressPool({
         <tr key={i}>
           <td>{i + 1}</td>
           <td colSpan={3}>
-            {pooler === user?._id.$oid ||
-            poolInfo.owner === user?._id.$oid ||
-            poolInfo.settings.assistants.includes(user?._id.$oid) ? (
+            {pooler === user?._id ||
+            poolInfo.owner === user?._id ||
+            poolInfo.settings.assistants.includes(user?._id) ? (
               <button className="base-button" type="button" onClick={() => open_fill_spot_modal(position)}>
                 Fill Spot
               </button>
@@ -700,6 +700,7 @@ export default function InProgressPool({
   const tooltip_msg = () => {
     if (
       formatDate === todayFormatDate &&
+      poolInfo.context.score_by_day &&
       poolInfo.context.score_by_day[formatDate] &&
       !poolInfo.context.score_by_day[formatDate][poolInfo.participants[0]].cumulate
     ) {
@@ -726,9 +727,9 @@ export default function InProgressPool({
       {poolInfo.participants.map(pooler => (
         <TabPanel key={pooler}>
           <div className="half-cont">
-            {(pooler === user?._id.$oid ||
-              poolInfo.owner === user?._id.$oid ||
-              poolInfo.settings.assistants.includes(user?._id.$oid)) &&
+            {(pooler === user?._id ||
+              poolInfo.owner === user?._id ||
+              poolInfo.settings.assistants.includes(user?._id)) &&
             rosterModificationAllowed ? (
               <table>
                 <tbody>
@@ -826,7 +827,7 @@ export default function InProgressPool({
                 {render_header_reservists()}
               </thead>
               <tbody>{render_reservists(pooler)}</tbody>
-              {poolInfo.owner === user?._id.$oid || poolInfo.settings.assistants.includes(user?._id.$oid) ? (
+              {poolInfo.owner === user?._id || poolInfo.settings.assistants.includes(user?._id) ? (
                 <tr>
                   <td colSpan={13}>
                     <button className="base-button" onClick={() => setShowAddPlayerModal(true)} type="button">
@@ -1097,7 +1098,7 @@ export default function InProgressPool({
           playersIdToPoolerMap={playersIdToPoolerMap}
         />
       </div>
-      {poolInfo.participants.includes(user?._id.$oid) ? (
+      {poolInfo.participants.includes(user?._id) ? (
         <>
           <FillSpotModal
             showFillSpotModal={showFillSpotModal}
