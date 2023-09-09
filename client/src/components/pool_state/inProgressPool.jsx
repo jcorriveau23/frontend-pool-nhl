@@ -404,15 +404,19 @@ export default function InProgressPool({
   }, [formatDate, poolInfo.context.score_by_day]);
 
   const mark_as_final = async pool => {
-    await axios.post(
-      '/api-rust/mark-as-final',
-      {
-        pool_name: poolInfo.name,
-      },
-      {
-        headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
-      }
-    );
+    try {
+      await axios.post(
+        '/api-rust/mark-as-final',
+        {
+          pool_name: poolInfo.name,
+        },
+        {
+          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
+        }
+      );
+    } catch (e) {
+      alert(e);
+    }
   };
 
   const download_csv = pool => {
