@@ -16,32 +16,23 @@ import User from '../user';
 // Images
 import { team_info } from '../img/logos';
 
-export default function DynastiePool({
-  user,
-  DictUsers,
-  poolInfo,
-  playersIdToPoolerMap,
-  setPoolUpdate,
-  injury,
-  userIndex,
-}) {
+export default function DynastiePool({ user, DictUsers, poolInfo, setPoolUpdate, injury, userIndex }) {
   const [forwProtected, setForwProtected] = useState([]);
   const [defProtected, setDefProtected] = useState([]);
   const [goalProtected, setGoalProtected] = useState([]);
   const [reservProtected, setReservProtected] = useState([]);
-  const [userTabIndex, setUSerTabIndex] = useState(poolInfo.participants.findIndex(userIndex === -1 ? 0 : userIndex));
+  const [userTabIndex, setUSerTabIndex] = useState(0);
 
   const protect_player = (player, isUser) => {
     if (!isUser) {
-      // alert(`You cannot protect a player you don't own.`);
+      alert(`You cannot protect a player you don't own.`);
       return;
     }
 
     const number_protected = defProtected.length + forwProtected.length + goalProtected.length + reservProtected.length;
 
     let add_to_reservist = false;
-
-    if (number_protected < poolInfo.settings.next_season_number_players_protected) {
+    if (number_protected < poolInfo.settings.dynastie_settings.next_season_number_players_protected) {
       if (player.position === 'D') {
         if (defProtected.length < poolInfo.settings.number_defenders) {
           const changedArray = defProtected;
@@ -79,7 +70,10 @@ export default function DynastiePool({
           setReservProtected([...changedArray]);
         } else alert(`You cannot have more than ${poolInfo.settings.number_reservists} reservists`);
       }
-    } else alert(`You cannot protect more than ${poolInfo.settings.next_season_number_players_protected} players`);
+    } else
+      alert(
+        `You cannot protect more than ${poolInfo.settings.dynastie_settings.next_season_number_players_protected} players`
+      );
   };
 
   const unprotect_player = (player, isReservist) => {
@@ -166,27 +160,27 @@ export default function DynastiePool({
       alert(`You need to protect ${poolInfo.settings.dynastie_settings.next_season_number_players_protected} players`);
   };
 
-  const render_not_protected_players = (players, isUser, isDone) =>
-    players
-      .filter(player => {
+  const render_not_protected_players = (players_ids, isUser, isDone) =>
+    players_ids
+      .filter(player_id => {
         if (
-          forwProtected.findIndex(p => p.id === player.id) === -1 &&
-          defProtected.findIndex(p => p.id === player.id) === -1 &&
-          goalProtected.findIndex(p => p.id === player.id) === -1 &&
-          reservProtected.findIndex(p => p.id === player.id) === -1
+          forwProtected.findIndex(p => p.id === player_id) === -1 &&
+          defProtected.findIndex(p => p.id === player_id) === -1 &&
+          goalProtected.findIndex(p => p.id === player_id) === -1 &&
+          reservProtected.findIndex(p => p.id === player_id) === -1
         ) {
-          return player;
+          return player_id;
         }
         return null;
       })
-      .map((player, i) => (
-        <tr onClick={isDone ? null : () => protect_player(player, isUser)} key={player.id}>
+      .map((player_id, i) => (
+        <tr onClick={isDone ? null : () => protect_player(poolInfo.context.players[player_id], isUser)} key={player_id}>
           <td>{i + 1}</td>
           <td>
-            <PlayerNoLink name={player.name} injury={injury} isLink={false} />
+            <PlayerNoLink name={poolInfo.context.players[player_id].name} injury={injury} isLink={false} />
           </td>
           <td>
-            <img src={team_info[player.team]?.logo} alt="" width="40" height="40" />
+            <img src={team_info[poolInfo.context.players[player_id].team]?.logo} alt="" width="40" height="40" />
           </td>
         </tr>
       ));

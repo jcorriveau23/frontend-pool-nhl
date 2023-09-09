@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ClipLoader from 'react-spinners/ClipLoader';
 import ReactTooltip from 'react-tooltip';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 // icons
 import { RiTeamFill, RiInformationFill, RiSettings2Fill } from 'react-icons/ri';
@@ -400,6 +402,18 @@ export default function InProgressPool({
       setRosterModificationAllowed(poolInfo.settings.roster_modification_date.includes(d.toISOString().slice(0, 10)));
     }
   }, [formatDate, poolInfo.context.score_by_day]);
+
+  const mark_as_final = async pool => {
+    await axios.post(
+      '/api-rust/mark-as-final',
+      {
+        pool_name: poolInfo.name,
+      },
+      {
+        headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
+      }
+    );
+  };
 
   const download_csv = pool => {
     let csv = 'Player Name,Team\n';
@@ -959,6 +973,9 @@ export default function InProgressPool({
   return (
     <div className="min-width">
       <div className="cont">
+        <button className="base-button" type="button" onClick={() => mark_as_final()}>
+          Mark As Final
+        </button>
         {playersStats && ranking && gameStatus ? (
           <Tabs selectedIndex={mainTabIndex} onSelect={index => setMainTab(index)}>
             <TabList>

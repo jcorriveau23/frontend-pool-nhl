@@ -26,6 +26,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
   const [poolInProgress, setPoolInProgress] = useState([]);
   const [poolDraft, setPoolDraft] = useState([]);
   const [poolDynastie, setPoolDynastie] = useState([]);
+  const [poolFinal, setPoolFinal] = useState([]);
 
   const get_pools = async () => {
     try {
@@ -33,6 +34,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
       const pDraft = [];
       const pInProgress = [];
       const pDynastie = [];
+      const pFinal = [];
       const pCreated = [];
 
       for (let i = 0; i < res.data.length; i += 1) {
@@ -55,6 +57,12 @@ export default function MyPoolsPage({ user, DictUsers }) {
               owner: res.data[i].owner,
             });
             break;
+          case 'Final':
+            pFinal.push({
+              name: res.data[i].name,
+              owner: res.data[i].owner,
+            });
+            break;
           default:
             pCreated.push({
               name: res.data[i].name,
@@ -67,6 +75,7 @@ export default function MyPoolsPage({ user, DictUsers }) {
       setPoolInProgress(pInProgress);
       setPoolDynastie(pDynastie);
       setPoolCreated(pCreated);
+      setPoolFinal(pFinal);
     } catch (e) {
       alert(e.response.data);
     }
@@ -117,10 +126,12 @@ export default function MyPoolsPage({ user, DictUsers }) {
                 in Progress
               </Tab>
             ) : null}
-            <Tab>
-              <FaTools size={30} />
-              Created
-            </Tab>
+            {poolCreated.length > 0 ? (
+              <Tab>
+                <FaTools size={30} />
+                Created
+              </Tab>
+            ) : null}
             {poolDraft.length > 0 ? (
               <Tab>
                 <BsFillPenFill size={30} />
@@ -131,6 +142,12 @@ export default function MyPoolsPage({ user, DictUsers }) {
               <Tab>
                 <FaHockeyPuck size={30} />
                 Dynastie
+              </Tab>
+            ) : null}
+            {poolFinal.length > 0 ? (
+              <Tab>
+                <FaHockeyPuck size={30} />
+                Final
               </Tab>
             ) : null}
           </TabList>
@@ -145,23 +162,25 @@ export default function MyPoolsPage({ user, DictUsers }) {
               </div>
             </TabPanel>
           ) : null}
-          <TabPanel>
-            <div className="pool_item">
-              <ul>
-                {poolCreated.map(pool => (
-                  <PoolItem
-                    key={pool.name}
-                    name={pool.name}
-                    owner={pool.owner}
-                    user={user}
-                    poolDeleted={poolDeleted}
-                    setPoolDeleted={setPoolDeleted}
-                    DictUsers={DictUsers}
-                  />
-                ))}
-              </ul>
-            </div>
-          </TabPanel>
+          {poolCreated.length > 0 ? (
+            <TabPanel>
+              <div className="pool_item">
+                <ul>
+                  {poolCreated.map(pool => (
+                    <PoolItem
+                      key={pool.name}
+                      name={pool.name}
+                      owner={pool.owner}
+                      user={user}
+                      poolDeleted={poolDeleted}
+                      setPoolDeleted={setPoolDeleted}
+                      DictUsers={DictUsers}
+                    />
+                  ))}
+                </ul>
+              </div>
+            </TabPanel>
+          ) : null}
           {poolDraft.length > 0 ? (
             <TabPanel>
               <div className="pool_item">
@@ -178,6 +197,17 @@ export default function MyPoolsPage({ user, DictUsers }) {
               <div className="pool_item">
                 <ul>
                   {poolDynastie.map(pool => (
+                    <PoolItem key={pool.name} name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
+                  ))}
+                </ul>
+              </div>
+            </TabPanel>
+          ) : null}
+          {poolFinal.length > 0 ? (
+            <TabPanel>
+              <div className="pool_item">
+                <ul>
+                  {poolFinal.map(pool => (
                     <PoolItem key={pool.name} name={pool.name} owner={pool.owner} DictUsers={DictUsers} />
                   ))}
                 </ul>

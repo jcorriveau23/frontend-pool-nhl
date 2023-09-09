@@ -202,6 +202,7 @@ export default function PoolPage({
           />
         );
       case 'InProgress':
+      case 'Final':
         return (
           <InProgressPool
             user={user}
