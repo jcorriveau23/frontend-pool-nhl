@@ -119,6 +119,8 @@ export default function PoolPage({
 
       if (res.data.participants) {
         setUserIndex(res.data.participants.findIndex(participant => participant === user?._id));
+      } else {
+        setUserIndex(-1);
       }
     }
   };
