@@ -68,7 +68,7 @@ export default function TeamsStanding({ season }) {
         <td>
           <img src={team_info[team.team.id]?.logo} alt="" width="40" height="40" />
         </td>
-        <td borderLeft="none">
+        <td>
           <b>{team.clinchIndicator}</b>
         </td>
         <td>{team.leagueRecord.wins + team.leagueRecord.losses + team.leagueRecord.ot}</td>

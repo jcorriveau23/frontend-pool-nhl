@@ -15,11 +15,19 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ethers } from 'ethers';
 import Cookies from 'js-cookie';
-
+import { BsFacebook } from 'react-icons/bs';
+import { fbLogin } from '../utils/facebookSDK';
 // css
 import './page.css';
 
-export default function LoginPage({ user, setUser, setIsWalletConnected, setCurrentAddr }) {
+export default function LoginPage({
+  user,
+  setUser,
+  authResponse,
+  setAuthResponse,
+  setIsWalletConnected,
+  setCurrentAddr,
+}) {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState(''); // for Register
@@ -70,6 +78,26 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
     }
   };
 
+  const social_login = async () => {
+    const response = await fbLogin();
+
+    if (response.authResponse !== null) {
+      setAuthResponse(response.authResponse);
+      try {
+        const res = await axios.post('/api-rust/user/social-login', response.authResponse);
+        Cookies.set(`token-${res.data.user._id}`, res.data.token);
+        localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+        setUser(res.data.user);
+
+        navigate('/'); // Navigate to the home page on success login.
+      } catch (e) {
+        alert(e.response.data);
+      }
+    } else {
+      alert('facebook login did not worked.');
+    }
+  };
+
   const register = async () => {
     if (password === repeatPassword) {
       try {
@@ -93,6 +121,18 @@ export default function LoginPage({ user, setUser, setIsWalletConnected, setCurr
 
   return (
     <div className="min-width">
+      <div className="cont">
+        <button className="base-button" type="button" onClick={() => social_login()}>
+          <table>
+            <tr>
+              <td>
+                <BsFacebook size={50} />
+              </td>
+              <td>Login with Facebook</td>
+            </tr>
+          </table>
+        </button>
+      </div>
       <div className="cont">
         {isRegister ? (
           <div className="form-content">

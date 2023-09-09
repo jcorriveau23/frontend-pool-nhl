@@ -11,7 +11,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+import { BsFacebook } from 'react-icons/bs';
 import { AiOutlineEdit } from 'react-icons/ai';
+import { fbLogin, fbLogout } from '../utils/facebookSDK';
 
 export default function ProfilePage({ user, setUser }) {
   const [newUsername, setNewUsername] = useState('');
@@ -25,6 +27,7 @@ export default function ProfilePage({ user, setUser }) {
     Cookies.remove(`token-${user._id}`);
     localStorage.clear('persist-account');
     setUser(null);
+    fbLogout();
     navigate('/login');
   };
 
@@ -69,6 +72,27 @@ export default function ProfilePage({ user, setUser }) {
     }
   };
 
+  const link_social_account = async () => {
+    const response = await fbLogin();
+    if (response.authResponse !== null) {
+      // setAuthResponse(response.authResponse);
+      try {
+        const res = await axios.post('/api-rust/user/link-social-account', response.authResponse, {
+          headers: { Authorization: `Bearer ${Cookies.get(`token-${user._id}`)}` },
+        });
+        console.log(res);
+        localStorage.setItem('persist-account', JSON.stringify(res.data.user));
+        setUser(res.data.user);
+
+        navigate('/'); // Navigate to the home page on success login.
+      } catch (e) {
+        alert(e.response.data);
+      }
+    } else {
+      alert('facebook login did not worked.');
+    }
+  };
+
   if (user) {
     return (
       <div className="cont">
@@ -88,6 +112,18 @@ export default function ProfilePage({ user, setUser }) {
             </tr>
           </tbody>
         </table>
+        {user && !user.social_id ? (
+          <button className="base-button" type="button" onClick={() => link_social_account()}>
+            <table>
+              <tr>
+                <td>
+                  <BsFacebook size={50} />
+                </td>
+                <td>Link a facebook account</td>
+              </tr>
+            </table>
+          </button>
+        ) : null}
         <div className="form-content">
           <form>
             <input

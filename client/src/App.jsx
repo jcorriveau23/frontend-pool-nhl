@@ -36,6 +36,7 @@ import TeamPage from './pages/team_page';
 // components
 import WalletCard from './components/web3/WalletCard';
 import SearchPlayer from './components/app/searchPlayer';
+import { getFacebookLoginStatus, initFacebookSdk } from './utils/facebookSDK';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -53,6 +54,7 @@ function App() {
   const [gameStatus, setGameStatus] = useState(null); // Live, Preview, N/A, Final
   const [DictTeamAgainst, setDictTeamAgainst] = useState(null);
   const [selectedGamePk, setSelectedGamePk] = useState(null);
+  const [authResponse, setAuthResponse] = useState(null); // Facebook authentification response.
   const refMenu = useRef(null);
   const refAccount = useRef(null);
 
@@ -67,6 +69,15 @@ function App() {
 
   useEffect(() => {
     get_injury();
+    // TODO: make sure the token store is still valid, force a reconnect if not.
+
+    initFacebookSdk().then(() => {
+      getFacebookLoginStatus().then(response => {
+        if (response !== null && response.authResponse !== null) {
+          setAuthResponse(response.authResponse);
+        }
+      });
+    });
 
     const persistAccount = localStorage.getItem('persist-account');
     const userTmp = persistAccount ? JSON.parse(persistAccount) : null;
@@ -144,7 +155,15 @@ function App() {
             />
             <Route
               path="/login"
-              element={<LoginPage user={user} setUser={setUser} setCurrentAddr={setCurrentAddr} />}
+              element={
+                <LoginPage
+                  user={user}
+                  setUser={setUser}
+                  authResponse={authResponse}
+                  setAuthResponse={setAuthResponse}
+                  setCurrentAddr={setCurrentAddr}
+                />
+              }
             />
             <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
             <Route path="/pools" element={<MyPoolsPage user={user} DictUsers={DictUsers} />} />
