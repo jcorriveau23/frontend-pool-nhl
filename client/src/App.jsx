@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 
 import { CgMenuRound } from 'react-icons/cg';
+import Cookies from 'js-cookie';
 
 // css
 import './components/components.css';
@@ -67,9 +68,33 @@ function App() {
     }
   };
 
+  const validate_token = async () => {
+    const persistAccount = localStorage.getItem('persist-account');
+    const userTmp = persistAccount ? JSON.parse(persistAccount) : null;
+
+    // Only if there were an existing connection, validate the token.
+    if (userTmp) {
+      try {
+        // This function doesn't return anything, but throw an error if the token is not valid.
+        await axios.post(
+          `/api-rust/token`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${Cookies.get(`token-${userTmp._id}`)}` },
+          }
+        );
+
+        setUser(userTmp);
+      } catch (e) {
+        Cookies.remove(`token-${userTmp._id}`);
+      }
+    }
+  };
+
   useEffect(() => {
-    get_injury();
     // TODO: make sure the token store is still valid, force a reconnect if not.
+    validate_token();
+    get_injury();
 
     initFacebookSdk().then(() => {
       getFacebookLoginStatus().then(response => {
@@ -78,11 +103,6 @@ function App() {
         }
       });
     });
-
-    const persistAccount = localStorage.getItem('persist-account');
-    const userTmp = persistAccount ? JSON.parse(persistAccount) : null;
-
-    setUser(userTmp);
   }, []);
 
   return (
