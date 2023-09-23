@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 // images
@@ -9,10 +8,9 @@ import { abbrevToTeamId, team_info } from '../img/logos';
 
 import './searchPlayer.css';
 
-function SearchPlayer() {
+function SearchPlayer({ OnSearchPlayerClicked }) {
   const [searchResult, setSearchResult] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
-  const navigate = useNavigate();
   const refDiv = useRef(null);
   const refInput = useRef(null);
 
@@ -48,10 +46,10 @@ function SearchPlayer() {
     };
   };
 
-  const link_to = dest => {
+  const onPlayerClicked = player => {
     setSearchResult(null);
     refInput.current.value = '';
-    navigate(dest);
+    OnSearchPlayerClicked(player);
   };
 
   return (
@@ -81,7 +79,7 @@ function SearchPlayer() {
           <table className="results_table">
             {isSearching ? <ClipLoader color="#fff" loading size={35} /> : null}
             {searchResult.map(player => (
-              <tr key={player.playerId} onClick={() => link_to(`/player-info/${player.playerId}`)}>
+              <tr key={player.playerId} onClick={() => onPlayerClicked(player)}>
                 <td>{`${player.name} (${player.positionCode})`}</td>
                 <td>
                   <img src={team_info[abbrevToTeamId[player.teamAbbrev]]?.logo} alt="" width="70" height="70" />

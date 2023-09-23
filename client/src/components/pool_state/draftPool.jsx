@@ -6,6 +6,9 @@ import ClipLoader from 'react-spinners/ClipLoader';
 // Icons
 import { BsPenFill } from 'react-icons/bs';
 
+// utils
+import { abbrevToTeamId } from '../img/logos';
+
 // components
 import PlayerList from './playerList';
 import DraftOrder from './draftOrder';
@@ -16,6 +19,7 @@ import '../react-tabs.css';
 
 // images
 import SearchPlayersStats from '../stats_page/searchPlayersStats';
+import SearchPlayer from '../app/searchPlayer';
 
 export default function DraftPool({
   user,
@@ -78,6 +82,38 @@ export default function DraftPool({
     if (window.confirm(`Do you really want to select ${player.name}?`)) {
       draft_player(player);
     }
+  };
+
+  const OnSearchPlayerClicked = async player => {
+    let playerPosition = '';
+
+    switch (player.positionCode) {
+      case 'G': {
+        playerPosition = 'G'; // goalie
+        break;
+      }
+      case 'L':
+      case 'C':
+      case 'R': {
+        playerPosition = 'F'; // forward
+        break;
+      }
+      case 'D': {
+        playerPosition = player.positionCode; // defender
+        break;
+      }
+      default: {
+        alert(`This player positionCode is not valid ${player.positionCode}!`);
+        return;
+      }
+    }
+
+    confirm_selection({
+      id: Number(player.playerId),
+      name: player.name,
+      team: abbrevToTeamId[player.teamAbbrev] ?? 0,
+      position: playerPosition,
+    });
   };
 
   const render_tabs_choice = _nextDrafter => (
@@ -149,6 +185,9 @@ export default function DraftPool({
         <div>
           <div className="float-left">
             <div className="half-cont">
+              <div className="search-players">
+                <SearchPlayer OnSearchPlayerClicked={player => OnSearchPlayerClicked(player)} />
+              </div>
               <SearchPlayersStats
                 injury={injury}
                 user={user}

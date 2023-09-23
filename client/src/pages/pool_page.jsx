@@ -71,13 +71,11 @@ export default function PoolPage({
   const fetch_pool_info = async forceUpdate => {
     const poolName_temp = url.name;
     if (poolName_temp !== poolName || forceUpdate) {
-      console.log(`fetching pool: ${poolName_temp}`);
       setPoolInfo(null);
       setPoolName(poolName_temp);
       setPoolUpdate(false);
 
       const pool = await db.pools.get({ name: poolName_temp });
-      console.log(pool);
       const lastFormatDate = find_last_date_in_db(pool);
 
       let res;
