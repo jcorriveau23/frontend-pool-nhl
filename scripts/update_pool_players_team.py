@@ -35,6 +35,11 @@ def update_pool_players_team():
 
                         response = requests.request('GET', player_url)
                         player_info_json = json.loads(response.text)
+
+                        if "currentTeam" not in player_info_json["people"][0]:
+                            # The player no more have a current team, we can continue.
+                            continue
+
                         player_current_team = player_info_json["people"][0]["currentTeam"]["id"]
                         players_id_to_current_team_dict[player_id] = player_current_team
                     else:
