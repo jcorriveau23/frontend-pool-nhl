@@ -69,7 +69,7 @@ export default function GameFeedPage({ user, contract, injury, setSelectedGamePk
       const res = await axios.get(`https://statsapi.web.nhl.com/api/v1/game/${id}/content`); // https://statsapi.web.nhl.com/api/v1/game/2021020128/content
       setGameContent(res.data);
     } catch (e) {
-      alert(e);
+      console.log(e);
     }
   };
 

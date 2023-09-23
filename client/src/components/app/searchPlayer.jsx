@@ -23,9 +23,9 @@ function SearchPlayer() {
 
       try {
         const res = await axios.get(
-          `/cors-anywhere/https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/${searchValue}/10`
+          `https://search.d3.nhle.com/api/v1/search/player?culture=en-us&limit=10&q=${searchValue}%2A&active=true`
         );
-        setSearchResult({ ...res.data });
+        setSearchResult(res.data);
       } catch (e) {
         alert(e);
       }
@@ -54,18 +54,6 @@ function SearchPlayer() {
     navigate(dest);
   };
 
-  const get_player_info = player => {
-    const p = player.split('|');
-
-    return {
-      id: Number(p[0]),
-      lastName: p[1],
-      firstName: p[2],
-      teamAbbrevs: p[11],
-      position: p[12],
-    };
-  };
-
   return (
     <div ref={refDiv}>
       <button onClick={() => refInput.current.focus()} type="button">
@@ -88,21 +76,18 @@ function SearchPlayer() {
           </tbody>
         </table>
       </button>
-      {searchResult?.suggestions?.length > 0 ? (
+      {searchResult?.length > 0 ? (
         <div className="results">
           <table className="results_table">
             {isSearching ? <ClipLoader color="#fff" loading size={35} /> : null}
-            {searchResult.suggestions.map(player => {
-              const p = get_player_info(player);
-              return (
-                <tr key={p} onClick={() => link_to(`/player-info/${p.id}`)}>
-                  <td>{`${p.firstName} ${p.lastName} (${p.position})`}</td>
-                  <td>
-                    <img src={team_info[abbrevToTeamId[p.teamAbbrevs]]?.logo} alt="" width="70" height="70" />
-                  </td>
-                </tr>
-              );
-            })}
+            {searchResult.map(player => (
+              <tr key={player.playerId} onClick={() => link_to(`/player-info/${player.playerId}`)}>
+                <td>{`${player.name} (${player.positionCode})`}</td>
+                <td>
+                  <img src={team_info[abbrevToTeamId[player.teamAbbrev]]?.logo} alt="" width="70" height="70" />
+                </td>
+              </tr>
+            ))}
           </table>
         </div>
       ) : null}
