@@ -40,7 +40,7 @@ export default function DraftPool({
   const create_socket_command = (command, arg) => `{"${command}": ${arg}}`;
 
   useEffect(() => {
-    const socket_tmp = new WebSocket(`ws://localhost:8000/api-rust/ws/${Cookies.get(`token-${user._id}`)}`);
+    const socket_tmp = new WebSocket(`wss://${window.location.host}api-rust/ws/${Cookies.get(`token-${user._id}`)}`);
 
     // Receiving message from the socket server.
     socket_tmp.onmessage = event => {
