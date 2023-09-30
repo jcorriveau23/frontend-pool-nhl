@@ -114,9 +114,7 @@ export default function CreatedPool({
 
   if (inRoom) {
     return (
-      <div className="min-width">
-        <h1>Match Making for Pool {poolName}</h1>
-
+      <div>
         <div className="float-left">
           <button
             className="base-button"
