@@ -96,9 +96,9 @@ export default function DraftOrder({ poolInfo, injury, DictUsers, setNextDrafter
         : 0; // initiate count to 0
     }
 
-    const rounds = []; // i + 1 = round #
+    const rounds = []; // round_index + 1 = round #
     let player_drafted_index = 0;
-    let i = 0;
+    let round_index = 0;
 
     let isUserTurnFound = false;
 
@@ -107,7 +107,7 @@ export default function DraftOrder({ poolInfo, injury, DictUsers, setNextDrafter
 
       picks.push(
         <tr>
-          <th colSpan={totalColumns}>Round {i + 1}</th>
+          <th colSpan={totalColumns}>Round {round_index + 1}</th>
         </tr>
       );
 
@@ -130,10 +130,10 @@ export default function DraftOrder({ poolInfo, injury, DictUsers, setNextDrafter
               : null;
           let isUserTurn = false;
 
-          if (poolInfo.context.past_tradable_picks && i < poolInfo.context.past_tradable_picks.length) {
+          if (poolInfo.context.past_tradable_picks && round_index < poolInfo.context.past_tradable_picks.length) {
             // we use tradable picks to find to process the next drafter
             const next_drafter = poolInfo.final_rank[poolInfo.final_rank.length - 1 - j];
-            const real_next_drafter = poolInfo.context.past_tradable_picks[i][next_drafter] ?? next_drafter;
+            const real_next_drafter = poolInfo.context.past_tradable_picks[round_index][next_drafter] ?? next_drafter;
 
             participantsToRosterCountDict[real_next_drafter] += 1;
             const isUserDone = participantsToRosterCountDict[real_next_drafter] > nbPlayers;
@@ -191,7 +191,10 @@ export default function DraftOrder({ poolInfo, injury, DictUsers, setNextDrafter
               ? poolInfo.context.players_name_drafted[player_drafted_index]
               : null;
 
-          const next_drafter = poolInfo.participants[j];
+          // Snake draft, reverse draft order each round.
+          const next_drafter =
+            round_index % 2 ? poolInfo.participants[poolInfo.participants.length - 1 - j] : poolInfo.participants[j];
+
           participantsToRosterCountDict[next_drafter] += 1;
           const isUserTurn = player_drafted_index === poolInfo.context.players_name_drafted.length;
 
@@ -208,7 +211,7 @@ export default function DraftOrder({ poolInfo, injury, DictUsers, setNextDrafter
       }
 
       rounds.push(picks);
-      i += 1;
+      round_index += 1;
     }
 
     return rounds;

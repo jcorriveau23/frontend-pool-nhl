@@ -170,9 +170,11 @@ export default function InProgressPool({
     // Parse the list of all daily games information to get the stats of each players
 
     const startDate = new Date(poolInfo.season_start);
-    const endDate = new Date(formatDate);
+    let endDate = new Date(formatDate);
     endDate.setMinutes(endDate.getMinutes() + endDate.getTimezoneOffset());
-    if (endDate < startDate) return;
+    if (endDate < startDate) {
+      endDate = poolInfo.season_start;
+    }
 
     for (let j = startDate; j <= endDate; j.setDate(j.getDate() + 1)) {
       const jDate = j.toISOString().slice(0, 10);

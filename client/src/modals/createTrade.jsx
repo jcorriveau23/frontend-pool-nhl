@@ -270,7 +270,7 @@ export default function CreateTradeModal({
           <div className="half-cont">
             <select onChange={event => on_change_to_selection(event.target.value)} defaultValue={toSelectedPooler}>
               {poolInfo.participants
-                .filter(pooler => pooler !== user._id)
+                .filter(pooler => pooler !== user?._id)
                 .map(pooler => (
                   <option value={pooler}>{DictUsers ? DictUsers[pooler] : pooler}</option>
                 ))}

@@ -40,7 +40,7 @@ export default function DraftPool({
   const create_socket_command = (command, arg) => `{"${command}": ${arg}}`;
 
   useEffect(() => {
-    const socket_tmp = new WebSocket(`wss://${window.location.host}/api-rust/ws/${Cookies.get(`token-${user._id}`)}`);
+    const socket_tmp = new WebSocket(`wss://${window.location.host}/api-rust/ws/${Cookies.get(`token-${user?._id}`)}`);
 
     // Receiving message from the socket server.
     socket_tmp.onmessage = event => {
@@ -126,7 +126,7 @@ export default function DraftPool({
         <Tab>Teams</Tab>
       </TabList>
       <TabPanel>
-        {user._id === poolInfo.owner ? (
+        {user?._id === poolInfo.owner ? (
           <button className="base-button" onClick={undo_draft_player} type="button">
             Undo
           </button>

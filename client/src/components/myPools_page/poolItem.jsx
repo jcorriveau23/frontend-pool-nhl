@@ -40,7 +40,7 @@ export default function PoolItem({ name, owner, user, poolDeleted, setPoolDelete
             </Link>
           </td>
           <td>
-            {user && user._id === owner ? (
+            {user && user?._id === owner ? (
               <button className="base-button" onClick={delete_pool} type="button">
                 Delete
               </button>
