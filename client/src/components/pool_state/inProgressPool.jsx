@@ -997,14 +997,16 @@ export default function InProgressPool({
                 )}
                 Daily
               </Tab>
-              <Tab>
+              {/* <Tab>
                 <BsCashCoin size={30} style={{ paddingRight: '5px' }} />
                 Cap Hit
-              </Tab>
-              <Tab>
-                <ImHistory size={30} style={{ paddingRight: '5px' }} />
-                Trade/History
-              </Tab>
+              </Tab> */}
+              {poolInfo.settings.can_trade ? (
+                <Tab>
+                  <ImHistory size={30} style={{ paddingRight: '5px' }} />
+                  Trade/History
+                </Tab>
+              ) : null}
               <Tab>
                 <ImHammer size={30} style={{ paddingRight: '5px' }} />
                 Draft
@@ -1068,7 +1070,7 @@ export default function InProgressPool({
                 />
               </div>
             </TabPanel>
-            <TabPanel>
+            {/* <TabPanel>
               <RosterCapHit
                 poolInfo={poolInfo}
                 userTabIndex={userTabIndex}
@@ -1078,19 +1080,21 @@ export default function InProgressPool({
                 user={user}
                 DictUsers={DictUsers}
               />
-            </TabPanel>
-            <TabPanel>
-              <PoolHistory
-                poolInfo={poolInfo}
-                todayFormatDate={todayFormatDate}
-                setPoolUpdate={setPoolUpdate}
-                hasOwnerRights={hasOwnerRights}
-                injury={injury}
-                user={user}
-                DictUsers={DictUsers}
-                userIndex={userIndex}
-              />
-            </TabPanel>
+            </TabPanel> */}
+            {poolInfo.settings.can_trade ? (
+              <TabPanel>
+                <PoolHistory
+                  poolInfo={poolInfo}
+                  todayFormatDate={todayFormatDate}
+                  setPoolUpdate={setPoolUpdate}
+                  hasOwnerRights={hasOwnerRights}
+                  injury={injury}
+                  user={user}
+                  DictUsers={DictUsers}
+                  userIndex={userIndex}
+                />
+              </TabPanel>
+            ) : null}
             <TabPanel>
               <DraftOrder poolInfo={poolInfo} injury={injury} DictUsers={DictUsers} user={user} />
             </TabPanel>
