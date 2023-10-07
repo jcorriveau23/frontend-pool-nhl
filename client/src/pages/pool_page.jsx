@@ -82,7 +82,9 @@ export default function PoolPage({
 
       try {
         res = await axios.get(
-          lastFormatDate ? `/api-rust/pool/${poolName_temp}/${lastFormatDate}` : `/api-rust/pool/${poolName_temp}`
+          lastFormatDate
+            ? `/api-rust/pool/${poolName_temp}/${pool.season_start}/${lastFormatDate}`
+            : `/api-rust/pool/${poolName_temp}`
         );
       } catch (e) {
         alert(e.response.data);
