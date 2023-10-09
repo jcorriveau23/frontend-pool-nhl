@@ -14,7 +14,7 @@ import User from '../user';
 
 import { team_info, abbrevToTeamId } from '../img/logos';
 
-const DEFAULT_PLAYER_COUNT = 50;
+const INITIAL_PLAYER_COUNT = 150;
 const MORE_PLAYER_COUNT = 20;
 
 export default function SearchPlayersStats({
@@ -125,7 +125,7 @@ export default function SearchPlayersStats({
 
   useEffect(() => {
     fetch_top_players(
-      DEFAULT_PLAYER_COUNT,
+      INITIAL_PLAYER_COUNT,
       true,
       type,
       statsType,
@@ -140,7 +140,7 @@ export default function SearchPlayersStats({
   const onClickSortingColumns = _statsType => {
     setStatsType(_statsType);
     fetch_top_players(
-      DEFAULT_PLAYER_COUNT,
+      INITIAL_PLAYER_COUNT,
       true,
       type,
       _statsType,
@@ -417,7 +417,7 @@ export default function SearchPlayersStats({
     setPlayerType(_playerType);
     setStatsType(_statsType);
     fetch_top_players(
-      DEFAULT_PLAYER_COUNT,
+      INITIAL_PLAYER_COUNT,
       true,
       _type,
       _statsType,
@@ -433,7 +433,7 @@ export default function SearchPlayersStats({
   const onClickGameType = _gameType => {
     setGameType(_gameType);
     fetch_top_players(
-      DEFAULT_PLAYER_COUNT,
+      INITIAL_PLAYER_COUNT,
       true,
       type,
       statsType,
@@ -544,7 +544,7 @@ export default function SearchPlayersStats({
     setLeaders([]);
     setStartSeason(event.target.value);
     fetch_top_players(
-      DEFAULT_PLAYER_COUNT,
+      INITIAL_PLAYER_COUNT,
       true,
       type,
       statsType,
@@ -561,7 +561,7 @@ export default function SearchPlayersStats({
     setLeaders([]);
     setEndSeason(event.target.value);
     fetch_top_players(
-      DEFAULT_PLAYER_COUNT,
+      INITIAL_PLAYER_COUNT,
       true,
       type,
       statsType,
@@ -579,7 +579,7 @@ export default function SearchPlayersStats({
     setStartSeason(event.target.value);
     setEndSeason(event.target.value);
     fetch_top_players(
-      DEFAULT_PLAYER_COUNT,
+      INITIAL_PLAYER_COUNT,
       true,
       type,
       statsType,
@@ -598,7 +598,7 @@ export default function SearchPlayersStats({
         setStartSeason(endSeason); // make sure that when this mode is requested, start date and end date are the same.
         setEndSeason(endSeason);
         fetch_top_players(
-          DEFAULT_PLAYER_COUNT,
+          INITIAL_PLAYER_COUNT,
           true,
           type,
           statsType,
@@ -614,7 +614,7 @@ export default function SearchPlayersStats({
       case 'allSeasons':
       case 'allSeasonsAggregate': {
         fetch_top_players(
-          DEFAULT_PLAYER_COUNT,
+          INITIAL_PLAYER_COUNT,
           true,
           type,
           statsType,
