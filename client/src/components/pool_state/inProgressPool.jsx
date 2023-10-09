@@ -401,7 +401,12 @@ export default function InProgressPool({
     if (todayFormatDate) {
       const d = new Date(todayFormatDate);
       d.setDate(d.getDate() + 1);
-      setRosterModificationAllowed(poolInfo.settings.roster_modification_date.includes(d.toISOString().slice(0, 10)));
+      const seasonStartDate = new Date(poolInfo.season_start);
+
+      // Allow to modify the roster on the modification dates and before the season starts.
+      setRosterModificationAllowed(
+        poolInfo.settings.roster_modification_date.includes(d.toISOString().slice(0, 10)) || seasonStartDate >= d
+      );
     }
   }, [formatDate, poolInfo.context.score_by_day]);
 
