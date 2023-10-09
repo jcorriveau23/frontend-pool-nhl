@@ -14,7 +14,7 @@ import User from '../user';
 
 import { team_info, abbrevToTeamId } from '../img/logos';
 
-const INITIAL_PLAYER_COUNT = 150;
+const INITIAL_PLAYER_COUNT = 100;
 const MORE_PLAYER_COUNT = 20;
 
 export default function SearchPlayersStats({
