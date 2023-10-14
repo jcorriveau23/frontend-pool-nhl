@@ -13,8 +13,9 @@ schedule.every(3).minutes.do(fetch_pointers_day)
 schedule.every(1).hours.do(fetch_injured_players_cbs)
  
 schedule.every().day.at("12:00").do(lock_daily_roster)
+schedule.every().day.at("05:00").do(cumulate_daily_roster_pts)
 schedule.every().day.at("11:55").do(cumulate_daily_roster_pts)
-schedule.every().day.at("05:00").do(update_pool_players_team)
+#schedule.every().day.at("05:00").do(update_pool_players_team)
 
 print("start the scheduling!")
 while True:

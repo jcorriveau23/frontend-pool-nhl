@@ -175,9 +175,10 @@ def cumulate_daily_roster_pts(day = None):
                     new_goals = player_stats["G"]
                     new_assists = player_stats["A"]
                     print(f"Date: {str(day)}, fix: {name}, G: {past_goals} -> {new_goals}, A: {past_assists} -> {new_assists}")
-
-                    score_by_day[participant]["roster"]["D"][key_defender] = player_stats
-
+                    
+                    
+                score_by_day[participant]["roster"]["D"][key_defender] = player_stats
+                if score_by_day[participant]["roster"]["D"][key_defender] is not None:
                     tot_goal += score_by_day[participant]["roster"]["D"][key_defender]["G"]
                     tot_assist += score_by_day[participant]["roster"]["D"][key_defender]["A"]
                     if score_by_day[participant]["roster"]["D"][key_defender]["G"] >= 3:
@@ -289,14 +290,14 @@ def lock_daily_roster(day = None):
 
 
 if __name__ == "__main__":
-    start_date = date(2023, 2, 11)     # beginning of the 2021-2022 season
-    end_date = date.today()
-    delta = timedelta(days=1)
-    while start_date <= end_date:
-        print(start_date)
-        lock_daily_roster(start_date)
-        cumulate_daily_roster_pts(start_date)
-        start_date += delta
+    #start_date = date(2023, 10, 11)     # beginning of the 2021-2022 season
+    #end_date = date.today()
+    #delta = timedelta(days=1)
+    #while start_date <= end_date:
+    #    print(start_date)
+    #    #lock_daily_roster(start_date)
+    #    cumulate_daily_roster_pts(start_date)
+    #    start_date += delta
 
     # lock_daily_roster()
-    # cumulate_daily_roster_pts()
+    cumulate_daily_roster_pts(date(2023, 10, 13))

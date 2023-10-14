@@ -41,7 +41,7 @@ def get_played_data(day):
 def update_skaters_stats(day_leaders_data, p):
     for player in day_leaders_data["skaters"]:
         if player["id"] == p["id"]:
-            if player["stats"]["goals"] != p["stats"]["goals"] or player["stats"]["assists"] != p["stats"]["assists"]:
+            if player["stats"]["goals"] != p["stats"]["goals"] or player["stats"]["assists"] != p["stats"]["assists"] or p["stats"]["shootoutGoals"]:
                 date = day_leaders_data["date"]
                 name = player["name"]
                 past_goals = player["stats"]["goals"]
@@ -137,12 +137,13 @@ def fetch_pointers_day(day = None):
         # When shootout happened in the game we need to process the number of times each players scores into the shootout.
 
         shootout = {}
+        
         if live_game['liveData']['linescore']['hasShootout']:
-
+		
             for i in live_game["liveData"]["plays"]["playsByPeriod"][4]["plays"]:
                 if live_game["liveData"]["plays"]["allPlays"][i]["result"]["eventTypeId"] == 'GOAL':
                     player = live_game["liveData"]["plays"]["allPlays"][i]["players"][0]["player"]["id"]
-                    print(f"{player} Scored in shootout!")
+                    print(f"{player} Scored in shootout!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                     if player in shootout:
                         shootout[player] += 1
                     else:
@@ -161,16 +162,16 @@ def fetch_pointers_day(day = None):
                     isShootoutPoints = False
 
                     if player["person"]["id"] in shootout:
+                        print("Add Shootout!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                         player['stats']['skaterStats']["shootoutGoals"] = shootout[player["person"]["id"]]    # Shootout
-                        isShootoutPoints += 1
+                        isShootoutPoints = True
                     else:
                         player['stats']['skaterStats']["shootoutGoals"] = 0   # Shootout
 
 
                     if isShootoutPoints or player['stats']['skaterStats']['goals'] > 0 or player['stats']['skaterStats']['assists'] > 0: 
-
                         player_name = player['person']['fullName']
-                        player_pts = player['stats']['skaterStats']['goals'] + player['stats']['skaterStats']['assists']
+                        player_pts = player['stats']['skaterStats']['goals'] + player['stats']['skaterStats']['assists'] + player['stats']['skaterStats']["shootoutGoals"]
 
                         print(f'{player_name} | {player_pts} pts')
 
@@ -238,13 +239,13 @@ def fetch_pointers_day(day = None):
 fetch_pointers_day.end_games = []
 
 if __name__ == "__main__":
-    start_date = date(2023, 2, 15)
-    end_date = date.today()
-    delta = timedelta(days=1)
-    while start_date <= end_date:
-        print(start_date)
-        fetch_pointers_day(start_date)
-        start_date += delta
+    #start_date = date(2022, 10, 7)
+    #end_date = date.today()
+    #delta = timedelta(days=1)
+    #while start_date <= end_date:
+    #    print(start_date)
+    #    fetch_pointers_day(start_date)
+    #    start_date += delta
 
     # fetch_pointers_day()
-    # fetch_pointers_day(date(2022, 10, 31))
+    fetch_pointers_day(date(2023, 10, 11))
