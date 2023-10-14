@@ -307,6 +307,7 @@ export default function DailyRanking({
           HT_F: count_stats(forwDailyStatsTemp[participant], 'HT'),
           SOG_F: count_stats(forwDailyStatsTemp[participant], 'SOG'),
           P_F: get_skaters_total_points(forwDailyStatsTemp[participant], true),
+
           // Defenders total daily points
           D_games: defendersCount,
           G_D: count_stats(defDailyStatsTemp[participant], 'G'),
@@ -314,6 +315,7 @@ export default function DailyRanking({
           HT_D: count_stats(defDailyStatsTemp[participant], 'HT'),
           SOG_D: count_stats(defDailyStatsTemp[participant], 'SOG'),
           P_D: get_skaters_total_points(defDailyStatsTemp[participant], false),
+
           // Goalies total daily points
           G_games: goaliesCount,
           G_G: count_stats(goalDailyStatsTemp[participant], 'G'),
@@ -327,11 +329,12 @@ export default function DailyRanking({
         });
       }
 
-      setForwDailyStats(forwDailyStatsTemp);
-      setDefDailyStats(defDailyStatsTemp);
-      setGoalDailyStats(goalDailyStatsTemp);
       setDailyRank(dailyRankTemp);
     }
+
+    setForwDailyStats(forwDailyStatsTemp);
+    setDefDailyStats(defDailyStatsTemp);
+    setGoalDailyStats(goalDailyStatsTemp);
   };
 
   const calculate_daily_preview = () => {
@@ -397,8 +400,13 @@ export default function DailyRanking({
   };
 
   useEffect(() => {
-    if (gameStatus === 'Preview') calculate_daily_preview();
-    else if (gameStatus !== 'N/A' && dayLeaders) calculate_daily_stats();
+    // When there is no daily leaders, we can preview the players.
+    if (!dayLeaders) {
+      calculate_daily_preview();
+    } else if (gameStatus !== 'N/A') {
+      // We can display stats when there is daily leaders.
+      calculate_daily_stats();
+    }
   }, [formatDate, gameStatus, DictTeamAgainst, dayLeaders]);
 
   const render_table_preview_header = () => (
@@ -708,7 +716,7 @@ export default function DailyRanking({
     return null;
   };
 
-  if (gameStatus === 'Preview' && dailyPreview && DictTeamAgainst) {
+  if (dailyPreview && DictTeamAgainst) {
     return (
       <>
         <table className="content-table-no-min">
