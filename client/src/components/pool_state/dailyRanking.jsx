@@ -401,7 +401,7 @@ export default function DailyRanking({
 
   useEffect(() => {
     // When there is no daily leaders, we can preview the players.
-    if (!dayLeaders) {
+    if (gameStatus === 'Preview' && !dayLeaders) {
       calculate_daily_preview();
     } else if (gameStatus !== 'N/A') {
       // We can display stats when there is daily leaders.

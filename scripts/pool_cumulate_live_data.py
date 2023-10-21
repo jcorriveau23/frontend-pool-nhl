@@ -132,7 +132,7 @@ def lock_daily_roster(day = None):
         for participant in pool["participants"]:
             daily_roster[participant] = {}
 
-            daily_roster[participant]["roster"] = {"is_cumulated": False}
+            daily_roster[participant] = {"roster": {}, "is_cumulated": False}
 
             # Forwards
 
