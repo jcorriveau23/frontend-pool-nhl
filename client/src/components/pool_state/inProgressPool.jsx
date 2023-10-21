@@ -727,7 +727,7 @@ export default function InProgressPool({
       formatDate === todayFormatDate &&
       poolInfo.context.score_by_day &&
       poolInfo.context.score_by_day[formatDate] &&
-      !poolInfo.context.score_by_day[formatDate][poolInfo.participants[0]].cumulate
+      !poolInfo.context.score_by_day[formatDate][poolInfo.participants[0]].is_cumulated
     ) {
       if (gameStatus === 'Live') {
         return 'The current game have not been cumulated yet.';

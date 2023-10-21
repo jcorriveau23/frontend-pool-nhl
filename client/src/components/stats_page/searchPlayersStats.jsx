@@ -38,8 +38,8 @@ export default function SearchPlayersStats({
   const [statsType, setStatsType] = useState(searchParams.get('statsType') ?? 'points');
   const [playerType, setPlayerType] = useState(searchParams.get('playerType') ?? 'allSkaters'); // allSkaters, allForwards, LOnly, ROnly, COnly, DOnly, GOnly
   const [gameType, setGameType] = useState(searchParams.get('gameType') ?? get_default_game_type());
-  const [startSeason, setStartSeason] = useState(searchParams.get('startSeason') ?? '20222023');
-  const [endSeason, setEndSeason] = useState(searchParams.get('endSeason') ?? '20222023');
+  const [startSeason, setStartSeason] = useState(searchParams.get('startSeason') ?? '20232024');
+  const [endSeason, setEndSeason] = useState(searchParams.get('endSeason') ?? '20232024');
   const [searchMode, setSearchMode] = useState(searchParams.get('searchMode') ?? 'singleSeason'); // singleSeason, allSeasons, allSeasonsAggregate
 
   const get_positionCode_with_playerType = _playerType => {
@@ -512,7 +512,7 @@ export default function SearchPlayersStats({
   const season_options = (season, isStart, isSingleDate) => {
     const seasonArray = [];
 
-    for (let i = 2022; i > 1916; i -= 1) {
+    for (let i = 2023; i > 1916; i -= 1) {
       if (
         isSingleDate || // In Single season mode, we want all date.
         (isStart && i < Number(endSeason.substr(endSeason.length - 4))) || // Start date cannot be higher than End date

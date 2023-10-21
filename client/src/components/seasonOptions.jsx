@@ -11,7 +11,7 @@ export default function SeasonOption({ season, setSeason, seasonParams, setSeaso
   const season_options = () => {
     const seasonArray = [];
 
-    for (let i = 2022; i > 1916; i -= 1) seasonArray.push(i.toString() + (i + 1).toString());
+    for (let i = 2023; i > 1916; i -= 1) seasonArray.push(i.toString() + (i + 1).toString());
 
     return seasonArray
       .filter(s => filter(s))

@@ -20,7 +20,7 @@ export default function TeamRosterBySeasonPage(injury) {
   const [goaliesStats, setGoaliesStats] = useState(null);
 
   const [seasonParams, setSeasonParams] = useSearchParams();
-  const [season, setSeason] = useState(seasonParams.get('season') ?? '20222023');
+  const [season, setSeason] = useState(seasonParams.get('season') ?? '20232024');
   const [teamId, setTeamId] = useState(Number(seasonParams.get('teamId') ?? 8));
 
   const get_skaters_stats = async () => {

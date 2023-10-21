@@ -10,7 +10,7 @@ import SeasonOption from '../components/seasonOptions';
 
 export default function LeagueLeadersPage({ injury }) {
   const [seasonParams, setSeasonParams] = useSearchParams();
-  const [season, setSeason] = useState(seasonParams.get('season') ?? '20222023');
+  const [season, setSeason] = useState(seasonParams.get('season') ?? '20232024');
   // statsType: "points", "goals", assists, "wins", "gaa", "savePct"
 
   return (

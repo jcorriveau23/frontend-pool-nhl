@@ -27,39 +27,98 @@ export default function GraphStats({ poolInfo, DictUsers }) {
   const [chartData, setChartData] = useState(null);
   const [chartOptions, setChartOptions] = useState(null);
 
-  const get_stats_value = (cumulate, keyStats) => {
-    switch (keyStats) {
-      case 'P':
-        return get_stats_value(cumulate, 'P_F') + get_stats_value(cumulate, 'P_D') + get_stats_value(cumulate, 'P_G');
-      case 'P_F':
+  const get_stats_value = (roster, statsInfo) => {
+    const [position, keyStats] = statsInfo;
+
+    let total_stats = 0;
+
+    switch (position) {
+      case 'All':
         return (
-          cumulate.G_F * poolInfo.settings.forward_pts_goals +
-          cumulate.A_F * poolInfo.settings.forward_pts_assists +
-          cumulate.HT_F * poolInfo.settings.forward_pts_hattricks +
-          cumulate.SOG_F * poolInfo.settings.forward_pts_shootout_goals
+          get_stats_value(roster, ['F', 'TOT']) +
+          get_stats_value(roster, ['D', 'TOT']) +
+          get_stats_value(roster, ['G', 'TOT'])
         );
-      case 'P_D':
-        return (
-          cumulate.G_D * poolInfo.settings.defender_pts_goals +
-          cumulate.A_D * poolInfo.settings.defender_pts_assists +
-          cumulate.HT_D * poolInfo.settings.defender_pts_hattricks +
-          cumulate.SOG_D * poolInfo.settings.defender_pts_shootout_goals
-        );
-      case 'P_G':
-        return (
-          cumulate.W_G * poolInfo.settings.goalies_pts_wins +
-          cumulate.SO_G * poolInfo.settings.goalies_pts_shutouts +
-          cumulate.G_G * poolInfo.settings.goalies_pts_goals +
-          cumulate.A_G * poolInfo.settings.goalies_pts_assists
-        );
+      case 'F': {
+        for (const [player_id, stats] of Object.entries(roster.F)) {
+          if (stats) {
+            if (keyStats === 'G' || keyStats === 'TOT') {
+              total_stats += stats.G * poolInfo.settings.forward_pts_goals;
+            }
+            if (keyStats === 'A' || keyStats === 'TOT') {
+              total_stats += stats.A * poolInfo.settings.forward_pts_assists;
+            }
+            if (keyStats === 'HT' || keyStats === 'TOT') {
+              if (stats.G >= 3) {
+                total_stats += poolInfo.settings.forward_pts_hattricks;
+              }
+            }
+            if (keyStats === 'SOG' || keyStats === 'TOT') {
+              if (stats.SOG) {
+                total_stats += stats.SOG * poolInfo.settings.forward_pts_shootout_goals;
+              }
+            }
+          }
+        }
+        return total_stats;
+      }
+      case 'D':
+        for (const [player_id, stats] of Object.entries(roster.D)) {
+          if (stats) {
+            if (keyStats === 'G' || keyStats === 'TOT') {
+              total_stats += stats.G * poolInfo.settings.defender_pts_goals;
+            }
+            if (keyStats === 'A' || keyStats === 'TOT') {
+              total_stats += stats.A * poolInfo.settings.defender_pts_assists;
+            }
+            if (keyStats === 'HT' || keyStats === 'TOT') {
+              if (stats.G >= 3) {
+                total_stats += poolInfo.settings.defender_pts_hattricks;
+              }
+            }
+            if (keyStats === 'SOG' || keyStats === 'TOT') {
+              if (stats.SOG) {
+                total_stats += stats.SOG * poolInfo.settings.defender_pts_shootout_goals;
+              }
+            }
+          }
+        }
+        return total_stats;
+      case 'G':
+        for (const [player_id, stats] of Object.entries(roster.G)) {
+          if (stats) {
+            if (keyStats === 'G' || keyStats === 'TOT') {
+              total_stats += stats.G * poolInfo.settings.goalies_pts_goals;
+            }
+            if (keyStats === 'A' || keyStats === 'TOT') {
+              total_stats += stats.A * poolInfo.settings.goalies_pts_assists;
+            }
+            if (keyStats === 'OT' || keyStats === 'TOT') {
+              if (stats.OT) {
+                total_stats += poolInfo.settings.goalies_pts_overtimes;
+              }
+            }
+            if (keyStats === 'W' || keyStats === 'TOT') {
+              if (stats.W) {
+                total_stats += poolInfo.settings.goalies_pts_wins;
+              }
+            }
+            if (keyStats === 'SO' || keyStats === 'TOT') {
+              if (stats.SO) {
+                total_stats += poolInfo.settings.goalies_pts_shutouts;
+              }
+            }
+          }
+        }
+        return total_stats;
       default:
-        return cumulate[keyStats];
+        return null;
     }
   };
 
-  const update_graph_stats = keyStats => {
+  const update_graph_stats = stats => {
     const startDate = new Date(poolInfo.season_start);
-    const endDate = new Date();
+    const endDate = new Date(poolInfo.season_end);
     endDate.setMinutes(endDate.getMinutes() + endDate.getTimezoneOffset());
 
     const labels = [];
@@ -71,19 +130,29 @@ export default function GraphStats({ poolInfo, DictUsers }) {
       }
     }
 
-    const color = ['red', 'blue', 'orange', 'green', 'pink', 'purple'];
+    const color = ['red', 'blue', 'orange', 'green', 'pink', 'purple', 'yellow'];
 
     const datasets = [];
     for (let i = 0; i < poolInfo.participants.length; i += 1) {
       const participant = poolInfo.participants[i];
+
+      // Cumulate the array
+      const cumulativeArray = [];
+      let cumulate = 0;
+      for (let j = 0; j < labels.length; j += 1) {
+        const date = labels[j];
+        if (poolInfo.context.score_by_day[date][participant].roster) {
+          const val = get_stats_value(poolInfo.context.score_by_day[date][participant].roster, stats);
+          cumulate += val;
+          cumulativeArray.push(cumulate);
+        } else {
+          cumulativeArray.push(null);
+        }
+      }
+
       const dataset = {
         label: DictUsers ? DictUsers[participant] : participant,
-        data: labels.map(
-          key =>
-            poolInfo.context.score_by_day[key][participant].cumulate
-              ? get_stats_value(poolInfo.context.score_by_day[key][participant].cumulate, keyStats)
-              : null // No cumulative data on that date. (Mostly no games has started yet)
-        ),
+        data: cumulativeArray,
         backgroundColor: color[i % poolInfo.participants.length],
         borderColor: color[i % poolInfo.participants.length],
         tension: 0.4,
@@ -98,7 +167,7 @@ export default function GraphStats({ poolInfo, DictUsers }) {
   };
 
   useEffect(() => {
-    update_graph_stats('P'); // By Default use P (for total points)
+    update_graph_stats(['All', 'TOT']); // By Default use P (for total points)
 
     setChartOptions({
       color: 'white',
@@ -160,30 +229,32 @@ export default function GraphStats({ poolInfo, DictUsers }) {
   }, []);
 
   const on_stats_selection = event => {
-    update_graph_stats(event.target.value);
+    update_graph_stats(event.target.value.split(','));
   };
+
   if (chartData && chartOptions) {
     return (
       <div className="cont-max-width">
         <h1>Pool Cumulative Stats</h1>
         <div>
           <select name="Cumulative Stats Selection" onChange={on_stats_selection}>
-            <option value="P">Total Points</option>
-            <option value="P_F">Total Forwards Points</option>
-            <option value="P_D">Total Defenders Points</option>
-            <option value="P_G">Total Goalies Points</option>
-            <option value="G_F">Goals Forwards</option>
-            <option value="A_F">Assists Forwards</option>
-            <option value="HT_F">Hat Tricks Forwards</option>
-            <option value="SOG_F">Shoot Out Goals Forwards</option>
-            <option value="G_D">Goals Defenders</option>
-            <option value="A_D">Assists Defenders</option>
-            <option value="HT_D">Hat Tricks Defenders</option>
-            <option value="SOG_D">Shoot Out Goals Defenders</option>
-            <option value="W_G">Wins Goalies</option>
-            <option value="SO_G">Shutouts Goalies</option>
-            <option value="G_G">Goals Goalies</option>
-            <option value="A_G">Assists Goalies</option>
+            <option value={['All', 'TOT']}>Total Points</option>
+            <option value={['F', 'TOT']}>Total Forwards Points</option>
+            <option value={['D', 'TOT']}>Total Defenders Points</option>
+            <option value={['G', 'TOT']}>Total Goalies Points</option>
+            <option value={['F', 'G']}>Goals Forwards</option>
+            <option value={['F', 'A']}>Assists Forwards</option>
+            <option value={['F', 'HT']}>Hat Tricks Forwards</option>
+            <option value={['F', 'SOG']}>Shoot Out Goals Forwards</option>
+            <option value={['D', 'G']}>Goals Defenders</option>
+            <option value={['D', 'A']}>Assists Defenders</option>
+            <option value={['D', 'HT']}>Hat Tricks Defenders</option>
+            <option value={['D', 'SOG']}>Shoot Out Goals Defenders</option>
+            <option value={['G', 'W']}>Wins Goalies</option>
+            <option value={['G', 'SO']}>Shutouts Goalies</option>
+            <option value={['G', 'G']}>Goals Goalies</option>
+            <option value={['G', 'A']}>Assists Goalies</option>
+            <option value={['G', 'OT']}>Overtimes lost</option>
           </select>
         </div>
         <div>

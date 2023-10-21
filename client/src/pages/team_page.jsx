@@ -8,7 +8,7 @@ import SeasonOption from '../components/seasonOptions';
 
 export default function TeamPage() {
   const [seasonParams, setSeasonParams] = useSearchParams();
-  const [season, setSeason] = useState(seasonParams.get('season') ?? '20222023');
+  const [season, setSeason] = useState(seasonParams.get('season') ?? '20232024');
 
   useEffect(() => {}, []);
 

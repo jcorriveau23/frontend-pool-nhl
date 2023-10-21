@@ -22,8 +22,8 @@ export default function HomePage({ formatDate, todayFormatDate, gameStatus, inju
           <h2>demo...</h2>
         </Link>
       </div>
-      <SummaryLeaders injury={injury} statsType="points" type="skater" playerType="allSkaters" season="20222023" />
-      <SummaryLeaders injury={injury} statsType="wins" type="goalie" playerType="GOnly" season="20222023" />
+      <SummaryLeaders injury={injury} statsType="points" type="skater" playerType="allSkaters" season="20232024" />
+      <SummaryLeaders injury={injury} statsType="wins" type="goalie" playerType="GOnly" season="20232024" />
       <div>
         <DayLeaders
           formatDate={formatDate}
