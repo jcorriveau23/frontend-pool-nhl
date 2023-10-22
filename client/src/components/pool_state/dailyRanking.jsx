@@ -322,7 +322,7 @@ export default function DailyRanking({
           A_G: count_stats(goalDailyStatsTemp[participant], 'A'),
           W_G: count_stats(goalDailyStatsTemp[participant], 'W'),
           SO_G: count_stats(goalDailyStatsTemp[participant], 'SO'),
-          OT_G: count_stats(goalDailyStatsTemp[participant], 'SO'),
+          OT_G: count_stats(goalDailyStatsTemp[participant], 'OT'),
           P_G: get_goalies_total_points(goalDailyStatsTemp[participant]),
           // Total daily points
           total_games: forwardsCount + defendersCount + goaliesCount,
@@ -534,7 +534,7 @@ export default function DailyRanking({
 
   const render_table_rank_body = () =>
     dailyRank
-      .sort((p1, p2) => {
+      ?.sort((p1, p2) => {
         const diff = p2.P_F + p2.P_D + p2.P_G - (p1.P_F + p1.P_D + p1.P_G);
         if (diff === 0) {
           return p1.total_games - p2.total_games;
@@ -591,7 +591,7 @@ export default function DailyRanking({
     <>
       <tr>
         <th colSpan={9}>
-          {position} ({skaterDailyStats[participant].length}/{maxPosition})
+          {position} ({skaterDailyStats[participant]?.length}/{maxPosition})
         </th>
       </tr>
       <tr>
@@ -608,7 +608,7 @@ export default function DailyRanking({
 
   const render_skaters_stats = (participant, skaterDailyStats) =>
     skaterDailyStats[participant]
-      .sort((player1, player2) => player2.pts + player2.played - player1.pts - player1.played)
+      ?.sort((player1, player2) => player2.pts + player2.played - player1.pts - player1.played)
       .map(player => (
         <tr key={player.id}>
           <td colSpan={2}>
@@ -634,7 +634,7 @@ export default function DailyRanking({
       ));
 
   const render_skaters_total = (participant, position_key) => {
-    const i = dailyRank.findIndex(dailyUser => dailyUser.participant === participant);
+    const i = dailyRank?.findIndex(dailyUser => dailyUser.participant === participant);
     if (i > -1) {
       return (
         <tr>
@@ -654,7 +654,7 @@ export default function DailyRanking({
     <>
       <tr>
         <th colSpan={9}>
-          Goalies ({goalDailyStats[participant].length}/{poolInfo.settings.number_goalies})
+          Goalies ({goalDailyStats[participant]?.length}/{poolInfo.settings.number_goalies})
         </th>
       </tr>
       <tr>
@@ -672,7 +672,7 @@ export default function DailyRanking({
 
   const render_goalies_stats = participant =>
     goalDailyStats[participant]
-      .sort(player => player.played)
+      ?.sort(player => player.played)
       .map(player => (
         <tr key={player.id}>
           <td colSpan={2}>
@@ -699,7 +699,7 @@ export default function DailyRanking({
       ));
 
   const render_goalies_total = participant => {
-    const i = dailyRank.findIndex(dailyUser => dailyUser.participant === participant);
+    const i = dailyRank?.findIndex(dailyUser => dailyUser.participant === participant);
     if (i > -1) {
       return (
         <tr>
@@ -788,6 +788,14 @@ export default function DailyRanking({
     return <h1>No game on {formatDate}.</h1>;
   }
 
+  if (new Date(poolInfo.season_end) < new Date(formatDate)) {
+    return (
+      <div className="cont">
+        <h1>The season has ended.</h1>
+      </div>
+    );
+  }
+
   if (forwDailyStats && defDailyStats && goalDailyStats) {
     return (
       <>
@@ -842,14 +850,6 @@ export default function DailyRanking({
           ))}
         </Tabs>
       </>
-    );
-  }
-
-  if (new Date(poolInfo.season_end) < new Date(formatDate)) {
-    return (
-      <div className="cont">
-        <h1>The season has ended.</h1>
-      </div>
     );
   }
 

@@ -984,9 +984,11 @@ export default function InProgressPool({
   return (
     <div className="min-width">
       <div className="cont">
-        <button className="base-button" type="button" onClick={() => mark_as_final()}>
-          Mark As Final
-        </button>
+        {poolInfo.owner === user?._id ? (
+          <button className="base-button" type="button" onClick={() => mark_as_final()}>
+            Mark as Final
+          </button>
+        ) : null}
         {playersStats && ranking && gameStatus ? (
           <Tabs selectedIndex={mainTabIndex} onSelect={index => setMainTab(index)}>
             <TabList>
