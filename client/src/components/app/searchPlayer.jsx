@@ -21,7 +21,7 @@ function SearchPlayer({ OnSearchPlayerClicked }) {
 
       try {
         const res = await axios.get(
-          `https://search.d3.nhle.com/api/v1/search/player?culture=en-us&limit=10&q=${searchValue}%2A&active=true`
+          `https://search.d3.nhle.com/api/v1/search/player?culture=en-us&limit=10&q=${searchValue}`
         );
         setSearchResult(res.data);
       } catch (e) {
@@ -82,7 +82,7 @@ function SearchPlayer({ OnSearchPlayerClicked }) {
               <tr key={player.playerId} onClick={() => onPlayerClicked(player)}>
                 <td>{`${player.name} (${player.positionCode})`}</td>
                 <td>
-                  <img src={team_info[abbrevToTeamId[player.teamAbbrev]]?.logo} alt="" width="70" height="70" />
+                  <img src={team_info[player.teamId ?? 0]?.logo} alt="" width="70" height="70" />
                 </td>
               </tr>
             ))}
