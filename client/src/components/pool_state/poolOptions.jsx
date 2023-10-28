@@ -129,10 +129,13 @@ export default function PoolOptions({
             <td>Number of poolers</td>
             <td>{poolInfo.settings.number_poolers}</td>
           </tr>
-          {render_options('Number of forwards:', 'number_forwards', 2, 12)}
-          {render_options('Number of defenders:', 'number_defenders', 2, 6)}
-          {render_options('Number of goalies:', 'number_goalies', 1, 3)}
-          {render_options('Number of reservists:', 'number_reservists', 1, 5)}
+          {render_options('Number of forwards:', 'number_forwards', 2, 16)}
+          {render_options('Number of defenders:', 'number_defenders', 2, 10)}
+          {render_options('Number of goalies:', 'number_goalies', 1, 5)}
+          {render_options('Number of reservists:', 'number_reservists', 0, 5)}
+          {render_options('Number of worst forwards to ignore:', 'number_worst_forwards_to_ignore', 0, 5)}
+          {render_options('Number of worst defenders to ignore:', 'number_worst_defenders_to_ignore', 0, 5)}
+          {render_options('Number of worst goalies to ignore:', 'number_worst_goalies_to_ignore', 0, 5)}
           {poolInfo.settings.dynastie_settings || poolSettingsUpdate?.dynastie_settings ? (
             <>
               {render_dynastie_options('Number of tradable draft picks:', 'tradable_picks', 1, 5)}

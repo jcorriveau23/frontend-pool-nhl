@@ -4,7 +4,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 // images
 import { FiSearch } from 'react-icons/fi';
-import { abbrevToTeamId, team_info } from '../img/logos';
+import { team_info } from '../img/logos';
 
 import './searchPlayer.css';
 

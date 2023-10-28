@@ -80,6 +80,7 @@ export default function InProgressPool({
     player.pool_points = 0;
     player.own = isOwn;
     player.reservist = isReservist;
+    player.ignore = true;
 
     return player;
   };
@@ -96,6 +97,7 @@ export default function InProgressPool({
     player.pool_points = 0;
     player.own = isOwn;
     player.reservist = isReservist;
+    player.ignore = true;
 
     return player;
   };
@@ -213,18 +215,6 @@ export default function InProgressPool({
                 stats[participant].chosen_forwards[index].A * poolInfo.settings.forward_pts_assists +
                 stats[participant].chosen_forwards[index].HT * poolInfo.settings.forward_pts_hattricks +
                 stats[participant].chosen_forwards[index].SOG * poolInfo.settings.forward_pts_shootout_goals;
-
-              // cumulative info.
-              stats[participant].forwards_total_goal += player.G;
-              stats[participant].forwards_total_game += 1; // will be count during the for loop.
-              stats[participant].forwards_total_assist += player.A;
-              stats[participant].forwards_total_hattrick += player.G >= 3 ? 1 : 0;
-              stats[participant].forwards_total_shootout_goals += player.SOG ? player.SOG : 0;
-              stats[participant].forwards_total_pts +=
-                player.G * poolInfo.settings.forward_pts_goals +
-                player.A * poolInfo.settings.forward_pts_assists +
-                player.SOG * poolInfo.settings.forward_pts_shootout_goals;
-              if (player.G >= 3) stats[participant].forwards_total_pts += poolInfo.settings.forward_pts_hattricks;
             }
 
             return null;
@@ -260,19 +250,6 @@ export default function InProgressPool({
                 stats[participant].chosen_defenders[index].A * poolInfo.settings.defender_pts_assists +
                 stats[participant].chosen_defenders[index].HT * poolInfo.settings.defender_pts_hattricks +
                 stats[participant].chosen_defenders[index].SOG * poolInfo.settings.defender_pts_shootout_goals;
-
-              // cumulative info.
-              stats[participant].defenders_total_goal += player.G;
-              stats[participant].defenders_total_game += 1; // will be count during the for loop.
-              stats[participant].defenders_total_assist += player.A;
-              stats[participant].defenders_total_hattrick += player.G >= 3 ? 1 : 0;
-              stats[participant].defenders_total_shootout_goals += player.SOG ? player.SOG : 0;
-              stats[participant].defenders_total_pts +=
-                player.G * poolInfo.settings.defender_pts_goals +
-                player.A * poolInfo.settings.defender_pts_assists +
-                player.SOG * poolInfo.settings.defender_pts_shootout_goals;
-
-              if (player.G >= 3) stats[participant].defenders_total_pts += poolInfo.settings.defender_pts_hattricks;
             }
 
             return null;
@@ -310,20 +287,6 @@ export default function InProgressPool({
                 stats[participant].chosen_goalies[index].W * poolInfo.settings.goalies_pts_wins +
                 stats[participant].chosen_goalies[index].SO * poolInfo.settings.goalies_pts_shutouts +
                 stats[participant].chosen_goalies[index].OT * poolInfo.settings.goalies_pts_overtimes;
-
-              // cumulative info.
-              stats[participant].goalies_total_goal += player.G;
-              stats[participant].goalies_total_game += 1; // will be count during the for loop.
-              stats[participant].goalies_total_assist += player.A;
-              stats[participant].goalies_total_win += player.W;
-              stats[participant].goalies_total_shutout += player.SO;
-              stats[participant].goalies_total_OT += player.OT;
-              stats[participant].goalies_total_pts +=
-                player.G * poolInfo.settings.goalies_pts_goals +
-                player.A * poolInfo.settings.goalies_pts_assists +
-                player.W * poolInfo.settings.goalies_pts_wins +
-                player.SO * poolInfo.settings.goalies_pts_shutouts +
-                player.OT * poolInfo.settings.goalies_pts_overtimes;
             }
 
             return null;
@@ -338,19 +301,71 @@ export default function InProgressPool({
       const participant = poolInfo.participants[i];
 
       stats[participant].forwards_own = 0;
+      stats[participant].defenders_own = 0;
+      stats[participant].goalies_own = 0;
+
+      // Sort player list using the pool_points field.
+      stats[participant].chosen_forwards.sort((a, b) => b.pool_points - a.pool_points);
+      stats[participant].chosen_defenders.sort((a, b) => b.pool_points - a.pool_points);
+      stats[participant].chosen_goalies.sort((a, b) => b.pool_points - a.pool_points);
 
       for (let j = 0; j < stats[participant].chosen_forwards.length; j += 1) {
-        stats[participant].forwards_own += stats[participant].chosen_forwards[j].own ? 1 : 0;
+        const player = stats[participant].chosen_forwards[j];
+        stats[participant].forwards_own += player.own ? 1 : 0;
+        // cumulative info.
+        if (j < stats[participant].chosen_forwards.length - poolInfo.settings.number_worst_forwards_to_ignore) {
+          player.ignore = false;
+          stats[participant].forwards_total_goal += player.G;
+          stats[participant].forwards_total_game += player.nb_game; // will be count during the for loop.
+          stats[participant].forwards_total_assist += player.A;
+          stats[participant].forwards_total_hattrick += player.HT;
+          stats[participant].forwards_total_shootout_goals += player.SOG;
+          stats[participant].forwards_total_pts +=
+            player.G * poolInfo.settings.forward_pts_goals +
+            player.A * poolInfo.settings.forward_pts_assists +
+            player.SOG * poolInfo.settings.forward_pts_shootout_goals +
+            player.HT * poolInfo.settings.forward_pts_hattricks;
+        }
       }
 
-      stats[participant].defenders_own = 0;
       for (let j = 0; j < stats[participant].chosen_defenders.length; j += 1) {
-        stats[participant].defenders_own += stats[participant].chosen_defenders[j].own ? 1 : 0;
+        const player = stats[participant].chosen_defenders[j];
+        stats[participant].defenders_own += player.own ? 1 : 0;
+        // cumulative info.
+        if (j < stats[participant].chosen_defenders.length - poolInfo.settings.number_worst_defenders_to_ignore) {
+          player.ignore = false;
+          stats[participant].defenders_total_goal += player.G;
+          stats[participant].defenders_total_game += player.nb_game; // will be count during the for loop.
+          stats[participant].defenders_total_assist += player.A;
+          stats[participant].defenders_total_hattrick += player.HT;
+          stats[participant].defenders_total_shootout_goals += player.SOG;
+          stats[participant].defenders_total_pts +=
+            player.G * poolInfo.settings.defender_pts_goals +
+            player.A * poolInfo.settings.defender_pts_assists +
+            player.SOG * poolInfo.settings.defender_pts_shootout_goals +
+            player.HT * poolInfo.settings.defender_pts_hattricks;
+        }
       }
 
-      stats[participant].goalies_own = 0;
       for (let j = 0; j < stats[participant].chosen_goalies.length; j += 1) {
-        stats[participant].goalies_own += stats[participant].chosen_goalies[j].own ? 1 : 0;
+        const player = stats[participant].chosen_goalies[j];
+        stats[participant].goalies_own += player.own ? 1 : 0;
+        // cumulative info.
+        if (j < stats[participant].chosen_goalies.length - poolInfo.settings.number_worst_goalies_to_ignore) {
+          player.ignore = false;
+          stats[participant].goalies_total_goal += player.G;
+          stats[participant].goalies_total_game += player.nb_game; // will be count during the for loop.
+          stats[participant].goalies_total_assist += player.A;
+          stats[participant].goalies_total_win += player.W;
+          stats[participant].goalies_total_shutout += player.SO;
+          stats[participant].goalies_total_OT += player.OT;
+          stats[participant].goalies_total_pts +=
+            player.G * poolInfo.settings.goalies_pts_goals +
+            player.A * poolInfo.settings.goalies_pts_assists +
+            player.W * poolInfo.settings.goalies_pts_wins +
+            player.SO * poolInfo.settings.goalies_pts_shutouts +
+            player.OT * poolInfo.settings.goalies_pts_overtimes;
+        }
       }
 
       rank.push({
@@ -496,22 +511,24 @@ export default function InProgressPool({
     return emptyRows;
   };
 
-  const render_inactive_players_tooltip = player =>
-    player.reservist ? (
-      <>
-        <a data-tip={`${poolInfo.context.players[player.id].name} is a reservist.`}>
-          <RiInformationFill size={30} color="yellow" />
-        </a>
-        <ReactTooltip className="tooltip" padding="8px" />
-      </>
-    ) : (
-      <>
-        <a data-tip={`${poolInfo.context.players[player.id].name} has been traded.`}>
-          <RiInformationFill size={30} color="yellow" />
-        </a>
-        <ReactTooltip className="tooltip" padding="8px" />
-      </>
-    );
+  const get_inactive_player_message = player => {
+    if (player.reservist) {
+      return `${poolInfo.context.players[player.id].name} is a reservist.`;
+    }
+    if (player.ignore) {
+      return `${poolInfo.context.players[player.id].name} stats is ignore.`;
+    }
+    return `${poolInfo.context.players[player.id].name} has been traded.`;
+  };
+
+  const render_inactive_players_tooltip = player => (
+    <>
+      <a data-tip={get_inactive_player_message(player)}>
+        <RiInformationFill size={30} color="yellow" />
+      </a>
+      <ReactTooltip className="tooltip" padding="8px" />
+    </>
+  );
 
   const render_not_own_player_color = isReservist => (isReservist ? '#e1ad01' : '#aa4a44');
 
@@ -537,10 +554,14 @@ export default function InProgressPool({
           .map((player, i) => (
             <tr
               key={player.id}
-              style={{ backgroundColor: player.own ? null : render_not_own_player_color(player.reservist) }}
+              style={{
+                backgroundColor: player.own && !player.ignore ? null : render_not_own_player_color(player.reservist),
+              }}
             >
               <td>{i + 1}</td>
-              <td>{player.own ? <RiTeamFill size={25} /> : render_inactive_players_tooltip(player)}</td>
+              <td>
+                {player.own && !player.ignore ? <RiTeamFill size={25} /> : render_inactive_players_tooltip(player)}
+              </td>
               <td colSpan={2}>
                 <PlayerLink name={poolInfo.context.players[player.id].name} id={player.id} injury={injury} />
               </td>
@@ -595,10 +616,14 @@ export default function InProgressPool({
           .map((player, i) => (
             <tr
               key={player.id}
-              style={{ backgroundColor: player.own ? null : render_not_own_player_color(player.reservist) }}
+              style={{
+                backgroundColor: player.own && !player.ignore ? null : render_not_own_player_color(player.reservist),
+              }}
             >
               <td>{i + 1}</td>
-              <td>{player.own ? <RiTeamFill size={25} /> : render_inactive_players_tooltip(player)}</td>
+              <td>
+                {player.own && !player.ignore ? <RiTeamFill size={25} /> : render_inactive_players_tooltip(player)}
+              </td>
               <td colSpan={2}>
                 <PlayerLink name={poolInfo.context.players[player.id].name} id={player.id} injury={injury} />
               </td>
