@@ -10,6 +10,7 @@ import Cookies from 'js-cookie';
 import { RiTeamFill, RiInformationFill, RiSettings2Fill } from 'react-icons/ri';
 import { BsCalendarDay, BsFillCalculatorFill, BsCashCoin, BsGraphUp } from 'react-icons/bs';
 import { ImHammer, ImHistory } from 'react-icons/im';
+import { FaExchangeAlt } from 'react-icons/fa';
 
 // component
 import DayLeaders from '../home_page/dailyLeaders';
@@ -23,6 +24,7 @@ import RosterCapHit from './rosterCapHit';
 import SearchPlayersStats from '../stats_page/searchPlayersStats';
 import PoolHistory from './poolHistory';
 import PoolSettings from './poolSettings';
+import TradeCenter from './tradeCenter';
 
 // modals
 import FillSpotModal from '../../modals/FillSpot';
@@ -1035,10 +1037,14 @@ export default function InProgressPool({
               </Tab> */}
               {poolInfo.settings.can_trade ? (
                 <Tab>
-                  <ImHistory size={30} style={{ paddingRight: '5px' }} />
-                  Trade/History
+                  <FaExchangeAlt size={30} style={{ paddingRight: '5px' }} />
+                  Trade
                 </Tab>
               ) : null}
+              <Tab>
+                <ImHistory size={30} style={{ paddingRight: '5px' }} />
+                History
+              </Tab>
               <Tab>
                 <ImHammer size={30} style={{ paddingRight: '5px' }} />
                 Draft
@@ -1115,18 +1121,29 @@ export default function InProgressPool({
             </TabPanel> */}
             {poolInfo.settings.can_trade ? (
               <TabPanel>
-                <PoolHistory
+                <TradeCenter
                   poolInfo={poolInfo}
-                  todayFormatDate={todayFormatDate}
                   setPoolUpdate={setPoolUpdate}
-                  hasOwnerRights={hasOwnerRights}
                   injury={injury}
                   user={user}
+                  hasOwnerRights={hasOwnerRights}
                   DictUsers={DictUsers}
                   userIndex={userIndex}
                 />
               </TabPanel>
             ) : null}
+            <TabPanel>
+              <PoolHistory
+                poolInfo={poolInfo}
+                todayFormatDate={todayFormatDate}
+                setPoolUpdate={setPoolUpdate}
+                hasOwnerRights={hasOwnerRights}
+                injury={injury}
+                user={user}
+                DictUsers={DictUsers}
+                userIndex={userIndex}
+              />
+            </TabPanel>
             <TabPanel>
               <DraftOrder poolInfo={poolInfo} injury={injury} DictUsers={DictUsers} user={user} />
             </TabPanel>

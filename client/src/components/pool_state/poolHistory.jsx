@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ReactTooltip from 'react-tooltip';
 
 // icons
@@ -15,18 +14,8 @@ import User from '../user';
 import PlayerLink from '../playerLink';
 import { team_info } from '../img/logos';
 import TradeItem from './tradeItem';
-import TradeCenter from './tradeCenter';
 
-export default function PoolHistory({
-  poolInfo,
-  todayFormatDate,
-  setPoolUpdate,
-  hasOwnerRights,
-  injury,
-  user,
-  DictUsers,
-  userIndex,
-}) {
+export default function PoolHistory({ poolInfo, todayFormatDate, user, DictUsers }) {
   const [history, setHistory] = useState(null);
   const [doneProcessing, setDoneProcessing] = useState(false);
   const [collapsedDays, setCollapsedDays] = useState([]);
@@ -259,50 +248,31 @@ export default function PoolHistory({
 
   return (
     <div>
-      <Tabs>
-        <TabList>
-          <Tab>Trade Center</Tab>
-          <Tab>History</Tab>
-        </TabList>
-        <TabPanel>
-          <TradeCenter
-            poolInfo={poolInfo}
-            setPoolUpdate={setPoolUpdate}
-            injury={injury}
-            user={user}
-            hasOwnerRights={hasOwnerRights}
-            DictUsers={DictUsers}
-            userIndex={userIndex}
-          />
-        </TabPanel>
-        <TabPanel>
-          {history ? (
-            <>
-              <button
-                className="base-button"
-                type="button"
-                onClick={() => expand_all_days()}
-                disabled={collapsedDays.length === 0}
-              >
-                Expand all
-              </button>
-              <button
-                className="base-button"
-                type="button"
-                onClick={() => collapse_all_days()}
-                disabled={collapsedDays.length === history.length}
-              >
-                Collapse all
-              </button>
-              <table className="content-table">
-                <tbody>{history.map(dailyMovements => render_daily_roster_movement(dailyMovements))}</tbody>
-              </table>
-            </>
-          ) : (
-            render_processing()
-          )}
-        </TabPanel>
-      </Tabs>
+      {history ? (
+        <>
+          <button
+            className="base-button"
+            type="button"
+            onClick={() => expand_all_days()}
+            disabled={collapsedDays.length === 0}
+          >
+            Expand all
+          </button>
+          <button
+            className="base-button"
+            type="button"
+            onClick={() => collapse_all_days()}
+            disabled={collapsedDays.length === history.length}
+          >
+            Collapse all
+          </button>
+          <table className="content-table">
+            <tbody>{history.map(dailyMovements => render_daily_roster_movement(dailyMovements))}</tbody>
+          </table>
+        </>
+      ) : (
+        render_processing()
+      )}
     </div>
   );
 }
