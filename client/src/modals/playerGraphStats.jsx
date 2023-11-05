@@ -149,7 +149,7 @@ export default function PlayerGraphStats({ poolInfo, participant, player, DictUs
         },
       },
     });
-  }, [player]);
+  }, [player, participant]);
 
   const on_stats_selection = event => {
     update_graph_stats(event.target.value);
