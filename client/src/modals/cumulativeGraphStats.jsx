@@ -23,7 +23,7 @@ import { Line } from 'react-chartjs-2';
 
 Chart.register(Title, Tooltip, LineElement, Legend, CategoryScale, LinearScale, PointElement, TimeScale);
 
-export default function GraphStats({ poolInfo, DictUsers }) {
+export default function CumulativeGraphStats({ poolInfo, DictUsers }) {
   const [chartData, setChartData] = useState(null);
   const [chartOptions, setChartOptions] = useState(null);
 

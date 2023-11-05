@@ -29,7 +29,8 @@ import TradeCenter from './tradeCenter';
 // modals
 import FillSpotModal from '../../modals/FillSpot';
 import RosterModificationModal from '../../modals/rosterModification';
-import GraphStats from '../../modals/graphStats';
+import CumulativeGraphStats from '../../modals/cumulativeGraphStats';
+import PlayerGraphStats from '../../modals/playerGraphStats';
 import AddPlayerModal from '../../modals/addPlayer';
 
 // images
@@ -62,10 +63,12 @@ export default function InProgressPool({
   const [showFillSpotModal, setShowFillSpotModal] = useState(false);
   const [fillSpotPosition, setFillSpotPosition] = useState('');
   const [showRosterModificationModal, setShowRosterModificationModal] = useState(false);
-  const [showGraphStats, setShowGraphStats] = useState(false);
+  const [showCumulativeGraphStats, setShowCumultiveGraphStats] = useState(false);
+  const [showPlayerGraphStats, setShowPlayerGraphStats] = useState(false);
   const [showAddPlayerModal, setShowAddPlayerModal] = useState(false);
   const [rosterModificationAllowed, setRosterModificationAllowed] = useState(false);
   const [tabSelectionParams, setTabSelectionParams] = useSearchParams();
+  const [selectedPlayerId, setSelectedPlayerId] = useState('');
 
   // Tab Index states. They are used in different child components.
   const [mainTabIndex, setMainTabIndex] = useState(Number(tabSelectionParams.get('mainTab') ?? get_default_mainTab()));
@@ -559,6 +562,7 @@ export default function InProgressPool({
               style={{
                 backgroundColor: player.own && !player.ignore ? null : render_not_own_player_color(player.reservist),
               }}
+              onClick={() => setSelectedPlayerId(player.id)}
             >
               <td>{i + 1}</td>
               <td>
@@ -576,12 +580,28 @@ export default function InProgressPool({
               <td>{player.G + player.A}</td>
               <td>{player.HT}</td>
               <td>{player.SOG}</td>
-              <td>
-                <b style={{ color: '#a20' }}>{player.pool_points}</b>
-              </td>
-              <td>
-                {player.nb_game ? Math.round((player.pool_points / player.nb_game + Number.EPSILON) * 100) / 100 : 0.0}
-              </td>
+              {player.id === selectedPlayerId ? (
+                <td colSpan={2}>
+                  <button
+                    type="button"
+                    className="base-button"
+                    onClick={() => setShowPlayerGraphStats(!showPlayerGraphStats)}
+                  >
+                    <BsGraphUp size={30} />
+                  </button>
+                </td>
+              ) : (
+                <>
+                  <td>
+                    <b style={{ color: '#a20' }}>{player.pool_points}</b>
+                  </td>
+                  <td>
+                    {player.nb_game
+                      ? Math.round((player.pool_points / player.nb_game + Number.EPSILON) * 100) / 100
+                      : 0.0}
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         {emptyRows.map(row => row)}
@@ -621,6 +641,7 @@ export default function InProgressPool({
               style={{
                 backgroundColor: player.own && !player.ignore ? null : render_not_own_player_color(player.reservist),
               }}
+              onClick={() => setSelectedPlayerId(player.id)}
             >
               <td>{i + 1}</td>
               <td>
@@ -638,12 +659,24 @@ export default function InProgressPool({
               <td>{player.W}</td>
               <td>{player.SO}</td>
               <td>{player.OT}</td>
-              <td>
-                <b style={{ color: '#a20' }}>{player.pool_points}</b>
-              </td>
-              <td>
-                {player.nb_game ? Math.round((player.pool_points / player.nb_game + Number.EPSILON) * 100) / 100 : 0.0}
-              </td>
+              {player.id === selectedPlayerId ? (
+                <td colSpan={2}>
+                  <button type="button" className="base-button">
+                    <BsGraphUp size={30} />
+                  </button>
+                </td>
+              ) : (
+                <>
+                  <td>
+                    <b style={{ color: '#a20' }}>{player.pool_points}</b>
+                  </td>
+                  <td>
+                    {player.nb_game
+                      ? Math.round((player.pool_points / player.nb_game + Number.EPSILON) * 100) / 100
+                      : 0.0}
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         {emptyRows.map(row => row)}
@@ -1056,7 +1089,11 @@ export default function InProgressPool({
             </TabList>
             <TabPanel>
               <div className="half-cont">
-                <button className="base-button" onClick={() => setShowGraphStats(!showGraphStats)} type="button">
+                <button
+                  className="base-button"
+                  onClick={() => setShowCumultiveGraphStats(!showCumulativeGraphStats)}
+                  type="button"
+                >
                   <table>
                     <tbody>
                       <tr>
@@ -1070,7 +1107,15 @@ export default function InProgressPool({
                     </tbody>
                   </table>
                 </button>
-                {showGraphStats ? <GraphStats poolInfo={poolInfo} DictUsers={DictUsers} /> : null}
+                {showCumulativeGraphStats ? <CumulativeGraphStats poolInfo={poolInfo} DictUsers={DictUsers} /> : null}
+                {showPlayerGraphStats ? (
+                  <PlayerGraphStats
+                    poolInfo={poolInfo}
+                    participant={poolInfo.participants[userTabIndex]}
+                    player={poolInfo.context.players[selectedPlayerId]}
+                    DictUsers={DictUsers}
+                  />
+                ) : null}
                 {render_tabs_pool_rank()}
                 {render_tabs_roster_stats()}
                 <button className="base-button" onClick={() => download_csv(poolInfo)} disabled={false} type="button">
