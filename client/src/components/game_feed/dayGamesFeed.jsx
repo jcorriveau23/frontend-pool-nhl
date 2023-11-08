@@ -29,22 +29,11 @@ export default function DayGamesFeed({
   selectedGamePk,
 }) {
   const [gamesStats, setGamesStats] = useState(null);
-  const [liveGameInfo, setLiveGameInfo] = useState(null);
 
   const reset_state = () => {
     setGameStatus('');
     setDictTeamAgainst(null);
     setGamesStats(null);
-  };
-
-  const get_live_game_info = async () => {
-    try {
-      const res = await axios.get('/live_game_info.json');
-      // console.log(res.data);
-      setLiveGameInfo(res.data);
-    } catch (e) {
-      alert(e);
-    }
   };
 
   const get_day_game_info = async () => {
@@ -67,37 +56,34 @@ export default function DayGamesFeed({
       setFormatDate(fDate);
 
       try {
-        const res = await axios.get(`https://statsapi.web.nhl.com/api/v1/schedule?startDate=${fDate}&endDate=${fDate}`);
-        if (res.data.dates[0]) {
+        const res = await axios.get(`/api-rust/daily_games/${fDate}`);
+        if (res.data.games.length > 0) {
           let bAllFinal = true;
           let bAllPreview = true;
           let bLiveGames = false;
           const DictTeamAgainst = {};
 
-          for (let i = 0; i < res.data.dates[0].games.length; i += 1) {
-            if (res.data.dates[0].games[i].status.detailedState !== 'Postponed') {
-              const status = res.data.dates[0].games[i].status.abstractGameState;
+          for (let i = 0; i < res.data.games.length; i += 1) {
+            const game = res.data.games[i];
+            const status = game.gameState;
 
-              if (status === 'Live') {
-                bAllFinal = false;
-                bAllPreview = false;
-                bLiveGames = true;
-              }
-
-              if (status === 'Final') {
-                bAllPreview = false;
-                bLiveGames = true;
-              }
-
-              if (status === 'Preview') {
-                bAllFinal = false;
-              }
-
-              DictTeamAgainst[res.data.dates[0].games[i].teams.away.team.id] =
-                res.data.dates[0].games[i].teams.home.team.id;
-              DictTeamAgainst[res.data.dates[0].games[i].teams.home.team.id] =
-                res.data.dates[0].games[i].teams.away.team.id;
+            if (status === 'ON') {
+              bAllFinal = false;
+              bAllPreview = false;
+              bLiveGames = true;
             }
+
+            if (status === 'OFF') {
+              bAllPreview = false;
+              bLiveGames = true;
+            }
+
+            if (status === 'FUT') {
+              bAllFinal = false;
+            }
+
+            DictTeamAgainst[game.awayTeam.id] = game.homeTeam.id;
+            DictTeamAgainst[game.homeTeam.id] = game.awayTeam.id;
           }
           setDictTeamAgainst(DictTeamAgainst);
 
@@ -111,20 +97,16 @@ export default function DayGamesFeed({
             setGameStatus('N/A');
           }
 
-          setGamesStats([...res.data.dates[0].games]);
+          setGamesStats([...res.data.games]);
         } else {
           setGamesStats([]);
           setGameStatus('N/A');
         }
       } catch (e) {
-        alert(e);
+        alert(e.response.data);
       }
     }
   };
-
-  useEffect(() => {
-    get_live_game_info();
-  }, []);
 
   useEffect(() => {
     get_day_game_info();
@@ -161,9 +143,7 @@ export default function DayGamesFeed({
 
   const render_game_item = () =>
     gamesStats.length > 0 ? (
-      gamesStats.map(game => (
-        <GameItem key={game.gamePk} gameData={game} selectedGamePk={selectedGamePk} liveGameInfo={liveGameInfo} />
-      ))
+      gamesStats.map(game => <GameItem key={game.id} gameData={game} selectedGamePk={selectedGamePk} />)
     ) : (
       <h1>No game on {formatDate}.</h1>
     );

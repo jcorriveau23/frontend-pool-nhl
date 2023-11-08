@@ -1,44 +1,45 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-// images
-import { team_info } from '../img/logos';
-
-export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
+export default function GameItem({ gameData, selectedGamePk }) {
+  console.log(gameData);
   const render_game_state = status => {
-    switch (status.abstractGameState) {
-      case 'Live': {
-        return liveGameInfo && Number(gameData.gamePk) in liveGameInfo ? (
+    switch (status) {
+      case 'ON': {
+        return gameData && gameData.period && gameData.clock ? (
           <td colSpan={2} style={{ color: '#a20', fontSize: 25 }}>
-            {liveGameInfo[Number(gameData.gamePk)].period} | {liveGameInfo[Number(gameData.gamePk)].time}
+            {gameData.period} | {gameData.clock.timeRemaining}
           </td>
         ) : (
           <td colSpan={2} style={{ fontSize: 25 }}>
-            {new Date(Date.parse(gameData.gameDate)).toLocaleString(navigator.language, {
+            {new Date(Date.parse(gameData.startTimeUTC)).toLocaleString(navigator.language, {
               hour: '2-digit',
               minute: '2-digit',
             })}
           </td>
         );
       }
-      case 'Postponed': {
+      case 'PPD': {
         return (
           <td colSpan={2} style={{ color: '#a20', fontSize: 25 }}>
             PPD
           </td>
         );
       }
-      case 'Final': {
+      case 'OFF': {
         return (
           <td colSpan={2} style={{ color: '#a20', fontSize: 25 }}>
-            Final
+            Final{' '}
+            {gameData.periodDescriptor && gameData.periodDescriptor.periodType !== 'REG'
+              ? ` (${gameData.periodDescriptor.periodType})`
+              : null}
           </td>
         );
       }
       default: {
         return (
           <td colSpan={2} style={{ fontSize: 25 }}>
-            {new Date(Date.parse(gameData.gameDate)).toLocaleString(navigator.language, {
+            {new Date(Date.parse(gameData.startTimeUTC)).toLocaleString(navigator.language, {
               hour: '2-digit',
               minute: '2-digit',
             })}
@@ -49,24 +50,24 @@ export default function GameItem({ gameData, selectedGamePk, liveGameInfo }) {
   };
 
   return (
-    <Link to={`/game/${gameData.gamePk}`} key={gameData.gamePk}>
-      <li style={Number(selectedGamePk) === Number(gameData.gamePk) ? { borderColor: '#fff' } : null}>
+    <Link to={`/game/${gameData.id}`} key={gameData.id}>
+      <li style={Number(selectedGamePk) === gameData.id ? { borderColor: '#fff' } : null}>
         <table style={{ width: '150px' }}>
           <thead>
-            <tr>{render_game_state(gameData.status)}</tr>
+            <tr>{render_game_state(gameData.gameState)}</tr>
           </thead>
           <tbody>
             <tr>
               <td align="left">
-                <img src={team_info[gameData.teams.away.team.id]?.logo} alt="" width="70" height="70" />
+                <img src={gameData.awayTeam.logo} alt="" width="70" height="70" />
               </td>
-              <td style={{ fontSize: 35 }}>{gameData.teams.away.score}</td>
+              <td style={{ fontSize: 35 }}>{gameData.awayTeam.score ?? 0}</td>
             </tr>
             <tr>
               <td align="left">
-                <img src={team_info[gameData.teams.home.team.id]?.logo} alt="" width="70" height="70" />
+                <img src={gameData.homeTeam.logo} alt="" width="70" height="70" />
               </td>
-              <td style={{ fontSize: 35 }}>{gameData.teams.home.score}</td>
+              <td style={{ fontSize: 35 }}>{gameData.homeTeam.score ?? 0}</td>
             </tr>
           </tbody>
         </table>

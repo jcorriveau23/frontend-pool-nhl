@@ -59,7 +59,6 @@ export default function CreatedPool({
 
   const update_pool_settings = () => {
     const newPoolSettings = { ...poolInfo.settings, ...poolSettingsUpdate };
-    console.log(newPoolSettings);
     socket.send(create_socket_command('OnPoolSettingChanges', `{"pool_settings": ${JSON.stringify(newPoolSettings)}}`));
   };
 

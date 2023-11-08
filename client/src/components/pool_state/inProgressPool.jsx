@@ -773,7 +773,6 @@ export default function InProgressPool({
     updatedSearchParams.set('userTab', _userTabIndex);
     setTabSelectionParams(updatedSearchParams.toString());
 
-    console.log('user tab changed');
     setUserTabIndex(_userTabIndex);
   };
 

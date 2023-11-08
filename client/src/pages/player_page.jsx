@@ -1,130 +1,59 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 // Loader
 import ClipLoader from 'react-spinners/ClipLoader';
 
-// images
-import { team_info } from '../components/img/logos';
-
 export default function PlayerPage() {
-  const [playerStats, setPlayerStats] = useState(null);
-  const [playerPlayoffStats, setPlayerPlayoffStats] = useState(null);
-  const [totalCareer, setTotalCareer] = useState(null);
-  const [totalCareerPlayoffs, setTotalCareerPlayoffs] = useState(null);
   const [playerInfo, setPlayerInfo] = useState(null);
-  const [prospectInfo, setProspectInfo] = useState(null);
-  const [prevPlayerID, setPrevPlayerID] = useState('');
+  const [isError, setIsError] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
-  const [hasNavigated, setHasNavigated] = useState(false);
 
   const playerID = window.location.pathname.split('/').pop();
 
   const get_player_stats = async () => {
     try {
-      const res = await axios.get(
-        `https://statsapi.web.nhl.com/api/v1/people/${playerID}?expand=person.stats&stats=yearByYear,yearByYearPlayoffs,careerRegularSeason,careerPlayoffs&expand=stats.team&site=en_nhlCA`
-      ); // https://statsapi.web.nhl.com/api/v1/people/8475726?expand=person.stats&stats=yearByYear,yearByYearPlayoffs,careerRegularSeason&expand=stats.team&site=en_nhlCA
+      const res = await axios.get(`/cors-anywhere/https://api-web.nhle.com/v1/player/${playerID}/landing`);
 
       setPlayerInfo(res.data);
-      setPlayerStats(res.data.people[0].stats[0]);
-      setPlayerPlayoffStats(res.data.people[0].stats[1]);
-      if (res.data.people[0].stats[2].splits.length > 0) setTotalCareer(res.data.people[0].stats[2].splits[0].stat);
-      if (res.data.people[0].stats[3].splits.length > 0)
-        setTotalCareerPlayoffs(res.data.people[0].stats[3].splits[0].stat);
     } catch (e) {
-      alert(e);
-    }
-  };
-
-  const get_prospect_info = async () => {
-    try {
-      const res = await axios.get(`https://statsapi.web.nhl.com/api/v1/draft/prospects/${playerID}`); // https://statsapi.web.nhl.com/api/v1/draft/prospects/76849
-      setProspectInfo({ ...res.data.prospects[0] });
-      // console.log(p.prospects[0])
-      if (res.data.prospects[0].nhlPlayerId > 8000000 && !hasNavigated) {
-        setHasNavigated(true);
-        navigate(`/player-info/${res.data.prospects[0].nhlPlayerId}`);
-      }
-    } catch (e) {
-      alert(e);
+      setIsError(true);
     }
   };
 
   useEffect(() => {
     const ID = parseInt(playerID, 10);
 
-    if (prevPlayerID !== playerID && !Number.isNaN(ID)) {
-      if (ID > 8000000) {
-        get_player_stats();
-      } else {
-        get_prospect_info();
-      }
-      setPrevPlayerID(playerID);
-    } else {
-      setPlayerInfo(null);
-      setPlayerStats(null);
-      setPlayerPlayoffStats(null);
-      setProspectInfo(null);
-      setPrevPlayerID('');
-    }
+    get_player_stats();
   }, [location]);
 
   const get_league_row_color = leagueName => {
     switch (leagueName) {
-      case 'National Hockey League':
+      case 'NHL':
         return '#ffd68c';
       case 'AHL':
-      case 'Can-Am':
         return '#f5abab';
-      case 'Swiss':
-      case 'Russia':
-      case 'Finland':
-      case 'Czechia':
-      case 'Rus-KHL':
-      case 'KHL':
-        return '#a3cf97';
-      case 'ECAC':
-      case 'NCAA':
-      case 'CCHA':
-        return '#bfb8e7';
-      case 'CJHL':
-      case 'OPJHL':
-      case 'QJHL':
-        return '#cce2ff';
-      case 'WHL':
-      case 'QMJHL':
-      case 'OHL':
-        return '#b2d4ff';
-      case 'ECHL':
-        return '#ffbfbf';
-      case 'Czechia2':
-      case 'Czech':
-        return '#c7e2c0';
-      case 'QSHL':
-      case 'QMHL':
-        return '#e9e3ba';
       default:
         return null;
     }
   };
 
   const get_playoff_stats = season => {
-    for (let i = 0; i < playerPlayoffStats.splits.length; i += 1) {
+    for (let i = 0; i < playerInfo.seasonTotals.length; i += 1) {
       if (
-        playerPlayoffStats.splits[i].season === season.season &&
-        playerPlayoffStats.splits[i].league.name === season.league.name &&
-        playerPlayoffStats.splits[i].team.name === season.team.name
+        playerInfo.seasonTotals.gameTypeId === 3 &&
+        playerInfo.seasonTotals.season === season.season &&
+        playerInfo.seasonTotals.leagueAbbrev === season.leagueAbbrev &&
+        playerInfo.seasonTotals.teamName.default === season.teamName.default
       ) {
-        return playerPlayoffStats.splits[i];
+        return playerInfo.seasonTotals[i];
       }
     }
     return null;
   };
 
-  const render_skater_stats = stats => (
+  const render_skater_stats = () => (
     <table className="content-table">
       <thead>
         <tr>
@@ -154,69 +83,71 @@ export default function PlayerPage() {
         </tr>
       </thead>
       <tbody>
-        {stats.map(season => {
-          const playoffStats = get_playoff_stats(season);
+        {playerInfo.seasonTotals
+          .filter(season => season.gameTypeId === 2)
+          .map(season => {
+            // Get the corresponding sesason playoff stats.
+            const playoffSeason = get_playoff_stats(season.leagueAbbrev);
 
-          return (
-            <tr style={{ backgroundColor: get_league_row_color(season.league.name) }}>
-              <td>{season.team.name}</td>
-              {season.league.id === 133 ? ( // nhl league
-                <>
-                  <td>
-                    <Link
-                      to={`/team-roster?teamId=${season.team.id}&season=${season.season}`}
-                      style={{ textDecoration: 'none', color: '#0000ff' }}
-                    >
-                      {`${season.season.slice(0, 4)}-${season.season.slice(4)}`}
-                    </Link>
-                  </td>
-                  <td>NHL</td>
-                </>
-              ) : (
-                <>
-                  <td>{`${season.season.slice(0, 4)}-${season.season.slice(4)}`}</td>
-                  <td>{season.league.name}</td>
-                </>
-              )}
-              <td>
-                <b>{season.stat.games}</b>
-              </td>
-              <td>{season.stat.goals}</td>
-              <td>{season.stat.assists}</td>
-              <td>
-                <b>{season.stat.points}</b>
-              </td>
-              <td>{season.stat.plusMinus}</td>
-              <td>{season.stat.penaltyMinutes}</td>
-              <td>
-                <b>{playoffStats ? playoffStats.stat.games : '-'}</b>
-              </td>
-              <td>{playoffStats ? playoffStats.stat.goals : '-'}</td>
-              <td>{playoffStats ? playoffStats.stat.assists : '-'}</td>
-              <td>
-                <b>{playoffStats ? playoffStats.stat.points : '-'}</b>
-              </td>
-              <td>{playoffStats ? playoffStats.stat.plusMinus : '-'}</td>
-              <td>{playoffStats ? playoffStats.stat.penaltyMinutes : '-'}</td>
-            </tr>
-          );
-        })}
+            return (
+              <tr style={{ backgroundColor: get_league_row_color(season.leagueAbbrev) }}>
+                <td>{season.teamName.default}</td>
+                {/* {season.leagueAbbrev === "NHL" ? ( // nhl league
+                  <>
+                    <td>
+                      <Link
+                        to={`/team-roster?teamId=${season.team.id}&season=${season.season}`}
+                        style={{ textDecoration: 'none', color: '#0000ff' }}
+                      >
+                        {`${season.season.slice(0, 4)}-${season.season.slice(4)}`}
+                      </Link>
+                    </td>
+                    <td>NHL</td>
+                  </>
+                ) : (
+                    <td>{`${season.season.slice(0, 4)}-${season.season.slice(4)}`}</td>
+                )} */}
+                <td>{season.season}</td>
+                <td>{season.leagueAbbrev}</td>
+                <td>
+                  <b>{season.gamesPlayed}</b>
+                </td>
+                <td>{season.goals}</td>
+                <td>{season.assists}</td>
+                <td>
+                  <b>{season.points}</b>
+                </td>
+                <td>{season.plusMinus}</td>
+                <td>{season.pim}</td>
+                <td>
+                  <b>{playoffSeason ? playoffSeason.gamesPlayed : '-'}</b>
+                </td>
+                <td>{playoffSeason ? playoffSeason.goals : '-'}</td>
+                <td>{playoffSeason ? playoffSeason.assists : '-'}</td>
+                <td>
+                  <b>{playoffSeason ? playoffSeason.points : '-'}</b>
+                </td>
+                <td>{playoffSeason ? playoffSeason.plusMinus : '-'}</td>
+                <td>{playoffSeason ? playoffSeason.pim : '-'}</td>
+              </tr>
+            );
+          })}
         <tr>
           <th>Total nhl</th>
           <th>-</th>
           <th>-</th>
-          <th>{totalCareer?.games}</th>
-          <th>{totalCareer?.goals}</th>
-          <th>{totalCareer?.assists}</th>
-          <th>{totalCareer?.points}</th>
-          <th>{totalCareer?.plusMinus}</th>
-          <th>{totalCareer?.penaltyMinutes}</th>
-          <th>{totalCareerPlayoffs?.games}</th>
-          <th>{totalCareerPlayoffs?.goals}</th>
-          <th>{totalCareerPlayoffs?.assists}</th>
-          <th>{totalCareerPlayoffs?.points}</th>
-          <th>{totalCareerPlayoffs?.plusMinus}</th>
-          <th>{totalCareerPlayoffs?.penaltyMinutes}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.gamesPlayed}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.goals}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.assists}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.points}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.plusMinus}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.pim}</th>
+          <th>{playerInfo.careerTotals?.playoffs?.games}</th>
+          <th>{playerInfo.careerTotals?.playoffs?.goals}</th>
+          <th>{playerInfo.careerTotals?.playoffs?.assists}</th>
+          <th>{playerInfo.careerTotals?.playoffs?.points}</th>
+          <th>{playerInfo.careerTotals?.playoffs?.plusMinus}</th>
+          <th>{playerInfo.careerTotals?.playoffs?.pim}</th>
         </tr>
       </tbody>
     </table>
@@ -240,92 +171,79 @@ export default function PlayerPage() {
           <th>L</th>
           <th>OT</th>
           <th>save %</th>
-          <th>S</th>
           <th>SA</th>
           <th>SO</th>
         </tr>
       </thead>
       <tbody>
-        {stats.map(season => (
-          <tr
-            style={{
-              backgroundColor: get_league_row_color(season.league.name),
-            }}
-          >
-            <td>{season.team.name}</td>
-            {season.league.id === 133 ? ( // nhl league
-              <>
-                <td>
-                  <Link
-                    to={`/team-roster?teamId=${season.team.id}&season=${season.season}`}
-                    style={{ textDecoration: 'none', color: '#000099' }}
-                  >
-                    {`${season.season.slice(0, 4)}-${season.season.slice(4)}`}
-                  </Link>
-                </td>
-                <td>NHL</td>
-              </>
-            ) : (
-              <>
-                <td>{`${season.season.slice(0, 4)}-${season.season.slice(4)}`}</td>
-                <td>{season.league.name}</td>
-              </>
-            )}
-
-            <td>{season.stat.games}</td>
-            <td>{season.stat.gamesStarted}</td>
-            <td>
-              {season.stat.goalAgainstAverage
-                ? Math.round((season.stat.goalAgainstAverage + Number.EPSILON) * 100) / 100
-                : null}
-            </td>
-            <td>{season.stat.goalsAgainst}</td>
-            <td>{season.stat.wins}</td>
-            <td>{season.stat.losses}</td>
-            <td>{season.stat.ot}</td>
-            <td>
-              {season.stat.savePercentage
-                ? Math.round((season.stat.savePercentage + Number.EPSILON) * 1000) / 1000
-                : null}
-            </td>
-            <td>{season.stat.saves}</td>
-            <td>{season.stat.shotsAgainst}</td>
-            <td>{season.stat.shutouts}</td>
-          </tr>
-        ))}
+        {playerInfo.seasonTotals
+          .filter(season => season.gameTypeId === 2)
+          .map(season => (
+            <tr
+              style={{
+                backgroundColor: get_league_row_color(season.leagueAbbrev),
+              }}
+            >
+              <td>{season.teamName.default}</td>
+              {/* {season.league.id === 133 ? ( // nhl league
+                <>
+                  <td>
+                    <Link
+                      to={`/team-roster?teamId=${season.team.id}&season=${season.season}`}
+                      style={{ textDecoration: 'none', color: '#000099' }}
+                    >
+                    </Link>
+                  </td>
+                  <td>NHL</td>
+                </>
+              ) : (
+                <>
+                  <td>{season.league.name}</td>
+                </>
+              )} */}
+              <td>{season.season}</td>
+              <td>{season.leagueAbbrev}</td>
+              <td>{season.gamesPlayed}</td>
+              <td>{season.gamesStarted}</td>
+              <td>{season.goalAgainstAvg}</td>
+              <td>{season.goalsAgainst}</td>
+              <td>{season.wins}</td>
+              <td>{season.losses}</td>
+              <td>{season.otLosses}</td>
+              <td>{season.savePctg ? Math.round((season.savePctg + Number.EPSILON) * 1000) / 1000 : null}</td>
+              <td>{season.shotsAgainst}</td>
+              <td>{season.shutouts}</td>
+            </tr>
+          ))}
         <tr>
           <th>total nhl</th>
           <th>-</th>
           <th>-</th>
-          <th>{totalCareer?.games}</th>
-          <th>{totalCareer?.gameStarted}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.gamesPlayed}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.gameStarted}</th>
           <th>-</th>
-          <th>{totalCareer?.goalsAgainst}</th>
-          <th>{totalCareer?.wins}</th>
-          <th>{totalCareer?.losses}</th>
-          <th>{totalCareer?.ot}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.goalsAgainst}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.wins}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.losses}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.otLosses}</th>
           <th>-</th>
-          <th>{totalCareer?.saves}</th>
-          <th>{totalCareer?.shotAgainst}</th>
-          <th>{totalCareer?.shutouts}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.shotsAgainst}</th>
+          <th>{playerInfo.careerTotals?.regularSeason?.shutouts}</th>
         </tr>
       </tbody>
     </table>
   );
 
-  const render_player_info = p => (
+  const render_player_info = () => (
     <>
       <img src={`https://cms.nhl.bamgrid.com/images/headshots/current/168x168/${playerID}.jpg`} alt="" />
       <table className="content-table">
         <thead>
           <tr>
-            <th>
-              {p.currentTeam ? <img src={team_info[p.currentTeam.id]?.logo} alt="" width="60" height="60" /> : null}
-            </th>
+            <th>{playerInfo.teamLogo ? <img src={playerInfo.teamLogo} alt="" width="60" height="60" /> : null}</th>
             <th>
               <h3>
-                {p.fullName}
-                {p.captain ? ` (C)` : p.alternateCaptain ? ` (A)` : null}
+                {playerInfo.firstName.default} {playerInfo.lastName.default}
               </h3>
             </th>
           </tr>
@@ -333,68 +251,68 @@ export default function PlayerPage() {
         <tbody>
           <tr>
             <th>Position</th>
-            <td>{p.primaryPosition.abbreviation}</td>
+            <td>{playerInfo.position}</td>
           </tr>
           <tr>
             <th>Shoot Catches</th>
-            <td>{p.shootsCatches}</td>
+            <td>{playerInfo.shootsCatches}</td>
           </tr>
           <tr>
             <th>Birth date</th>
-            <td>{p.birthDate}</td>
+            <td>{playerInfo.birthDate}</td>
           </tr>
           <tr>
             <th>Age</th>
-            <td>{p.currentAge}</td>
+            <td>{playerInfo.currentAge}</td>
           </tr>
           <tr>
             <th>Birth city</th>
-            <td>{p.birthCity}</td>
+            <td>{playerInfo.birthCity.default}</td>
           </tr>
           <tr>
             <th>Birth country</th>
-            <td>{p.birthCountry}</td>
+            <td>{playerInfo.birthCountry}</td>
           </tr>
           <tr>
-            <th>Height</th>
-            <td>{p.height}</td>
+            <th>Height (inches)</th>
+            <td>{playerInfo.heightInInches}</td>
           </tr>
           <tr>
-            <th>Weight</th>
-            <td>{p.weight}</td>
+            <th>Weight (pounds)</th>
+            <td>{playerInfo.weightInPounds}</td>
+          </tr>
+          <tr>
+            <th>Drafted</th>
+            <td>
+              {playerInfo.draftDetails
+                ? `${playerInfo.draftDetails.overallPick} overall in ${playerInfo.draftDetails.year}`
+                : null}
+            </td>
           </tr>
         </tbody>
       </table>
     </>
   );
 
-  const render_player_info_stats = (stats, info) => (
-    <div className="cont">
-      {render_player_info(info)}
-      {info.primaryPosition.abbreviation !== 'G' ? render_skater_stats(stats) : render_goalie_stats(stats)}
-    </div>
-  );
-
-  if (playerStats && playerPlayoffStats && playerInfo) {
-    return render_player_info_stats(playerStats.splits, playerInfo.people[0]);
-  }
-
-  if (!Number.isNaN(Number(playerID)) && playerID !== '' && !prospectInfo) {
+  if (playerInfo) {
     return (
       <div className="cont">
-        <h1>Trying to fetch player data from nhl api...</h1>
-        <ClipLoader color="#fff" loading size={75} />
+        {render_player_info()}
+        {playerInfo.position !== 'G' ? render_skater_stats() : render_goalie_stats()}
       </div>
     );
   }
 
-  if (prospectInfo) {
-    return <div className="cont">{render_player_info(prospectInfo)}</div>;
-  }
+  if (isError)
+    return (
+      <div className="cont">
+        <h1>Player information was not found.</h1>
+      </div>
+    );
 
   return (
     <div className="cont">
-      <h1>Player does not exist</h1>
+      <ClipLoader color="#fff" loading size={75} />
     </div>
   );
 }

@@ -14,8 +14,11 @@ db = mo_c.hockeypool
 
 day_leaders = db.day_leaders
 played = db.played
+daily_games = db.daily_games
+games = db.games
+boxscores = db.boxscores
 
-API_URL = 'https://statsapi.web.nhl.com'
+API_URL = 'https://api-web.nhle.com'
 
 def get_day_leaders_data(day):
     day_leaders_data = day_leaders.find_one({"date": str(day)})
@@ -41,7 +44,7 @@ def get_played_data(day):
 def update_skaters_stats(day_leaders_data, p):
     for player in day_leaders_data["skaters"]:
         if player["id"] == p["id"]:
-            if player["stats"]["goals"] != p["stats"]["goals"] or player["stats"]["assists"] != p["stats"]["assists"] or p["stats"]["shootoutGoals"]:
+            if player["stats"]["goals"] != p["stats"]["goals"] or player["stats"]["assists"] != p["stats"]["assists"] or player["stats"]["shootoutGoals"] != p["stats"]["shootoutGoals"]:
                 date = day_leaders_data["date"]
                 name = player["name"]
                 past_goals = player["stats"]["goals"]
@@ -69,9 +72,7 @@ def update_goalies_stats(day_leaders_data, p):
     day_leaders_data["goalies"].append(p)
 
 def fetch_pointers_day(day = None):
-    try:
-        live_game_info = {} # contains the live game time information that gets updated each 3 min.
-
+    #try:
         # To make sure that we fetch points of games that finish after 12AM, we fetch previous day before 12PM.
         if day is None:
             if datetime.now().hour < 12:
@@ -81,170 +82,118 @@ def fetch_pointers_day(day = None):
 
         day_leaders_data = get_day_leaders_data(day)
         played_data = get_played_data(day)
-
-        live_game_info["date"] = str(day)
-
-        TODAY_GAME_END_POINT = f'/api/v1/schedule?startDate={day}&endDate={day}'
+        TODAY_GAME_END_POINT = f'/v1/score/{day}'
 
         response = requests.request('GET', API_URL + TODAY_GAME_END_POINT)  # fetch all todays games
         today_games = json.loads(response.text)
+        
 
-        if len(today_games["dates"]) == 0:
-            return  # There is no game on that date!
+        is_live_game = False
+        daily_games.update_one({'date': str(day)}, {'$set': today_games}, upsert=True)
 
-        number_of_games = len(today_games['dates'][0]['games'])
-
+        number_of_games = len(today_games["games"])
         print(f'fetching for: {day}, there is {number_of_games} games')
-
-        isLiveGame = False
-
-        for game in today_games['dates'][0]['games']:
-            hasOT = False # tell if the game has been in shootout.
+        for game in today_games["games"]:
+            has_ot = False # tell if the game has been in shootout.
             win_processed = False   # tell if the win has been processed to the goaly.
             loss_processed = False  # tell if the loss has been processed to the goaly.
 
-            gameID = game['gamePk']
-            gameState = game['status']['abstractGameState']
+            game_id = game['id']
+            game_state = game['gameState']
 
-            if game['gameType'] != "R" and game['gameType'] != "P":
+            if game['gameType'] != 2:
                 print(f"Skip the game! | Game Type: {game['gameType']}")
                 continue
 
-            if gameState != "Live" and gameState != "Final":
-                print(f"Skip the game! | gameState: {gameState}")
+            if game_state != "LIVE" and game_state != "OFF":
+                print(f"Skip the game! | gameState: {game_state}")
                 continue     # fetch the game stats until there is no more update
 
-            if gameID in fetch_pointers_day.end_games:
-                print(f"Skip the game! | Game Ended: {gameID}")
+            if game_id in fetch_pointers_day.end_games:
+                print(f"Skip the game! | Game Ended: {game_id}")
                 continue
 
-            print(f'Game: {gameID},  State: {gameState}')
+            is_live_game = True
 
-            isLiveGame = True
+            BOX_SCORE_END_POINT = f'/v1/gamecenter/{game_id}/boxscore'
+            response = requests.request('GET', API_URL + BOX_SCORE_END_POINT)
+            box_score = json.loads(response.text)
 
-            GAME_DATA_END_POINT = f'/api/v1/game/{gameID}/feed/live'
-            response = requests.request('GET', API_URL + GAME_DATA_END_POINT)   # fetch the live game data
-            live_game = json.loads(response.text)
-            if gameState == 'Live':
-                live_game_info[gameID] = {  
-                                            "period": live_game["liveData"]["linescore"]["currentPeriodOrdinal"],
-                                            "time": live_game["liveData"]["linescore"]["currentPeriodTimeRemaining"]
-                                            }
+            GAME_END_POINT = f"/v1/gamecenter/{game_id}/landing"
+            response = requests.request('GET', API_URL + GAME_END_POINT)
+            game = json.loads(response.text)
+
+            boxscores.update_one({'id': game_id}, {'$set': box_score}, upsert=True)
+            games.update_one({'id': game_id}, {'$set': game}, upsert=True)
 
             # When OT happens in the game we need to process the losing goalies points.
 
-            if live_game['liveData']['linescore']['currentPeriod'] > 3:
-                hasOT = True
+            if box_score['period'] > 3:
+                has_ot = True
 
-            # When shootout happened in the game we need to process the number of times each players scores into the shootout.
+            for side in ("awayTeam", "homeTeam"):
+                for player in box_score["boxscore"]['playerByGameStats'][side]["forwards"] + box_score["boxscore"]['playerByGameStats'][side]["defense"]:
+                    if player['goals'] > 0 or player['assists'] > 0 or player['shPoints'] > 0: 
+                        player_name = player['name']['default']
+                        player_pts = player['goals'] + player['assists'] + player["shPoints"]
 
-            shootout = {}
-            
-            if live_game['liveData']['linescore']['hasShootout']:
-            
-                for i in live_game["liveData"]["plays"]["playsByPeriod"][4]["plays"]:
-                    if live_game["liveData"]["plays"]["allPlays"][i]["result"]["eventTypeId"] == 'GOAL':
-                        player = live_game["liveData"]["plays"]["allPlays"][i]["players"][0]["player"]["id"]
-                        print(f"{player} Scored in shootout.")
-                        if player in shootout:
-                            shootout[player] += 1
-                        else:
-                            shootout[player] = 1
+                        print(f'{player_name} | {player_pts} pts')
 
-            teams = live_game['liveData']['boxscore']['teams']
-
-            for side in teams:
-                for id in teams[side]['players']:
-                    player = teams[side]['players'][id]
-
-                    if "fullName" not in player['person']:
-                        continue    # should never happen in a regular game.
-
-                    if 'skaterStats' in player['stats']:
-                        isShootoutPoints = False
-
-                        if player["person"]["id"] in shootout:
-                            player['stats']['skaterStats']["shootoutGoals"] = shootout[player["person"]["id"]]    # Shootout
-                            isShootoutPoints = True
-                        else:
-                            player['stats']['skaterStats']["shootoutGoals"] = 0   # Shootout
+                        update_skaters_stats(day_leaders_data, {
+                            'name': player_name, 
+                            'id': player['playerId'],
+                            'team': box_score[side]['id'],
+                            'stats': {"goals": player["goals"], "assists": player["assists"], "shootoutGoals": player["shPoints"]}
+                        })
+                    else:
+                        # Remove in case the player was given a points falsely.
+                        remove_skaters_stats(day_leaders_data, player['playerId'])
 
 
-                        if isShootoutPoints or player['stats']['skaterStats']['goals'] > 0 or player['stats']['skaterStats']['assists'] > 0: 
-                            player_name = player['person']['fullName']
-                            player_pts = player['stats']['skaterStats']['goals'] + player['stats']['skaterStats']['assists'] + player['stats']['skaterStats']["shootoutGoals"]
+                if player['toi'] != '0:00':
+                    if player['playerId'] not in played_data["players"]:
+                        played_data["players"].append(player['playerId'])
 
-                            print(f'{player_name} | {player_pts} pts')
+                for goalie in box_score["boxscore"]['playerByGameStats'][side]["goalies"]:
+                    if goalie['toi'] != '0:00':
+                        player_name = goalie['name']['default']
 
-                            update_skaters_stats(day_leaders_data, {
-                                'name': player_name, 
-                                'id': player['person']['id'],
-                                'team': teams[side]['team']['id'],
-                                'stats': player['stats']['skaterStats']
-                            })
-                        else:
-                            # Remove in case the player was given a points falsely.
-                            remove_skaters_stats(day_leaders_data, player['person']['id'])
+                        print(f'{player_name} | goalies')
 
+                        update_goalies_stats(day_leaders_data, {
+                            'name': player_name, 
+                            'id': goalie['playerId'],
+                            'team': box_score[side]['id'],
+                            'stats': {"goals": goalie.get("goals"), "assists": goalie.get("assists"), "OT": has_ot, "SO": False, "W": False }
+                        })
 
-                        if player['stats']['skaterStats']['timeOnIce'] != '0:00':
-                            if player['person']['id'] not in played_data["players"]:
-                                played_data["players"].append(player['person']['id'])
+                        # if 'decision' in player['stats']['goalieStats'] and player['stats']['goalieStats']['decision'] == 'W':
+                        #     win_processed = True
 
-                    elif 'goalieStats' in player['stats']:
-                        if player['stats']['goalieStats']['timeOnIce'] != '0:00':
-                            player_name = player['person']['fullName']
+                        # if 'decision' in player['stats']['goalieStats'] and player['stats']['goalieStats']['decision'] == 'L':
+                        #     loss_processed = True
 
-                            print(f'{player_name} | goalies')
+                        if goalie['playerId'] not in played_data["players"]:
+                            played_data["players"].append(goalie['playerId'])
 
-                            if hasOT:
-                                player['stats']['goalieStats']['OT'] = True
-
-                            update_goalies_stats(day_leaders_data, {
-                                'name': player_name, 
-                                'id': player['person']['id'],
-                                'team': teams[side]['team']['id'],
-                                'stats': player['stats']['goalieStats']
-                            })
-
-                            if 'decision' in player['stats']['goalieStats'] and player['stats']['goalieStats']['decision'] == 'W':
-                                win_processed = True
-
-                            if 'decision' in player['stats']['goalieStats'] and player['stats']['goalieStats']['decision'] == 'L':
-                                loss_processed = True
-
-                            played_data["players"].append(player['person']['id'])
-            if win_processed and loss_processed:              
-                fetch_pointers_day.end_games.append(gameID)
+        #     if win_processed and loss_processed:              
+        #         fetch_pointers_day.end_games.append(gameID)
                             
-            day_leaders_data["played"] = played_data["players"]
-            day_leaders.update_one({'date': str(day)}, {'$set': day_leaders_data}, upsert=True) # upsert = True, to create a new document if not found
-            played.update_one({'date': str(day)}, {'$set': played_data}, upsert=True) # upsert = True, to create a new document if not found
+        day_leaders_data["played"] = played_data["players"]
+        day_leaders.update_one({'date': str(day)}, {'$set': day_leaders_data}, upsert=True)
+        played.update_one({'date': str(day)}, {'$set': played_data}, upsert=True)
                 
-        # dump the live game 
-        
-        # debug
+        return is_live_game
 
-        file = open("./client/public/live_game_info.json", "w+")
-        json.dump(live_game_info, file, indent=4)
-        file.close()
-
-        # release
-
-        file = open("./client/build/live_game_info.json", "w+")
-        json.dump(live_game_info, file, indent=4)
-        file.close()
-
-        return isLiveGame
-
-    except Exception as e:
-        print(e)
+    # except Exception as e:
+    #     print("error")
+    #     print(e)
 
 fetch_pointers_day.end_games = []
 
 if __name__ == "__main__":
-    start_date = date(2023, 10, 10)
-    end_date = date(2023, 10, 20)
+    start_date = date.today()
+    end_date = date(2024,4,18)
     delta = timedelta(days=1)
     while start_date <= end_date:
        print(start_date)
@@ -252,4 +201,4 @@ if __name__ == "__main__":
        start_date += delta
 
     # fetch_pointers_day()
-    # fetch_pointers_day(date(2023, 10, 11))
+    #fetch_pointers_day(date(2023, 10, 21))
