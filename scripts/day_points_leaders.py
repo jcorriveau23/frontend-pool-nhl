@@ -166,12 +166,12 @@ def fetch_pointers_day(day = None):
                         remove_skaters_stats(day_leaders_data, player['playerId'])
 
 
-                if player['toi'] != '00:00':
+                if player.get('toi', "00:00") != '00:00':
                     if player['playerId'] not in played_data["players"]:
                         played_data["players"].append(player['playerId'])
 
                 for goalie in box_score["boxscore"]['playerByGameStats'][side]["goalies"]:
-                    if goalie['toi'] != '00:00':
+                    if goalie.get('toi', "00:00") != '00:00':
                         player_name = goalie['name']['default']
 
                         print(f'{player_name} | goalies')
@@ -222,4 +222,4 @@ if __name__ == "__main__":
     #    start_date += delta
 
     # fetch_pointers_day()
-    fetch_pointers_day(date(2023, 11, 7))
+    fetch_pointers_day(date(2023, 11, 8))

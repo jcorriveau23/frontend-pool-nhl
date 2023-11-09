@@ -2,13 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function GameItem({ gameData, selectedGamePk }) {
-  console.log(gameData);
   const render_game_state = status => {
     switch (status) {
-      case 'ON': {
+      case 'LIVE': {
         return gameData && gameData.period && gameData.clock ? (
           <td colSpan={2} style={{ color: '#a20', fontSize: 25 }}>
-            {gameData.period} | {gameData.clock.timeRemaining}
+            Period {gameData.period} | {gameData.clock.timeRemaining}
           </td>
         ) : (
           <td colSpan={2} style={{ fontSize: 25 }}>

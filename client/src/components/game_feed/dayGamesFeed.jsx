@@ -67,7 +67,7 @@ export default function DayGamesFeed({
             const game = res.data.games[i];
             const status = game.gameState;
 
-            if (status === 'ON') {
+            if (status === 'LIVE') {
               bAllFinal = false;
               bAllPreview = false;
               bLiveGames = true;
