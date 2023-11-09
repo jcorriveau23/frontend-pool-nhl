@@ -119,7 +119,7 @@ def fetch_pointers_day(day = None):
                 print(f"Skip the game! | Game Type: {game['gameType']}")
                 continue
 
-            if game_state != "LIVE" and game_state != "OFF":
+            if game_state != "LIVE" and game_state != "OFF" and game_state != "FINAL":
                 print(f"Skip the game! | gameState: {game_state}")
                 continue     # fetch the game stats until there is no more update
 
@@ -144,7 +144,7 @@ def fetch_pointers_day(day = None):
                 has_ot = True
 
             # Try to get the winning goalie id.
-            if game_state == "OFF":
+            if game_state == "OFF" or game_state == "FINAL":
                 winning_goalie, winning_team = _get_winning_goalie(day, game_id)
 
             for side in ("awayTeam", "homeTeam"):
