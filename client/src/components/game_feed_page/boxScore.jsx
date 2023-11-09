@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ClipLoader from 'react-spinners/ClipLoader';
 import axios from 'axios';
 import PlayerLink from '../playerLink';
 
@@ -125,8 +126,6 @@ export default function BoxScore({ gameId }) {
   if (boxscore) {
     return (
       <div>
-        <h1>Box score</h1>
-
         {render_team_skaters('Forwards', boxscore.awayTeam, boxscore.boxscore.playerByGameStats.awayTeam.forwards)}
         {render_team_skaters('Defense', boxscore.awayTeam, boxscore.boxscore.playerByGameStats.awayTeam.defense)}
         {render_team_goalies(boxscore.awayTeam, boxscore.boxscore.playerByGameStats.awayTeam.goalies)}
@@ -137,5 +136,9 @@ export default function BoxScore({ gameId }) {
       </div>
     );
   }
-  return <h1>Loading</h1>;
+  return (
+    <div>
+      <ClipLoader color="#fff" loading size={75} />
+    </div>
+  );
 }

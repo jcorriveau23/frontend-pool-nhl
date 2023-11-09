@@ -31,14 +31,14 @@ def get_skaters_stats(id, today_pointers, played_today):
                     }
 
 def get_goalies_stats(id, today_pointers):
-    for goaly in today_pointers["goalies"]:
-        if goaly["id"] == id:
+    for goalie in today_pointers["goalies"]:
+        if goalie["id"] == id:
             return {
-                    "G": goaly["stats"]["goals"], 
-                    "A": goaly["stats"]["assists"], 
-                    "W": "decision" in goaly["stats"] and goaly["stats"]["decision"] == "W", 
-                    "SO": goaly["stats"]["shots"] == goaly["stats"]["saves"] and "decision" in goaly["stats"] and goaly["stats"]["decision"] == "W",
-                    "OT": "decision" in goaly["stats"] and goaly["stats"]["decision"] == "L" and "OT" in goaly["stats"] and goaly["stats"]["OT"], 
+                    "G": goalie["stats"]["goals"], 
+                    "A": goalie["stats"]["assists"], 
+                    "W": "decision" in goalie["stats"] and goalie["stats"]["decision"] == "W", 
+                    "SO": round(goalie["stats"]["savePercentage"], 1) == 1.0 and "decision" in goalie["stats"] and goalie["stats"]["decision"] == "W",
+                    "OT": "decision" in goalie["stats"] and goalie["stats"]["decision"] == "L" and "OT" in goalie["stats"] and goalie["stats"]["OT"], 
                     }
 
 def get_db_infos(day):
@@ -163,14 +163,14 @@ def lock_daily_roster(day = None):
 
 
 if __name__ == "__main__":
-    start_date = date(2023, 10, 10)     # beginning of the 2021-2022 season
-    end_date = date(2023, 10, 20)
-    delta = timedelta(days=1)
-    while start_date <= end_date:
-       print(start_date)
-       lock_daily_roster(start_date)
-       cumulate_daily_roster_pts(start_date)
-       start_date += delta
+    # start_date = date(2023, 10, 10)     # beginning of the 2021-2022 season
+    # end_date = date(2023, 10, 27)
+    # delta = timedelta(days=1)
+    # while start_date <= end_date:
+    #    print(start_date)
+    #    lock_daily_roster(start_date)
+    #    cumulate_daily_roster_pts(start_date)
+    #    start_date += delta
 
-    # lock_daily_roster()
-    # cumulate_daily_roster_pts(date(2023, 10, 13))
+    lock_daily_roster(date(2023, 11, 7))
+    cumulate_daily_roster_pts(date(2023, 11, 7))

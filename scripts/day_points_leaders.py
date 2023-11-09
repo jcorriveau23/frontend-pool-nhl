@@ -71,8 +71,25 @@ def update_goalies_stats(day_leaders_data, p):
     
     day_leaders_data["goalies"].append(p)
 
+def _get_winning_goalie(day, game_id):
+    TODAY_SCHEDULE_END_POINT = f'/v1/schedule/{day}'
+    
+    response = requests.request('GET', API_URL + TODAY_SCHEDULE_END_POINT)  # fetch all todays games
+    schedule = json.loads(response.text)
+
+    for week_day in schedule["gameWeek"]:
+        if week_day["date"] == str(day):
+            for game in week_day["games"]:
+                if game["awayTeam"]["score"] > game["homeTeam"]["score"]:
+                    winning_team = game["awayTeam"]["id"]
+                else:
+                    winning_team = game["homeTeam"]["id"]
+
+                if game["id"] == game_id and "winningGoalie" in game:
+                    return game["winningGoalie"], winning_team
+
 def fetch_pointers_day(day = None):
-    #try:
+    try:
         # To make sure that we fetch points of games that finish after 12AM, we fetch previous day before 12PM.
         if day is None:
             if datetime.now().hour < 12:
@@ -87,16 +104,13 @@ def fetch_pointers_day(day = None):
         response = requests.request('GET', API_URL + TODAY_GAME_END_POINT)  # fetch all todays games
         today_games = json.loads(response.text)
         
-
-        is_live_game = False
         daily_games.update_one({'date': str(day)}, {'$set': today_games}, upsert=True)
 
         number_of_games = len(today_games["games"])
         print(f'fetching for: {day}, there is {number_of_games} games')
         for game in today_games["games"]:
             has_ot = False # tell if the game has been in shootout.
-            win_processed = False   # tell if the win has been processed to the goaly.
-            loss_processed = False  # tell if the loss has been processed to the goaly.
+            winning_goalie = None
 
             game_id = game['id']
             game_state = game['gameState']
@@ -113,8 +127,6 @@ def fetch_pointers_day(day = None):
                 print(f"Skip the game! | Game Ended: {game_id}")
                 continue
 
-            is_live_game = True
-
             BOX_SCORE_END_POINT = f'/v1/gamecenter/{game_id}/boxscore'
             response = requests.request('GET', API_URL + BOX_SCORE_END_POINT)
             box_score = json.loads(response.text)
@@ -130,6 +142,10 @@ def fetch_pointers_day(day = None):
 
             if box_score['period'] > 3:
                 has_ot = True
+
+            # Try to get the winning goalie id.
+            if game_state == "OFF":
+                winning_goalie, winning_team = _get_winning_goalie(day, game_id)
 
             for side in ("awayTeam", "homeTeam"):
                 for player in box_score["boxscore"]['playerByGameStats'][side]["forwards"] + box_score["boxscore"]['playerByGameStats'][side]["defense"]:
@@ -150,55 +166,60 @@ def fetch_pointers_day(day = None):
                         remove_skaters_stats(day_leaders_data, player['playerId'])
 
 
-                if player['toi'] != '0:00':
+                if player['toi'] != '00:00':
                     if player['playerId'] not in played_data["players"]:
                         played_data["players"].append(player['playerId'])
 
                 for goalie in box_score["boxscore"]['playerByGameStats'][side]["goalies"]:
-                    if goalie['toi'] != '0:00':
+                    if goalie['toi'] != '00:00':
                         player_name = goalie['name']['default']
 
                         print(f'{player_name} | goalies')
+
+                        decision = None
+                        if winning_goalie and winning_team:
+                            if goalie['playerId'] == winning_goalie["playerId"]:
+                                decision = "W"
+                            elif box_score[side]['id'] != winning_team:
+                                decision = "L"
 
                         update_goalies_stats(day_leaders_data, {
                             'name': player_name, 
                             'id': goalie['playerId'],
                             'team': box_score[side]['id'],
-                            'stats': {"goals": goalie.get("goals"), "assists": goalie.get("assists"), "OT": has_ot, "SO": False, "W": False }
+                            'stats': {
+                                "goals": goalie.get("goals", 0), 
+                                "assists": goalie.get("assists", 0), 
+                                "OT": has_ot, 
+                                "savePercentage": float(goalie.get("savePctg", "0.0")), 
+                                "decision": decision 
+                                }
                         })
-
-                        # if 'decision' in player['stats']['goalieStats'] and player['stats']['goalieStats']['decision'] == 'W':
-                        #     win_processed = True
-
-                        # if 'decision' in player['stats']['goalieStats'] and player['stats']['goalieStats']['decision'] == 'L':
-                        #     loss_processed = True
 
                         if goalie['playerId'] not in played_data["players"]:
                             played_data["players"].append(goalie['playerId'])
 
-        #     if win_processed and loss_processed:              
-        #         fetch_pointers_day.end_games.append(gameID)
+            if winning_goalie:              
+                fetch_pointers_day.end_games.append(game_id)
                             
         day_leaders_data["played"] = played_data["players"]
         day_leaders.update_one({'date': str(day)}, {'$set': day_leaders_data}, upsert=True)
         played.update_one({'date': str(day)}, {'$set': played_data}, upsert=True)
-                
-        return is_live_game
 
-    # except Exception as e:
-    #     print("error")
-    #     print(e)
+    except Exception as e:
+        print("error")
+        print(e)
 
 fetch_pointers_day.end_games = []
 
 if __name__ == "__main__":
-    start_date = date.today()
-    end_date = date(2024,4,18)
-    delta = timedelta(days=1)
-    while start_date <= end_date:
-       print(start_date)
-       fetch_pointers_day(start_date)
-       start_date += delta
+    # start_date = date.today()
+    # end_date = date(2024,4,18)
+    # delta = timedelta(days=1)
+    # while start_date <= end_date:
+    #    print(start_date)
+    #    fetch_pointers_day(start_date)
+    #    start_date += delta
 
     # fetch_pointers_day()
-    #fetch_pointers_day(date(2023, 10, 21))
+    fetch_pointers_day(date(2023, 11, 7))

@@ -21,19 +21,18 @@ export default function SummaryLeaders({ injury, statsType, type, playerType, se
   const navigate = useNavigate();
 
   const get_league_leaders = async () => {
-    // https://statsapi.web.nhl.com/api/v1/stats/leaders?leaderCategories=gaa&season=20212022&limit=5
     setLeagueLeaders([]);
 
-    try {
-      const res = await axios.get(
-        `https://statsapi.web.nhl.com/api/v1/stats/leaders?leaderCategories=${statsType}&season=${season}&limit=5`
-      );
-      if (res.data.leagueLeaders[0] === undefined) setNoData(true);
+    // try {
+    //   const res = await axios.get(
+    //     `https://statsapi.web.nhl.com/api/v1/stats/leaders?leaderCategories=${statsType}&season=${season}&limit=5`
+    //   );
+    //   if (res.data.leagueLeaders[0] === undefined) setNoData(true);
 
-      setLeagueLeaders({ ...res.data.leagueLeaders[0] });
-    } catch (e) {
-      alert(e);
-    }
+    //   setLeagueLeaders({ ...res.data.leagueLeaders[0] });
+    // } catch (e) {
+    //   alert(e);
+    // }
   };
 
   useEffect(() => {
