@@ -25,7 +25,8 @@ export default function GameItem({ gameData, selectedGamePk }) {
           </td>
         );
       }
-      case 'OFF': {
+      case 'OFF':
+      case 'FINAL': {
         return (
           <td colSpan={2} style={{ color: '#a20', fontSize: 25 }}>
             Final{' '}

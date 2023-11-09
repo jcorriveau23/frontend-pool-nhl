@@ -73,7 +73,7 @@ export default function DayGamesFeed({
               bLiveGames = true;
             }
 
-            if (status === 'OFF') {
+            if (status === 'OFF' || status === 'Final') {
               bAllPreview = false;
               bLiveGames = true;
             }
