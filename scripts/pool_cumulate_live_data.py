@@ -37,7 +37,7 @@ def get_goalies_stats(id, today_pointers):
                     "G": goalie["stats"]["goals"], 
                     "A": goalie["stats"]["assists"], 
                     "W": "decision" in goalie["stats"] and goalie["stats"]["decision"] == "W", 
-                    "SO": round(goalie["stats"]["savePercentage"], 1) == 1.0 and "decision" in goalie["stats"] and goalie["stats"]["decision"] == "W",
+                    "SO": round(goalie["stats"]["savePercentage"], 3) == 1.000 and "decision" in goalie["stats"] and goalie["stats"]["decision"] == "W",
                     "OT": "decision" in goalie["stats"] and goalie["stats"]["decision"] == "L" and "OT" in goalie["stats"] and goalie["stats"]["OT"], 
                     }
 
