@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 export default function GameItem({ gameData, selectedGamePk }) {
   const render_game_state = status => {
     switch (status) {
-      case 'LIVE': {
+      case 'LIVE':
+      case 'CRIT': {
         return gameData && gameData.period && gameData.clock ? (
           <td colSpan={2} style={{ color: '#a20', fontSize: 25 }}>
             Period {gameData.period} | {gameData.clock.timeRemaining}
