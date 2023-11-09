@@ -67,18 +67,18 @@ export default function DayGamesFeed({
             const game = res.data.games[i];
             const status = game.gameState;
 
-            if (status === 'LIVE') {
+            if (status === 'LIVE' || status === 'CRIT') {
               bAllFinal = false;
               bAllPreview = false;
               bLiveGames = true;
             }
 
-            if (status === 'OFF' || status === 'Final') {
+            if (status === 'OFF' || status === 'FINAL') {
               bAllPreview = false;
               bLiveGames = true;
             }
 
-            if (status === 'FUT') {
+            if (status === 'FUT' || status === 'PRE') {
               bAllFinal = false;
             }
 
