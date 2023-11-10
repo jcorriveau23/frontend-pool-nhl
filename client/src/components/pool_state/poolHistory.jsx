@@ -21,98 +21,96 @@ export default function PoolHistory({ poolInfo, todayFormatDate, user, DictUsers
   const [collapsedDays, setCollapsedDays] = useState([]);
 
   const parse_all_movement = async () => {
-    if (poolInfo.trades) {
-      const startDate = new Date(poolInfo.season_start);
+    const startDate = new Date(poolInfo.season_start);
 
-      const endDate = new Date();
+    const endDate = new Date();
 
-      const currentRoster = {};
-      const historyTmp = [];
-      let isFirstDay = true;
+    const currentRoster = {};
+    const historyTmp = [];
+    let isFirstDay = true;
 
-      for (let j = startDate; j <= endDate; j.setDate(j.getDate() + 1)) {
-        const jDate = j.toISOString().slice(0, 10);
-
-        const dailyMovements = []; // Will capture all movement that happened on this date.
-        const dailyTrades = poolInfo.trades?.filter(
-          trade =>
-            trade.status === 'ACCEPTED' && new Date(trade.date_accepted + 3600000).toISOString().slice(0, 10) === jDate
-        );
-
-        if (poolInfo.context.score_by_day && poolInfo.context.score_by_day[jDate]) {
-          for (let i = 0; i < poolInfo.participants.length; i += 1) {
-            const participant = poolInfo.participants[i];
-            const forwards = Object.keys(poolInfo.context.score_by_day[jDate][participant].roster.F);
-            const defenders = Object.keys(poolInfo.context.score_by_day[jDate][participant].roster.D);
-            const goalies = Object.keys(poolInfo.context.score_by_day[jDate][participant].roster.G);
-
-            const roster = forwards.concat(defenders, goalies);
-
-            if (!isFirstDay) {
-              // see if a changes was made to the roster and note it in historyTmp.
-
-              const removedPlayers = currentRoster[participant].filter(player => !roster.includes(player));
-              const addedPlayers = roster.filter(player => !currentRoster[participant].includes(player));
-
-              if (removedPlayers.length > 0 || addedPlayers.length > 0) {
-                const movement = {
-                  participant,
-                  removedPlayers,
-                  addedPlayers,
-                };
-                dailyMovements.push(movement);
-              }
-            }
-
-            // update the current roster.
-            currentRoster[participant] = roster;
-          }
-
-          if (dailyMovements.length > 0 || dailyTrades.length > 0) {
-            historyTmp.unshift({ date: jDate, dailyMovements, dailyTrades });
-          }
-
-          if (isFirstDay) isFirstDay = false; // We will start to note changes applied to rosters after the first day.
-        }
-      }
-
-      // Make sure that we count current roster (for days that roster modifications are allowed we will see them in real time)
-      // TODO: this could be generalize by creating a function centralizing logic between this and the for loop above.
+    for (let j = startDate; j <= endDate; j.setDate(j.getDate() + 1)) {
+      const jDate = j.toISOString().slice(0, 10);
 
       const dailyMovements = []; // Will capture all movement that happened on this date.
-      const dailyTrades = poolInfo.trades.filter(trade => trade.status === 'NEW');
-      for (let i = 0; i < poolInfo.participants.length; i += 1) {
-        const participant = poolInfo.participants[i];
+      const dailyTrades = poolInfo.trades?.filter(
+        trade =>
+          trade.status === 'ACCEPTED' && new Date(trade.date_accepted + 3600000).toISOString().slice(0, 10) === jDate
+      );
 
-        const forwards = poolInfo.context.pooler_roster[participant].chosen_forwards.map(playerId => playerId);
-        const defenders = poolInfo.context.pooler_roster[participant].chosen_defenders.map(playerId => playerId);
-        const goalies = poolInfo.context.pooler_roster[participant].chosen_goalies.map(playerId => playerId);
+      if (poolInfo.context.score_by_day && poolInfo.context.score_by_day[jDate]) {
+        for (let i = 0; i < poolInfo.participants.length; i += 1) {
+          const participant = poolInfo.participants[i];
+          const forwards = Object.keys(poolInfo.context.score_by_day[jDate][participant].roster.F);
+          const defenders = Object.keys(poolInfo.context.score_by_day[jDate][participant].roster.D);
+          const goalies = Object.keys(poolInfo.context.score_by_day[jDate][participant].roster.G);
 
-        const roster = forwards.concat(defenders, goalies);
+          const roster = forwards.concat(defenders, goalies);
 
-        // see if a changes was made to the roster and note it in historyTmp.
+          if (!isFirstDay) {
+            // see if a changes was made to the roster and note it in historyTmp.
 
-        const removedPlayers = currentRoster[participant].filter(player => !roster.includes(Number(player)));
-        const addedPlayers = roster.filter(player => !currentRoster[participant].includes(String(player)));
+            const removedPlayers = currentRoster[participant].filter(player => !roster.includes(player));
+            const addedPlayers = roster.filter(player => !currentRoster[participant].includes(player));
 
-        if (removedPlayers.length > 0 || addedPlayers.length > 0) {
-          const movement = {
-            participant,
-            removedPlayers,
-            addedPlayers,
-          };
-          dailyMovements.push(movement);
+            if (removedPlayers.length > 0 || addedPlayers.length > 0) {
+              const movement = {
+                participant,
+                removedPlayers,
+                addedPlayers,
+              };
+              dailyMovements.push(movement);
+            }
+          }
+
+          // update the current roster.
+          currentRoster[participant] = roster;
         }
-      }
 
-      if (dailyMovements.length > 0 || dailyTrades.length > 0) {
-        historyTmp.unshift({ date: 'Today', dailyMovements, dailyTrades });
-      }
+        if (dailyMovements.length > 0 || dailyTrades.length > 0) {
+          historyTmp.unshift({ date: jDate, dailyMovements, dailyTrades });
+        }
 
-      if (historyTmp.length > 0) {
-        setHistory(historyTmp);
-        setCollapsedDays(historyTmp.map(d => (d.date !== historyTmp[0].date ? d.date : null))); // collapse every day except the last
+        if (isFirstDay) isFirstDay = false; // We will start to note changes applied to rosters after the first day.
       }
+    }
+
+    // Make sure that we count current roster (for days that roster modifications are allowed we will see them in real time)
+    // TODO: this could be generalize by creating a function centralizing logic between this and the for loop above.
+
+    const dailyMovements = []; // Will capture all movement that happened on this date.
+    const dailyTrades = poolInfo.trades.filter(trade => trade.status === 'NEW');
+    for (let i = 0; i < poolInfo.participants.length; i += 1) {
+      const participant = poolInfo.participants[i];
+
+      const forwards = poolInfo.context.pooler_roster[participant].chosen_forwards.map(playerId => playerId);
+      const defenders = poolInfo.context.pooler_roster[participant].chosen_defenders.map(playerId => playerId);
+      const goalies = poolInfo.context.pooler_roster[participant].chosen_goalies.map(playerId => playerId);
+
+      const roster = forwards.concat(defenders, goalies);
+
+      // see if a changes was made to the roster and note it in historyTmp.
+
+      const removedPlayers = currentRoster[participant].filter(player => !roster.includes(Number(player)));
+      const addedPlayers = roster.filter(player => !currentRoster[participant].includes(String(player)));
+
+      if (removedPlayers.length > 0 || addedPlayers.length > 0) {
+        const movement = {
+          participant,
+          removedPlayers,
+          addedPlayers,
+        };
+        dailyMovements.push(movement);
+      }
+    }
+
+    if (dailyMovements.length > 0 || dailyTrades.length > 0) {
+      historyTmp.unshift({ date: 'Today', dailyMovements, dailyTrades });
+    }
+
+    if (historyTmp.length > 0) {
+      setHistory(historyTmp);
+      setCollapsedDays(historyTmp.map(d => (d.date !== historyTmp[0].date ? d.date : null))); // collapse every day except the last
     }
 
     setDoneProcessing(true);
