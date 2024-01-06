@@ -18,7 +18,7 @@ export default function GoalItem({ goalData }) {
         <tbody>
           <tr>
             <td rowSpan={rowSpan} width="30">
-              <img src={team_info[abbrevToTeamId[goalData.teamAbbrev]]?.logo} alt="" width="70" height="70" />
+              <img src={team_info[abbrevToTeamId[goalData.teamAbbrev.default]]?.logo} alt="" width="70" height="70" />
             </td>
             <th width="125">Time:</th>
             <td width="250">{goalData.timeInPeriod}</td>
@@ -30,7 +30,7 @@ export default function GoalItem({ goalData }) {
             <th>Scorer:</th>
             <td>
               <PlayerLink
-                name={`${goalData.firstName} ${goalData.lastName}`}
+                name={`${goalData.firstName.default} ${goalData.lastName.default}`}
                 id={goalData.playerId}
                 number={goalData.goalsToDate}
               />
@@ -41,7 +41,7 @@ export default function GoalItem({ goalData }) {
               <th>Assist #{i + 1}</th>
               <td>
                 <PlayerLink
-                  name={`${assist.firstName} ${assist.lastName}`}
+                  name={`${assist.firstName.default} ${assist.lastName.default}`}
                   id={assist.playerId}
                   number={assist.assistsToDate}
                 />
